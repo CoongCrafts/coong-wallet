@@ -3,10 +3,15 @@
   "version": "0.0.1",
   "private": true,
   "description": "A website-based multichain wallet for Polkadot & Kusama ecosystem",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "start": "yarn workspace ui start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Thang X. Vu  - thang@coong.xyz"
+  "author": "Thang X. Vu  - thang@coong.xyz",
+  "devDependencies": {
+    "prettier": "^2.8.1"
+  }
 }
