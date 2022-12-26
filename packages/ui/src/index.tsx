@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { CssBaseline, GlobalStyles, ThemeProvider } from '@mui/material';
-import App from 'App';
 import reportWebVitals from 'reportWebVitals';
 import light from 'themes/light';
 import { globalStyles } from 'styles';
+import { RouterProvider } from 'react-router-dom';
+import router from 'router';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -12,7 +13,7 @@ root.render(
     <ThemeProvider theme={light}>
       <CssBaseline />
       <GlobalStyles styles={globalStyles} />
-      <App />
+      <RouterProvider router={router} />
     </ThemeProvider>
   </React.StrictMode>,
 );
