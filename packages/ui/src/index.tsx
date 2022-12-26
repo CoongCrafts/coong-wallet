@@ -1,13 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { CssBaseline, GlobalStyles, ThemeProvider } from '@mui/material';
+import App from 'App';
+import reportWebVitals from 'reportWebVitals';
+import light from 'themes/light';
+import { globalStyles } from 'styles';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={light}>
+      <CssBaseline />
+      <GlobalStyles styles={globalStyles} />
+      <App />
+    </ThemeProvider>
   </React.StrictMode>,
 );
 
