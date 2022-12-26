@@ -1,11 +1,11 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 import MainLayout from 'components/layouts/MainLayout';
-import Welcome from 'components/pages/Welcome';
+import MainScreen from 'components/pages/MainScreen';
 
 export default createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<MainLayout />}>
-      <Route index element={<Welcome />} />
+      <Route index element={<MainScreen />} />
     </Route>,
   ),
 );

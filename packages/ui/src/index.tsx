@@ -6,15 +6,19 @@ import light from 'themes/light';
 import { globalStyles } from 'styles';
 import { RouterProvider } from 'react-router-dom';
 import router from 'router';
+import { Provider } from 'react-redux';
+import { store } from 'redux/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={light}>
-      <CssBaseline />
-      <GlobalStyles styles={globalStyles} />
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={light}>
+        <CssBaseline />
+        <GlobalStyles styles={globalStyles} />
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>,
 );
 
