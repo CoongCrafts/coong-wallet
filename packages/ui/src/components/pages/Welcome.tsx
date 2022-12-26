@@ -1,10 +1,15 @@
 import { Button, styled } from '@mui/material';
 import React from 'react';
 import { Props } from 'types';
+import { toast } from 'react-toastify';
 
 const Welcome: React.FC<Props> = ({ className = '' }: Props) => {
   const doCreateNewWallet = () => {
     console.log('new account');
+  };
+
+  const doRestoreWallet = () => {
+    toast.info('Coming soon!');
   };
 
   return (
@@ -23,7 +28,7 @@ const Welcome: React.FC<Props> = ({ className = '' }: Props) => {
           <Button size='large' onClick={doCreateNewWallet}>
             Create new wallet
           </Button>
-          <Button variant='outlined' size='large'>
+          <Button variant='outlined' size='large' onClick={doRestoreWallet}>
             Restore existing wallet
           </Button>
         </div>

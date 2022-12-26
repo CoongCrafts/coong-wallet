@@ -8,6 +8,9 @@ import { RouterProvider } from 'react-router-dom';
 import router from 'router';
 import { Provider } from 'react-redux';
 import { store } from 'redux/store';
+import { ToastContainer } from 'react-toastify';
+import { ALERT_TIMEOUT } from 'utils/constants';
+import 'react-toastify/dist/ReactToastify.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -17,6 +20,7 @@ root.render(
         <CssBaseline />
         <GlobalStyles styles={globalStyles} />
         <RouterProvider router={router} />
+        <ToastContainer position='top-right' closeOnClick pauseOnHover theme='colored' autoClose={ALERT_TIMEOUT} />
       </ThemeProvider>
     </Provider>
   </React.StrictMode>,
