@@ -6,4 +6,8 @@ export const globalStyles = css`
   #root {
     height: 100%;
   }
+
+  ::selection {
+    background-color: rgba(79, 170, 245, 0.3);
+  }
 `;

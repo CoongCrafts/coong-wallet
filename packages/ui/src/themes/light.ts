@@ -6,6 +6,15 @@ export default createTheme({
       defaultProps: {
         disableRipple: true,
         variant: 'contained',
+        size: 'large',
+        sx: {
+          textTransform: 'initial',
+        },
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        variant: 'outlined',
       },
     },
   },

@@ -2,10 +2,13 @@ import { Button, styled } from '@mui/material';
 import React from 'react';
 import { Props } from 'types';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const Welcome: React.FC<Props> = ({ className = '' }: Props) => {
+  const navigate = useNavigate();
+
   const doCreateNewWallet = () => {
-    console.log('new account');
+    navigate('/new-wallet');
   };
 
   const doRestoreWallet = () => {
