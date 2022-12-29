@@ -4,6 +4,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { useDispatch } from 'react-redux';
 import { appActions } from 'redux/slices/app';
 import { Props } from 'types';
+import keyring from 'keyring';
 
 const SplashScreen: React.FC<Props> = ({ className = '' }: Props) => {
   const dispatch = useDispatch();
@@ -16,6 +17,14 @@ const SplashScreen: React.FC<Props> = ({ className = '' }: Props) => {
       .catch((error) => {
         console.error(error);
       });
+  });
+
+  useEffect(() => {
+    keyring.isInitialized().then((initialized) => {
+      if (initialized) {
+        dispatch(appActions.setSeedReady());
+      }
+    });
   });
 
   return (

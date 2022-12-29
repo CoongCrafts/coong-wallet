@@ -8,11 +8,15 @@ import { RootState } from 'redux/store';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { LoadingButton } from '@mui/lab';
 import { useEffectOnce } from 'react-use';
+import keyring from 'keyring';
+import { appActions } from 'redux/slices/app';
+import { useNavigate } from 'react-router-dom';
 
 const BackupSecretRecoveryPhrase: FC<Props> = ({ className = '' }: Props) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { password } = useSelector((state: RootState) => state.setupWallet);
-  const [checked, setChecked] = useState<boolean>();
+  const [checked, setChecked] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>();
   const [secretPhrase, setSecretPhrase] = useState<string>();
 
@@ -20,13 +24,18 @@ const BackupSecretRecoveryPhrase: FC<Props> = ({ className = '' }: Props) => {
     setSecretPhrase(generateMnemonic(12));
   });
 
-  const doSetupWallet = (e: FormEvent) => {
+  const doSetupWallet = async (e: FormEvent) => {
     e.preventDefault();
 
     setLoading(true);
+    await keyring.init(secretPhrase!, password);
 
-    // TODO call setup keyring
-    console.log('setup keyring', password, secretPhrase);
+    // TODO setup first account
+
+    setTimeout(() => {
+      dispatch(appActions.setSeedReady());
+      navigate('/');
+    }, 500); // intentionally!
   };
 
   const back = () => {

@@ -5,24 +5,21 @@ export interface AppState {
   seedReady: boolean;
 }
 
-const initialState = (): AppState => {
-  return { ready: false, seedReady: false };
-};
-
-const setAppReady = (state: Draft<AppState>) => {
-  state.ready = true;
-};
-
-const setSeedReady = (state: Draft<AppState>) => {
-  state.seedReady = true;
+const initialState: AppState = {
+  ready: false,
+  seedReady: false,
 };
 
 const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    setAppReady,
-    setSeedReady,
+    setAppReady: (state: Draft<AppState>) => {
+      state.ready = true;
+    },
+    setSeedReady: (state: Draft<AppState>) => {
+      state.seedReady = true;
+    },
   },
 });
 
