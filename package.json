@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "start": "yarn workspace ui start",
+    "start": "yarn workspace @coong/ui start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Thang X. Vu  - thang@coong.xyz",

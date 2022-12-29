@@ -2,13 +2,14 @@ import React from 'react';
 import { Props } from 'types';
 import { Container, styled } from '@mui/material';
 import { Outlet } from 'react-router-dom';
+import CoongLogo from 'assets/images/coong-logo.png';
 
 const MainLayout: React.FC<Props> = ({ className = '' }: Props) => {
   return (
     <div className={className}>
       <header>
         <Container>
-          <img src='images/coong-logo.png' alt='Coong Wallet' />
+          <img src={CoongLogo} alt='Coong Wallet' />
         </Container>
       </header>
       <main>

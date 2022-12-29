@@ -1,1 +1,0 @@
-# Coong Wallet UI
