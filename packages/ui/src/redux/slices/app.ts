@@ -6,7 +6,7 @@ export interface AppState {
 }
 
 const initialState = (): AppState => {
-  return { ready: false, seedReady: !!localStorage.getItem('encryptedSeed') };
+  return { ready: false, seedReady: false };
 };
 
 const setAppReady = (state: Draft<AppState>) => {
