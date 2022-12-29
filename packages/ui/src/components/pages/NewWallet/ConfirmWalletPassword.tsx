@@ -46,7 +46,7 @@ const ConfirmWalletPassword: FC<Props> = ({ className = '' }: Props) => {
           onChange={handleChange}
           value={passwordConfirmation}
           error={!!passwordConfirmation && notMatch}
-          helperText={!!passwordConfirmation && notMatch && "Password's not match"}
+          helperText={!!passwordConfirmation && notMatch && 'Password does not match'}
         />
         <div className='form-actions'>
           <Button variant='text' onClick={back}>
