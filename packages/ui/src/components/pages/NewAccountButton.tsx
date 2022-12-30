@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FormEvent, useState } from 'react';
+import { ChangeEvent, FC, FormEvent, useRef, useState } from 'react';
 import { Props } from 'types';
 import { Add } from '@mui/icons-material';
 import {
@@ -23,11 +23,16 @@ interface NewAccountButtonProps extends Props {
 const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useUpdateEffect(() => {
     if (open) {
       const accountsIndex = keyring.getAccountsIndex();
       setName(`Account ${(accountsIndex + 1).toString().padStart(2, '0')}`);
+
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 50);
     }
   }, [open]);
 
@@ -58,7 +63,15 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
         <Box component='form' noValidate autoComplete='off' onSubmit={doCreateNewAccount}>
           <DialogContent>
             <DialogContentText sx={{ marginBottom: '1rem' }}>Choose a name for your new account</DialogContentText>
-            <TextField autoFocus label='New account name' type='text' fullWidth onChange={handleChange} value={name} />
+            <TextField
+              inputRef={inputRef}
+              autoFocus
+              label='New account name'
+              type='text'
+              fullWidth
+              onChange={handleChange}
+              value={name}
+            />
           </DialogContent>
           <DialogActions>
             <Button variant='outlined' onClick={handleClose}>
