@@ -3,6 +3,7 @@ import { Props } from 'types';
 import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { styled } from '@mui/material';
 import { Identicon } from '@polkadot/react-identicon';
+import AccountAddress from 'components/pages/Accounts/AccountAddress';
 
 interface AccountCardProps extends Props {
   account: KeyringAddress;
@@ -17,7 +18,7 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account }) => {
       </div>
       <div>
         <div className='account-card__name'>{meta.name}</div>
-        <div className='account-card__address'>{address}</div>
+        <AccountAddress address={address} />
       </div>
     </div>
   );
