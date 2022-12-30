@@ -58,7 +58,7 @@ export default styled(MainLayout)`
   }
 
   main {
-    margin: 1rem 0;
+    padding: 1rem 0 2rem 0;
     flex: 1;
 
     > div {
