@@ -24,15 +24,16 @@ const BackupSecretRecoveryPhrase: FC<Props> = ({ className = '' }: Props) => {
     setSecretPhrase(generateMnemonic(12));
   });
 
-  const doSetupWallet = async (e: FormEvent) => {
+  const doSetupWallet = (e: FormEvent) => {
     e.preventDefault();
 
     setLoading(true);
-    await keyring.init(secretPhrase!, password);
 
-    // TODO setup first account
+    setTimeout(async () => {
+      await keyring.init(secretPhrase!, password);
+      await keyring.unlock(password);
+      await keyring.createNewAccount('My first account');
 
-    setTimeout(() => {
       dispatch(appActions.setSeedReady());
       navigate('/');
     }, 500); // intentionally!

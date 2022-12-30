@@ -1,15 +1,17 @@
 import React from 'react';
 import { Props } from 'types';
 import { Container, styled } from '@mui/material';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import CoongLogo from 'assets/images/coong-logo.png';
 
 const MainLayout: React.FC<Props> = ({ className = '' }: Props) => {
   return (
     <div className={className}>
-      <header>
+      <header className='main-header'>
         <Container>
-          <img src={CoongLogo} alt='Coong Wallet' />
+          <Link to='/'>
+            <img src={CoongLogo} alt='Coong Wallet' />
+          </Link>
         </Container>
       </header>
       <main>
@@ -26,7 +28,7 @@ export default styled(MainLayout)`
   flex-direction: column;
   height: 100%;
 
-  header {
+  header.main-header {
     background-color: #f5f5f5;
 
     .MuiContainer-root {
