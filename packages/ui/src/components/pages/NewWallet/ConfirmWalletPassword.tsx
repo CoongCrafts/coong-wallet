@@ -36,7 +36,7 @@ const ConfirmWalletPassword: FC<Props> = ({ className = '' }: Props) => {
 
   return (
     <div className={className}>
-      <h3>Next, confirm your wallet password</h3>
+      <h2>Next, confirm your wallet password</h2>
       <Box component='form' noValidate autoComplete='off' onSubmit={next}>
         <TextField
           label='Confirm Wallet Password'

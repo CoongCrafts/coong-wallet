@@ -32,8 +32,7 @@ const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
 
   return (
     <div className={className}>
-      <h1>Welcome to Coong Wallet</h1>
-      <p>First, choose your wallet password</p>
+      <h2>First, choose your wallet password</h2>
       <Box component='form' noValidate autoComplete='off' onSubmit={next}>
         <TextField
           label='Wallet Password'
