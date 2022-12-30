@@ -4,6 +4,7 @@ import { Container, styled } from '@mui/material';
 import { Link, Outlet } from 'react-router-dom';
 import CoongLogo from 'assets/images/coong-logo.png';
 import LockWalletButton from 'components/shared/LockWalletButton';
+import ResetWalletButton from 'components/shared/ResetWalletButton';
 
 const MainLayout: React.FC<Props> = ({ className = '' }: Props) => {
   return (
@@ -14,7 +15,10 @@ const MainLayout: React.FC<Props> = ({ className = '' }: Props) => {
             <Link to='/'>
               <img src={CoongLogo} alt='Coong Wallet' />
             </Link>
-            <LockWalletButton />
+            <div className='main-header__actions'>
+              {!import.meta.env.PROD && <ResetWalletButton />}
+              <LockWalletButton />
+            </div>
           </div>
         </Container>
       </header>
@@ -45,6 +49,11 @@ export default styled(MainLayout)`
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+
+    &__actions {
+      display: flex;
+      gap: 0.5rem;
     }
   }
 

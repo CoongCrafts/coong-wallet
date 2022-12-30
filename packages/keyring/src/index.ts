@@ -42,6 +42,16 @@ export default class Keyring {
     localStorage.setItem(UNLOCK_UNTIL, String(Date.now() - 1000));
   }
 
+  async reset() {
+    const accounts = await this.getAccounts();
+    accounts.forEach((account) => {
+      this.#keyring.forgetAccount(account.address);
+    });
+    localStorage.removeItem(ENCRYPTED_MNEMONIC);
+    localStorage.removeItem(ACCOUNTS_INDEX);
+    localStorage.removeItem(UNLOCK_UNTIL);
+  }
+
   async unlock(password: string): Promise<void> {
     if (!(await this.isInitialized())) {
       throw new Error('Keyring is not initialized!');
