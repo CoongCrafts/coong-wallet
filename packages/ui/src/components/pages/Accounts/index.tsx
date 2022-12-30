@@ -22,7 +22,7 @@ const Index: FC<Props> = ({ className = '' }) => {
   return (
     <div className={className}>
       <header className='page-header'>
-        <PageTitle>Accounts {accounts.length >= 3 && <span>({accounts.length})</span>}</PageTitle>
+        <PageTitle>Accounts {accounts.length >= 5 && <span>({accounts.length})</span>}</PageTitle>
         <div className='page-header__actions'>
           <NewAccountButton onCreated={onNewAccountCreated} />
         </div>
