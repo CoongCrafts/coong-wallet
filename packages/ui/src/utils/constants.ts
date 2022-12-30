@@ -1,1 +1,1 @@
-export const ALERT_TIMEOUT = 5_000;
+export const ALERT_TIMEOUT = 2_000;

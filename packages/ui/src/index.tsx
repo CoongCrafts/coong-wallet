@@ -19,7 +19,14 @@ root.render(
         <CssBaseline />
         <GlobalStyles styles={globalStyles} />
         <RouterProvider router={router} />
-        <ToastContainer position='top-right' closeOnClick pauseOnHover theme='colored' autoClose={ALERT_TIMEOUT} />
+        <ToastContainer
+          position='bottom-right'
+          closeOnClick
+          pauseOnHover
+          theme='light'
+          autoClose={ALERT_TIMEOUT}
+          hideProgressBar
+        />
       </ThemeProvider>
     </Provider>
   </React.StrictMode>,
