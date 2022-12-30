@@ -6,7 +6,7 @@ import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { useAsync } from 'react-use';
 import keyring from 'keyring';
 import AccountCard from 'components/pages/Accounts/AccountCard';
-import NewAccountButton from 'components/pages/NewAccountButton';
+import NewAccountButton from 'components/shared/NewAccountButton';
 
 const Index: FC<Props> = ({ className = '' }) => {
   const [accounts, setAccounts] = useState<KeyringAddress[]>([]);
