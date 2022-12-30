@@ -9,7 +9,7 @@ const MainLayout: React.FC<Props> = ({ className = '' }: Props) => {
   return (
     <div className={className}>
       <header className='main-header'>
-        <Container>
+        <Container maxWidth='md'>
           <div className='main-header__inner'>
             <Link to='/'>
               <img src={CoongLogo} alt='Coong Wallet' />
@@ -19,7 +19,7 @@ const MainLayout: React.FC<Props> = ({ className = '' }: Props) => {
         </Container>
       </header>
       <main>
-        <Container>
+        <Container maxWidth='md'>
           <Outlet />
         </Container>
       </main>
@@ -37,6 +37,7 @@ export default styled(MainLayout)`
 
     img {
       height: 28px;
+      display: block;
     }
 
     &__inner {
