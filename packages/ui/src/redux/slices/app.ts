@@ -3,11 +3,13 @@ import { createSlice, Draft } from '@reduxjs/toolkit';
 export interface AppState {
   ready: boolean;
   seedReady: boolean;
+  locked: boolean;
 }
 
 const initialState: AppState = {
   ready: false,
   seedReady: false,
+  locked: true,
 };
 
 const appSlice = createSlice({
@@ -19,6 +21,9 @@ const appSlice = createSlice({
     },
     setSeedReady: (state: Draft<AppState>) => {
       state.seedReady = true;
+    },
+    setLockStatus: (state: Draft<AppState>, action) => {
+      state.locked = !!action.payload;
     },
   },
 });

@@ -23,6 +23,7 @@ const SplashScreen: React.FC<Props> = ({ className = '' }: Props) => {
     keyring.isInitialized().then((initialized) => {
       if (initialized) {
         dispatch(appActions.setSeedReady());
+        dispatch(appActions.setLockStatus(keyring.locked()));
       }
     });
   });

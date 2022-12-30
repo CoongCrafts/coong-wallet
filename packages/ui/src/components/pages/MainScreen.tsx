@@ -4,19 +4,24 @@ import { RootState } from 'redux/store';
 import Welcome from 'components/pages/Welcome';
 import SplashScreen from 'components/pages/SplashScreen';
 import Accounts from 'components/pages/Accounts';
+import UnlockWallet from 'components/pages/UnlockWallet';
 
 const MainScreen: React.FC = () => {
-  const { ready, seedReady } = useSelector((state: RootState) => state.app);
+  const { ready, seedReady, locked } = useSelector((state: RootState) => state.app);
 
-  if (ready) {
-    if (seedReady) {
-      return <Accounts />;
-    } else {
-      return <Welcome />;
-    }
-  } else {
+  if (!ready) {
     return <SplashScreen />;
   }
+
+  if (!seedReady) {
+    return <Welcome />;
+  }
+
+  if (locked) {
+    return <UnlockWallet />;
+  }
+
+  return <Accounts />;
 };
 
 export default MainScreen;

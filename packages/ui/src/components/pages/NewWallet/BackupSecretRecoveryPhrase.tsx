@@ -35,6 +35,7 @@ const BackupSecretRecoveryPhrase: FC<Props> = ({ className = '' }: Props) => {
       await keyring.createNewAccount('My first account');
 
       dispatch(appActions.setSeedReady());
+      dispatch(appActions.setLockStatus(keyring.locked()));
       navigate('/');
     }, 500); // intentionally!
   };

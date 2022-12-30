@@ -3,15 +3,19 @@ import { Props } from 'types';
 import { Container, styled } from '@mui/material';
 import { Link, Outlet } from 'react-router-dom';
 import CoongLogo from 'assets/images/coong-logo.png';
+import LockWalletButton from 'components/shared/LockWalletButton';
 
 const MainLayout: React.FC<Props> = ({ className = '' }: Props) => {
   return (
     <div className={className}>
       <header className='main-header'>
         <Container>
-          <Link to='/'>
-            <img src={CoongLogo} alt='Coong Wallet' />
-          </Link>
+          <div className='main-header__inner'>
+            <Link to='/'>
+              <img src={CoongLogo} alt='Coong Wallet' />
+            </Link>
+            <LockWalletButton />
+          </div>
         </Container>
       </header>
       <main>
@@ -28,17 +32,18 @@ export default styled(MainLayout)`
   flex-direction: column;
   height: 100%;
 
-  header.main-header {
+  .main-header {
     background-color: #f5f5f5;
-
-    .MuiContainer-root {
-      height: 64px;
-      display: flex;
-      align-items: center;
-    }
 
     img {
       height: 28px;
+    }
+
+    &__inner {
+      height: 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
   }
 
