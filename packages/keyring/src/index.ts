@@ -5,16 +5,15 @@ import { KeyringPair } from '@polkadot/keyring/types';
 
 const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
 const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
+const UNLOCK_UNTIL = 'UNLOCK_UNTIL';
 const DEFAULT_KEY_TYPE = 'sr25519';
+const UNLOCK_INTERVAL = 15 * 60 * 1000;
 
 export default class Keyring {
   #keyring: PKeyring;
-  #index: number = 0;
-  #isLocked: boolean;
   #mnemonic: string | null;
 
   constructor() {
-    this.#isLocked = true;
     this.#mnemonic = null;
 
     this.#keyring = new PKeyring();
@@ -31,7 +30,16 @@ export default class Keyring {
   }
 
   locked() {
-    return this.#isLocked;
+    const unlockTimer = this.#getUnlockTimer();
+    if (!unlockTimer) {
+      return true;
+    }
+
+    return unlockTimer < Date.now();
+  }
+
+  lock() {
+    localStorage.setItem(UNLOCK_UNTIL, String(Date.now() - 1000));
   }
 
   async unlock(password: string): Promise<void> {
@@ -45,13 +53,17 @@ export default class Keyring {
 
     try {
       const decrypted = CryptoJS.AES.decrypt(this.#getEncryptedMnemonic()!, password);
-      this.#mnemonic = decrypted.toString(CryptoJS.enc.Utf8);
-      this.#isLocked = false;
+      const raw = decrypted.toString(CryptoJS.enc.Utf8);
+      if (!raw) {
+        throw new Error();
+      }
+
+      this.#mnemonic = raw;
+      localStorage.setItem(UNLOCK_UNTIL, String(Date.now() + UNLOCK_INTERVAL));
 
       setTimeout(() => {
         this.#mnemonic = null;
-        this.#isLocked = true;
-      }, 10_000); // TODO: change this auto-lock timmer
+      }, UNLOCK_INTERVAL); // TODO: change this auto-lock timmer
     } catch (e: any) {
       throw new Error('Password is incorrect');
     }
@@ -62,7 +74,11 @@ export default class Keyring {
   }
 
   #getAccountsIndex(): number {
-    return parseInt(localStorage.getItem(ACCOUNTS_INDEX) || '0') || 0;
+    return parseInt(localStorage.getItem(ACCOUNTS_INDEX)!) || 0;
+  }
+
+  #getUnlockTimer(): number | null {
+    return parseInt(localStorage.getItem(UNLOCK_UNTIL)!) || null;
   }
 
   #increaseAccountsIndex(): number {
