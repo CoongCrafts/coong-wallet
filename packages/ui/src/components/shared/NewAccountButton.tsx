@@ -31,7 +31,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
       setName(`Account ${(accountsIndex + 1).toString().padStart(2, '0')}`);
 
       setTimeout(() => {
-        inputRef.current?.focus();
+        inputRef.current?.select();
       }, 50);
     }
   }, [open]);
