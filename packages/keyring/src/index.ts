@@ -73,7 +73,7 @@ export default class Keyring {
     return localStorage.getItem(ENCRYPTED_MNEMONIC);
   }
 
-  #getAccountsIndex(): number {
+  getAccountsIndex(): number {
     return parseInt(localStorage.getItem(ACCOUNTS_INDEX)!) || 0;
   }
 
@@ -82,13 +82,13 @@ export default class Keyring {
   }
 
   #increaseAccountsIndex(): number {
-    const next = this.#getAccountsIndex() + 1;
+    const next = this.getAccountsIndex() + 1;
     localStorage.setItem(ACCOUNTS_INDEX, next.toString());
     return next;
   }
 
   #nextAccountPath(): string {
-    const currentIndex = this.#getAccountsIndex();
+    const currentIndex = this.getAccountsIndex();
     if (currentIndex === 0) {
       return '';
     }
@@ -97,13 +97,19 @@ export default class Keyring {
   }
 
   async getAccounts(): Promise<KeyringAddress[]> {
-    return this.#keyring.getAccounts();
+    return this.#keyring.getAccounts().sort((a, b) => (a.meta.whenCreated || 0) - (b.meta.whenCreated || 0));
   }
 
   async createNewAccount(name: string): Promise<KeyringPair> {
     if (this.locked()) {
       throw new Error('Unlock the wallet first!');
     }
+
+    if (!name) {
+      throw new Error('Account name is required');
+    }
+
+    // TODO check if name is already used
 
     const nextPath = `${this.#mnemonic}${this.#nextAccountPath()}`;
     const keypair = this.#keyring.createFromUri(nextPath, { name }, DEFAULT_KEY_TYPE);

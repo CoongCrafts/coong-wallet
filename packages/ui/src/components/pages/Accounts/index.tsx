@@ -1,12 +1,12 @@
-import { Button, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import PageTitle from 'components/shared/PageTitle';
 import { FC, useState } from 'react';
 import { Props } from 'types';
-import { Add } from '@mui/icons-material';
 import { KeyringAddress } from '@polkadot/ui-keyring/types';
-import { useAsync, useEffectOnce } from 'react-use';
+import { useAsync } from 'react-use';
 import keyring from 'keyring';
 import AccountCard from 'components/pages/Accounts/AccountCard';
+import NewAccountButton from 'components/pages/NewAccountButton';
 
 const Index: FC<Props> = ({ className = '' }) => {
   const [accounts, setAccounts] = useState<KeyringAddress[]>([]);
@@ -15,14 +15,16 @@ const Index: FC<Props> = ({ className = '' }) => {
     setAccounts(await keyring.getAccounts());
   }, []);
 
+  const onNewAccountCreated = async () => {
+    setAccounts(await keyring.getAccounts());
+  };
+
   return (
     <div className={className}>
       <header className='page-header'>
-        <PageTitle title='Accounts' />
+        <PageTitle>Accounts {accounts.length >= 3 && <span>({accounts.length})</span>}</PageTitle>
         <div className='page-header__actions'>
-          <Button size='small' variant='outlined' startIcon={<Add />}>
-            New Account
-          </Button>
+          <NewAccountButton onCreated={onNewAccountCreated} />
         </div>
       </header>
       <div className='page-content'>
