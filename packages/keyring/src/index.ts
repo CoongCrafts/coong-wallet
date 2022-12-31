@@ -20,12 +20,12 @@ export default class Keyring {
     this.#keyring.loadAll({});
   }
 
-  async init(mnemonic: string, password: string) {
+  async initialize(mnemonic: string, password: string) {
     const encryptedSeed = CryptoJS.AES.encrypt(mnemonic, password).toString();
     localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedSeed);
   }
 
-  async isInitialized(): Promise<boolean> {
+  async initialized(): Promise<boolean> {
     return !!this.#getEncryptedMnemonic();
   }
 
@@ -53,7 +53,7 @@ export default class Keyring {
   }
 
   async unlock(password: string): Promise<void> {
-    if (!(await this.isInitialized())) {
+    if (!(await this.initialized())) {
       throw new Error('Keyring is not initialized!');
     }
 
