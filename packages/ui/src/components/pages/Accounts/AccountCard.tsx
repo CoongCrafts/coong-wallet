@@ -4,7 +4,7 @@ import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { styled } from '@mui/material';
 import { Identicon } from '@polkadot/react-identicon';
 import AccountAddress from 'components/pages/Accounts/AccountAddress';
-import { toast } from 'react-toastify';
+import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 
 interface AccountCardProps extends Props {
   account: KeyringAddress;
@@ -12,19 +12,18 @@ interface AccountCardProps extends Props {
 
 const AccountCard: FC<AccountCardProps> = ({ className = '', account }) => {
   const { address, meta } = account;
-
-  const onCopy = () => {
-    toast.success('Address copied');
-  };
+  const { name } = meta;
 
   return (
     <div className={`${className} account-card`}>
       <div className='account-card--icon'>
-        <Identicon value={address} size={42} theme='polkadot' onCopy={onCopy} />
+        <CopyAddressTooltip address={address} name={name}>
+          <Identicon value={address} size={42} theme='polkadot' />
+        </CopyAddressTooltip>
       </div>
       <div>
-        <div className='account-card__name'>{meta.name}</div>
-        <AccountAddress address={address} />
+        <div className='account-card__name'>{name}</div>
+        <AccountAddress address={address} name={name} />
       </div>
     </div>
   );

@@ -3,12 +3,14 @@ import { Props } from 'types';
 import { styled } from '@mui/material';
 import { useWindowSize } from 'react-use';
 import { shortenAddress } from 'utils/string';
+import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 
 interface AccountAddressProps extends Props {
   address: string;
+  name?: string;
 }
 
-const AccountAddress: FC<AccountAddressProps> = ({ className, address }) => {
+const AccountAddress: FC<AccountAddressProps> = ({ className, address, name }) => {
   const { width } = useWindowSize();
   const [displayAddress, setDisplayAddress] = useState('');
 
@@ -20,9 +22,14 @@ const AccountAddress: FC<AccountAddressProps> = ({ className, address }) => {
     }
   }, [width]);
 
-  return <div className={className}>{displayAddress || <span>&nbsp;</span>}</div>;
+  return (
+    <CopyAddressTooltip address={address} name={name}>
+      <div className={className}>{displayAddress || <span>&nbsp;</span>}</div>
+    </CopyAddressTooltip>
+  );
 };
 
 export default styled(AccountAddress)`
   font-size: 0.8rem;
+  cursor: copy;
 `;

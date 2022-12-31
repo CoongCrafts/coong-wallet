@@ -16,5 +16,11 @@ export default createTheme({
         variant: 'outlined',
       },
     },
+    MuiTooltip: {
+      defaultProps: {
+        placement: 'top',
+        arrow: true,
+      },
+    },
   },
 });
