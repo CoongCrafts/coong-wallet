@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Props } from 'types';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/store';
-import keyring from 'keyring';
+import keyring from '@coong/base/keyring';
 import { Button } from '@mui/material';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 

@@ -8,7 +8,7 @@ import { RootState } from 'redux/store';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { LoadingButton } from '@mui/lab';
 import { useEffectOnce } from 'react-use';
-import keyring from 'keyring';
+import keyring from '@coong/base/keyring';
 import { appActions } from 'redux/slices/app';
 import { useNavigate } from 'react-router-dom';
 

@@ -4,7 +4,7 @@ import { FC, useState } from 'react';
 import { Props } from 'types';
 import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { useAsync } from 'react-use';
-import keyring from 'keyring';
+import keyring from '@coong/base/keyring';
 import AccountCard from 'components/pages/Accounts/AccountCard';
 import NewAccountButton from 'components/shared/NewAccountButton';
 

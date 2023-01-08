@@ -2,7 +2,7 @@ import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import { Props } from 'types';
 import { useDispatch } from 'react-redux';
 import { Box, Button, styled, TextField } from '@mui/material';
-import keyring from 'keyring';
+import keyring from '@coong/base/keyring';
 import { appActions } from 'redux/slices/app';
 
 const UnlockWallet: FC<Props> = ({ className = '' }) => {
