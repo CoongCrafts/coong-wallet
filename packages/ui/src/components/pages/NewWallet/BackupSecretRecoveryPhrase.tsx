@@ -64,7 +64,7 @@ const BackupSecretRecoveryPhrase: FC<Props> = ({ className = '' }: Props) => {
           <Button variant='text' onClick={back} disabled={loading}>
             Back
           </Button>
-          <LoadingButton type='submit' fullWidth disabled={!checked} loading={loading} variant='contained'>
+          <LoadingButton type='submit' fullWidth disabled={!checked} loading={loading} variant='contained' size='large'>
             Finish
           </LoadingButton>
         </div>

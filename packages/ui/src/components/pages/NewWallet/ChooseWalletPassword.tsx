@@ -3,6 +3,7 @@ import { Props } from 'types';
 import { Box, Button, TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
+import EmptySpace from 'components/shared/mics/EmptySpace';
 
 const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
   const dispatch = useDispatch();
@@ -42,9 +43,9 @@ const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
           onChange={handleChange}
           value={password}
           error={!!validation}
-          helperText={validation}
+          helperText={validation || <EmptySpace />}
         />
-        <Button type='submit' fullWidth disabled={!password || !!validation}>
+        <Button type='submit' fullWidth disabled={!password || !!validation} size='large'>
           Next
         </Button>
       </Box>

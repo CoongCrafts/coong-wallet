@@ -5,6 +5,7 @@ import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/store';
+import EmptySpace from 'components/shared/mics/EmptySpace';
 
 const ConfirmWalletPassword: FC<Props> = ({ className = '' }: Props) => {
   const dispatch = useDispatch();
@@ -46,13 +47,13 @@ const ConfirmWalletPassword: FC<Props> = ({ className = '' }: Props) => {
           onChange={handleChange}
           value={passwordConfirmation}
           error={!!passwordConfirmation && notMatch}
-          helperText={!!passwordConfirmation && notMatch && 'Password does not match'}
+          helperText={!!passwordConfirmation && notMatch ? 'Password does not match' : <EmptySpace />}
         />
         <div className='form-actions'>
           <Button variant='text' onClick={back}>
             Back
           </Button>
-          <Button type='submit' fullWidth disabled={notMatch}>
+          <Button type='submit' fullWidth disabled={notMatch} size='large'>
             Next
           </Button>
         </div>

@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Box, Button, styled, TextField } from '@mui/material';
 import { keyring } from '@coong/base';
 import { appActions } from 'redux/slices/app';
+import EmptySpace from 'components/shared/mics/EmptySpace';
 
 const UnlockWallet: FC<Props> = ({ className = '' }) => {
   const dispatch = useDispatch();
@@ -34,7 +35,7 @@ const UnlockWallet: FC<Props> = ({ className = '' }) => {
 
   return (
     <div className={className}>
-      <h5>Welcome back</h5>
+      <h4>Welcome back</h4>
       <h2>Unlock your Coong wallet</h2>
       <Box component='form' noValidate autoComplete='off' onSubmit={doUnlock}>
         <TextField
@@ -45,9 +46,9 @@ const UnlockWallet: FC<Props> = ({ className = '' }) => {
           onChange={handleChange}
           value={password}
           error={!!validation}
-          helperText={validation}
+          helperText={validation || <EmptySpace />}
         />
-        <Button type='submit' fullWidth disabled={!password}>
+        <Button type='submit' fullWidth disabled={!password} size='large'>
           Unlock
         </Button>
       </Box>
@@ -59,10 +60,14 @@ export default styled(UnlockWallet)`
   max-width: 450px;
   margin: 4rem auto;
 
+  h4 {
+    margin-bottom: 0.5rem;
+  }
+
   form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .form-actions {
