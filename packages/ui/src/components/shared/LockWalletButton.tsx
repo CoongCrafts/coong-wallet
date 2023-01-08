@@ -4,7 +4,7 @@ import { Lock } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/store';
-import keyring from '@coong/base/keyring';
+import { keyring } from '@coong/base';
 import { appActions } from 'redux/slices/app';
 
 const LockWalletButton: FC<Props> = () => {

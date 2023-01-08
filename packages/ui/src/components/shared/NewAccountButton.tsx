@@ -12,7 +12,7 @@ import {
   TextField,
 } from '@mui/material';
 import { useUpdateEffect } from 'react-use';
-import keyring from '@coong/base/keyring';
+import { keyring } from '@coong/base';
 import { toast } from 'react-toastify';
 import { KeyringPair } from '@polkadot/keyring/types';
 

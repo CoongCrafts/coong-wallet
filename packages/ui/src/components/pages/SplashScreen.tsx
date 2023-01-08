@@ -4,7 +4,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { useDispatch } from 'react-redux';
 import { appActions } from 'redux/slices/app';
 import { Props } from 'types';
-import keyring from '@coong/base/keyring';
+import { keyring } from '@coong/base';
 
 const SplashScreen: React.FC<Props> = ({ className = '' }: Props) => {
   const dispatch = useDispatch();
