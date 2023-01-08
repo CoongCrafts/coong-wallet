@@ -17,21 +17,22 @@ const Welcome: React.FC<Props> = ({ className = '' }: Props) => {
 
   return (
     <div className={className}>
-      <div>
-        <h2>
+      <div className='welcome'>
+        <h2>Welcome to Coong</h2>
+        <p>
           A multichain crypto wallet
           <br />
-          for Polkadot & Kusama ecosystem
-        </h2>
+          for <strong>Polkadot & Kusama</strong> ecosystem
+        </p>
       </div>
-      <div>
-        <p>Set up your Coong wallet</p>
+      <div className='setup-wallet'>
+        <h4>Set up your Coong wallet now</h4>
 
         <div className='wallet-buttons-group'>
           <Button size='large' onClick={doCreateNewWallet}>
             Create new wallet
           </Button>
-          <Button variant='outlined' size='large' onClick={doRestoreWallet}>
+          <Button variant='outlined' size='large' onClick={doRestoreWallet} disabled={true}>
             Restore existing wallet
           </Button>
         </div>
@@ -41,11 +42,20 @@ const Welcome: React.FC<Props> = ({ className = '' }: Props) => {
 };
 
 export default styled(Welcome)`
-  //display: flex;
-  //align-items: center;
-  //justify-content: space-between;
-  //margin: 5rem auto;
+  margin: 3rem auto;
   text-align: center;
+
+  h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .setup-wallet {
+    margin-top: 2rem;
+
+    h4 {
+      margin-bottom: 0.7rem;
+    }
+  }
 
   .wallet-buttons-group {
     display: flex;
