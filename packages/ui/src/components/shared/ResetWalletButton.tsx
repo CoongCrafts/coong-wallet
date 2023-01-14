@@ -3,7 +3,7 @@ import { Props } from 'types';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/store';
 import { keyring } from '@coong/base';
-import { Button } from '@mui/material';
+import { IconButton } from '@mui/material';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 
 const ResetWalletButton: FC<Props> = () => {
@@ -24,15 +24,9 @@ const ResetWalletButton: FC<Props> = () => {
   };
 
   return (
-    <Button
-      variant='outlined'
-      color='error'
-      size='small'
-      title='Reset wallet'
-      startIcon={<RotateLeftIcon />}
-      onClick={doReset}>
-      Reset
-    </Button>
+    <IconButton color='error' size='small' title='Reset wallet' onClick={doReset}>
+      <RotateLeftIcon />
+    </IconButton>
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Props } from 'types';
 import { Lock } from '@mui/icons-material';
-import { Button } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/store';
 import { keyring } from '@coong/base';
@@ -20,15 +20,9 @@ const LockWalletButton: FC<Props> = () => {
   };
 
   return (
-    <Button
-      variant='outlined'
-      color='warning'
-      size='small'
-      title='Lock the wallet'
-      startIcon={<Lock />}
-      onClick={doLock}>
-      Lock
-    </Button>
+    <IconButton size='small' title='Lock the wallet' onClick={doLock}>
+      <Lock />
+    </IconButton>
   );
 };
 
