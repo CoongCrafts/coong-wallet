@@ -49,13 +49,19 @@ export default styled(MainLayout)`
     &__inner {
       height: 64px;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
     }
 
     &__actions {
+      flex-grow: 1;
       display: flex;
       gap: 0.5rem;
+      justify-content: flex-end;
+
+      &:empty {
+        display: none;
+      }
     }
   }
 
