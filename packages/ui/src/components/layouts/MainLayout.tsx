@@ -2,7 +2,7 @@ import React from 'react';
 import { Props } from 'types';
 import { Container, styled } from '@mui/material';
 import { Link, Outlet } from 'react-router-dom';
-import CoongLogo from 'assets/images/coong-logo.png';
+import CoongLogo from 'assets/images/coong-text-inverted-logo.svg';
 import LockWalletButton from 'components/shared/LockWalletButton';
 import ResetWalletButton from 'components/shared/ResetWalletButton';
 
@@ -13,7 +13,7 @@ const MainLayout: React.FC<Props> = ({ className = '' }: Props) => {
         <Container maxWidth='sm'>
           <div className='main-header__inner'>
             <Link to='/'>
-              <img src={CoongLogo} alt='Coong Wallet' />
+              <img src={CoongLogo} alt='Coong Wallet' height={36} />
             </Link>
             <div className='main-header__actions'>
               {!import.meta.env.PROD && <ResetWalletButton />}
@@ -37,10 +37,12 @@ export default styled(MainLayout)`
   height: 100%;
 
   .main-header {
-    background-color: #f5f5f5;
+    background-color: #f1f6fa;
+    color: #fff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
     img {
-      height: 28px;
+      height: 36px;
       display: block;
     }
 

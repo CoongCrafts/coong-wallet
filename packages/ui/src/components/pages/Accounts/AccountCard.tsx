@@ -30,12 +30,13 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account }) => {
 };
 
 export default styled(AccountCard)`
-  border: 1px solid #e0e0e0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 0.5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
+  border-radius: 4px;
 
   .account-card--icon {
     font-size: 0;
