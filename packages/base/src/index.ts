@@ -1,3 +1,3 @@
-import keyring from 'keyring';
+import keyring from './keyring';
 
 export { keyring };

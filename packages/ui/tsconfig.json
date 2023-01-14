@@ -10,5 +10,5 @@
     }
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }, { "path": "../base/tsconfig.json" }]
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
