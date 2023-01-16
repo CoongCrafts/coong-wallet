@@ -1,15 +1,9 @@
-<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="800" height="800" rx="100" fill="white"/>
-    <circle cx="399" cy="400" r="315" fill="white"/>
-    <circle cx="399" cy="400" r="300" fill="white"/>
-    <g filter="url(#filter0_i_325_246)">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M449.998 649.878C449.998 673.808 471.683 692.105 494.371 684.496C613.26 644.624 698.92 532.316 698.92 400C698.92 234.315 564.605 100 398.92 100C233.234 100 98.9199 234.315 98.9199 400C98.9199 533.212 185.745 646.146 305.891 685.297C328.521 692.671 349.998 674.406 349.998 650.604V650.604C349.998 632.518 337.28 617.19 320.336 610.867C234.865 578.968 173.998 496.592 173.998 400C173.998 275.736 274.734 175 398.998 175C523.262 175 623.998 275.736 623.998 400C623.998 495.964 563.92 577.897 479.324 610.238C462.545 616.653 449.998 631.914 449.998 649.878V649.878ZM398.998 525C468.034 525 523.998 469.036 523.998 400C523.998 330.964 468.034 275 398.998 275C329.962 275 273.998 330.964 273.998 400C273.998 469.036 329.962 525 398.998 525Z" fill="url(#paint0_linear_325_246)"/>
-    </g>
-    <g filter="url(#filter1_d_325_246)">
-        <circle cx="399" cy="400" r="50" fill="white"/>
+<svg width="587" height="600" viewBox="0 0 587 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g filter="url(#filter0_i_325_231)">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M586.999 300C586.999 465.685 452.684 600 286.999 600C154.251 600 41.6415 513.78 2.1145 394.286C-5.38846 371.604 12.9125 350 36.8035 350V350C54.8472 350 70.1574 362.646 76.536 379.525C108.665 464.543 190.811 525 287.079 525C411.343 525 512.079 424.264 512.079 300C512.079 175.736 411.343 75 287.079 75C190.811 75 108.665 135.457 76.536 220.475C70.1574 237.354 54.8472 250 36.8035 250V250C12.9125 250 -5.38847 228.396 2.11449 205.714C41.6415 86.2198 154.251 0 286.999 0C452.684 0 586.999 134.315 586.999 300ZM412.079 300C412.079 369.036 356.114 425 287.079 425C218.043 425 162.079 369.036 162.079 300C162.079 230.964 218.043 175 287.079 175C356.114 175 412.079 230.964 412.079 300ZM287.081 350C314.695 350 337.081 327.614 337.081 300C337.081 272.386 314.695 250 287.081 250C259.466 250 237.081 272.386 237.081 300C237.081 327.614 259.466 350 287.081 350Z" fill="url(#paint0_linear_325_231)"/>
     </g>
     <defs>
-        <filter id="filter0_i_325_246" x="98.9199" y="100" width="605.002" height="591.953" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+        <filter id="filter0_i_325_231" x="0.410156" y="0" width="591.59" height="605" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
             <feFlood flood-opacity="0" result="BackgroundImageFix"/>
             <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
             <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
@@ -17,20 +11,10 @@
             <feGaussianBlur stdDeviation="5"/>
             <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
             <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
-            <feBlend mode="normal" in2="shape" result="effect1_innerShadow_325_246"/>
+            <feBlend mode="normal" in2="shape" result="effect1_innerShadow_325_231"/>
         </filter>
-        <filter id="filter1_d_325_246" x="345" y="350" width="108" height="108" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-            <feOffset dy="4"/>
-            <feGaussianBlur stdDeviation="2"/>
-            <feComposite in2="hardAlpha" operator="out"/>
-            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
-            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_325_246"/>
-            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_325_246" result="shape"/>
-        </filter>
-        <linearGradient id="paint0_linear_325_246" x1="398.88" y1="100" x2="398.88" y2="686.953" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#54ACEF"/>
+        <linearGradient id="paint0_linear_325_231" x1="293.665" y1="0" x2="293.665" y2="600" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#1C9DFF"/>
             <stop offset="1" stop-color="#1A88DB"/>
         </linearGradient>
     </defs>

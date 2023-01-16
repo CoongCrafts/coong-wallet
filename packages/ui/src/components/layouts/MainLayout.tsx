@@ -2,7 +2,7 @@ import React from 'react';
 import { Props } from 'types';
 import { Container, styled } from '@mui/material';
 import { Link, Outlet } from 'react-router-dom';
-import CoongLogo from 'assets/images/coong-text-inverted-logo.svg';
+import CoongLogo from 'assets/images/coong-text-logo.svg';
 import LockWalletButton from 'components/shared/LockWalletButton';
 import ResetWalletButton from 'components/shared/ResetWalletButton';
 
@@ -37,12 +37,16 @@ export default styled(MainLayout)`
   height: 100%;
 
   .main-header {
-    background-color: #f1f6fa;
     color: #fff;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.8);
 
     img {
-      height: 36px;
+      height: 34px;
       display: block;
     }
 
