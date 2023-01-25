@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "Keyring for Coong wallet",
   "scripts": {
-    "build": "rm -rf ./dist && tsc --build"
+    "build": "tsc --build",
+    "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo"
   },
   "main": "src/index.ts",
   "dependencies": {
