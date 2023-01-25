@@ -9,5 +9,6 @@
   "main": "src/index.ts",
   "dependencies": {
     "@coong/keyring": "*"
-  }
+  },
+  "license": "Apache-2.0"
 }

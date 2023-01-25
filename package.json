@@ -17,5 +17,6 @@
   },
   "dependencies": {
     "lerna": "^6.4.1"
-  }
+  },
+  "license": "Apache-2.0"
 }
