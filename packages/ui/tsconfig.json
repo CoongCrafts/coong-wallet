@@ -9,6 +9,13 @@
       "@coong/base/*": ["../../base/src/*"]
     }
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src/**/*"],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "../base/tsconfig.json"
+    }
+  ]
 }

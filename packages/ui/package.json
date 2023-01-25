@@ -5,12 +5,11 @@
   "type": "module",
   "scripts": {
     "start": "vite --port 3030",
-    "build": "tsc && vite build",
+    "build": "rm -rf ./dist && tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@coong/base": "^0.0.1",
-    "@coong/keyring": "^0.0.1",
+    "@coong/base": "*",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.11.0",
