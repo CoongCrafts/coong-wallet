@@ -1,5 +1,5 @@
 import CryptoJS from 'crypto-js';
-import { Keyring as PKeyring } from '@polkadot/ui-keyring';
+import { Keyring as InnerKeyring } from '@polkadot/ui-keyring';
 import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { KeyringPair } from '@polkadot/keyring/types';
 
@@ -10,13 +10,13 @@ const DEFAULT_KEY_TYPE = 'sr25519';
 const UNLOCK_INTERVAL = 15 * 60 * 1000;
 
 export default class Keyring {
-  #keyring: PKeyring;
+  #keyring: InnerKeyring;
   #mnemonic: string | null;
 
   constructor() {
     this.#mnemonic = null;
 
-    this.#keyring = new PKeyring();
+    this.#keyring = new InnerKeyring();
     this.#keyring.loadAll({});
   }
 
@@ -129,5 +129,9 @@ export default class Keyring {
     this.#increaseAccountsIndex();
 
     return keypair;
+  }
+
+  get accountsStore() {
+    return this.#keyring.accounts;
   }
 }

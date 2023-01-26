@@ -10,5 +10,11 @@
   "dependencies": {
     "@coong/keyring": "*"
   },
+  "devDependencies": {
+    "@polkadot/extension-inject": "^0.44.7",
+    "@polkadot/types": "^9.10.5",
+    "@polkadot/ui-keyring": "^2.9.14",
+    "@polkadot/util-crypto": "^10.2.1"
+  },
   "license": "Apache-2.0"
 }

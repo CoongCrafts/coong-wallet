@@ -9,6 +9,9 @@
   "references": [
     {
       "path": "../keyring/tsconfig.json"
+    },
+    {
+      "path": "../util/tsconfig.json"
     }
   ]
 }
