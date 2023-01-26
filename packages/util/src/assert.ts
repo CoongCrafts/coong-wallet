@@ -1,8 +1,8 @@
 import { CoongError, ErrorCode, ErrorCodes } from 'errors';
 
-export function assert(condition: unknown, message: string) {
+export function assert(condition: unknown, message?: string) {
   if (!condition) {
-    if (ErrorCodes.includes(message)) {
+    if (message && ErrorCodes.includes(message)) {
       throw new CoongError(message as ErrorCode);
     } else {
       throw new CoongError(ErrorCode.UnknownRequest, message);
@@ -10,6 +10,12 @@ export function assert(condition: unknown, message: string) {
   }
 }
 
-export function assertFalse(condition: unknown, message: string) {
+/**
+ * Throw out error if condition is undefined, false, null, '' or 0
+ *
+ * @param condition
+ * @param message
+ */
+export function assertFalse(condition: unknown, message?: string) {
   assert(!condition, message);
 }

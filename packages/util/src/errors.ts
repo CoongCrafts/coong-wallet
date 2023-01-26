@@ -1,11 +1,17 @@
 export enum ErrorCode {
   UnknownRequest = 'UnknownRequest',
-  AccountNameIsUsed = 'AccountNameIsUsed',
+
+  KeyringNotInitialized = 'KeyringNotInitialized',
+  PasswordIncorrect = 'PasswordIncorrect',
+  WalletLocked = 'WalletLocked',
+  AccountNameRequired = 'AccountNameRequired',
 }
 
 export const ErrorCodes = Object.values(ErrorCode) as string[];
 
-export class CoongError extends Error {
+export class StandardCoongError extends Error {}
+
+export class CoongError extends StandardCoongError {
   code: ErrorCode;
   constructor(errorCode: ErrorCode, message?: string) {
     super(message);

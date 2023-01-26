@@ -2,6 +2,7 @@ import CryptoJS from 'crypto-js';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring';
 import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { KeyringPair } from '@polkadot/keyring/types';
+import { assertFalse, CoongError, ErrorCode } from '@coong/util';
 
 const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
 const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
@@ -54,7 +55,7 @@ export default class Keyring {
 
   async unlock(password: string): Promise<void> {
     if (!(await this.initialized())) {
-      throw new Error('Keyring is not initialized!');
+      throw new CoongError(ErrorCode.KeyringNotInitialized);
     }
 
     if (!this.locked()) {
@@ -64,9 +65,7 @@ export default class Keyring {
     try {
       const decrypted = CryptoJS.AES.decrypt(this.#getEncryptedMnemonic()!, password);
       const raw = decrypted.toString(CryptoJS.enc.Utf8);
-      if (!raw) {
-        throw new Error();
-      }
+      assertFalse(raw);
 
       this.#mnemonic = raw;
       localStorage.setItem(UNLOCK_UNTIL, String(Date.now() + UNLOCK_INTERVAL));
@@ -75,7 +74,7 @@ export default class Keyring {
         this.#mnemonic = null;
       }, UNLOCK_INTERVAL); // TODO: change this auto-lock timmer
     } catch (e: any) {
-      throw new Error('Password is incorrect');
+      throw new CoongError(ErrorCode.PasswordIncorrect);
     }
   }
 
@@ -112,11 +111,11 @@ export default class Keyring {
 
   async createNewAccount(name: string): Promise<KeyringPair> {
     if (this.locked()) {
-      throw new Error('Unlock the wallet first!');
+      throw new CoongError(ErrorCode.WalletLocked);
     }
 
     if (!name) {
-      throw new Error('Account name is required');
+      throw new CoongError(ErrorCode.AccountNameRequired);
     }
 
     // TODO check if name is already used
