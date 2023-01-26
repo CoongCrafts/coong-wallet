@@ -4,11 +4,7 @@
     "baseUrl": "src",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "jsx": "react-jsx",
-    "noEmit": true,
-    "paths": {
-      "@coong/base": ["../../base/src"],
-      "@coong/base/*": ["../../base/src/*"]
-    }
+    "noEmit": true
   },
   "include": ["src/**/*"],
   "references": [
