@@ -11,7 +11,7 @@
       "path": "../keyring/tsconfig.json"
     },
     {
-      "path": "../util/tsconfig.json"
+      "path": "../utils/tsconfig.json"
     }
   ]
 }

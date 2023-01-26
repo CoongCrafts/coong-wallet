@@ -1,5 +1,5 @@
 {
-  "name": "@coong/util",
+  "name": "@coong/utils",
   "version": "0.0.1",
   "description": "Utilities for Coong wallet",
   "main": "src/index.ts",

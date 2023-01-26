@@ -2,7 +2,7 @@ import { MessageId, RequestAuthorizedAccounts, RequestName, WalletRequest, Walle
 import keyring from 'keyring';
 import { InjectedAccount } from '@polkadot/extension-inject/types';
 import { SingleAddress, SubjectInfo } from '@polkadot/ui-keyring/observable/types';
-import { CoongError, ErrorCode } from '@coong/util';
+import { CoongError, ErrorCode } from '@coong/utils';
 import { KeypairType } from '@polkadot/util-crypto/types';
 import Handler from '@coong/base/requests/Handler';
 

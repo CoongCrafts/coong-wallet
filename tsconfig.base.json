@@ -21,8 +21,8 @@
       "@coong/base/*": ["../../base/src/*"],
       "@coong/keyring": ["../../keyring/src"],
       "@coong/keyring/*": ["../../keyring/src/*"],
-      "@coong/util": ["../../util/src"],
-      "@coong/util/*": ["../../util/src/*"]
+      "@coong/utils": ["../../utils/src"],
+      "@coong/utils/*": ["../../utils/src/*"]
     }
   }
 }

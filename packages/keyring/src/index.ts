@@ -2,7 +2,7 @@ import CryptoJS from 'crypto-js';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring';
 import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { KeyringPair } from '@polkadot/keyring/types';
-import { assertFalse, CoongError, ErrorCode } from '@coong/util';
+import { assertFalse, CoongError, ErrorCode } from '@coong/utils';
 
 const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
 const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';

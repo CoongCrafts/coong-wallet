@@ -1,5 +1,5 @@
 import { MessageId, RequestName, WalletRequest, WalletResponse } from '@coong/base/types';
-import { CoongError, ErrorCode } from '@coong/util';
+import { CoongError, ErrorCode } from '@coong/utils';
 import Handler from '@coong/base/requests/Handler';
 
 export default class TabHandler extends Handler {
