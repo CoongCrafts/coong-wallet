@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { Container, styled } from '@mui/material';
-import CoongLogo from 'assets/images/coong-text-logo.svg';
 import LockWalletButton from 'components/shared/LockWalletButton';
 import ResetWalletButton from 'components/shared/ResetWalletButton';
+import CoongTextLogo from 'components/shared/mics/CoongTextLogo';
 import { Props } from 'types';
 
 interface MainLayoutProps extends Props {
@@ -16,9 +16,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ className = '', headerActions }
       <header className='main-header'>
         <Container maxWidth='sm'>
           <div className='main-header__inner'>
-            <Link to='/'>
-              <img src={CoongLogo} alt='Coong Wallet' height={36} />
-            </Link>
+            <CoongTextLogo />
             {headerActions && (
               <div className='main-header__actions'>
                 {!import.meta.env.PROD && <ResetWalletButton />}

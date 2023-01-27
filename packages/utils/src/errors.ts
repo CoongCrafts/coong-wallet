@@ -18,4 +18,8 @@ export class CoongError extends StandardCoongError {
     super(message);
     this.code = errorCode;
   }
+
+  get message() {
+    return this.code || super.message;
+  }
 }

@@ -5,6 +5,7 @@ export const globalStyles = css`
   body,
   #root {
     height: 100%;
+    display: flow-root;
   }
 
   ::selection {
