@@ -18,7 +18,7 @@ export const setupWalletMessageHandler = (walletUrl?: string) => {
       return;
     }
 
-    if (isWalletResponse(data)) {
+    if (!isWalletResponse(data)) {
       return;
     }
 
