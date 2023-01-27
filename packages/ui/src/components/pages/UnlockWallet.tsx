@@ -2,7 +2,7 @@ import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { keyring } from '@coong/base';
 import { Box, Button, styled, TextField } from '@mui/material';
-import EmptySpace from 'components/shared/mics/EmptySpace';
+import EmptySpace from 'components/shared/misc/EmptySpace';
 import { appActions } from 'redux/slices/app';
 import { Props } from 'types';
 

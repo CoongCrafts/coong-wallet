@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Box, Button, TextField } from '@mui/material';
-import EmptySpace from 'components/shared/mics/EmptySpace';
+import EmptySpace from 'components/shared/misc/EmptySpace';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { Props } from 'types';
 

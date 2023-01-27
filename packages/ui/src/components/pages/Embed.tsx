@@ -9,7 +9,7 @@ import {
 } from '@coong/base';
 import { RequestName, WalletRequestEvent, WalletResponse, WalletSignal } from '@coong/base/types';
 import { styled } from '@mui/material';
-import CoongTextLogo from 'components/shared/mics/CoongTextLogo';
+import CoongTextLogo from 'components/shared/misc/CoongTextLogo';
 import { Props } from 'types';
 
 const Embed: FC<Props> = ({ className = '' }: Props) => {
