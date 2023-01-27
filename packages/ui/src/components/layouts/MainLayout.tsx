@@ -6,7 +6,11 @@ import LockWalletButton from 'components/shared/LockWalletButton';
 import ResetWalletButton from 'components/shared/ResetWalletButton';
 import { Props } from 'types';
 
-const MainLayout: React.FC<Props> = ({ className = '' }: Props) => {
+interface MainLayoutProps extends Props {
+  headerActions?: boolean;
+}
+
+const MainLayout: React.FC<MainLayoutProps> = ({ className = '', headerActions }: MainLayoutProps) => {
   return (
     <div className={className}>
       <header className='main-header'>
@@ -15,10 +19,12 @@ const MainLayout: React.FC<Props> = ({ className = '' }: Props) => {
             <Link to='/'>
               <img src={CoongLogo} alt='Coong Wallet' height={36} />
             </Link>
-            <div className='main-header__actions'>
-              {!import.meta.env.PROD && <ResetWalletButton />}
-              <LockWalletButton />
-            </div>
+            {headerActions && (
+              <div className='main-header__actions'>
+                {!import.meta.env.PROD && <ResetWalletButton />}
+                <LockWalletButton />
+              </div>
+            )}
           </div>
         </Container>
       </header>
