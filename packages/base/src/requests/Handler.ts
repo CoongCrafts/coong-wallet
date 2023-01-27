@@ -1,4 +1,4 @@
-import State from '@coong/base/requests/State';
+import State from 'requests/State';
 
 export default abstract class Handler {
   readonly #state: State;

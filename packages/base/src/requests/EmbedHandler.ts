@@ -4,7 +4,7 @@ import { InjectedAccount } from '@polkadot/extension-inject/types';
 import { SingleAddress, SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import { CoongError, ErrorCode } from '@coong/utils';
 import { KeypairType } from '@polkadot/util-crypto/types';
-import Handler from '@coong/base/requests/Handler';
+import Handler from 'requests/Handler';
 
 const sortOldestFirst = (a: SingleAddress, b: SingleAddress) => {
   return (a.json.meta.whenCreated || 0) - (b.json.meta.whenCreated || 0);
