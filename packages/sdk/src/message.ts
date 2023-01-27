@@ -1,7 +1,7 @@
 import { injectExtension } from '@polkadot/extension-inject';
 import { Injected } from '@polkadot/extension-inject/types';
-import { isMessageId, newMessageId, newWalletRequest } from '@coong/base';
-import { MessageType, RequestName, WalletRequest, WalletResponse, WalletResponseEvent } from '@coong/base/types';
+import { isWalletResponse, newMessageId, newWalletRequest } from '@coong/base';
+import { RequestName, WalletRequest, WalletResponse, WalletResponseEvent } from '@coong/base/types';
 import { assert } from '@coong/utils';
 import CoongSdk from 'CoongSdk';
 import SubstrateInjected from 'injection/Injected';
@@ -18,11 +18,11 @@ export const setupWalletMessageHandler = (walletUrl?: string) => {
       return;
     }
 
-    const { id, error, response, type } = data;
-
-    if (!isMessageId(id) || type !== MessageType.RESPONSE) {
+    if (isWalletResponse(data)) {
       return;
     }
+
+    const { id, error, response } = data;
 
     const handler = handlers[id];
 

@@ -1,4 +1,5 @@
-import { MessageType, WalletSignal, WalletSignalEvent } from '@coong/base/types';
+import { isWalletSignal } from '@coong/base';
+import { WalletSignal, WalletSignalEvent } from '@coong/base/types';
 import { StandardCoongError } from '@coong/utils';
 
 export default abstract class WalletInstance {
@@ -29,11 +30,11 @@ export default abstract class WalletInstance {
         return;
       }
 
-      const { type, signal } = data;
-
-      if (type !== MessageType.SIGNAL) {
+      if (!isWalletSignal(data)) {
         return;
       }
+
+      const { signal } = data;
 
       this.onSignal(signal as WalletSignal);
     };

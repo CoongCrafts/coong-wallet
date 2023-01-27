@@ -8,8 +8,9 @@ import {
   WalletResponseEvent,
   WalletSignal,
   WalletSignalEvent,
+  WalletSignals,
 } from 'types';
-import { newMessageId } from 'utils/messageId';
+import { isMessageId, newMessageId } from 'utils/messageId';
 
 export const newWalletRequest = (request: WalletRequest<RequestName>, id?: MessageId): WalletRequestEvent => {
   return {
@@ -41,4 +42,19 @@ export const newWalletSignal = (signal: WalletSignal, id?: MessageId): WalletSig
     id: id || newMessageId(),
     signal,
   };
+};
+
+export const isWalletRequest = (event: WalletRequestEvent) => {
+  const { id, type, request } = event;
+  return isMessageId(id) && type === MessageType.REQUEST && request;
+};
+
+export const isWalletResponse = (event: WalletResponseEvent) => {
+  const { id, type, response, error } = event;
+  return isMessageId(id) && type === MessageType.RESPONSE && (response || error);
+};
+
+export const isWalletSignal = (event: WalletSignalEvent) => {
+  const { id, type, signal } = event;
+  return isMessageId(id) && type === MessageType.SIGNAL && WalletSignals.includes(signal);
 };

@@ -62,6 +62,8 @@ export enum WalletSignal {
   WALLET_TAB_UNLOADED = 'WALLET_TAB_UNLOADED',
 }
 
+export const WalletSignals = Object.values(WalletSignal) as string[];
+
 export interface WalletEvent {
   id: MessageId;
   type: MessageType;
