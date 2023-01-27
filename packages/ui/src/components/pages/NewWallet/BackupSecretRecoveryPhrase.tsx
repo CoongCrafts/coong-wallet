@@ -12,7 +12,6 @@ import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 
-
 const BackupSecretRecoveryPhrase: FC<Props> = ({ className = '' }: Props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

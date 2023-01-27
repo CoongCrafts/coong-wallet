@@ -5,7 +5,6 @@ import TabHandler from 'requests/TabHandler';
 import { MessageId, RequestName, WalletRequest, WalletResponse } from 'types';
 import { isMessageId } from 'utils/messageId';
 
-
 export const state = new State();
 export const embedHandler = new EmbedHandler(state);
 export const tabHandler = new TabHandler(state);

@@ -1,5 +1,5 @@
 import { WalletSignal } from '@coong/base/types';
-import { StandardCoongError } from '@coong/utils/errors';
+import { StandardCoongError } from '@coong/utils';
 import WalletInstance from 'wallet/WalletInstance';
 
 export default class TabInstance extends WalletInstance {

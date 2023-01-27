@@ -8,7 +8,6 @@ import NewAccountButton from 'components/shared/NewAccountButton';
 import PageTitle from 'components/shared/PageTitle';
 import { Props } from 'types';
 
-
 const Index: FC<Props> = ({ className = '' }) => {
   const [accounts, setAccounts] = useState<KeyringAddress[]>([]);
 

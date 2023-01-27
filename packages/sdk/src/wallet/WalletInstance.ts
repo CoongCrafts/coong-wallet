@@ -1,5 +1,5 @@
 import { MessageType, WalletSignal, WalletSignalEvent } from '@coong/base/types';
-import { StandardCoongError } from '@coong/utils/errors';
+import { StandardCoongError } from '@coong/utils';
 
 export default abstract class WalletInstance {
   public readonly walletUrl: string;

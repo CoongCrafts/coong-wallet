@@ -6,7 +6,6 @@ import EmptySpace from 'components/shared/mics/EmptySpace';
 import { appActions } from 'redux/slices/app';
 import { Props } from 'types';
 
-
 const UnlockWallet: FC<Props> = ({ className = '' }) => {
   const dispatch = useDispatch();
   const [password, setPassword] = useState('');

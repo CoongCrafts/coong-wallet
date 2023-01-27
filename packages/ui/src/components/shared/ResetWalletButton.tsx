@@ -6,7 +6,6 @@ import { IconButton } from '@mui/material';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 
-
 const ResetWalletButton: FC<Props> = () => {
   const { seedReady, locked } = useSelector((state: RootState) => state.app);
 

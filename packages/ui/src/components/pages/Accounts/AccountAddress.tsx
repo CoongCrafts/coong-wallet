@@ -5,7 +5,6 @@ import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 import { Props } from 'types';
 import { shortenAddress } from 'utils/string';
 
-
 interface AccountAddressProps extends Props {
   address: string;
   name?: string;

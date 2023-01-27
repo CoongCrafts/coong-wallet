@@ -6,7 +6,6 @@ import { CircularProgress, styled } from '@mui/material';
 import { appActions } from 'redux/slices/app';
 import { Props } from 'types';
 
-
 const SplashScreen: React.FC<Props> = ({ className = '' }: Props) => {
   const dispatch = useDispatch();
 

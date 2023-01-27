@@ -4,7 +4,6 @@ import { Tooltip } from '@mui/material';
 import { Props } from 'types';
 import { isTouchDevice } from 'utils/device';
 
-
 interface AddressCopiedTooltipProps extends Props {
   address: string;
   name?: string;

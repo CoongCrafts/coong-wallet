@@ -2,7 +2,6 @@ import type { Signer as SignerInterface, SignerResult } from '@polkadot/api/type
 import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types/extrinsic';
 import { SendMessage } from 'types';
 
-
 let sendMessage: SendMessage;
 
 const nextRequestId = (): number => {

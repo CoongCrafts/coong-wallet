@@ -8,7 +8,6 @@ import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 
-
 const ScreenStep = () => {
   const { newWalletScreenStep } = useSelector((state: RootState) => state.setupWallet);
 

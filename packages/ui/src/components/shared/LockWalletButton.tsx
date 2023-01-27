@@ -7,7 +7,6 @@ import { appActions } from 'redux/slices/app';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 
-
 const LockWalletButton: FC<Props> = () => {
   const dispatch = useDispatch();
   const { locked } = useSelector((state: RootState) => state.app);

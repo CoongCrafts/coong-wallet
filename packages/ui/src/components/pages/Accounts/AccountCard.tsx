@@ -6,7 +6,6 @@ import AccountAddress from 'components/pages/Accounts/AccountAddress';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 import { Props } from 'types';
 
-
 interface AccountCardProps extends Props {
   account: KeyringAddress;
 }

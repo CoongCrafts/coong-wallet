@@ -6,7 +6,6 @@ import keyring from 'keyring';
 import Handler from 'requests/Handler';
 import { MessageId, RequestAuthorizedAccounts, RequestName, WalletRequest, WalletResponse } from 'types';
 
-
 const sortOldestFirst = (a: SingleAddress, b: SingleAddress) => {
   return (a.json.meta.whenCreated || 0) - (b.json.meta.whenCreated || 0);
 };

@@ -11,7 +11,6 @@ import { globalStyles } from 'styles';
 import light from 'themes/light';
 import { ALERT_TIMEOUT } from 'utils/constants';
 
-
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>

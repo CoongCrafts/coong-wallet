@@ -4,7 +4,6 @@ import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { assert, CoongError, ErrorCode } from '@coong/utils';
 import CryptoJS from 'crypto-js';
 
-
 const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
 const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
 const UNLOCK_UNTIL = 'UNLOCK_UNTIL';

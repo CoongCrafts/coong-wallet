@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import { Button, styled } from '@mui/material';
 import { Props } from 'types';
 
-
 const Welcome: React.FC<Props> = ({ className = '' }: Props) => {
   const navigate = useNavigate();
 

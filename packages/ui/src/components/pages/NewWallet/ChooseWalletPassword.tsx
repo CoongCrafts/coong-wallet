@@ -5,7 +5,6 @@ import EmptySpace from 'components/shared/mics/EmptySpace';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { Props } from 'types';
 
-
 const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
   const dispatch = useDispatch();
   const [password, setPassword] = useState('');

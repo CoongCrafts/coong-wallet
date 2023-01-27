@@ -6,7 +6,6 @@ import LockWalletButton from 'components/shared/LockWalletButton';
 import ResetWalletButton from 'components/shared/ResetWalletButton';
 import { Props } from 'types';
 
-
 const MainLayout: React.FC<Props> = ({ className = '' }: Props) => {
   return (
     <div className={className}>
