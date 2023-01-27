@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
-import { Props } from 'types';
 import { useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
 import { keyring } from '@coong/base';
-import { IconButton } from '@mui/material';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
+import { IconButton } from '@mui/material';
+import { RootState } from 'redux/store';
+import { Props } from 'types';
+
 
 const ResetWalletButton: FC<Props> = () => {
   const { seedReady, locked } = useSelector((state: RootState) => state.app);

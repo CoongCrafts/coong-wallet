@@ -1,11 +1,12 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
-import { Props } from 'types';
-import { Box, Button, TextField } from '@mui/material';
-import { setupWalletActions } from 'redux/slices/setup-wallet';
-import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
+import { Box, Button, TextField } from '@mui/material';
+import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
 import EmptySpace from 'components/shared/mics/EmptySpace';
+import { setupWalletActions } from 'redux/slices/setup-wallet';
+import { RootState } from 'redux/store';
+import { Props } from 'types';
+
 
 const ConfirmWalletPassword: FC<Props> = ({ className = '' }: Props) => {
   const dispatch = useDispatch();

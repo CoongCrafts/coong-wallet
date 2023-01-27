@@ -1,8 +1,9 @@
 import { FC, useState } from 'react';
-import { Props } from 'types';
-import { Tooltip } from '@mui/material';
 import { useCopyToClipboard } from 'react-use';
+import { Tooltip } from '@mui/material';
+import { Props } from 'types';
 import { isTouchDevice } from 'utils/device';
+
 
 interface AddressCopiedTooltipProps extends Props {
   address: string;

@@ -1,8 +1,6 @@
-import { isMessageId, newMessageId } from '@coong/base';
-import { Handlers } from 'types';
+import { injectExtension } from '@polkadot/extension-inject';
 import { Injected } from '@polkadot/extension-inject/types';
-import SubstrateInjected from 'injection/Injected';
-import CoongSdk from 'CoongSdk';
+import { isMessageId, newMessageId } from '@coong/base';
 import {
   MessageType,
   RequestName,
@@ -11,8 +9,10 @@ import {
   WalletResponse,
   WalletResponseEvent,
 } from '@coong/base/types';
-import { injectExtension } from '@polkadot/extension-inject';
 import { assert } from '@coong/utils';
+import CoongSdk from 'CoongSdk';
+import SubstrateInjected from 'injection/Injected';
+import { Handlers } from 'types';
 
 const handlers: Handlers = {};
 

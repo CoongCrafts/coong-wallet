@@ -1,16 +1,17 @@
 import { ChangeEvent, FC, FormEvent, useState } from 'react';
-import { Props } from 'types';
-import { Box, Button, Checkbox, FormControlLabel, FormGroup, styled } from '@mui/material';
-import { setupWalletActions } from 'redux/slices/setup-wallet';
-import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
-import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
-import { LoadingButton } from '@mui/lab';
-import { useEffectOnce } from 'react-use';
-import { keyring } from '@coong/base';
-import { appActions } from 'redux/slices/app';
 import { useNavigate } from 'react-router-dom';
+import { useEffectOnce } from 'react-use';
+import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
+import { keyring } from '@coong/base';
+import { LoadingButton } from '@mui/lab';
+import { Box, Button, Checkbox, FormControlLabel, FormGroup, styled } from '@mui/material';
+import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
+import { appActions } from 'redux/slices/app';
+import { setupWalletActions } from 'redux/slices/setup-wallet';
+import { RootState } from 'redux/store';
+import { Props } from 'types';
+
 
 const BackupSecretRecoveryPhrase: FC<Props> = ({ className = '' }: Props) => {
   const dispatch = useDispatch();

@@ -1,10 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
-import Welcome from 'components/pages/Welcome';
-import SplashScreen from 'components/pages/SplashScreen';
 import Accounts from 'components/pages/Accounts';
+import SplashScreen from 'components/pages/SplashScreen';
 import UnlockWallet from 'components/pages/UnlockWallet';
+import Welcome from 'components/pages/Welcome';
+import { RootState } from 'redux/store';
+
 
 const MainScreen: React.FC = () => {
   const { ready, seedReady, locked } = useSelector((state: RootState) => state.app);

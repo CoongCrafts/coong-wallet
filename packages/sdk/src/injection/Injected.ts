@@ -1,6 +1,6 @@
 import { Injected } from '@polkadot/extension-inject/types';
-import CoongSigner from 'injection/CoongSigner';
 import Accounts from 'injection/Accounts';
+import CoongSigner from 'injection/CoongSigner';
 import { SendMessage } from 'types';
 
 export default class SubstrateInjected implements Injected {

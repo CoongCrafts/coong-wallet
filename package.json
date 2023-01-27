@@ -9,10 +9,12 @@
   "scripts": {
     "start": "yarn workspace @coong/ui start",
     "build": "yarn clean && npx lerna run build",
-    "clean": "npx lerna run clean"
+    "clean": "npx lerna run clean",
+    "prettify": "npx prettier --write ."
   },
   "author": "Thang X. Vu  - thang@coong.xyz",
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "prettier": "^2.8.1"
   },
   "dependencies": {

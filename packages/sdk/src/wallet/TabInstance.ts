@@ -1,6 +1,6 @@
-import WalletInstance from 'wallet/WalletInstance';
-import { StandardCoongError } from '@coong/utils/errors';
 import { WalletSignal } from '@coong/base/types';
+import { StandardCoongError } from '@coong/utils/errors';
+import WalletInstance from 'wallet/WalletInstance';
 
 export default class TabInstance extends WalletInstance {
   async openWalletWindow(path = ''): Promise<Window> {

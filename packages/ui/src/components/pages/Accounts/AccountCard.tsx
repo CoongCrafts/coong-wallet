@@ -1,10 +1,11 @@
+import { Identicon } from '@polkadot/react-identicon';
 import { FC } from 'react';
-import { Props } from 'types';
 import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { styled } from '@mui/material';
-import { Identicon } from '@polkadot/react-identicon';
 import AccountAddress from 'components/pages/Accounts/AccountAddress';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
+import { Props } from 'types';
+
 
 interface AccountCardProps extends Props {
   account: KeyringAddress;

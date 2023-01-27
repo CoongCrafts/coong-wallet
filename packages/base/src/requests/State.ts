@@ -1,5 +1,5 @@
-import { AccessStatus, RequestAppRequestAccess, ResponseAppRequestAccess } from 'types';
 import { assert } from '@coong/utils';
+import { AccessStatus, RequestAppRequestAccess, ResponseAppRequestAccess } from 'types';
 
 export type AppId = string;
 export interface AppInfo {

@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { CircularProgress, styled } from '@mui/material';
-import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { useDispatch } from 'react-redux';
+import { cryptoWaitReady } from '@polkadot/util-crypto';
+import { keyring } from '@coong/base';
+import { CircularProgress, styled } from '@mui/material';
 import { appActions } from 'redux/slices/app';
 import { Props } from 'types';
-import { keyring } from '@coong/base';
+
 
 const SplashScreen: React.FC<Props> = ({ className = '' }: Props) => {
   const dispatch = useDispatch();

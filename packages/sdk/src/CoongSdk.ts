@@ -1,9 +1,10 @@
-import { injectWalletAPI, setupWalletMessageHandler } from 'message';
-import TabInstance from 'wallet/TabInstance';
-import EmbedInstance from 'wallet/EmbedInstance';
-import { assert, assertFalse, ErrorCode } from '@coong/utils';
 import { MessageType, WalletEvent, WalletRequestEvent } from '@coong/base/types';
+import { assert, assertFalse, ErrorCode } from '@coong/utils';
 import { StandardCoongError } from '@coong/utils/errors';
+import { injectWalletAPI, setupWalletMessageHandler } from 'message';
+import EmbedInstance from 'wallet/EmbedInstance';
+import TabInstance from 'wallet/TabInstance';
+
 
 const DEFAULT_WALLET_URL = 'https://coongwallet.io';
 

@@ -1,9 +1,10 @@
 import { FC, useEffect, useState } from 'react';
-import { Props } from 'types';
-import { styled } from '@mui/material';
 import { useWindowSize } from 'react-use';
-import { shortenAddress } from 'utils/string';
+import { styled } from '@mui/material';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
+import { Props } from 'types';
+import { shortenAddress } from 'utils/string';
+
 
 interface AccountAddressProps extends Props {
   address: string;

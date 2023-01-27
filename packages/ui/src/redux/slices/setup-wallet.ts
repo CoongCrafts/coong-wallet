@@ -1,5 +1,5 @@
-import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
 import { createSlice } from '@reduxjs/toolkit';
+import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
 
 export interface SetupWalletState {
   newWalletScreenStep: NewWalletScreenStep;

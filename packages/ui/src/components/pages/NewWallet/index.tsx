@@ -1,12 +1,13 @@
 import { FC } from 'react';
-import { Props } from 'types';
-import { styled } from '@mui/material';
-import ChooseWalletPassword from 'components/pages/NewWallet/ChooseWalletPassword';
 import { useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
-import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
-import ConfirmWalletPassword from 'components/pages/NewWallet/ConfirmWalletPassword';
+import { styled } from '@mui/material';
 import BackupSecretRecoveryPhrase from 'components/pages/NewWallet/BackupSecretRecoveryPhrase';
+import ChooseWalletPassword from 'components/pages/NewWallet/ChooseWalletPassword';
+import ConfirmWalletPassword from 'components/pages/NewWallet/ConfirmWalletPassword';
+import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
+import { RootState } from 'redux/store';
+import { Props } from 'types';
+
 
 const ScreenStep = () => {
   const { newWalletScreenStep } = useSelector((state: RootState) => state.setupWallet);

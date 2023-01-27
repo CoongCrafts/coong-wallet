@@ -6,4 +6,5 @@ module.exports = {
   printWidth: 120,
   tabWidth: 2,
   bracketSameLine: true,
+  importOrder: ['.*react.*', '^@polkadot/(.*)$', '^@coong/(.*)$', '<THIRD_PARTY_MODULES>', '^[./]'],
 };

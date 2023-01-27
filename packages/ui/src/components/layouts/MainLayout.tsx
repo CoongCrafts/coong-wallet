@@ -1,10 +1,11 @@
 import React from 'react';
-import { Props } from 'types';
-import { Container, styled } from '@mui/material';
 import { Link, Outlet } from 'react-router-dom';
+import { Container, styled } from '@mui/material';
 import CoongLogo from 'assets/images/coong-text-logo.svg';
 import LockWalletButton from 'components/shared/LockWalletButton';
 import ResetWalletButton from 'components/shared/ResetWalletButton';
+import { Props } from 'types';
+
 
 const MainLayout: React.FC<Props> = ({ className = '' }: Props) => {
   return (

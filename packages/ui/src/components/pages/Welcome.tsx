@@ -1,8 +1,9 @@
-import { Button, styled } from '@mui/material';
 import React from 'react';
-import { Props } from 'types';
-import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Button, styled } from '@mui/material';
+import { Props } from 'types';
+
 
 const Welcome: React.FC<Props> = ({ className = '' }: Props) => {
   const navigate = useNavigate();

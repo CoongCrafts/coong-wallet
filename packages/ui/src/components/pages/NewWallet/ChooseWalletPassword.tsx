@@ -1,9 +1,10 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
-import { Props } from 'types';
-import { Box, Button, TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { setupWalletActions } from 'redux/slices/setup-wallet';
+import { Box, Button, TextField } from '@mui/material';
 import EmptySpace from 'components/shared/mics/EmptySpace';
+import { setupWalletActions } from 'redux/slices/setup-wallet';
+import { Props } from 'types';
+
 
 const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
   const dispatch = useDispatch();
