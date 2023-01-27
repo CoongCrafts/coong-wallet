@@ -1,14 +1,7 @@
 import { injectExtension } from '@polkadot/extension-inject';
 import { Injected } from '@polkadot/extension-inject/types';
-import { isMessageId, newMessageId } from '@coong/base';
-import {
-  MessageType,
-  RequestName,
-  WalletRequest,
-  WalletRequestEvent,
-  WalletResponse,
-  WalletResponseEvent,
-} from '@coong/base/types';
+import { isMessageId, newMessageId, newWalletRequest } from '@coong/base';
+import { MessageType, RequestName, WalletRequest, WalletResponse, WalletResponseEvent } from '@coong/base/types';
 import { assert } from '@coong/utils';
 import CoongSdk from 'CoongSdk';
 import SubstrateInjected from 'injection/Injected';
@@ -66,9 +59,7 @@ export function sendMessage<TRequestName extends RequestName>(
       reject,
     };
 
-    const messageBody: WalletRequestEvent = { id, request, type: MessageType.REQUEST };
-
-    console.log('sendMessage', messageBody);
+    const messageBody = newWalletRequest(request, id);
 
     CoongSdk.instance()
       .sendMessageToWallet(messageBody)
