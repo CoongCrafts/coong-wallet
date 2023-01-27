@@ -1,12 +1,14 @@
 import { CoongError, ErrorCode, ErrorCodes } from 'errors';
 
 export function assert(condition: unknown, message?: string) {
-  if (!condition) {
-    if (message && ErrorCodes.includes(message)) {
-      throw new CoongError(message as ErrorCode);
-    } else {
-      throw new CoongError(ErrorCode.UnknownRequest, message);
-    }
+  if (condition) {
+    return;
+  }
+
+  if (message && ErrorCodes.includes(message)) {
+    throw new CoongError(message as ErrorCode);
+  } else {
+    throw new CoongError(ErrorCode.UnknownRequest, message);
   }
 }
 

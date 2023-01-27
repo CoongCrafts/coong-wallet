@@ -2,7 +2,7 @@ import CryptoJS from 'crypto-js';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring';
 import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { KeyringPair } from '@polkadot/keyring/types';
-import { assertFalse, CoongError, ErrorCode } from '@coong/utils';
+import { assert, CoongError, ErrorCode } from '@coong/utils';
 
 const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
 const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
@@ -65,7 +65,7 @@ export default class Keyring {
     try {
       const decrypted = CryptoJS.AES.decrypt(this.#getEncryptedMnemonic()!, password);
       const raw = decrypted.toString(CryptoJS.enc.Utf8);
-      assertFalse(raw);
+      assert(raw);
 
       this.#mnemonic = raw;
       localStorage.setItem(UNLOCK_UNTIL, String(Date.now() + UNLOCK_INTERVAL));
