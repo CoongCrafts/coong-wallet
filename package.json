@@ -16,9 +16,7 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "prettier": "^2.8.1",
-    "prettier-plugin-organize-imports": "^3.2.2"
-  },
-  "dependencies": {
+    "prettier-plugin-organize-imports": "^3.2.2",
     "lerna": "^6.4.1"
   },
   "license": "Apache-2.0"
