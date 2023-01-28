@@ -11,22 +11,29 @@ import { RequestName, WalletRequestEvent, WalletResponse, WalletSignal } from '@
 import { styled } from '@mui/material';
 import CoongTextLogo from 'components/shared/misc/CoongTextLogo';
 import { Props } from 'types';
+import { isInsideIframe, topWindow } from 'utils/browser';
 
 const Embed: FC<Props> = ({ className = '' }: Props) => {
-  const topWindow = window.top;
-  const isInsideIframe = topWindow !== window.self;
+  const loadedInsideIframe = !topWindow() || !isInsideIframe();
 
   useEffectOnce(() => {
-    if (!topWindow || !isInsideIframe) {
+    if (loadedInsideIframe) {
       console.error('This page should be loaded inside an iframe!');
       return;
     }
 
-    topWindow.postMessage(newWalletSignal(WalletSignal.WALLET_EMBED_INITIALIZED), '*');
+    topWindow().postMessage(newWalletSignal(WalletSignal.WALLET_EMBED_INITIALIZED), '*');
+
+    const onUnload = () => {
+      topWindow().postMessage(newWalletSignal(WalletSignal.WALLET_EMBED_UNLOADED), '*');
+    };
+
+    window.addEventListener('unload', onUnload);
+    return () => window.removeEventListener('unload', onUnload);
   });
 
   useEffectOnce(() => {
-    if (!isInsideIframe) {
+    if (loadedInsideIframe) {
       return;
     }
 
@@ -40,11 +47,11 @@ const Embed: FC<Props> = ({ className = '' }: Props) => {
 
       handleWalletRequest(origin, id, request)
         .then((response: WalletResponse<RequestName>) => {
-          window.top!.postMessage(newWalletResponse(response, id), origin);
+          topWindow().postMessage(newWalletResponse(response, id), origin);
         })
         .catch((error: any) => {
           const message = error instanceof Error ? error.message : String(error);
-          window.top!.postMessage(newWalletErrorResponse(message, id), origin);
+          topWindow().postMessage(newWalletErrorResponse(message, id), origin);
         });
     };
 
