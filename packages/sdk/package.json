@@ -2,11 +2,11 @@
   "name": "@coong/sdk",
   "version": "0.0.1",
   "description": "Coong SDK to integrate Coong Wallet into dapps",
+  "author": "Thang X. Vu <thang@coongwallet.io>",
   "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Thang X. Vu <thang@coong.xyz>",
   "dependencies": {
     "@coong/base": "*"
   },

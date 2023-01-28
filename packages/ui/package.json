@@ -1,8 +1,8 @@
 {
   "name": "@coong/ui",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "0.0.1",
+  "author": "Thang X. Vu <thang@coongwallet.io>",
   "scripts": {
     "start": "vite --port 3030",
     "build": "tsc && vite build",

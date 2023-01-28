@@ -2,6 +2,7 @@
   "name": "@coong/base",
   "version": "0.0.1",
   "description": "Shared functions, logics for Coong wallet",
+  "author": "Thang X. Vu <thang@coongwallet.io>",
   "scripts": {
     "build": "tsc --build",
     "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo"

@@ -2,6 +2,7 @@
   "name": "@coong/keyring",
   "version": "0.0.1",
   "description": "Keyring for Coong wallet",
+  "author": "Thang X. Vu <thang@coongwallet.io>",
   "scripts": {
     "build": "tsc --build",
     "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo"

@@ -2,8 +2,8 @@
   "name": "@coong/utils",
   "version": "0.0.1",
   "description": "Utilities for Coong wallet",
+  "author": "Thang X. Vu <thang@coongwallet.io>",
   "main": "src/index.ts",
-  "author": "Thang X. Vu <thang@coong.xyz>",
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --build",

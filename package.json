@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "description": "A website-based multichain wallet for Polkadot & Kusama ecosystem",
+  "author": "Thang X. Vu <thang@coongwallet.io>",
   "workspaces": [
     "packages/*"
   ],
@@ -12,7 +13,6 @@
     "clean": "npx lerna run clean",
     "prettify": "npx prettier --write ."
   },
-  "author": "Thang X. Vu  - thang@coong.xyz",
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "prettier": "^2.8.1",
