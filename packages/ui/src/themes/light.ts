@@ -18,6 +18,7 @@ export default createTheme({
         variant: 'contained',
         sx: {
           textTransform: 'initial',
+          fontWeight: 700,
         },
       },
     },
