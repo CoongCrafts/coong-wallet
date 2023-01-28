@@ -6,7 +6,7 @@ export default class TabInstance extends WalletInstance {
   async openWalletWindow(path = ''): Promise<Window> {
     this.registerEvent();
 
-    const tabWalletWindow = window.open(`${this.walletUrl}${path}`);
+    const tabWalletWindow = window.open(`${this.walletUrl}${path}`, '_blank');
 
     if (!tabWalletWindow) {
       throw new StandardCoongError('Error open wallet tab');
