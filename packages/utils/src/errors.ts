@@ -1,6 +1,6 @@
 export enum ErrorCode {
   UnknownRequest = 'UnknownRequest',
-  InvalidWalletRequest = 'InvalidWalletRequest',
+  InvalidMessageFormat = 'InvalidMessageFormat',
 
   KeyringNotInitialized = 'KeyringNotInitialized',
   PasswordIncorrect = 'PasswordIncorrect',

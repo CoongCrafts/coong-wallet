@@ -1,5 +1,5 @@
 import { MessageType, WalletEvent, WalletRequestEvent } from '@coong/base/types';
-import { assert, assertFalse, ErrorCode, StandardCoongError } from '@coong/utils';
+import { assert, assertFalse, CoongError, ErrorCode } from '@coong/utils';
 import { injectWalletAPI, setupWalletMessageHandler } from 'message';
 import EmbedInstance from 'wallet/EmbedInstance';
 import TabInstance from 'wallet/TabInstance';
@@ -81,7 +81,7 @@ export default class CoongSdk {
     } else if (name.startsWith('embed/')) {
       await this.sendMessageToEmbedInstance(walletMessage);
     } else {
-      throw new StandardCoongError(ErrorCode.InvalidWalletRequest);
+      throw new CoongError(ErrorCode.InvalidMessageFormat);
     }
   }
 
