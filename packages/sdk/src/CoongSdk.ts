@@ -1,4 +1,4 @@
-import { MessageType, WalletEvent, WalletRequestEvent } from '@coong/base/types';
+import { MessageType, WalletRequestEvent } from '@coong/base/types';
 import { assert, assertFalse, CoongError, ErrorCode } from '@coong/utils';
 import { injectWalletAPI, setupWalletMessageHandler } from 'message';
 import EmbedInstance from 'wallet/EmbedInstance';
@@ -54,32 +54,32 @@ export default class CoongSdk {
     return new TabInstance(this.#walletUrl).openWalletWindow(path);
   }
 
-  async sendMessageToEmbedInstance(walletMessage: WalletEvent) {
+  async sendMessageToEmbedInstance(message: WalletRequestEvent) {
     this.ensureSdkInitialized();
 
-    this.#embedInstance!.walletWindow!.postMessage(walletMessage, this.#walletUrl || '*');
+    this.#embedInstance!.walletWindow!.postMessage(message, this.#walletUrl || '*');
   }
 
-  async sendMessageToTabInstance(walletMessage: WalletEvent) {
+  async sendMessageToTabInstance(message: WalletRequestEvent) {
     this.ensureSdkInitialized();
 
     const params = new URLSearchParams({
-      data: JSON.stringify({ origin: window.location.origin, data: walletMessage }),
+      message: JSON.stringify({ origin: window.location.origin, data: message }),
     });
 
     await this.openWalletWindow(`/request?${params.toString()}`);
   }
 
-  async sendMessageToWallet(walletMessage: WalletRequestEvent) {
-    const { type, request } = walletMessage;
+  async sendMessageToWallet(message: WalletRequestEvent) {
+    const { type, request } = message;
     assert(type === MessageType.REQUEST && request, 'Invalid message format');
 
     const { name } = request;
 
     if (name.startsWith('tab/')) {
-      await this.sendMessageToTabInstance(walletMessage);
+      await this.sendMessageToTabInstance(message);
     } else if (name.startsWith('embed/')) {
-      await this.sendMessageToEmbedInstance(walletMessage);
+      await this.sendMessageToEmbedInstance(message);
     } else {
       throw new CoongError(ErrorCode.InvalidMessageFormat);
     }
