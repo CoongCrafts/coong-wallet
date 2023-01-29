@@ -1,9 +1,9 @@
-import State from 'requests/State';
+import WalletState from 'requests/WalletState';
 
 export default abstract class Handler {
-  readonly #state: State;
+  readonly #state: WalletState;
 
-  constructor(state: State) {
+  constructor(state: WalletState) {
     this.#state = state;
   }
 

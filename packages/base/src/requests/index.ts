@@ -1,11 +1,11 @@
 import { CoongError, ErrorCode } from '@coong/utils';
 import { EmbedHandler } from 'requests/EmbedHandler';
-import State from 'requests/State';
 import TabHandler from 'requests/TabHandler';
+import WalletState from 'requests/WalletState';
 import { MessageId, RequestName, WalletRequest, WalletResponse } from 'types';
 import { isMessageId } from 'utils/messageId';
 
-export const state = new State();
+export const state = new WalletState();
 export const embedHandler = new EmbedHandler(state);
 export const tabHandler = new TabHandler(state);
 

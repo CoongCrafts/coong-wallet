@@ -9,7 +9,8 @@
   },
   "main": "src/index.ts",
   "dependencies": {
-    "@coong/keyring": "*"
+    "@coong/keyring": "*",
+    "rxjs": "^7.8.0"
   },
   "devDependencies": {
     "@polkadot/extension-inject": "^0.44.7",

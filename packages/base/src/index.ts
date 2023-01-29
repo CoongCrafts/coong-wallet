@@ -1,5 +1,5 @@
 import keyring from 'keyring';
 
 export { keyring };
-export { handleWalletRequest } from 'requests';
+export { handleWalletRequest, state, embedHandler, tabHandler } from 'requests';
 export * from 'utils';

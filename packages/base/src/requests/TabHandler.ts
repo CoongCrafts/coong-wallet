@@ -1,12 +1,8 @@
-import { MessageId, RequestAppRequestAccess, RequestName, WalletRequest, WalletResponse } from '@coong/base/types';
+import { MessageId, RequestName, WalletRequest, WalletResponse } from '@coong/base/types';
 import { CoongError, ErrorCode } from '@coong/utils';
 import Handler from 'requests/Handler';
 
 export default class TabHandler extends Handler {
-  async authorizeApp(fromUrl: string, request: RequestAppRequestAccess) {
-    return this.state.authorizeApp(fromUrl, request, []);
-  }
-
   async handle<TRequestName extends RequestName>(
     fromUrl: string,
     id: MessageId,
@@ -14,11 +10,15 @@ export default class TabHandler extends Handler {
   ): Promise<WalletResponse<TRequestName>> {
     const { name } = request;
 
+    if (name !== 'tab/requestAccess') {
+      this.state.ensureAppAuthorized(fromUrl);
+    }
+
     switch (name) {
       case 'tab/requestAccess':
-        return this.authorizeApp(fromUrl, request.body as RequestAppRequestAccess);
       case 'tab/signRaw':
       case 'tab/signExtrinsic':
+        return this.state.newRequestMessage(fromUrl, id, request);
       default:
         throw new CoongError(ErrorCode.UnknownRequest);
     }

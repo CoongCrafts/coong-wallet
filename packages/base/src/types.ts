@@ -81,3 +81,14 @@ export interface WalletResponseEvent extends WalletEvent {
 export interface WalletSignalEvent extends WalletEvent {
   signal: WalletSignal;
 }
+
+interface Resolver<T> {
+  reject: (error: Error) => void;
+  resolve: (result: T) => void;
+}
+
+export interface RequestMessage<TRequestName extends RequestName> extends Resolver<WalletResponse<TRequestName>> {
+  origin: string;
+  id: MessageId;
+  request: WalletRequest<TRequestName>;
+}
