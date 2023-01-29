@@ -2,13 +2,13 @@ import { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { state } from '@coong/base';
-import { RequestAppRequestAccess, RequestMessage, RequestName } from '@coong/base/types';
+import { RequestAppRequestAccess, WalletRequestWithResolver } from '@coong/base/types';
 import { Button, styled } from '@mui/material';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 
 interface RequestAccessProps extends Props {
-  message: RequestMessage<RequestName>;
+  message: WalletRequestWithResolver;
 }
 
 const RequestAccess: FC<RequestAccessProps> = ({ className = '', message }) => {

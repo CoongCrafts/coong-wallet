@@ -1,7 +1,6 @@
 import {
   MessageId,
   MessageType,
-  RequestName,
   WalletRequest,
   WalletRequestMessage,
   WalletResponse,
@@ -16,7 +15,7 @@ export const currentOrigin = () => {
   return window.location.origin;
 };
 
-export const newWalletRequest = (request: WalletRequest<RequestName>, id?: MessageId): WalletRequestMessage => {
+export const newWalletRequest = (request: WalletRequest, id?: MessageId): WalletRequestMessage => {
   return {
     type: MessageType.REQUEST,
     id: id || newMessageId(),
@@ -25,7 +24,7 @@ export const newWalletRequest = (request: WalletRequest<RequestName>, id?: Messa
   };
 };
 
-export const newWalletResponse = (response: WalletResponse<RequestName>, id?: MessageId): WalletResponseMessage => {
+export const newWalletResponse = (response: WalletResponse, id?: MessageId): WalletResponseMessage => {
   return {
     type: MessageType.RESPONSE,
     id: id || newMessageId(),
@@ -53,16 +52,16 @@ export const newWalletSignal = (signal: WalletSignal, id?: MessageId): WalletSig
 };
 
 export const isWalletRequest = (event: WalletRequestMessage) => {
-  const { id, type, request } = event;
-  return isMessageId(id) && type === MessageType.REQUEST && request;
+  const { id, type, origin, request } = event;
+  return origin && isMessageId(id) && type === MessageType.REQUEST && request;
 };
 
 export const isWalletResponse = (event: WalletResponseMessage) => {
-  const { id, type, response, error } = event;
-  return isMessageId(id) && type === MessageType.RESPONSE && (response || error);
+  const { id, type, origin, response, error } = event;
+  return origin && isMessageId(id) && type === MessageType.RESPONSE && (response || error);
 };
 
 export const isWalletSignal = (event: WalletSignalMessage) => {
-  const { id, type, signal } = event;
-  return isMessageId(id) && type === MessageType.SIGNAL && WalletSignals.includes(signal);
+  const { id, type, origin, signal } = event;
+  return origin && isMessageId(id) && type === MessageType.SIGNAL && WalletSignals.includes(signal);
 };

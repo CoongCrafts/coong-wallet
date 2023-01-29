@@ -2,7 +2,7 @@ import type { InjectedAccount } from '@polkadot/extension-inject/types';
 import type { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import type { HexString } from '@polkadot/util/types';
 
-export type MessageId = string;
+export type MessageId = `coong/${string}`;
 
 export interface RequestAccessAuthorized {
   appName: string;
@@ -42,12 +42,12 @@ export interface RequestSignatures {
 
 export type RequestName = keyof RequestSignatures;
 
-export interface WalletRequest<TRequestName extends RequestName> {
+export interface WalletRequest<TRequestName extends RequestName = RequestName> {
   name: TRequestName;
   body: RequestSignatures[TRequestName][0];
 }
 
-export type WalletResponse<TRequestName extends RequestName> = RequestSignatures[TRequestName][1];
+export type WalletResponse<TRequestName extends RequestName = RequestName> = RequestSignatures[TRequestName][1];
 
 export enum MessageType {
   SIGNAL = 'SIGNAL',
@@ -70,12 +70,12 @@ export interface WalletMessage {
   origin: string; // where the message was sending from
 }
 
-export interface WalletRequestMessage extends WalletMessage {
-  request: WalletRequest<RequestName>;
+export interface WalletRequestMessage<TRequestName extends RequestName = RequestName> extends WalletMessage {
+  request: WalletRequest<TRequestName>;
 }
 
-export interface WalletResponseMessage extends WalletMessage {
-  response?: WalletResponse<RequestName>;
+export interface WalletResponseMessage<TRequestName extends RequestName = RequestName> extends WalletMessage {
+  response?: WalletResponse<TRequestName>;
   error?: string;
 }
 
@@ -88,8 +88,6 @@ interface Resolver<T> {
   resolve: (result: T) => void;
 }
 
-export interface RequestMessage<TRequestName extends RequestName> extends Resolver<WalletResponse<TRequestName>> {
-  origin: string;
-  id: MessageId;
-  request: WalletRequest<TRequestName>;
-}
+export interface WalletRequestWithResolver<TRequestName extends RequestName = RequestName>
+  extends Resolver<WalletResponse<TRequestName>>,
+    WalletRequestMessage<TRequestName> {}

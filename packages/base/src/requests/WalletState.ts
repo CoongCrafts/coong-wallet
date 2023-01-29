@@ -2,11 +2,10 @@ import { assert, StandardCoongError } from '@coong/utils';
 import { BehaviorSubject } from 'rxjs';
 import {
   AccessStatus,
-  MessageId,
   RequestAppRequestAccess,
-  RequestMessage,
   RequestName,
-  WalletRequest,
+  WalletRequestMessage,
+  WalletRequestWithResolver,
   WalletResponse,
 } from 'types';
 
@@ -21,11 +20,12 @@ export type AuthorizedApps = Record<AppId, AppInfo>;
 const AUTHORIZED_ACCOUNTS_KEY = 'AUTHORIZED_ACCOUNTS';
 const URL_PROTOCOLS = ['http://', 'https://'];
 
-type NullableRequest = RequestMessage<RequestName> | null;
+type NullableRequestWithResolver = WalletRequestWithResolver | null;
 
 export default class WalletState {
   #authorizedApps: AuthorizedApps = {};
-  #requestMessageSubject: BehaviorSubject<NullableRequest> = new BehaviorSubject<NullableRequest>(null);
+  #requestMessageSubject: BehaviorSubject<NullableRequestWithResolver> =
+    new BehaviorSubject<NullableRequestWithResolver>(null);
 
   constructor() {
     this.#loadAuthorizedAccounts();
@@ -111,22 +111,18 @@ export default class WalletState {
   };
 
   async newRequestMessage<TRequestName extends RequestName>(
-    fromUrl: string,
-    id: MessageId,
-    request: WalletRequest<TRequestName>,
+    message: WalletRequestMessage<TRequestName>,
   ): Promise<WalletResponse<TRequestName>> {
     return new Promise<WalletResponse<TRequestName>>((resolve, reject) => {
       this.#requestMessageSubject.next({
-        origin: fromUrl,
-        id,
-        request,
+        ...message,
         reject,
         resolve,
       });
     });
   }
 
-  subscribeToNewRequestMessage = (onNewRequest: (request: RequestMessage<RequestName>) => void): (() => void) => {
+  subscribeToNewRequestMessage = (onNewRequest: (request: WalletRequestWithResolver) => void): (() => void) => {
     const subscription = this.#requestMessageSubject.subscribe((nextRequest) => {
       nextRequest && onNewRequest(nextRequest);
     });
