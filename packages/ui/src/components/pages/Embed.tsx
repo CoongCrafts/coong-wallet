@@ -64,7 +64,7 @@ const Embed: FC<Props> = ({ className = '' }: Props) => {
       <CoongTextLogo />
       <h2>Welcome to Coong Wallet!</h2>
       <h3>This page should be loaded inside an iframe!</h3>
-      <p>If you open this page by accident, it's safe to close it.</p>
+      <p>If you open this page by accident, it's safe to close it now.</p>
     </div>
   );
 };

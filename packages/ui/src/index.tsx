@@ -19,10 +19,10 @@ root.render(
         <GlobalStyles styles={globalStyles} />
         <App />
         <ToastContainer
-          position='bottom-right'
+          position='top-right' // TODO move to bottom right on mobile
           closeOnClick
           pauseOnHover
-          theme='light'
+          theme='colored'
           autoClose={ALERT_TIMEOUT}
           hideProgressBar
         />
