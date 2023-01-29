@@ -7,7 +7,7 @@ import {
   newWalletResponse,
   newWalletSignal,
 } from '@coong/base';
-import { RequestName, WalletRequestEvent, WalletResponse, WalletSignal } from '@coong/base/types';
+import { RequestName, WalletRequestMessage, WalletResponse, WalletSignal } from '@coong/base/types';
 import { styled } from '@mui/material';
 import CoongTextLogo from 'components/shared/misc/CoongTextLogo';
 import { Props } from 'types';
@@ -37,7 +37,7 @@ const Embed: FC<Props> = ({ className = '' }: Props) => {
       return;
     }
 
-    const onMessage = (event: MessageEvent<WalletRequestEvent>) => {
+    const onMessage = (event: MessageEvent<WalletRequestMessage>) => {
       const { origin, data } = event;
       if (origin === window.location.origin || !isWalletRequest(data)) {
         return;

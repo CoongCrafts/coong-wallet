@@ -1,7 +1,7 @@
 import { injectExtension } from '@polkadot/extension-inject';
 import { Injected } from '@polkadot/extension-inject/types';
 import { isWalletResponse, newMessageId, newWalletRequest } from '@coong/base';
-import { RequestName, WalletRequest, WalletResponse, WalletResponseEvent } from '@coong/base/types';
+import { RequestName, WalletRequest, WalletResponse, WalletResponseMessage } from '@coong/base/types';
 import { assert } from '@coong/utils';
 import CoongSdk from 'CoongSdk';
 import SubstrateInjected from 'injection/Injected';
@@ -12,7 +12,7 @@ const handlers: Handlers = {};
 export const setupWalletMessageHandler = (walletUrl?: string) => {
   walletUrl = walletUrl || '*';
 
-  window.addEventListener('message', (event: MessageEvent<WalletResponseEvent>) => {
+  window.addEventListener('message', (event: MessageEvent<WalletResponseMessage>) => {
     const { origin, data } = event;
     if (origin !== walletUrl) {
       return;

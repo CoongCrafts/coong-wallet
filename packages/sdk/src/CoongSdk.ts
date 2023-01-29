@@ -1,4 +1,4 @@
-import { MessageType, WalletRequestEvent } from '@coong/base/types';
+import { MessageType, WalletRequestMessage } from '@coong/base/types';
 import { assert, assertFalse, CoongError, ErrorCode } from '@coong/utils';
 import { injectWalletAPI, setupWalletMessageHandler } from 'message';
 import EmbedInstance from 'wallet/EmbedInstance';
@@ -54,23 +54,23 @@ export default class CoongSdk {
     return new TabInstance(this.#walletUrl).openWalletWindow(path);
   }
 
-  async sendMessageToEmbedInstance(message: WalletRequestEvent) {
+  async sendMessageToEmbedInstance(message: WalletRequestMessage) {
     this.ensureSdkInitialized();
 
     this.#embedInstance!.walletWindow!.postMessage(message, this.#walletUrl || '*');
   }
 
-  async sendMessageToTabInstance(message: WalletRequestEvent) {
+  async sendMessageToTabInstance(message: WalletRequestMessage) {
     this.ensureSdkInitialized();
 
     const params = new URLSearchParams({
-      message: JSON.stringify({ origin: window.location.origin, data: message }),
+      message: JSON.stringify(message),
     });
 
     await this.openWalletWindow(`/request?${params.toString()}`);
   }
 
-  async sendMessageToWallet(message: WalletRequestEvent) {
+  async sendMessageToWallet(message: WalletRequestMessage) {
     const { type, request } = message;
     assert(type === MessageType.REQUEST && request, 'Invalid message format');
 

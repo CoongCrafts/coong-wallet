@@ -1,5 +1,5 @@
 import { isWalletSignal } from '@coong/base';
-import { WalletSignal, WalletSignalEvent } from '@coong/base/types';
+import { WalletSignal, WalletSignalMessage } from '@coong/base/types';
 import { StandardCoongError } from '@coong/utils';
 
 export default abstract class WalletInstance {
@@ -24,7 +24,7 @@ export default abstract class WalletInstance {
   }
 
   protected registerEvent() {
-    const onMessage = (event: MessageEvent<WalletSignalEvent>) => {
+    const onMessage = (event: MessageEvent<WalletSignalMessage>) => {
       const { origin, data } = event;
       if (origin !== this.walletUrl) {
         return;

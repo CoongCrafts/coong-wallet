@@ -2,17 +2,12 @@ import { FC, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useEffectOnce } from 'react-use';
 import { handleWalletRequest, newWalletErrorResponse, newWalletResponse, newWalletSignal } from '@coong/base';
-import { RequestName, WalletRequestEvent, WalletResponse, WalletSignal } from '@coong/base/types';
+import { RequestName, WalletRequestMessage, WalletResponse, WalletSignal } from '@coong/base/types';
 import { ErrorCode } from '@coong/utils';
 import { styled } from '@mui/material';
 import RequestContent from 'components/pages/Request/RequestContent';
 import { Props } from 'types';
 import { isChildTabOrPopup, openerWindow } from 'utils/browser';
-
-export interface CurrentRequestMessage {
-  origin: string;
-  data: WalletRequestEvent;
-}
 
 const Request: FC<Props> = ({ className = '' }) => {
   const [searchParams] = useSearchParams();
@@ -24,12 +19,9 @@ const Request: FC<Props> = ({ className = '' }) => {
     }
 
     try {
-      const message = JSON.parse(searchParams.get('message')!) as CurrentRequestMessage;
+      const message = JSON.parse(searchParams.get('message')!) as WalletRequestMessage;
 
-      const {
-        origin,
-        data: { id, request },
-      } = message;
+      const { origin, id, request } = message;
 
       handleWalletRequest(origin, id, request)
         .then((response: WalletResponse<RequestName>) => {

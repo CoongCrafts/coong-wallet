@@ -64,21 +64,22 @@ export enum WalletSignal {
 
 export const WalletSignals = Object.values(WalletSignal) as string[];
 
-export interface WalletEvent {
+export interface WalletMessage {
   id: MessageId;
   type: MessageType;
+  origin: string; // where the message was sending from
 }
 
-export interface WalletRequestEvent extends WalletEvent {
+export interface WalletRequestMessage extends WalletMessage {
   request: WalletRequest<RequestName>;
 }
 
-export interface WalletResponseEvent extends WalletEvent {
+export interface WalletResponseMessage extends WalletMessage {
   response?: WalletResponse<RequestName>;
   error?: string;
 }
 
-export interface WalletSignalEvent extends WalletEvent {
+export interface WalletSignalMessage extends WalletMessage {
   signal: WalletSignal;
 }
 
