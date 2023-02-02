@@ -42,8 +42,11 @@ function transformAccounts(accounts: SubjectInfo, anyType = false): InjectedAcco
 }
 
 export class EmbedHandler extends Handler {
-  authorizedAccounts({ anyType }: RequestAuthorizedAccounts): InjectedAccount[] {
-    return transformAccounts(keyring.accountsStore.subject.getValue(), anyType);
+  authorizedAccounts(fromUrl: string, { anyType }: RequestAuthorizedAccounts): InjectedAccount[] {
+    const app = this.state.getAuthorizedApp(fromUrl);
+    const accounts = transformAccounts(keyring.accountsStore.subject.getValue(), anyType);
+
+    return accounts.filter((account) => app.authorizedAccounts.includes(account.address));
   }
 
   accessAuthorized(url: string): boolean {
@@ -53,14 +56,14 @@ export class EmbedHandler extends Handler {
   async handle<TRequestName extends RequestName>(
     message: WalletRequestMessage<TRequestName>,
   ): Promise<WalletResponse<TRequestName>> {
-    const { request, origin: fromUrl } = message;
+    const { request, origin } = message;
     const { name } = request;
 
     switch (name) {
       case 'embed/accessAuthorized':
-        return this.accessAuthorized(fromUrl);
+        return this.accessAuthorized(origin);
       case 'embed/authorizedAccounts':
-        return this.authorizedAccounts(request.body as RequestAuthorizedAccounts);
+        return this.authorizedAccounts(origin, request.body as RequestAuthorizedAccounts);
       default:
         throw new CoongError(ErrorCode.UnknownRequest);
     }

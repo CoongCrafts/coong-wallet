@@ -52,12 +52,16 @@ export default class WalletState {
     return url.split('//')[1];
   }
 
-  ensureAppAuthorized(url: string): boolean {
+  getAuthorizedApp(url: string): AppInfo {
     const appInfo = this.#authorizedApps[this.extractAppId(url)];
 
     assert(appInfo, `The app at ${url} has not been authorized yet!`);
 
-    return true;
+    return appInfo;
+  }
+
+  ensureAppAuthorized(url: string): boolean {
+    return !!this.getAuthorizedApp(url);
   }
 
   getCurrentRequestMessage = (requestName: RequestName) => {
