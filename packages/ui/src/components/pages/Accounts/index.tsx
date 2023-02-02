@@ -1,30 +1,20 @@
-import { FC, useState } from 'react';
-import { useAsync } from 'react-use';
-import { keyring } from '@coong/base';
-import { AccountInfo } from '@coong/keyring/types';
+import { FC } from 'react';
 import { styled } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
 import NewAccountButton from 'components/shared/NewAccountButton';
 import PageTitle from 'components/shared/PageTitle';
+import useAccounts from 'hooks/accounts/useAccounts';
 import { Props } from 'types';
 
 const Index: FC<Props> = ({ className = '' }) => {
-  const [accounts, setAccounts] = useState<AccountInfo[]>([]);
-
-  useAsync(async () => {
-    setAccounts(await keyring.getAccounts());
-  }, []);
-
-  const onNewAccountCreated = async () => {
-    setAccounts(await keyring.getAccounts());
-  };
+  const accounts = useAccounts();
 
   return (
     <div className={className}>
       <header className='page-header'>
         <PageTitle>Accounts {accounts.length >= 5 && <span>({accounts.length})</span>}</PageTitle>
         <div className='page-header__actions'>
-          <NewAccountButton onCreated={onNewAccountCreated} />
+          <NewAccountButton />
         </div>
       </header>
       <div className='page-content'>
