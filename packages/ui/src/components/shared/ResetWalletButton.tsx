@@ -14,7 +14,7 @@ const ResetWalletButton: FC<Props> = () => {
   }
 
   const doReset = async () => {
-    const confirm = window.confirm('[DEV] Confirm reset wallet?');
+    const confirm = window.confirm('[DEV] Confirm to reset wallet?');
     if (!confirm) {
       return;
     }
