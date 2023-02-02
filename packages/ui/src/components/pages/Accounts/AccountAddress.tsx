@@ -12,14 +12,15 @@ interface AccountAddressProps extends Props {
 
 const AccountAddress: FC<AccountAddressProps> = ({ className, address, name }) => {
   const { width } = useWindowSize();
-  const [displayAddress, setDisplayAddress] = useState('');
+  const showShortAddress = width < 500;
+  const getDisplayAddress = () => {
+    return showShortAddress ? shortenAddress(address) : address;
+  };
+
+  const [displayAddress, setDisplayAddress] = useState(getDisplayAddress());
 
   useEffect(() => {
-    if (width < 500) {
-      setDisplayAddress(shortenAddress(address));
-    } else {
-      setDisplayAddress(address);
-    }
+    setDisplayAddress(getDisplayAddress());
   }, [width]);
 
   return (
