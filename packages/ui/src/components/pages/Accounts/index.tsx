@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { useAsync } from 'react-use';
-import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { keyring } from '@coong/base';
+import { AccountInfo } from '@coong/keyring/types';
 import { styled } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
 import NewAccountButton from 'components/shared/NewAccountButton';
@@ -9,7 +9,7 @@ import PageTitle from 'components/shared/PageTitle';
 import { Props } from 'types';
 
 const Index: FC<Props> = ({ className = '' }) => {
-  const [accounts, setAccounts] = useState<KeyringAddress[]>([]);
+  const [accounts, setAccounts] = useState<AccountInfo[]>([]);
 
   useAsync(async () => {
     setAccounts(await keyring.getAccounts());

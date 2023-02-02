@@ -1,18 +1,17 @@
 import { Identicon } from '@polkadot/react-identicon';
 import { FC } from 'react';
-import { KeyringAddress } from '@polkadot/ui-keyring/types';
+import { AccountInfo } from '@coong/keyring/types';
 import { styled } from '@mui/material';
 import AccountAddress from 'components/pages/Accounts/AccountAddress';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 import { Props } from 'types';
 
 interface AccountCardProps extends Props {
-  account: KeyringAddress;
+  account: AccountInfo;
 }
 
 const AccountCard: FC<AccountCardProps> = ({ className = '', account }) => {
-  const { address, meta } = account;
-  const { name } = meta;
+  const { address, name } = account;
 
   return (
     <div className={`${className} account-card`}>

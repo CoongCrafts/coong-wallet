@@ -1,6 +1,6 @@
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring';
-import { KeyringAddress } from '@polkadot/ui-keyring/types';
+import { AccountInfo } from '@coong/keyring/types';
 import { assert, CoongError, ErrorCode } from '@coong/utils';
 import CryptoJS from 'crypto-js';
 
@@ -105,8 +105,12 @@ export default class Keyring {
     return `//${currentIndex - 1}`;
   }
 
-  async getAccounts(): Promise<KeyringAddress[]> {
-    return this.#keyring.getAccounts().sort((a, b) => (a.meta.whenCreated || 0) - (b.meta.whenCreated || 0));
+  async getAccounts(): Promise<AccountInfo[]> {
+    return Object.values(this.accountsStore.subject.getValue()).map(({ json: { address, meta }, type }) => ({
+      address,
+      ...meta,
+      type,
+    }));
   }
 
   async createNewAccount(name: string): Promise<KeyringPair> {
