@@ -1,4 +1,7 @@
+import { TypeRegistry } from '@polkadot/types';
+import { SignerPayloadJSON } from '@polkadot/types/types';
 import { assert, StandardCoongError } from '@coong/utils';
+import keyring from 'keyring';
 import { BehaviorSubject } from 'rxjs';
 import {
   AccessStatus,
@@ -113,6 +116,34 @@ export default class WalletState {
     const currentRequestMessage = this.getCurrentRequestMessage('tab/requestAccess');
     currentRequestMessage.reject(new StandardCoongError(AccessStatus.DENIED));
   };
+
+  async approveSignExtrinsic(password: string) {
+    await keyring.verifyPassword(password);
+
+    const currentMessage = this.getCurrentRequestMessage('tab/signExtrinsic');
+
+    const { id, request, resolve } = currentMessage;
+    const payloadJSON = request.body as SignerPayloadJSON;
+
+    const pair = keyring.getSigningPair(payloadJSON.address);
+    pair.unlock();
+
+    const registry = new TypeRegistry();
+    registry.setSignedExtensions(payloadJSON.signedExtensions);
+    const payload = registry.createType('ExtrinsicPayload', payloadJSON, { version: payloadJSON.version });
+    const result = payload.sign(pair);
+
+    resolve({
+      id,
+      ...result,
+    });
+  }
+
+  cancelSignExtrinsic() {
+    const currentMessage = this.getCurrentRequestMessage('tab/signExtrinsic');
+
+    currentMessage.reject(new StandardCoongError('Cancelled'));
+  }
 
   async newRequestMessage<TRequestName extends RequestName>(
     message: WalletRequestMessage<TRequestName>,

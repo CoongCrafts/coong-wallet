@@ -30,6 +30,12 @@ export default class Keyring {
     return !!this.#getEncryptedMnemonic();
   }
 
+  async ensureWalletInitialized() {
+    if (!(await this.initialized())) {
+      throw new CoongError(ErrorCode.KeyringNotInitialized);
+    }
+  }
+
   locked() {
     const unlockTimer = this.#getUnlockTimer();
     if (!unlockTimer) {
@@ -54,28 +60,37 @@ export default class Keyring {
   }
 
   async unlock(password: string): Promise<void> {
-    if (!(await this.initialized())) {
-      throw new CoongError(ErrorCode.KeyringNotInitialized);
-    }
+    await this.ensureWalletInitialized();
 
     if (!this.locked()) {
       return;
     }
+
+    this.#mnemonic = await this.#decryptMnemonic(password);
+    localStorage.setItem(UNLOCK_UNTIL, String(Date.now() + UNLOCK_INTERVAL));
+
+    setTimeout(() => {
+      this.#mnemonic = null;
+    }, UNLOCK_INTERVAL); // TODO: change this auto-lock timmer
+  }
+
+  async #decryptMnemonic(password: string): Promise<string> {
+    await this.ensureWalletInitialized();
 
     try {
       const decrypted = CryptoJS.AES.decrypt(this.#getEncryptedMnemonic()!, password);
       const raw = decrypted.toString(CryptoJS.enc.Utf8);
       assert(raw);
 
-      this.#mnemonic = raw;
-      localStorage.setItem(UNLOCK_UNTIL, String(Date.now() + UNLOCK_INTERVAL));
-
-      setTimeout(() => {
-        this.#mnemonic = null;
-      }, UNLOCK_INTERVAL); // TODO: change this auto-lock timmer
+      return raw;
     } catch (e: any) {
       throw new CoongError(ErrorCode.PasswordIncorrect);
     }
+  }
+
+  async verifyPassword(password: string) {
+    await this.ensureWalletInitialized();
+    await this.#decryptMnemonic(password);
   }
 
   #getEncryptedMnemonic(): string | null {
@@ -136,5 +151,13 @@ export default class Keyring {
 
   get accountsStore() {
     return this.#keyring.accounts;
+  }
+
+  getSigningPair(address: string): KeyringPair {
+    const pair = this.#keyring.getPair(address);
+
+    assert(pair, 'Unable to find keypair');
+
+    return pair;
   }
 }
