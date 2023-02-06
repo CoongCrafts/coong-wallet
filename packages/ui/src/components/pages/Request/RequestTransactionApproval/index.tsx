@@ -3,18 +3,13 @@ import { Form } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { keyring, state } from '@coong/base';
-import { WalletRequestWithResolver } from '@coong/base/types';
 import { assert } from '@coong/utils';
 import { Button, TextField } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
 import RequestDetails from 'components/pages/Request/RequestTransactionApproval/RequestDetails';
-import { Props } from 'types';
+import { RequestProps } from 'components/pages/Request/types';
 
-interface RequestTransactionApprovalProps extends Props {
-  message: WalletRequestWithResolver;
-}
-
-const RequestTransactionApproval: FC<RequestTransactionApprovalProps> = ({ className, message }) => {
+const RequestTransactionApproval: FC<RequestProps> = ({ className, message }) => {
   const [password, setPassword] = useState<string>('');
   const { request } = message;
 

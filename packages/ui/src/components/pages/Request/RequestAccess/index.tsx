@@ -2,17 +2,13 @@ import { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { state } from '@coong/base';
-import { RequestAppRequestAccess, WalletRequestWithResolver } from '@coong/base/types';
+import { RequestAppRequestAccess } from '@coong/base/types';
 import { Button, styled } from '@mui/material';
 import AccountsSelection from 'components/pages/Request/RequestAccess/AccountsSelection';
+import { RequestProps } from 'components/pages/Request/types';
 import { RootState } from 'redux/store';
-import { Props } from 'types';
 
-interface RequestAccessProps extends Props {
-  message: WalletRequestWithResolver;
-}
-
-const RequestAccess: FC<RequestAccessProps> = ({ className = '', message }) => {
+const RequestAccess: FC<RequestProps> = ({ className = '', message }) => {
   const {
     app: { seedReady },
     accounts: { selectedAccounts },
