@@ -61,7 +61,7 @@ const RequestTransactionApproval: FC<RequestTransactionApprovalProps> = ({ class
 
   return (
     <div className={className}>
-      <h2 className='text-center'>Approve Transaction Request</h2>
+      <h2 className='text-center'>Transaction Approval Request</h2>
       <p>You are approving a transaction with account</p>
       <AccountCard account={targetAccount} />
       <div className='my-4'>
