@@ -3,7 +3,6 @@ import { Form } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { keyring, state } from '@coong/base';
-import { assert } from '@coong/utils';
 import { Button, TextField } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
 import RequestDetails from 'components/pages/Request/RequestTransactionApproval/RequestDetails';
@@ -14,11 +13,7 @@ const RequestTransactionApproval: FC<RequestProps> = ({ className, message }) =>
   const { request } = message;
 
   const payloadJSON = request.body as SignerPayloadJSON;
-
-  const pair = keyring.getSigningPair(payloadJSON.address);
-  assert(pair, 'Account not found');
-
-  const targetAccount = { address: pair.address, ...pair.meta };
+  const targetAccount = keyring.getAccount(payloadJSON.address);
 
   const approveTransaction = async () => {
     try {

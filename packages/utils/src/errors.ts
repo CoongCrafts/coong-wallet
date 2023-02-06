@@ -1,6 +1,9 @@
 export enum ErrorCode {
+  InternalError = 'InternalError',
   UnknownRequest = 'UnknownRequest',
+  UnknownRequestOrigin = 'UnknownRequestOrigin',
   InvalidMessageFormat = 'InvalidMessageFormat',
+  KeypairNotFound = 'KeypairNotFound',
 
   KeyringNotInitialized = 'KeyringNotInitialized',
   PasswordIncorrect = 'PasswordIncorrect',
@@ -23,3 +26,13 @@ export class CoongError extends StandardCoongError {
     return this.code || super.message;
   }
 }
+
+export const getErrorMessage = (error: Error) => {
+  if (error instanceof SyntaxError) {
+    return ErrorCode.InvalidMessageFormat;
+  } else if (error instanceof StandardCoongError) {
+    return error.message;
+  }
+
+  return ErrorCode.InternalError;
+};

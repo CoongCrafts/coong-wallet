@@ -154,10 +154,16 @@ export default class Keyring {
   }
 
   getSigningPair(address: string): KeyringPair {
-    const pair = this.#keyring.getPair(address);
+    try {
+      return this.#keyring.getPair(address);
+    } catch (e: any) {
+      throw new CoongError(ErrorCode.KeypairNotFound);
+    }
+  }
 
-    assert(pair, 'Unable to find keypair');
+  getAccount(address: string) {
+    const pair = this.getSigningPair(address);
 
-    return pair;
+    return { address, ...pair.meta };
   }
 }

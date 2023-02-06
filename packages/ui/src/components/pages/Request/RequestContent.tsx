@@ -1,31 +1,31 @@
-import { FC } from 'react';
-import InvalidRequest from 'components/pages/Request/InvalidRequest';
+import React, { FC } from 'react';
+import { CoongError, ErrorCode } from '@coong/utils';
+import { CircularProgress } from '@mui/material';
 import RequestAccess from 'components/pages/Request/RequestAccess';
 import RequestTransactionApproval from 'components/pages/Request/RequestTransactionApproval';
 import useCurrentRequestMessage from 'hooks/messages/useCurrentRequestMessage';
 import { Props } from 'types';
-import { isChildTabOrPopup } from 'utils/browser';
 
-interface RequestContentProps extends Props {
-  invalidReason?: string;
-}
+const RequestContent: FC<Props> = () => {
+  const [ready, message] = useCurrentRequestMessage();
 
-const RequestContent: FC<RequestContentProps> = ({ invalidReason }) => {
-  const message = useCurrentRequestMessage();
-
-  if (!isChildTabOrPopup() || !message || invalidReason) {
-    return <InvalidRequest reason={invalidReason} />;
+  if (!ready) {
+    return (
+      <div className='flex justify-center my-8'>
+        <CircularProgress />
+      </div>
+    );
   }
 
   const requestName = message?.request?.name;
 
   if (requestName === 'tab/requestAccess') {
-    return <RequestAccess message={message} />;
+    return <RequestAccess message={message!} />;
   } else if (requestName === 'tab/signExtrinsic') {
-    return <RequestTransactionApproval message={message} />;
+    return <RequestTransactionApproval message={message!} />;
   }
 
-  return <InvalidRequest reason={invalidReason} />;
+  throw new CoongError(ErrorCode.UnknownRequest);
 };
 
 export default RequestContent;

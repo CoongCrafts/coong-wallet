@@ -67,7 +67,7 @@ export default class WalletState {
     return !!this.getAuthorizedApp(url);
   }
 
-  getCurrentRequestMessage = (requestName: RequestName) => {
+  getCurrentRequestMessage = (requestName?: RequestName) => {
     const currentRequestMessage = this.#requestMessageSubject.value;
     if (!currentRequestMessage) {
       throw new StandardCoongError('No request message available');

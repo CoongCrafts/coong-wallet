@@ -51,17 +51,29 @@ export const newWalletSignal = (signal: WalletSignal, id?: MessageId): WalletSig
   };
 };
 
-export const isWalletRequest = (event: WalletRequestMessage) => {
-  const { id, type, origin, request } = event;
+export const isWalletRequest = (message?: WalletRequestMessage) => {
+  if (!message) {
+    return false;
+  }
+
+  const { id, type, origin, request } = message;
   return origin && isMessageId(id) && type === MessageType.REQUEST && request;
 };
 
-export const isWalletResponse = (event: WalletResponseMessage) => {
-  const { id, type, origin, response, error } = event;
+export const isWalletResponse = (message?: WalletResponseMessage) => {
+  if (!message) {
+    return false;
+  }
+
+  const { id, type, origin, response, error } = message;
   return origin && isMessageId(id) && type === MessageType.RESPONSE && (response || error);
 };
 
-export const isWalletSignal = (event: WalletSignalMessage) => {
-  const { id, type, origin, signal } = event;
+export const isWalletSignal = (message?: WalletSignalMessage) => {
+  if (!message) {
+    return false;
+  }
+
+  const { id, type, origin, signal } = message;
   return origin && isMessageId(id) && type === MessageType.SIGNAL && WalletSignals.includes(signal);
 };

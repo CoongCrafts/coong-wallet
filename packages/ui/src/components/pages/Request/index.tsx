@@ -1,4 +1,5 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useSearchParams } from 'react-router-dom';
 import { useEffectOnce } from 'react-use';
 import {
@@ -10,55 +11,44 @@ import {
 } from '@coong/base';
 import { WalletRequestMessage, WalletResponse, WalletSignal } from '@coong/base/types';
 import { CoongError, ErrorCode } from '@coong/utils';
+import { getErrorMessage } from '@coong/utils/errors';
 import { styled } from '@mui/material';
+import InvalidRequest from 'components/pages/Request/InvalidRequest';
 import RequestContent from 'components/pages/Request/RequestContent';
 import { Props } from 'types';
 import { isChildTabOrPopup, openerWindow } from 'utils/browser';
 
 const Request: FC<Props> = ({ className = '' }) => {
   const [searchParams] = useSearchParams();
-  const [reason, setReason] = useState<string>();
+
+  if (!isChildTabOrPopup()) {
+    console.error('This page should not be open directly!');
+    throw new CoongError(ErrorCode.UnknownRequestOrigin);
+  }
 
   useEffectOnce(() => {
-    if (!isChildTabOrPopup()) {
-      return;
+    const message = JSON.parse(searchParams.get('message')!) as WalletRequestMessage;
+
+    if (!isWalletRequest(message)) {
+      throw new CoongError(ErrorCode.InvalidMessageFormat);
     }
 
-    try {
-      const message = JSON.parse(searchParams.get('message')!) as WalletRequestMessage;
+    const { origin, id } = message;
 
-      const { origin, id } = message;
-
-      if (!isWalletRequest(message)) {
-        throw new CoongError(ErrorCode.InvalidMessageFormat);
-      }
-
-      handleWalletRequest(message)
-        .then((response: WalletResponse) => {
-          openerWindow().postMessage(newWalletResponse(response, id), origin);
-        })
-        .catch((error: any) => {
-          const message = error instanceof Error ? error.message : String(error);
-          openerWindow().postMessage(newWalletErrorResponse(message, id), origin);
-        })
-        .finally(() => {
-          window.close();
-        });
-    } catch (e: any) {
-      if (e instanceof SyntaxError) {
-        setReason(ErrorCode.InvalidMessageFormat);
-      } else {
-        setReason(e.message);
-      }
-    }
+    handleWalletRequest(message)
+      .then((response: WalletResponse) => {
+        openerWindow().postMessage(newWalletResponse(response, id), origin);
+      })
+      .catch((error: any) => {
+        const message = error instanceof Error ? error.message : String(error);
+        openerWindow().postMessage(newWalletErrorResponse(message, id), origin);
+      })
+      .finally(() => {
+        window.close();
+      });
   });
 
   useEffectOnce(() => {
-    if (!isChildTabOrPopup()) {
-      console.error('This page should not be open directly!');
-      return;
-    }
-
     openerWindow().postMessage(newWalletSignal(WalletSignal.WALLET_TAB_INITIALIZED), '*');
 
     const onUnload = () => {
@@ -71,11 +61,19 @@ const Request: FC<Props> = ({ className = '' }) => {
 
   return (
     <div className={className}>
-      <RequestContent invalidReason={reason} />
+      <RequestContent />
     </div>
   );
 };
 
-export default styled(Request)`
+const StyledRequest = styled(Request)`
   margin: 1rem auto;
 `;
+
+const WrappedRequest = withErrorBoundary(StyledRequest, {
+  fallbackRender: ({ error }) => {
+    return <InvalidRequest reason={getErrorMessage(error)} />;
+  },
+});
+
+export default WrappedRequest;
