@@ -25,7 +25,10 @@ export const globalStyles = css`
     }
   }
 
-  p,
+  p {
+    margin-top: 0;
+  }
+
   h1,
   h2,
   h3,
@@ -33,5 +36,32 @@ export const globalStyles = css`
   h5,
   h6 {
     margin-top: 0;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.625rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+
+  h4 {
+    font-size: 1.25rem;
+  }
+
+  h5 {
+    font-size: 1.125rem;
+  }
+
+  h6 {
+    font-size: 1rem;
   }
 `;
