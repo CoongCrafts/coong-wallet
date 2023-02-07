@@ -137,7 +137,10 @@ export default class Keyring {
       throw new CoongError(ErrorCode.AccountNameRequired);
     }
 
-    // TODO check if name is already used
+    const existingAccount = await this.getAccountByName(name);
+    if (existingAccount) {
+      throw new CoongError(ErrorCode.AccountNameUsed);
+    }
 
     const nextPath = `${this.#mnemonic}${this.#nextAccountPath()}`;
     const keypair = this.#keyring.createFromUri(nextPath, { name }, DEFAULT_KEY_TYPE);
@@ -165,5 +168,9 @@ export default class Keyring {
     const pair = this.getSigningPair(address);
 
     return { address, ...pair.meta };
+  }
+
+  async getAccountByName(name: string) {
+    return (await this.getAccounts()).find((one) => one.name === name);
   }
 }

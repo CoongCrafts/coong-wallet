@@ -9,6 +9,7 @@ export enum ErrorCode {
   PasswordIncorrect = 'PasswordIncorrect',
   WalletLocked = 'WalletLocked',
   AccountNameRequired = 'AccountNameRequired',
+  AccountNameUsed = 'AccountNameUsed',
 }
 
 export const ErrorCodes = Object.values(ErrorCode) as string[];
