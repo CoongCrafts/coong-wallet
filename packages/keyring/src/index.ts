@@ -117,11 +117,13 @@ export default class Keyring {
   }
 
   async getAccounts(): Promise<AccountInfo[]> {
-    return Object.values(this.accountsStore.subject.getValue()).map(({ json: { address, meta }, type }) => ({
-      address,
-      ...meta,
-      type,
-    }));
+    return Object.values(this.accountsStore.subject.getValue())
+      .map(({ json: { address, meta }, type }) => ({
+        address,
+        ...meta,
+        type,
+      }))
+      .sort((a, b) => (a.whenCreated || 0) - (b.whenCreated || 0));
   }
 
   async createNewAccount(name: string): Promise<KeyringPair> {
