@@ -16,7 +16,7 @@ const LockWalletButton: FC<Props> = () => {
 
   const doLock = () => {
     keyring.lock();
-    dispatch(appActions.setLockStatus(keyring.locked()));
+    dispatch(appActions.lock());
   };
 
   return (

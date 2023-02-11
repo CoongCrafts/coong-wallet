@@ -22,8 +22,11 @@ const appSlice = createSlice({
     setSeedReady: (state: Draft<AppState>) => {
       state.seedReady = true;
     },
-    setLockStatus: (state: Draft<AppState>, action) => {
-      state.locked = !!action.payload;
+    lock: (state: Draft<AppState>) => {
+      state.locked = true;
+    },
+    unlock: (state: Draft<AppState>) => {
+      state.locked = false;
     },
   },
 });

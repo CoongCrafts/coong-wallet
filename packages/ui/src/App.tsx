@@ -28,7 +28,6 @@ const App: FC<Props> = () => {
     keyring.initialized().then((initialized) => {
       if (initialized) {
         dispatch(appActions.setSeedReady());
-        dispatch(appActions.setLockStatus(keyring.locked()));
       }
     });
   });
