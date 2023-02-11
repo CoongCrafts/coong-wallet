@@ -7,16 +7,13 @@ import CryptoJS from 'crypto-js';
 const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
 const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
 const DEFAULT_KEY_TYPE = 'sr25519';
-const UNLOCK_INTERVAL = 15 * 60 * 1000; // 15 minutes
 
 export default class Keyring {
   #keyring: InnerKeyring;
   #mnemonic: string | null;
-  #unlockUntil: number | null;
 
   constructor() {
     this.#mnemonic = null;
-    this.#unlockUntil = null;
 
     this.#keyring = new InnerKeyring();
     this.#keyring.loadAll({});
@@ -38,15 +35,11 @@ export default class Keyring {
   }
 
   locked() {
-    if (!this.#unlockUntil || !this.#mnemonic) {
-      return true;
-    }
-
-    return this.#unlockUntil < Date.now();
+    return !this.#mnemonic;
   }
 
   lock() {
-    this.#unlockUntil = null;
+    this.#mnemonic = null;
   }
 
   async reset() {
@@ -66,12 +59,6 @@ export default class Keyring {
     }
 
     this.#mnemonic = await this.#decryptMnemonic(password);
-    this.#unlockUntil = Date.now() + UNLOCK_INTERVAL;
-
-    setTimeout(() => {
-      this.#mnemonic = null;
-      this.#unlockUntil = null;
-    }, UNLOCK_INTERVAL); // TODO: change this auto-lock timmer
   }
 
   async #decryptMnemonic(password: string): Promise<string> {
@@ -128,7 +115,7 @@ export default class Keyring {
 
   async createNewAccount(name: string): Promise<KeyringPair> {
     if (this.locked()) {
-      throw new CoongError(ErrorCode.WalletLocked);
+      throw new CoongError(ErrorCode.KeyringLocked);
     }
 
     if (!name) {

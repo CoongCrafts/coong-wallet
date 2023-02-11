@@ -8,6 +8,7 @@ export enum ErrorCode {
   KeyringNotInitialized = 'KeyringNotInitialized',
   PasswordIncorrect = 'PasswordIncorrect',
   WalletLocked = 'WalletLocked',
+  KeyringLocked = 'KeyringLocked',
   AccountNameRequired = 'AccountNameRequired',
   AccountNameUsed = 'AccountNameUsed',
 }
