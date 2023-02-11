@@ -113,9 +113,13 @@ export default class Keyring {
       .sort((a, b) => (a.whenCreated || 0) - (b.whenCreated || 0));
   }
 
-  async createNewAccount(name: string): Promise<KeyringPair> {
+  async createNewAccount(name: string, password?: string): Promise<KeyringPair> {
     if (this.locked()) {
-      throw new CoongError(ErrorCode.KeyringLocked);
+      if (password) {
+        await this.unlock(password);
+      } else {
+        throw new CoongError(ErrorCode.KeyringLocked);
+      }
     }
 
     if (!name) {
@@ -133,6 +137,10 @@ export default class Keyring {
     // TODO: encrypt data
     this.#keyring.saveAccount(keypair);
     this.#increaseAccountsIndex();
+
+    if (password) {
+      this.lock();
+    }
 
     return keypair;
   }

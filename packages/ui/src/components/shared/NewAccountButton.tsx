@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FormEvent, useRef, useState } from 'react';
+import { FC, FormEvent, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useUpdateEffect } from 'react-use';
 import { KeyringPair } from '@polkadot/keyring/types';
@@ -23,6 +23,7 @@ interface NewAccountButtonProps extends Props {
 const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
   useUpdateEffect(() => {
@@ -38,19 +39,22 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
 
   const handleClose = () => setOpen(false);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
-
   const doCreateNewAccount = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const newAccount = await keyring.createNewAccount(name);
+      const newAccount = await keyring.createNewAccount(name, password);
+      resetForm();
+
       onCreated && onCreated(newAccount);
       handleClose();
     } catch (e: any) {
       toast.error(e.message);
     }
+  };
+
+  const resetForm = () => {
+    setName('');
+    setPassword('');
   };
 
   return (
@@ -60,7 +64,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
       </Button>
       <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
         <DialogTitle>Create new account</DialogTitle>
-        <Box component='form' noValidate autoComplete='off' onSubmit={doCreateNewAccount}>
+        <Box component='form' autoComplete='off' onSubmit={doCreateNewAccount}>
           <DialogContent>
             <DialogContentText sx={{ marginBottom: '1rem' }}>Choose a name for your new account</DialogContentText>
             <TextField
@@ -68,16 +72,29 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
               autoFocus
               label='New account name'
               type='text'
+              required
               fullWidth
-              onChange={handleChange}
+              onChange={(e) => setName(e.target.value)}
               value={name}
+              className='mb-4'
+              size='small'
+            />
+            <TextField
+              autoFocus
+              label='Wallet password'
+              type='password'
+              fullWidth
+              required
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              size='small'
             />
           </DialogContent>
           <DialogActions>
             <Button variant='outlined' onClick={handleClose}>
               Cancel
             </Button>
-            <Button type='submit' disabled={!name}>
+            <Button type='submit' disabled={!name || !password}>
               Create
             </Button>
           </DialogActions>
