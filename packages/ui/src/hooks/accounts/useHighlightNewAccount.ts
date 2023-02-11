@@ -14,7 +14,7 @@ export default function useHighlightNewAccount() {
       return;
     }
 
-    accountCard.scrollIntoView({ behavior: 'smooth' });
+    accountCard.scrollIntoView(true);
 
     setTimeout(() => {
       accountCard.classList.add('bg-primary/20');
