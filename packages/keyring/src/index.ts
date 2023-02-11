@@ -6,16 +6,17 @@ import CryptoJS from 'crypto-js';
 
 const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
 const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
-const UNLOCK_UNTIL = 'UNLOCK_UNTIL';
 const DEFAULT_KEY_TYPE = 'sr25519';
-const UNLOCK_INTERVAL = 15 * 60 * 1000;
+const UNLOCK_INTERVAL = 15 * 60 * 1000; // 15 minutes
 
 export default class Keyring {
   #keyring: InnerKeyring;
   #mnemonic: string | null;
+  #unlockUntil: number | null;
 
   constructor() {
     this.#mnemonic = null;
+    this.#unlockUntil = null;
 
     this.#keyring = new InnerKeyring();
     this.#keyring.loadAll({});
@@ -37,16 +38,15 @@ export default class Keyring {
   }
 
   locked() {
-    const unlockTimer = this.#getUnlockTimer();
-    if (!unlockTimer) {
+    if (!this.#unlockUntil || !this.#mnemonic) {
       return true;
     }
 
-    return unlockTimer < Date.now();
+    return this.#unlockUntil < Date.now();
   }
 
   lock() {
-    localStorage.setItem(UNLOCK_UNTIL, String(Date.now() - 1000));
+    this.#unlockUntil = null;
   }
 
   async reset() {
@@ -56,7 +56,6 @@ export default class Keyring {
     });
     localStorage.removeItem(ENCRYPTED_MNEMONIC);
     localStorage.removeItem(ACCOUNTS_INDEX);
-    localStorage.removeItem(UNLOCK_UNTIL);
   }
 
   async unlock(password: string): Promise<void> {
@@ -67,10 +66,11 @@ export default class Keyring {
     }
 
     this.#mnemonic = await this.#decryptMnemonic(password);
-    localStorage.setItem(UNLOCK_UNTIL, String(Date.now() + UNLOCK_INTERVAL));
+    this.#unlockUntil = Date.now() + UNLOCK_INTERVAL;
 
     setTimeout(() => {
       this.#mnemonic = null;
+      this.#unlockUntil = null;
     }, UNLOCK_INTERVAL); // TODO: change this auto-lock timmer
   }
 
@@ -99,10 +99,6 @@ export default class Keyring {
 
   getAccountsIndex(): number {
     return parseInt(localStorage.getItem(ACCOUNTS_INDEX)!) || 0;
-  }
-
-  #getUnlockTimer(): number | null {
-    return parseInt(localStorage.getItem(UNLOCK_UNTIL)!) || null;
   }
 
   #increaseAccountsIndex(): number {
