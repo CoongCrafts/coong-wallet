@@ -16,10 +16,10 @@ const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    setAppReady: (state: Draft<AppState>) => {
+    appReady: (state: Draft<AppState>) => {
       state.ready = true;
     },
-    setSeedReady: (state: Draft<AppState>) => {
+    seedReady: (state: Draft<AppState>) => {
       state.seedReady = true;
     },
     lock: (state: Draft<AppState>) => {

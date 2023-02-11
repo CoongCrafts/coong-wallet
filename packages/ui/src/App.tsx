@@ -17,7 +17,7 @@ const App: FC<Props> = () => {
   useEffectOnce(() => {
     cryptoWaitReady().then((cryptoReady) => {
       if (cryptoReady) {
-        dispatch(appActions.setAppReady());
+        dispatch(appActions.appReady());
       } else {
         // TODO handle if browser does not support crypto!
       }
@@ -27,7 +27,7 @@ const App: FC<Props> = () => {
   useEffectOnce(() => {
     keyring.initialized().then((initialized) => {
       if (initialized) {
-        dispatch(appActions.setSeedReady());
+        dispatch(appActions.seedReady());
       }
     });
   });
