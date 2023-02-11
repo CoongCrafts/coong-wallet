@@ -4,12 +4,14 @@ export interface AppState {
   ready: boolean;
   seedReady: boolean;
   locked: boolean;
+  lastUsedAt: number | null;
 }
 
 const initialState: AppState = {
   ready: false,
   seedReady: false,
   locked: true,
+  lastUsedAt: null,
 };
 
 const appSlice = createSlice({
@@ -27,6 +29,9 @@ const appSlice = createSlice({
     },
     unlock: (state: Draft<AppState>) => {
       state.locked = false;
+    },
+    recordLastUsedAt(state: Draft<AppState>) {
+      state.lastUsedAt = Date.now();
     },
   },
 });
