@@ -1,8 +1,8 @@
 import { FC, FormEvent, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useUpdateEffect } from 'react-use';
-import { KeyringPair } from '@polkadot/keyring/types';
 import { keyring } from '@coong/base';
+import { AccountInfo } from '@coong/keyring/types';
 import { Add } from '@mui/icons-material';
 import {
   Box,
@@ -17,7 +17,7 @@ import {
 import { Props } from 'types';
 
 interface NewAccountButtonProps extends Props {
-  onCreated?: (account: KeyringPair) => void;
+  onCreated?: (account: AccountInfo) => void;
 }
 
 const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {

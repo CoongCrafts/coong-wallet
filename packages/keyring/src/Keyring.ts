@@ -113,7 +113,7 @@ export default class Keyring {
       .sort((a, b) => (a.whenCreated || 0) - (b.whenCreated || 0));
   }
 
-  async createNewAccount(name: string, password?: string): Promise<KeyringPair> {
+  async createNewAccount(name: string, password?: string): Promise<AccountInfo> {
     if (this.locked()) {
       if (password) {
         await this.unlock(password);
@@ -142,7 +142,7 @@ export default class Keyring {
       this.lock();
     }
 
-    return keypair;
+    return this.getAccount(keypair.address);
   }
 
   get accountsStore() {

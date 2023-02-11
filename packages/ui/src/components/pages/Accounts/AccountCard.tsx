@@ -14,7 +14,7 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account }) => {
   const { address, name } = account;
 
   return (
-    <div className={`${className} account-card`}>
+    <div id={address} className={`${className} account-card transition-colors duration-200`}>
       <div className='account-card--icon'>
         <CopyAddressTooltip address={address} name={name}>
           <Identicon value={address} size={36} theme='polkadot' />

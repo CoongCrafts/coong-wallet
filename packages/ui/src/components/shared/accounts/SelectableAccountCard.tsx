@@ -30,7 +30,10 @@ const SelectableAccountCard: FC<SelectableAccountCardProps> = ({ className = '',
   };
 
   return (
-    <div className={`${className} selectable-account-card ${selected ? 'selected' : ''}`} onClick={doSelect}>
+    <div
+      id={address}
+      className={`${className} selectable-account-card ${selected ? 'selected' : ''}`}
+      onClick={doSelect}>
       <div className='selectable-account-card__left'>
         <div className='selectable-account-card__icon'>
           <CopyAddressTooltip address={address} name={name}>

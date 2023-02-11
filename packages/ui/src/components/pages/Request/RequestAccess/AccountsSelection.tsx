@@ -6,6 +6,7 @@ import { Button, InputAdornment, styled, TextField } from '@mui/material';
 import NewAccountButton from 'components/shared/NewAccountButton';
 import SelectableAccountCard from 'components/shared/accounts/SelectableAccountCard';
 import useAccounts from 'hooks/accounts/useAccounts';
+import useHighlightNewAccount from 'hooks/accounts/useHighlightNewAccount';
 import { accountsActions } from 'redux/slices/accounts';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
@@ -16,6 +17,7 @@ const AccountsSelection: FC<Props> = ({ className }) => {
   const { selectedAccounts } = useSelector((state: RootState) => state.accounts);
   const [displayAccounts, setDisplayAccounts] = useState<AccountInfo[]>([]);
   const [query, setQuery] = useState<string>('');
+  const { setNewAccount } = useHighlightNewAccount();
 
   useEffect(() => {
     setDisplayAccounts(accounts.filter((one) => one.name && one.name.toLowerCase().includes(query.toLowerCase())));
@@ -83,7 +85,11 @@ const AccountsSelection: FC<Props> = ({ className }) => {
             <span>No accounts selected</span>
           )}
         </div>
-        <NewAccountButton />
+        <NewAccountButton
+          onCreated={(account) => {
+            setTimeout(() => setNewAccount(account));
+          }}
+        />
       </div>
     </div>
   );
