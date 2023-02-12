@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AccountInfo } from '@coong/keyring/types';
 import { Check } from '@mui/icons-material';
-import { styled } from '@mui/material';
+import { alpha, styled } from '@mui/material';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 import { accountsActions } from 'redux/slices/accounts';
 import { RootState } from 'redux/store';
@@ -50,7 +50,8 @@ const SelectableAccountCard: FC<SelectableAccountCardProps> = ({ className = '',
   );
 };
 
-export default styled(SelectableAccountCard)`
+export default styled(SelectableAccountCard)(
+  ({ theme }) => `
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 0.5rem;
   display: flex;
@@ -66,11 +67,11 @@ export default styled(SelectableAccountCard)`
   }
 
   &:hover {
-    background-color: rgba(104, 217, 96, 0.2);
+    background-color: ${alpha(theme.palette.success.light, 0.2)};
   }
 
   &.selected {
-    background-color: rgba(104, 217, 96, 0.5);
+    background-color: ${alpha(theme.palette.success.light, 0.6)};
   }
 
   .selectable-account-card {
@@ -100,4 +101,5 @@ export default styled(SelectableAccountCard)`
       font-size: 0.8rem;
     }
   }
-`;
+`,
+);
