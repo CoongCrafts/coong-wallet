@@ -1,19 +1,13 @@
 import React from 'react';
-import { CircularProgress, styled } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import { Props } from 'types';
 
 const SplashScreen: React.FC<Props> = ({ className = '' }: Props) => {
   return (
-    <div className={className}>
+    <div className={`${className} w-full h-full flex justify-center items-center`}>
       <CircularProgress />
     </div>
   );
 };
 
-export default styled(SplashScreen)`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+export default SplashScreen;

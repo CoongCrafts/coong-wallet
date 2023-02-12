@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { keyring } from '@coong/base';
-import { Box, Button, styled, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import { appActions } from 'redux/slices/app';
 import { Props } from 'types';
@@ -34,10 +34,10 @@ const UnlockWallet: FC<Props> = ({ className = '' }) => {
   };
 
   return (
-    <div className={className}>
-      <h4>Welcome back</h4>
-      <h2>Unlock your Coong wallet</h2>
-      <Box component='form' noValidate autoComplete='off' onSubmit={doUnlock}>
+    <div className={`${className} max-w-[450px] my-16 mx-auto`}>
+      <h6>Welcome back</h6>
+      <h2 className='mb-6'>Unlock your Coong wallet</h2>
+      <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={doUnlock}>
         <TextField
           label='Wallet Password'
           fullWidth
@@ -51,36 +51,9 @@ const UnlockWallet: FC<Props> = ({ className = '' }) => {
         <Button type='submit' fullWidth disabled={!password} size='large'>
           Unlock
         </Button>
-      </Box>
+      </form>
     </div>
   );
 };
 
-export default styled(UnlockWallet)`
-  max-width: 450px;
-  margin: 4rem auto;
-
-  h4 {
-    margin-bottom: 0.5rem;
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .form-actions {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-  }
-
-  h2 {
-    margin-top: 0;
-  }
-
-  h5 {
-    margin-bottom: 0.5rem;
-  }
-`;
+export default UnlockWallet;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, styled } from '@mui/material';
+import { Button } from '@mui/material';
 import { Props } from 'types';
 
 const Welcome: React.FC<Props> = ({ className = '' }: Props) => {
@@ -16,7 +16,7 @@ const Welcome: React.FC<Props> = ({ className = '' }: Props) => {
   };
 
   return (
-    <div className={className}>
+    <div className={`${className} my-16 mx-auto text-center`}>
       <div className='welcome'>
         <h2>Welcome to Coong</h2>
         <p>
@@ -25,14 +25,14 @@ const Welcome: React.FC<Props> = ({ className = '' }: Props) => {
           for <strong>Polkadot & Kusama</strong> ecosystem
         </p>
       </div>
-      <div className='setup-wallet'>
-        <h4>Set up your Coong wallet now</h4>
+      <div className='mt-8'>
+        <h5 className='mb-4'>Set up your Coong wallet now</h5>
 
-        <div className='wallet-buttons-group'>
-          <Button size='large' onClick={doCreateNewWallet}>
+        <div className='flex flex-col gap-4 items-center'>
+          <Button size='large' className='min-w-[270px]' onClick={doCreateNewWallet}>
             Create new wallet
           </Button>
-          <Button variant='outlined' size='large' onClick={doRestoreWallet} disabled={true}>
+          <Button size='large' className='min-w-[270px]' variant='outlined' onClick={doRestoreWallet} disabled={true}>
             Restore existing wallet
           </Button>
         </div>
@@ -41,31 +41,4 @@ const Welcome: React.FC<Props> = ({ className = '' }: Props) => {
   );
 };
 
-export default styled(Welcome)`
-  margin: 3rem auto;
-  text-align: center;
-
-  h2 {
-    margin-bottom: 0.5rem;
-  }
-
-  .setup-wallet {
-    margin-top: 2rem;
-
-    h4 {
-      margin-bottom: 0.7rem;
-    }
-  }
-
-  .wallet-buttons-group {
-    display: flex;
-    flex-direction: column;
-    row-gap: 1rem;
-    justify-content: center;
-    align-items: center;
-
-    button {
-      min-width: 270px;
-    }
-  }
-`;
+export default Welcome;

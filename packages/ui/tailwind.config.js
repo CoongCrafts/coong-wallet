@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  important: true,
+  important: '#root',
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     // https://mui.com/material-ui/customization/breakpoints/#default-breakpoints
