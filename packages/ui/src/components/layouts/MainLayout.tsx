@@ -36,10 +36,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ className = '', headerActions }
 };
 
 export default styled(MainLayout)`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-
   .main-header {
     color: #fff;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -75,7 +71,6 @@ export default styled(MainLayout)`
 
   main {
     padding: 1rem 0;
-    flex: 1;
 
     > div {
       display: flow-root;
