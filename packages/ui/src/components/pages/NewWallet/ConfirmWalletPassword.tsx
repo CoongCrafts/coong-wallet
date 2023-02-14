@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Button, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
@@ -37,8 +37,9 @@ const ConfirmWalletPassword: FC<Props> = ({ className = '' }: Props) => {
 
   return (
     <div className={className}>
-      <h2>Next, confirm your wallet password</h2>
-      <Box component='form' noValidate autoComplete='off' onSubmit={next}>
+      <h4 className='mb-4'>Next, confirm your wallet password</h4>
+
+      <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={next}>
         <TextField
           label='Confirm Wallet Password'
           fullWidth
@@ -49,7 +50,7 @@ const ConfirmWalletPassword: FC<Props> = ({ className = '' }: Props) => {
           error={!!passwordConfirmation && notMatch}
           helperText={!!passwordConfirmation && notMatch ? 'Password does not match' : <EmptySpace />}
         />
-        <div className='form-actions'>
+        <div className='flex flex-row gap-4'>
           <Button variant='text' onClick={back}>
             Back
           </Button>
@@ -57,7 +58,7 @@ const ConfirmWalletPassword: FC<Props> = ({ className = '' }: Props) => {
             Next
           </Button>
         </div>
-      </Box>
+      </form>
     </div>
   );
 };

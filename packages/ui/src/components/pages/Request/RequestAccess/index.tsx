@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { state } from '@coong/base';
 import { RequestAppRequestAccess } from '@coong/base/types';
-import { Button, styled } from '@mui/material';
+import { Button } from '@mui/material';
 import AccountsSelection from 'components/pages/Request/RequestAccess/AccountsSelection';
 import { RequestProps } from 'components/pages/Request/types';
 import { RootState } from 'redux/store';
@@ -44,13 +44,12 @@ const RequestAccess: FC<RequestProps> = ({ className = '', message }) => {
 
       {seedReady ? (
         <div>
-          <h3>Select the accounts you'd like to connect</h3>
-
+          <h5>Select the accounts you'd like to connect</h5>
           <AccountsSelection />
 
-          <div className='actions'>
-            <p>Only connect if you trust the application</p>
-            <div className='button-groups'>
+          <div>
+            <p className='font-semibold mb-2'>Only connect if you trust the application</p>
+            <div className='flex flex-row gap-4'>
               <Button size='large' variant='text' color='warning' onClick={rejectAccess}>
                 Cancel
               </Button>
@@ -61,9 +60,9 @@ const RequestAccess: FC<RequestProps> = ({ className = '', message }) => {
           </div>
         </div>
       ) : (
-        <div className='text-center'>
-          <h4>Setup your Coong wallet now to connect</h4>
-          <div className='button-groups'>
+        <div>
+          <h4 className='text-center'>Setup your Coong wallet now to connect</h4>
+          <div className='flex flex-row gap-4'>
             <Button variant='outlined' color='warning' onClick={rejectAccess}>
               Cancel
             </Button>
@@ -75,14 +74,4 @@ const RequestAccess: FC<RequestProps> = ({ className = '', message }) => {
   );
 };
 
-export default styled(RequestAccess)`
-  .text-center {
-    text-align: center;
-  }
-
-  .button-groups {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-  }
-`;
+export default RequestAccess;

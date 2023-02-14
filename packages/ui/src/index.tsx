@@ -21,12 +21,13 @@ root.render(
           <GlobalStyles styles={globalStyles} />
           <App />
           <ToastContainer
-            position='top-right'
+            position='top-center'
             closeOnClick
             pauseOnHover
             theme='colored'
             autoClose={ALERT_TIMEOUT}
             hideProgressBar
+            limit={2}
           />
         </ThemeProvider>
       </PersistGate>

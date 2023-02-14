@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
-import { styled } from '@mui/material';
 import BackupSecretRecoveryPhrase from 'components/pages/NewWallet/BackupSecretRecoveryPhrase';
 import ChooseWalletPassword from 'components/pages/NewWallet/ChooseWalletPassword';
 import ConfirmWalletPassword from 'components/pages/NewWallet/ConfirmWalletPassword';
@@ -23,25 +22,10 @@ const ScreenStep = () => {
 
 const NewWallet: FC<Props> = ({ className = '' }: Props) => {
   return (
-    <div className={className}>
+    <div className={`${className} max-w-[450px] my-16 mx-auto`}>
       <ScreenStep />
     </div>
   );
 };
 
-export default styled(NewWallet)`
-  max-width: 450px;
-  margin: 4rem auto;
-
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .form-actions {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-  }
-`;
+export default NewWallet;

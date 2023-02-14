@@ -12,7 +12,6 @@ import {
 import { WalletRequestMessage, WalletResponse, WalletSignal } from '@coong/base/types';
 import { CoongError, ErrorCode } from '@coong/utils';
 import { getErrorMessage } from '@coong/utils/errors';
-import { styled } from '@mui/material';
 import InvalidRequest from 'components/pages/Request/InvalidRequest';
 import RequestContent from 'components/pages/Request/RequestContent';
 import { Props } from 'types';
@@ -60,17 +59,13 @@ const Request: FC<Props> = ({ className = '' }) => {
   });
 
   return (
-    <div className={className}>
+    <div className={`${className} my-4 mx-auto`}>
       <RequestContent />
     </div>
   );
 };
 
-const StyledRequest = styled(Request)`
-  margin: 1rem auto;
-`;
-
-const WrappedRequest = withErrorBoundary(StyledRequest, {
+const WrappedRequest = withErrorBoundary(Request, {
   fallbackRender: ({ error }) => {
     return <InvalidRequest reason={getErrorMessage(error)} />;
   },

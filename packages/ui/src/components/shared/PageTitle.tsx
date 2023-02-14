@@ -1,12 +1,8 @@
 import { FC } from 'react';
-import { styled } from '@mui/material';
 import { Props } from 'types';
 
 const PageTitle: FC<Props> = ({ className = '', children }) => {
-  return <div className={className}>{children}</div>;
+  return <div className={`${className} text-2xl font-bold`}>{children}</div>;
 };
 
-export default styled(PageTitle)`
-  font-size: 1.5rem;
-  font-weight: bold;
-`;
+export default PageTitle;

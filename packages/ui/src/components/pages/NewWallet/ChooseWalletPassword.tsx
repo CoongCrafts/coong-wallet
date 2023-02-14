@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Box, Button, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { Props } from 'types';
@@ -33,8 +33,9 @@ const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
 
   return (
     <div className={className}>
-      <h2>First, choose your wallet password</h2>
-      <Box component='form' noValidate autoComplete='off' onSubmit={next}>
+      <h4 className='mb-4'>First, choose your wallet password</h4>
+
+      <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={next}>
         <TextField
           label='Wallet Password'
           fullWidth
@@ -48,7 +49,7 @@ const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
         <Button type='submit' fullWidth disabled={!password || !!validation} size='large'>
           Next
         </Button>
-      </Box>
+      </form>
     </div>
   );
 };

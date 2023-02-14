@@ -5,7 +5,7 @@ import { useEffectOnce } from 'react-use';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { keyring } from '@coong/base';
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, Checkbox, FormControlLabel, FormGroup, styled } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, FormGroup, styled } from '@mui/material';
 import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
 import { appActions } from 'redux/slices/app';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
@@ -54,9 +54,9 @@ const BackupSecretRecoveryPhrase: FC<Props> = ({ className = '' }: Props) => {
 
   return (
     <div className={className}>
-      <h3>Finally, back up your secret recovery phrase</h3>
+      <h4 className='mb-4'>Finally, back up your secret recovery phrase</h4>
 
-      <Box component='form' noValidate autoComplete='off' onSubmit={doSetupWallet}>
+      <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={doSetupWallet}>
         <div className='secret-phrase-box'>{secretPhrase}</div>
         <FormGroup>
           <FormControlLabel
@@ -64,7 +64,7 @@ const BackupSecretRecoveryPhrase: FC<Props> = ({ className = '' }: Props) => {
             label='I have backed up my recovery phrase'
           />
         </FormGroup>
-        <div className='form-actions'>
+        <div className='flex flex-row gap-4'>
           <Button variant='text' onClick={back} disabled={loading}>
             Back
           </Button>
@@ -72,7 +72,7 @@ const BackupSecretRecoveryPhrase: FC<Props> = ({ className = '' }: Props) => {
             Finish
           </LoadingButton>
         </div>
-      </Box>
+      </form>
     </div>
   );
 };
