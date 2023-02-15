@@ -1,12 +1,12 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AccountInfo } from '@coong/keyring/types';
-import { Search } from '@mui/icons-material';
-import { Button, InputAdornment, styled, TextField } from '@mui/material';
+import { Button, styled } from '@mui/material';
 import NewAccountButton from 'components/shared/NewAccountButton';
+import SearchBox from 'components/shared/accounts/SearchBox';
 import SelectableAccountCard from 'components/shared/accounts/SelectableAccountCard';
 import useAccounts from 'hooks/accounts/useAccounts';
 import useHighlightNewAccount from 'hooks/accounts/useHighlightNewAccount';
+import useSearchAccounts from 'hooks/accounts/useSearchAccounts';
 import { accountsActions } from 'redux/slices/accounts';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
@@ -15,13 +15,8 @@ const AccountsSelection: FC<Props> = ({ className }) => {
   const accounts = useAccounts();
   const dispatch = useDispatch();
   const { selectedAccounts } = useSelector((state: RootState) => state.accounts);
-  const [displayAccounts, setDisplayAccounts] = useState<AccountInfo[]>([]);
-  const [query, setQuery] = useState<string>('');
+  const { displayAccounts, query, setQuery } = useSearchAccounts();
   const { setNewAccount } = useHighlightNewAccount();
-
-  useEffect(() => {
-    setDisplayAccounts(accounts.filter((one) => one.name && one.name.toLowerCase().includes(query.toLowerCase())));
-  }, [accounts, query]);
 
   const doSelectAll = () => {
     dispatch(accountsActions.addSelectedAccounts(accounts));
@@ -34,24 +29,7 @@ const AccountsSelection: FC<Props> = ({ className }) => {
   return (
     <div className={`${className} accounts-selection`}>
       <div className='accounts-selection--top'>
-        <div>
-          <TextField
-            hiddenLabel
-            size='small'
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <Search fontSize='small' />
-                </InputAdornment>
-              ),
-              className: 'pl-2 h-[30px] text-[0.8125rem]',
-            }}
-            placeholder='Search by name'
-            onChange={(event) => {
-              setQuery(event.target.value);
-            }}
-          />
-        </div>
+        <SearchBox onChange={(query) => setQuery(query)} />
         <div>
           {accounts.length > selectedAccounts.length && (
             <Button size='small' variant='outlined' onClick={doSelectAll}>
