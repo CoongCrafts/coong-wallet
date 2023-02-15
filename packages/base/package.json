@@ -10,13 +10,13 @@
   "main": "src/index.ts",
   "dependencies": {
     "@coong/keyring": "*",
-    "@polkadot/types": "^9.10.5",
+    "@polkadot/types": "^9.14.1",
     "rxjs": "^7.8.0"
   },
   "devDependencies": {
     "@polkadot/extension-inject": "^0.44.7",
-    "@polkadot/ui-keyring": "^2.9.14",
-    "@polkadot/util-crypto": "^10.2.1"
+    "@polkadot/ui-keyring": "^2.11.2",
+    "@polkadot/util-crypto": "^10.4.1"
   },
   "license": "Apache-2.0"
 }
