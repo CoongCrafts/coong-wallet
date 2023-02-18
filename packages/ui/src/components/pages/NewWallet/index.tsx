@@ -1,5 +1,8 @@
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useEffectOnce } from 'react-use';
+import { keyring } from '@coong/base';
 import BackupSecretRecoveryPhrase from 'components/pages/NewWallet/BackupSecretRecoveryPhrase';
 import ChooseWalletPassword from 'components/pages/NewWallet/ChooseWalletPassword';
 import ConfirmWalletPassword from 'components/pages/NewWallet/ConfirmWalletPassword';
@@ -21,6 +24,14 @@ const ScreenStep = () => {
 };
 
 const NewWallet: FC<Props> = ({ className = '' }: Props) => {
+  const navigate = useNavigate();
+
+  useEffectOnce(() => {
+    keyring.initialized().then(() => {
+      navigate('/');
+    });
+  });
+
   return (
     <div className={`${className} max-w-[450px] my-16 mx-auto`}>
       <ScreenStep />
