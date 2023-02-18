@@ -4,7 +4,6 @@ import { AccountInfo } from '@coong/keyring/types';
 import { styled } from '@mui/material';
 import AccountAddress from 'components/pages/Accounts/AccountAddress';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
-import useDisplayAddress from 'hooks/accounts/useDisplayAddress';
 import { Props } from 'types';
 
 interface AccountCardProps extends Props {
@@ -13,18 +12,17 @@ interface AccountCardProps extends Props {
 
 const AccountCard: FC<AccountCardProps> = ({ className = '', account }) => {
   const { address, name } = account;
-  const displayAddress = useDisplayAddress(address);
 
   return (
-    <div id={displayAddress} className={`${className} account-card transition-colors duration-200`}>
+    <div id={address} className={`${className} account-card transition-colors duration-200`}>
       <div className='account-card--icon'>
-        <CopyAddressTooltip address={displayAddress} name={name}>
-          <Identicon value={displayAddress} size={36} theme='polkadot' />
+        <CopyAddressTooltip address={address} name={name}>
+          <Identicon value={address} size={36} theme='polkadot' />
         </CopyAddressTooltip>
       </div>
       <div>
         <div className='account-card__name'>{name}</div>
-        <AccountAddress address={displayAddress} name={name} />
+        <AccountAddress address={address} name={name} />
       </div>
     </div>
   );
