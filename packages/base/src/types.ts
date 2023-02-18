@@ -91,3 +91,9 @@ interface Resolver<T> {
 export interface WalletRequestWithResolver<TRequestName extends RequestName = RequestName>
   extends Resolver<WalletResponse<TRequestName>>,
     WalletRequestMessage<TRequestName> {}
+
+export interface NetworkInfo {
+  networkId: string;
+  displayName: string;
+  prefix: number;
+}
