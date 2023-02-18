@@ -8,7 +8,7 @@ import setupWalletSlice from 'redux/slices/setup-wallet';
 const appPersistConfig = {
   key: 'app',
   storage: storage,
-  whitelist: ['locked', 'lastUsedAt'],
+  whitelist: ['locked', 'lastUsedAt', 'addressPrefix'],
 };
 
 const rootReducer = combineReducers({

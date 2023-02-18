@@ -1,10 +1,12 @@
-import { createSlice, Draft } from '@reduxjs/toolkit';
+import { defaultNetwork } from '@coong/base';
+import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 
 export interface AppState {
   ready: boolean;
   seedReady: boolean;
   locked: boolean;
   lastUsedAt: number | null;
+  addressPrefix: number;
 }
 
 const initialState: AppState = {
@@ -12,6 +14,7 @@ const initialState: AppState = {
   seedReady: false,
   locked: true,
   lastUsedAt: null,
+  addressPrefix: defaultNetwork.prefix,
 };
 
 const appSlice = createSlice({
@@ -30,8 +33,11 @@ const appSlice = createSlice({
     unlock: (state: Draft<AppState>) => {
       state.locked = false;
     },
-    recordLastUsedAt(state: Draft<AppState>) {
+    recordLastUsedAt: (state: Draft<AppState>) => {
       state.lastUsedAt = Date.now();
+    },
+    updateAddressPrefix: (state: Draft<AppState>, action: PayloadAction<number>) => {
+      state.addressPrefix = action.payload;
     },
   },
 });

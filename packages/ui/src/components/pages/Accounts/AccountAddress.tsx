@@ -21,7 +21,7 @@ const AccountAddress: FC<AccountAddressProps> = ({ className, address, name }) =
 
   useEffect(() => {
     setDisplayAddress(getDisplayAddress());
-  }, [width]);
+  }, [width, address]);
 
   return (
     <CopyAddressTooltip address={address} name={name}>
