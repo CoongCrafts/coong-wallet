@@ -29,7 +29,7 @@ const AccountsSelection: FC<Props> = ({ className }) => {
   return (
     <div className={`${className} accounts-selection`}>
       <div className='accounts-selection--top'>
-        <SearchBox onChange={(query) => setQuery(query)} />
+        <SearchBox onChange={(query) => setQuery(query)} size='xxs' />
         <div>
           {accounts.length > selectedAccounts.length && (
             <Button size='small' variant='outlined' onClick={doSelectAll}>

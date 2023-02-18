@@ -12,6 +12,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  IconButton,
   TextField,
 } from '@mui/material';
 import { Props } from 'types';
@@ -59,9 +60,17 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
 
   return (
     <>
-      <Button size='small' variant='outlined' startIcon={<Add />} onClick={() => setOpen(true)}>
+      <Button
+        className='max-xs:hidden'
+        size='small'
+        variant='outlined'
+        startIcon={<Add />}
+        onClick={() => setOpen(true)}>
         New Account
       </Button>
+      <IconButton color='primary' className='xs:hidden' onClick={() => setOpen(true)}>
+        <Add />
+      </IconButton>
       <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
         <DialogTitle>Create new account</DialogTitle>
         <Box component='form' autoComplete='off' onSubmit={doCreateNewAccount}>

@@ -44,16 +44,16 @@ const RequestAccess: FC<RequestProps> = ({ className = '', message }) => {
 
       {seedReady ? (
         <div>
-          <h5>Select the accounts you'd like to connect</h5>
+          <h6>Select the accounts you'd like to connect</h6>
           <AccountsSelection />
 
           <div>
             <p className='font-semibold mb-2'>Only connect if you trust the application</p>
-            <div className='flex flex-row gap-4'>
-              <Button size='large' variant='text' color='warning' onClick={rejectAccess}>
+            <div className='flex flex-col-reverse sm:flex-row gap-x-4 gap-y-2'>
+              <Button size='large' variant='text' className='w-full sm:w-2/5' color='warning' onClick={rejectAccess}>
                 Cancel
               </Button>
-              <Button size='large' fullWidth onClick={acceptAccess}>
+              <Button size='large' className='w-full sm:w-3/5' onClick={acceptAccess}>
                 Connect
               </Button>
             </div>

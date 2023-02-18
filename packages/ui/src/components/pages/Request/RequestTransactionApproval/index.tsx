@@ -43,11 +43,11 @@ const RequestTransactionApproval: FC<RequestProps> = ({ className, message }) =>
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        <div className='flex mt-4 gap-4'>
-          <Button size='large' variant='text' color='warning' onClick={cancelRequest}>
+        <div className='flex mt-4 flex-col-reverse sm:flex-row gap-x-4 gap-y-2'>
+          <Button size='large' variant='text' className='w-full sm:w-2/5' color='warning' onClick={cancelRequest}>
             Cancel
           </Button>
-          <Button size='large' fullWidth disabled={!password} type='submit'>
+          <Button size='large' className='w-full sm:w-3/5' disabled={!password} type='submit'>
             Approve Transaction
           </Button>
         </div>
