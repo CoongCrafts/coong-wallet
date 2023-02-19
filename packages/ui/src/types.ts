@@ -1,7 +1,12 @@
 import { ReactNode } from 'react';
+import { AccountInfo } from '@coong/keyring/types';
 
 export interface Props {
   className?: string;
   children?: ReactNode;
   [prop: string]: any;
+}
+
+export interface AccountInfoExt extends AccountInfo {
+  networkAddress: string; // Network address changing following the `addressPrefix`
 }

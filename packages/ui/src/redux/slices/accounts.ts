@@ -1,9 +1,9 @@
-import { AccountInfo } from '@coong/keyring/types';
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
+import { AccountInfoExt } from 'types';
 
 export interface AccountsState {
-  accounts: AccountInfo[];
-  selectedAccounts: AccountInfo[];
+  accounts: AccountInfoExt[];
+  selectedAccounts: AccountInfoExt[];
 }
 
 const initialState: AccountsState = {
@@ -11,12 +11,12 @@ const initialState: AccountsState = {
   selectedAccounts: [],
 };
 
-const removeSelectedAccounts = (state: Draft<AccountsState>, action: PayloadAction<AccountInfo[]>) => {
+const removeSelectedAccounts = (state: Draft<AccountsState>, action: PayloadAction<AccountInfoExt[]>) => {
   const toRemoveAddresses = action.payload.map((one) => one.address);
   state.selectedAccounts = state.selectedAccounts.filter((one) => !toRemoveAddresses.includes(one.address));
 };
 
-const addSelectedAccounts = (state: Draft<AccountsState>, action: PayloadAction<AccountInfo[]>) => {
+const addSelectedAccounts = (state: Draft<AccountsState>, action: PayloadAction<AccountInfoExt[]>) => {
   removeSelectedAccounts(state, action);
   state.selectedAccounts.push(...action.payload);
 };
@@ -25,7 +25,7 @@ const accountsSlice = createSlice({
   name: 'accounts',
   initialState,
   reducers: {
-    setAccounts: (state: Draft<AccountsState>, action: PayloadAction<AccountInfo[]>) => {
+    setAccounts: (state: Draft<AccountsState>, action: PayloadAction<AccountInfoExt[]>) => {
       state.accounts = action.payload;
     },
     addSelectedAccounts,

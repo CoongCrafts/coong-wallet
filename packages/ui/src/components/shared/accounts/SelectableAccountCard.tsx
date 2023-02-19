@@ -1,24 +1,23 @@
 import { Identicon } from '@polkadot/react-identicon';
 import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AccountInfo } from '@coong/keyring/types';
 import { Check } from '@mui/icons-material';
 import { alpha, styled } from '@mui/material';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 import { accountsActions } from 'redux/slices/accounts';
 import { RootState } from 'redux/store';
-import { Props } from 'types';
+import { AccountInfoExt, Props } from 'types';
 import { shortenAddress } from 'utils/string';
 
 interface SelectableAccountCardProps extends Props {
-  account: AccountInfo;
+  account: AccountInfoExt;
 }
 
 const SelectableAccountCard: FC<SelectableAccountCardProps> = ({ className = '', account }) => {
   const { selectedAccounts } = useSelector((state: RootState) => state.accounts);
   const dispatch = useDispatch();
 
-  const { address, name } = account;
+  const { networkAddress, name } = account;
 
   const selected = selectedAccounts.map((one) => one.address).includes(account.address);
   const doSelect = () => {
@@ -31,18 +30,18 @@ const SelectableAccountCard: FC<SelectableAccountCardProps> = ({ className = '',
 
   return (
     <div
-      id={address}
+      id={networkAddress}
       className={`${className} selectable-account-card ${selected ? 'selected' : ''}`}
       onClick={doSelect}>
       <div className='selectable-account-card__left'>
         <div className='selectable-account-card__icon'>
-          <CopyAddressTooltip address={address} name={name}>
-            <Identicon value={address} size={24} theme='polkadot' />
+          <CopyAddressTooltip address={networkAddress} name={name}>
+            <Identicon value={networkAddress} size={24} theme='polkadot' />
           </CopyAddressTooltip>
         </div>
         <div className='selectable-account-card__info'>
           <div className='selectable-account-card__name'>{name}</div>
-          <div className='selectable-account-card__address'>({shortenAddress(address)})</div>
+          <div className='selectable-account-card__address'>({shortenAddress(networkAddress)})</div>
         </div>
       </div>
       <div className='selectable-account-card__right'>{selected && <Check />}</div>

@@ -1,28 +1,27 @@
 import { Identicon } from '@polkadot/react-identicon';
 import { FC } from 'react';
-import { AccountInfo } from '@coong/keyring/types';
 import { styled } from '@mui/material';
 import AccountAddress from 'components/pages/Accounts/AccountAddress';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
-import { Props } from 'types';
+import { AccountInfoExt, Props } from 'types';
 
 interface AccountCardProps extends Props {
-  account: AccountInfo;
+  account: AccountInfoExt;
 }
 
 const AccountCard: FC<AccountCardProps> = ({ className = '', account }) => {
-  const { address, name } = account;
+  const { networkAddress, name } = account;
 
   return (
-    <div id={address} className={`${className} account-card transition-colors duration-200`}>
+    <div id={networkAddress} className={`${className} account-card transition-colors duration-200`}>
       <div className='account-card--icon'>
-        <CopyAddressTooltip address={address} name={name}>
-          <Identicon value={address} size={36} theme='polkadot' />
+        <CopyAddressTooltip address={networkAddress} name={name}>
+          <Identicon value={networkAddress} size={36} theme='polkadot' />
         </CopyAddressTooltip>
       </div>
       <div>
         <div className='account-card__name'>{name}</div>
-        <AccountAddress address={address} name={name} />
+        <AccountAddress address={networkAddress} name={name} />
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { keyring } from '@coong/base';
 import { AccountInfo } from '@coong/keyring/types';
 import { accountsActions } from 'redux/slices/accounts';
 import { RootState } from 'redux/store';
+import { AccountInfoExt } from 'types';
 
 export default function useAccounts() {
   const { addressPrefix } = useSelector((state: RootState) => state.app);
@@ -13,8 +14,12 @@ export default function useAccounts() {
   const dispatch = useDispatch();
 
   const setAccounts = (newAccounts: AccountInfo[]) => {
-    newAccounts = newAccounts.map((one) => ({ ...one, address: encodeAddress(one.address, addressPrefix) }));
-    dispatch(accountsActions.setAccounts(newAccounts));
+    const newExtendedAccounts: AccountInfoExt[] = newAccounts.map((one) => ({
+      ...one,
+      networkAddress: encodeAddress(one.address, addressPrefix),
+    }));
+
+    dispatch(accountsActions.setAccounts(newExtendedAccounts));
   };
 
   useEffectOnce(() => {
