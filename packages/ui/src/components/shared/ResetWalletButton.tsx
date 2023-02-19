@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
-import { keyring } from '@coong/base';
+import { keyring, state } from '@coong/base';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import { IconButton } from '@mui/material';
-import { RootState } from 'redux/store';
+import { persistor, RootState } from 'redux/store';
 import { Props } from 'types';
 
 const ResetWalletButton: FC<Props> = () => {
@@ -20,6 +20,8 @@ const ResetWalletButton: FC<Props> = () => {
     }
 
     await keyring.reset();
+    state.reset();
+    await persistor.purge();
     window.location.reload();
   };
 

@@ -9,8 +9,8 @@ import { Props } from 'types';
 
 const LockWalletButton: FC<Props> = () => {
   const dispatch = useDispatch();
-  const { locked } = useSelector((state: RootState) => state.app);
-  if (locked) {
+  const { seedReady, locked } = useSelector((state: RootState) => state.app);
+  if (!seedReady || locked) {
     return null;
   }
 

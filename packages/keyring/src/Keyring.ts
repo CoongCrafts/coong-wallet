@@ -44,6 +44,7 @@ export default class Keyring {
 
   async reset() {
     const accounts = await this.getAccounts();
+    // TODO improve this process to clear all at once!
     accounts.forEach((account) => {
       this.#keyring.forgetAccount(account.address);
     });

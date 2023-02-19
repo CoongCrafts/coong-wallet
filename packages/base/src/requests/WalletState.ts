@@ -164,4 +164,8 @@ export default class WalletState {
 
     return subscription.unsubscribe.bind(subscription);
   };
+
+  reset() {
+    localStorage.removeItem(AUTHORIZED_ACCOUNTS_KEY);
+  }
 }
