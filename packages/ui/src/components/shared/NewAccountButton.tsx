@@ -25,7 +25,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
 
   useUpdateEffect(() => {
     if (open) {
@@ -33,7 +33,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
       setName(`Account ${(accountsIndex + 1).toString().padStart(2, '0')}`);
 
       setTimeout(() => {
-        inputRef.current?.select();
+        passwordInputRef.current?.focus();
       }, 50);
     }
   }, [open]);
@@ -77,8 +77,6 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
           <DialogContent>
             <DialogContentText sx={{ marginBottom: '1rem' }}>Choose a name for your new account</DialogContentText>
             <TextField
-              inputRef={inputRef}
-              autoFocus
               label='New account name'
               type='text'
               required
@@ -89,6 +87,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
               size='small'
             />
             <TextField
+              inputRef={passwordInputRef}
               autoFocus
               label='Wallet password'
               type='password'
