@@ -54,7 +54,8 @@ const BackupSecretRecoveryPhrase: FC<Props> = ({ className = '' }: Props) => {
 
   return (
     <div className={className}>
-      <h4 className='mb-4'>Finally, back up your secret recovery phrase</h4>
+      <h3>Finally, back up your secret recovery phrase</h3>
+      <p className='mb-4'>Write down the below 12 words and keep it in a safe place.</p>
 
       <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={doSetupWallet}>
         <div className='secret-phrase-box'>{secretPhrase}</div>

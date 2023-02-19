@@ -35,7 +35,7 @@ const NewWallet: FC<Props> = ({ className = '' }: Props) => {
   });
 
   return (
-    <div className={`${className} max-w-[450px] my-16 mx-auto`}>
+    <div className={`${className} max-w-[450px] mt-8 mb-16 mx-auto`}>
       <ScreenStep />
     </div>
   );

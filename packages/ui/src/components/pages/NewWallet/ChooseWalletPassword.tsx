@@ -11,6 +11,7 @@ const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
   const [validation, setValidation] = useState('');
 
   useEffect(() => {
+    // TODO Add more strict password policy & password strength indicator
     if (password && password.length <= 5) {
       setValidation("Password's too short");
     } else {
@@ -33,7 +34,11 @@ const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
 
   return (
     <div className={className}>
-      <h4 className='mb-4'>First, choose your wallet password</h4>
+      <h3>First, choose your wallet password</h3>
+      <p className='mb-6'>
+        Your password will be used to <b>encrypt accounts as well as unlock the wallet</b>, make sure to pick a{' '}
+        <b>strong & easy-to-member</b> password.
+      </p>
 
       <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={next}>
         <TextField

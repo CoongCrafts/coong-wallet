@@ -36,7 +36,7 @@ const UnlockWallet: FC<Props> = ({ className = '' }) => {
   return (
     <div className={`${className} max-w-[450px] my-16 mx-auto`}>
       <h6>Welcome back</h6>
-      <h2 className='mb-6'>Unlock your Coong wallet</h2>
+      <h2 className='mb-6'>Unlock your wallet</h2>
       <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={doUnlock}>
         <TextField
           label='Wallet Password'

@@ -37,7 +37,8 @@ const ConfirmWalletPassword: FC<Props> = ({ className = '' }: Props) => {
 
   return (
     <div className={className}>
-      <h4 className='mb-4'>Next, confirm your wallet password</h4>
+      <h3>Next, confirm your wallet password</h3>
+      <p className='mb-6'>Type again your chosen password to ensure you remember it.</p>
 
       <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={next}>
         <TextField
