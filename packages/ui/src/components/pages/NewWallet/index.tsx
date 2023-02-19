@@ -27,8 +27,10 @@ const NewWallet: FC<Props> = ({ className = '' }: Props) => {
   const navigate = useNavigate();
 
   useEffectOnce(() => {
-    keyring.initialized().then(() => {
-      navigate('/');
+    keyring.initialized().then((initialized) => {
+      if (initialized) {
+        navigate('/');
+      }
     });
   });
 
