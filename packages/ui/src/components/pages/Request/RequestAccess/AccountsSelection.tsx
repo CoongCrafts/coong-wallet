@@ -63,11 +63,7 @@ const AccountsSelection: FC<Props> = ({ className }) => {
             <span>No accounts selected</span>
           )}
         </div>
-        <NewAccountButton
-          onCreated={(account) => {
-            setTimeout(() => setNewAccount(account));
-          }}
-        />
+        <NewAccountButton onCreated={(account) => setTimeout(() => setNewAccount(account))} />
       </div>
     </div>
   );

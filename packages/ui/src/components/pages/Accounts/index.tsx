@@ -31,7 +31,7 @@ const Accounts: FC<Props> = ({ className = '' }) => {
           <IconButton className='xs:hidden' color={showSearchBox ? 'default' : 'primary'} onClick={toggleSearchBox}>
             {showSearchBox ? <SearchOff /> : <Search />}
           </IconButton>
-          <NewAccountButton onCreated={setNewAccount} />
+          <NewAccountButton onCreated={(newAccount) => setTimeout(() => setNewAccount(newAccount))} />
         </div>
       </header>
       <div className='mt-2 mb-20'>

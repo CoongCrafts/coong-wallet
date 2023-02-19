@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { encodeAddress } from '@polkadot/util-crypto';
 import { AccountInfo } from '@coong/keyring/types';
+import { RootState } from 'redux/store';
 
 export default function useHighlightNewAccount() {
+  const { addressPrefix } = useSelector((state: RootState) => state.app);
   const [newAccount, setNewAccount] = useState<AccountInfo>();
 
   useEffect(() => {
@@ -9,7 +13,8 @@ export default function useHighlightNewAccount() {
       return;
     }
 
-    const accountCard = document.getElementById(newAccount.address);
+    const displayAddress = encodeAddress(newAccount.address, addressPrefix);
+    const accountCard = document.getElementById(displayAddress);
     if (!accountCard) {
       return;
     }
