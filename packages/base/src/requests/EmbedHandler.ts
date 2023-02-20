@@ -59,6 +59,11 @@ export class EmbedHandler extends Handler {
     const { request, origin } = message;
     const { name } = request;
 
+    // Make sure the state is refreshed before handling embed requests
+    // TODO better check when to reload states
+    this.state.reloadState();
+    keyring.reload();
+
     switch (name) {
       case 'embed/accessAuthorized':
         return this.accessAuthorized(origin);

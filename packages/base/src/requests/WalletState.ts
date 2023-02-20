@@ -180,4 +180,8 @@ export default class WalletState {
   reset() {
     localStorage.removeItem(AUTHORIZED_ACCOUNTS_KEY);
   }
+
+  reloadState() {
+    this.#loadAuthorizedAccounts();
+  }
 }

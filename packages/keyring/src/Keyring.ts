@@ -1,5 +1,5 @@
 import { KeyringPair } from '@polkadot/keyring/types';
-import { Keyring as InnerKeyring } from '@polkadot/ui-keyring';
+import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
 import { AccountInfo } from '@coong/keyring/types';
 import { assert, CoongError, ErrorCode } from '@coong/utils';
 import CryptoJS from 'crypto-js';
@@ -17,6 +17,20 @@ export default class Keyring {
 
     this.#keyring = new InnerKeyring();
     this.#keyring.loadAll({});
+  }
+
+  reload() {
+    try {
+      this.#keyring = new InnerKeyring();
+      this.#keyring.loadAll({});
+    } catch (e: any) {
+      if (e.message === 'Unable to initialise options more than once') {
+        // TODO Better handle this issue, ignore this for now
+        return;
+      }
+
+      throw e;
+    }
   }
 
   async initialize(mnemonic: string, password: string) {
