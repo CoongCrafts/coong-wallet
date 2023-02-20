@@ -1,10 +1,11 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { state } from '@coong/base';
 import { RequestAppRequestAccess } from '@coong/base/types';
 import { Button } from '@mui/material';
 import AccountsSelection from 'components/pages/Request/RequestAccess/AccountsSelection';
+import SetupWalletButton from 'components/pages/Request/RequestAccess/SetupWalletButton';
 import { RequestProps } from 'components/pages/Request/types';
 import { RootState } from 'redux/store';
 
@@ -23,10 +24,6 @@ const RequestAccess: FC<RequestProps> = ({ className = '', message }) => {
 
   const rejectAccess = () => {
     state.rejectRequestAccess();
-  };
-
-  const setupWallet = () => {
-    console.log('Trigger setup wallet flow!');
   };
 
   const { origin, request } = message;
@@ -66,9 +63,7 @@ const RequestAccess: FC<RequestProps> = ({ className = '', message }) => {
             <Button size='large' variant='text' className='xs:w-2/5' color='warning' onClick={rejectAccess}>
               Cancel
             </Button>
-            <Button size='large' onClick={setupWallet} className='w-full xs:w-3/5'>
-              Setup wallet
-            </Button>
+            <SetupWalletButton className='w-full xs:w-3/5' />
           </div>
         </div>
       )}
