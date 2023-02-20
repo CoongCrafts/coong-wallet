@@ -74,7 +74,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
       <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
         <DialogTitle>Create new account</DialogTitle>
         <Box component='form' autoComplete='off' onSubmit={doCreateNewAccount}>
-          <DialogContent>
+          <DialogContent className='pt-0'>
             <DialogContentText sx={{ marginBottom: '1rem' }}>Choose a name for your new account</DialogContentText>
             <TextField
               label='New account name'

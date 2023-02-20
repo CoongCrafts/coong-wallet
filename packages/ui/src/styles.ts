@@ -25,11 +25,11 @@ export const globalStyles = css`
     .MuiDialog-container {
       align-items: flex-start;
 
-      @media (min-width: 600px) {
-        .MuiPaper-root {
-          margin-top: 64px;
-        }
-      }
+      //@media (min-width: 600px) {
+      //  .MuiPaper-root {
+      //    margin-top: 64px;
+      //  }
+      //}
     }
   }
 
