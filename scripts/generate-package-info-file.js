@@ -6,7 +6,9 @@ const packageJson = JSON.parse(fs.readFileSync(path.join(currentDir, 'package.js
 
 const { name, version } = packageJson;
 
+const fileHeader = `// THIS FILE IS AUTO-GENERATED, DO NOT EDIT!\n`;
+
 fs.writeFileSync(
   path.join(currentDir, 'src/packageInfo.ts'),
-  `export const packageInfo = { name: '${name}', version: '${version}' };\n`,
+  `${fileHeader}\nexport const packageInfo = { name: '${name}', version: '${version}' };\n`,
 );
