@@ -158,10 +158,10 @@ export default class Keyring {
     }
   }
 
-  getAccount(address: string) {
+  getAccount(address: string): AccountInfo {
     const pair = this.getSigningPair(address);
 
-    return { address, ...pair.meta };
+    return { address: pair.address, type: pair.type, ...pair.meta };
   }
 
   async getAccountByName(name: string) {

@@ -1,19 +1,24 @@
 import { FC, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Form } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SignerPayloadJSON } from '@polkadot/types/types';
+import { encodeAddress } from '@polkadot/util-crypto';
 import { keyring, state } from '@coong/base';
 import { Button, TextField } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
 import RequestDetails from 'components/pages/Request/RequestTransactionApproval/RequestDetails';
 import { RequestProps } from 'components/pages/Request/types';
+import { RootState } from 'redux/store';
 
 const RequestTransactionApproval: FC<RequestProps> = ({ className, message }) => {
+  const { addressPrefix } = useSelector((state: RootState) => state.app);
   const [password, setPassword] = useState<string>('');
   const { request } = message;
 
   const payloadJSON = request.body as SignerPayloadJSON;
   const targetAccount = keyring.getAccount(payloadJSON.address);
+  const currentNetworkAddress = encodeAddress(targetAccount.address, addressPrefix);
 
   const approveTransaction = async () => {
     try {
@@ -31,7 +36,7 @@ const RequestTransactionApproval: FC<RequestProps> = ({ className, message }) =>
     <div className={className}>
       <h2 className='text-center'>Transaction Approval Request</h2>
       <p className='mb-2'>You are approving a transaction with account</p>
-      <AccountCard account={targetAccount} />
+      <AccountCard account={{ ...targetAccount, networkAddress: currentNetworkAddress }} />
       <RequestDetails className='my-4' message={message} />
       <Form className='mt-8' onSubmit={approveTransaction}>
         <TextField
