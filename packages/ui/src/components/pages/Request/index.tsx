@@ -59,7 +59,7 @@ const Request: FC<Props> = ({ className = '' }) => {
   });
 
   return (
-    <div className={`${className} my-4 mx-auto`}>
+    <div className={`${className} mt-4 mb-[200px] mx-auto`}>
       <RequestContent />
     </div>
   );

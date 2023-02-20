@@ -49,11 +49,11 @@ const RequestAccess: FC<RequestProps> = ({ className = '', message }) => {
 
           <div>
             <p className='font-semibold mb-2'>Only connect if you trust the application</p>
-            <div className='flex flex-col-reverse sm:flex-row gap-x-4 gap-y-2'>
-              <Button size='large' variant='text' className='w-full sm:w-2/5' color='warning' onClick={rejectAccess}>
+            <div className='flex gap-4'>
+              <Button size='large' variant='text' className='xs:w-2/5' color='warning' onClick={rejectAccess}>
                 Cancel
               </Button>
-              <Button size='large' className='w-full sm:w-3/5' onClick={acceptAccess}>
+              <Button size='large' className='w-full xs:w-3/5' onClick={acceptAccess}>
                 Connect
               </Button>
             </div>
@@ -61,12 +61,14 @@ const RequestAccess: FC<RequestProps> = ({ className = '', message }) => {
         </div>
       ) : (
         <div>
-          <h4 className='text-center'>Setup your Coong wallet now to connect</h4>
-          <div className='flex flex-row gap-4'>
-            <Button variant='outlined' color='warning' onClick={rejectAccess}>
+          <h6 className='text-center mb-4'>Setup your Coong wallet now to connect</h6>
+          <div className='flex gap-4'>
+            <Button size='large' variant='text' className='xs:w-2/5' color='warning' onClick={rejectAccess}>
               Cancel
             </Button>
-            <Button onClick={setupWallet}>Setup wallet</Button>
+            <Button size='large' onClick={setupWallet} className='w-full xs:w-3/5'>
+              Setup wallet
+            </Button>
           </div>
         </div>
       )}

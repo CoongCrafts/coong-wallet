@@ -2,6 +2,14 @@ import { css } from '@emotion/react';
 import 'tailwind.css';
 
 export const globalStyles = css`
+  // Fix border style when disable Tailwind prelight-mode
+  // https://stackoverflow.com/questions/23218345/3px-border-automatically-added-when-using-border-style-without-specifying-border
+  *,
+  :after,
+  :before {
+    border: 0 solid;
+  }
+
   html,
   body,
   #root {
