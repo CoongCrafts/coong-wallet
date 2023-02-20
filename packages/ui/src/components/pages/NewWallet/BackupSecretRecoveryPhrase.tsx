@@ -12,7 +12,11 @@ import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 
-const BackupSecretRecoveryPhrase: FC<Props> = ({ className = '' }: Props) => {
+interface BackupSecretRecoveryPhraseProps extends Props {
+  onWalletSetup?: () => void;
+}
+
+const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ className = '', onWalletSetup }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { password } = useSelector((state: RootState) => state.setupWallet);
@@ -40,7 +44,12 @@ const BackupSecretRecoveryPhrase: FC<Props> = ({ className = '' }: Props) => {
 
       dispatch(appActions.seedReady());
       dispatch(appActions.unlock());
-      navigate('/');
+
+      if (onWalletSetup) {
+        onWalletSetup();
+      } else {
+        navigate('/');
+      }
     }, 500); // intentionally!
   };
 

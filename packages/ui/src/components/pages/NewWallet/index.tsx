@@ -10,33 +10,41 @@ import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 
-const ScreenStep = () => {
+interface NewWalletProps extends Props {
+  onWalletSetup?: () => void;
+}
+
+const ScreenStep: FC<NewWalletProps> = ({ onWalletSetup }) => {
   const { newWalletScreenStep } = useSelector((state: RootState) => state.setupWallet);
 
   switch (newWalletScreenStep) {
     case NewWalletScreenStep.ConfirmWalletPassword:
       return <ConfirmWalletPassword />;
     case NewWalletScreenStep.BackupSecretRecoveryPhrase:
-      return <BackupSecretRecoveryPhrase />;
+      return <BackupSecretRecoveryPhrase onWalletSetup={onWalletSetup} />;
     default:
       return <ChooseWalletPassword />;
   }
 };
 
-const NewWallet: FC<Props> = ({ className = '' }: Props) => {
+const NewWallet: FC<NewWalletProps> = ({ className = '', onWalletSetup }) => {
   const navigate = useNavigate();
 
   useEffectOnce(() => {
     keyring.initialized().then((initialized) => {
       if (initialized) {
-        navigate('/');
+        if (onWalletSetup) {
+          onWalletSetup();
+        } else {
+          navigate('/');
+        }
       }
     });
   });
 
   return (
     <div className={`${className} max-w-[450px] mt-8 mb-16 mx-auto`}>
-      <ScreenStep />
+      <ScreenStep onWalletSetup={onWalletSetup} />
     </div>
   );
 };

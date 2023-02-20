@@ -4,11 +4,15 @@ import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
 import { Props } from 'types';
 
-const Welcome: React.FC<Props> = ({ className = '' }: Props) => {
+interface WelcomeProps extends Props {
+  onCreateNewWallet?: () => void;
+}
+
+const Welcome: React.FC<WelcomeProps> = ({ className = '', onCreateNewWallet }) => {
   const navigate = useNavigate();
 
   const doCreateNewWallet = () => {
-    navigate('/new-wallet');
+    onCreateNewWallet ? onCreateNewWallet() : navigate('/new-wallet');
   };
 
   const doRestoreWallet = () => {
