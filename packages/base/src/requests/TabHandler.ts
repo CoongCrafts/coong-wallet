@@ -1,3 +1,4 @@
+import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import { RequestName, WalletRequestMessage, WalletResponse } from '@coong/base/types';
 import { CoongError, ErrorCode } from '@coong/utils';
 import Handler from 'requests/Handler';
@@ -14,12 +15,18 @@ export default class TabHandler extends Handler {
     }
 
     switch (name) {
-      case 'tab/requestAccess':
       case 'tab/signRaw':
-      case 'tab/signExtrinsic':
-        return this.state.newRequestMessage(message);
+      case 'tab/signExtrinsic': {
+        const { address } = request.body as SignerPayloadJSON | SignerPayloadRaw;
+        this.state.ensureAccountAuthorized(fromUrl, address);
+        break;
+      }
+      case 'tab/requestAccess':
+        break;
       default:
         throw new CoongError(ErrorCode.UnknownRequest);
     }
+
+    return this.state.newRequestMessage(message);
   }
 }

@@ -1,5 +1,7 @@
 import { TypeRegistry } from '@polkadot/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
+import { encodeAddress } from '@polkadot/util-crypto';
+import { defaultNetwork } from '@coong/base';
 import { assert, StandardCoongError } from '@coong/utils';
 import keyring from 'keyring';
 import { BehaviorSubject } from 'rxjs';
@@ -65,6 +67,16 @@ export default class WalletState {
 
   ensureAppAuthorized(url: string): boolean {
     return !!this.getAuthorizedApp(url);
+  }
+
+  ensureAccountAuthorized(url: string, accountAddress: string): void {
+    const app = this.getAuthorizedApp(url);
+    const substrateAddress = encodeAddress(accountAddress, defaultNetwork.prefix);
+
+    assert(
+      app.authorizedAccounts.includes(substrateAddress),
+      `The app at ${url} is not authorized to access account with address ${accountAddress}!`,
+    );
   }
 
   getCurrentRequestMessage = (requestName?: RequestName) => {
