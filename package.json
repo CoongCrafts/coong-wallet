@@ -11,7 +11,8 @@
     "start": "yarn workspace @coong/ui start",
     "build": "yarn clean && npx lerna run build",
     "clean": "npx lerna run clean",
-    "prettify": "npx prettier --write ."
+    "prettify": "npx prettier --write .",
+    "generate-package-info-file": "lerna exec -- node \\$LERNA_ROOT_PATH/scripts/generate-package-info-file.js"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
