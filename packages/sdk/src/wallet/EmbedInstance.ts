@@ -1,6 +1,6 @@
 import { compareWalletInfo } from '@coong/base';
 import { WalletSignal, WalletSignalMessage } from '@coong/base/types';
-import WalletInstance from 'wallet/WalletInstance';
+import WalletInstance from './WalletInstance';
 
 export default class EmbedInstance extends WalletInstance {
   async initialize() {

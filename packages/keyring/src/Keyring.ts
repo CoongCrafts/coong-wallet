@@ -1,8 +1,8 @@
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
-import { AccountInfo } from '@coong/keyring/types';
 import { assert, CoongError, ErrorCode } from '@coong/utils';
 import CryptoJS from 'crypto-js';
+import { AccountInfo } from './types';
 
 const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
 const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';

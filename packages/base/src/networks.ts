@@ -1,5 +1,5 @@
 import { availableNetworks } from '@polkadot/networks';
-import { NetworkInfo } from 'types';
+import { NetworkInfo } from './types';
 
 export const networks: NetworkInfo[] = availableNetworks.map(({ prefix, displayName, network }) => ({
   displayName,

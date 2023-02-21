@@ -9,8 +9,8 @@ import {
   WalletSignal,
   WalletSignalMessage,
   WalletSignals,
-} from 'types';
-import { isMessageId, newMessageId } from 'utils/messageId';
+} from '../types';
+import { isMessageId, newMessageId } from '../utils';
 
 export const currentOrigin = () => {
   return window.location.origin;

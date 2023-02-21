@@ -1,5 +1,5 @@
 import { InjectedAccount, InjectedAccounts, Unsubcall } from '@polkadot/extension-inject/types';
-import { SendMessage } from 'types';
+import { SendMessage } from '../types';
 
 let sendMessage: SendMessage;
 

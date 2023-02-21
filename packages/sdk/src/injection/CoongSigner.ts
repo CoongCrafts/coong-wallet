@@ -1,6 +1,6 @@
 import type { Signer as SignerInterface, SignerResult } from '@polkadot/api/types';
 import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types/extrinsic';
-import { SendMessage } from 'types';
+import { SendMessage } from '../types';
 
 let sendMessage: SendMessage;
 

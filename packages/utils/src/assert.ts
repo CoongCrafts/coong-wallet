@@ -1,4 +1,4 @@
-import { CoongError, ErrorCode, ErrorCodes } from 'errors';
+import { CoongError, ErrorCode, ErrorCodes } from './errors';
 
 export function assert(condition: unknown, message?: string) {
   if (condition) {

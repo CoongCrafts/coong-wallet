@@ -4,7 +4,17 @@
     "baseUrl": "src",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "jsx": "react-jsx",
-    "noEmit": true
+    "noEmit": true,
+    "paths": {
+      "@coong/base": ["../../base/src"],
+      "@coong/base/*": ["../../base/src/*"],
+      "@coong/keyring": ["../../keyring/src"],
+      "@coong/keyring/*": ["../../keyring/src/*"],
+      "@coong/utils": ["../../utils/src"],
+      "@coong/utils/*": ["../../utils/src/*"],
+      "@coong/sdk": ["../../sdk/src"],
+      "@coong/sdk/*": ["../../sdk/src/*"]
+    }
   },
   "include": ["src/**/*"],
   "references": [

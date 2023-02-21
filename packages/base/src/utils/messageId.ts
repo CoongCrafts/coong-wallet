@@ -1,4 +1,4 @@
-import { MessageId } from 'types';
+import { MessageId } from '../types';
 
 let counter = 0;
 

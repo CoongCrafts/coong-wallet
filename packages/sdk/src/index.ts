@@ -1,3 +1,3 @@
-import CoongSdk from 'CoongSdk';
+import CoongSdk from './CoongSdk';
 
 export default CoongSdk;

@@ -1,7 +1,7 @@
 import { Injected } from '@polkadot/extension-inject/types';
-import Accounts from 'injection/Accounts';
-import CoongSigner from 'injection/CoongSigner';
-import { SendMessage } from 'types';
+import { SendMessage } from '../types';
+import Accounts from './Accounts';
+import CoongSigner from './CoongSigner';
 
 export default class SubstrateInjected implements Injected {
   public readonly accounts: Accounts;

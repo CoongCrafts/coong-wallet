@@ -1,9 +1,9 @@
 import { CoongError, ErrorCode } from '@coong/utils';
-import { EmbedHandler } from 'requests/EmbedHandler';
-import TabHandler from 'requests/TabHandler';
-import WalletState from 'requests/WalletState';
-import { RequestName, WalletRequestMessage, WalletResponse } from 'types';
-import { isMessageId } from 'utils/messageId';
+import { RequestName, WalletRequestMessage, WalletResponse } from '../types';
+import { isMessageId } from '../utils';
+import { EmbedHandler } from './EmbedHandler';
+import TabHandler from './TabHandler';
+import WalletState from './WalletState';
 
 export const state = new WalletState();
 export const embedHandler = new EmbedHandler(state);

@@ -10,6 +10,7 @@
   "main": "dist/index.js",
   "dependencies": {
     "@coong/keyring": "^0.0.3",
+    "@coong/utils": "^0.0.3",
     "@polkadot/networks": "^10.4.1",
     "@polkadot/types": "^9.14.1",
     "rxjs": "^7.8.0"

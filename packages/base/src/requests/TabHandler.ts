@@ -1,7 +1,7 @@
 import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
-import { RequestName, WalletRequestMessage, WalletResponse } from '@coong/base/types';
 import { CoongError, ErrorCode } from '@coong/utils';
-import Handler from 'requests/Handler';
+import { RequestName, WalletRequestMessage, WalletResponse } from '../types';
+import Handler from './Handler';
 
 export default class TabHandler extends Handler {
   async handle<TRequestName extends RequestName>(

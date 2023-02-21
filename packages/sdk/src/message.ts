@@ -3,10 +3,10 @@ import { Injected } from '@polkadot/extension-inject/types';
 import { isWalletResponse, newMessageId, newWalletRequest } from '@coong/base';
 import { RequestName, WalletRequest, WalletResponse, WalletResponseMessage } from '@coong/base/types';
 import { assert } from '@coong/utils';
-import CoongSdk from 'CoongSdk';
-import SubstrateInjected from 'injection/Injected';
-import { Handlers } from 'types';
-import WalletInstance from 'wallet/WalletInstance';
+import CoongSdk from './CoongSdk';
+import SubstrateInjected from './injection/Injected';
+import { Handlers } from './types';
+import WalletInstance from './wallet/WalletInstance';
 
 const handlers: Handlers = {};
 

@@ -16,14 +16,14 @@
     "declaration": true,
     "composite": true,
     "paths": {
-      "@coong/base": ["../../base/src"],
-      "@coong/base/*": ["../../base/src/*"],
-      "@coong/keyring": ["../../keyring/src"],
-      "@coong/keyring/*": ["../../keyring/src/*"],
-      "@coong/utils": ["../../utils/src"],
-      "@coong/utils/*": ["../../utils/src/*"],
-      "@coong/sdk": ["../../sdk/src"],
-      "@coong/sdk/*": ["../../sdk/src/*"]
+      "@coong/base": ["../base/src"],
+      "@coong/base/*": ["../base/src/*"],
+      "@coong/keyring": ["../keyring/src"],
+      "@coong/keyring/*": ["../keyring/src/*"],
+      "@coong/utils": ["../utils/src"],
+      "@coong/utils/*": ["../utils/src/*"],
+      "@coong/sdk": ["../sdk/src"],
+      "@coong/sdk/*": ["../sdk/src/*"]
     }
   }
 }

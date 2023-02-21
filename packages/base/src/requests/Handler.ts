@@ -1,4 +1,4 @@
-import WalletState from 'requests/WalletState';
+import WalletState from './WalletState';
 
 export default abstract class Handler {
   readonly #state: WalletState;

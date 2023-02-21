@@ -3,8 +3,8 @@ import { SignerPayloadJSON } from '@polkadot/types/types';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { defaultNetwork } from '@coong/base';
 import { assert, StandardCoongError } from '@coong/utils';
-import keyring from 'keyring';
 import { BehaviorSubject } from 'rxjs';
+import keyring from '../keyring';
 import {
   AccessStatus,
   RequestAppRequestAccess,
@@ -12,7 +12,7 @@ import {
   WalletRequestMessage,
   WalletRequestWithResolver,
   WalletResponse,
-} from 'types';
+} from '../types';
 
 export type AppId = string;
 export interface AppInfo {
