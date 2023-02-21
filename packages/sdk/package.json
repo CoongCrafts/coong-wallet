@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Coong SDK to integrate Coong Wallet into dapps",
   "author": "Thang X. Vu <thang@coongwallet.io>",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,5 +13,12 @@
   "devDependencies": {
     "@polkadot/api": "^9.10.5",
     "@polkadot/extension-inject": "^0.44.7"
-  }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "Apache-2.0"
 }

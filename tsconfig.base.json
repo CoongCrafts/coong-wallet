@@ -14,7 +14,6 @@
     "isolatedModules": true,
     "noEmit": false,
     "declaration": true,
-    "declarationMap": true,
     "composite": true,
     "paths": {
       "@coong/base": ["../../base/src"],

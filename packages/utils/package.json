@@ -3,10 +3,16 @@
   "version": "0.0.1",
   "description": "Utilities for Coong wallet",
   "author": "Thang X. Vu <thang@coongwallet.io>",
-  "main": "src/index.ts",
-  "license": "Apache-2.0",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc --build",
     "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo"
-  }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "Apache-2.0"
 }
