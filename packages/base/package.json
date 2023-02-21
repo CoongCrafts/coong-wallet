@@ -1,6 +1,6 @@
 {
   "name": "@coong/base",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Shared functions, logics for Coong wallet",
   "author": "Thang X. Vu <thang@coongwallet.io>",
   "scripts": {
@@ -23,7 +23,8 @@
     "dist"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "directory": "dist"
   },
   "license": "Apache-2.0"
 }

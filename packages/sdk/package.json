@@ -1,11 +1,12 @@
 {
   "name": "@coong/sdk",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Coong SDK to integrate Coong Wallet into dapps",
   "author": "Thang X. Vu <thang@coongwallet.io>",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc --build",
+    "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo"
   },
   "dependencies": {
     "@coong/base": "*"
@@ -18,7 +19,8 @@
     "dist"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "directory": "dist"
   },
   "license": "Apache-2.0"
 }
