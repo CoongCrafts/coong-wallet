@@ -1,6 +1,5 @@
 {
   "name": "coong-wallet",
-  "version": "0.0.1",
   "private": true,
   "description": "A website-based multichain wallet for Polkadot & Kusama ecosystem",
   "author": "Thang X. Vu <thang@coongwallet.io>",

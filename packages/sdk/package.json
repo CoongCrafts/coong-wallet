@@ -1,6 +1,6 @@
 {
   "name": "@coong/sdk",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "Coong SDK to integrate Coong Wallet into dapps",
   "author": "Thang X. Vu <thang@coongwallet.io>",
   "main": "dist/index.js",
