@@ -9,11 +9,12 @@
     "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@coong/base": "^0.0.6"
+    "@coong/base": "^0.0.6",
+    "@coong/utils": "^0.0.6",
+    "@polkadot/extension-inject": "^0.44.7"
   },
   "devDependencies": {
-    "@polkadot/api": "^9.10.5",
-    "@polkadot/extension-inject": "^0.44.7"
+    "@polkadot/api": "^9.10.5"
   },
   "publishConfig": {
     "access": "public",

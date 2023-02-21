@@ -9,6 +9,7 @@
   },
   "main": "index.js",
   "dependencies": {
+    "@coong/utils": "^0.0.6",
     "@polkadot/ui-keyring": "^2.11.2",
     "crypto-js": "^4.1.1"
   },

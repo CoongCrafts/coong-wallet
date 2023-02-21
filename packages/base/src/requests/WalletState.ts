@@ -1,10 +1,10 @@
 import { TypeRegistry } from '@polkadot/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { encodeAddress } from '@polkadot/util-crypto';
-import { defaultNetwork } from '@coong/base';
 import { assert, StandardCoongError } from '@coong/utils';
 import { BehaviorSubject } from 'rxjs';
 import keyring from '../keyring';
+import { defaultNetwork } from '../networks';
 import {
   AccessStatus,
   RequestAppRequestAccess,

@@ -13,12 +13,12 @@
     "@coong/utils": "^0.0.6",
     "@polkadot/networks": "^10.4.1",
     "@polkadot/types": "^9.14.1",
+    "@polkadot/util-crypto": "^10.4.1",
     "rxjs": "^7.8.0"
   },
   "devDependencies": {
     "@polkadot/extension-inject": "^0.44.7",
-    "@polkadot/ui-keyring": "^2.11.2",
-    "@polkadot/util-crypto": "^10.4.1"
+    "@polkadot/ui-keyring": "^2.11.2"
   },
   "publishConfig": {
     "access": "public",
