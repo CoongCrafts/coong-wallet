@@ -1,6 +1,6 @@
 {
   "name": "@coong/keyring",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Keyring for Coong wallet",
   "author": "Thang X. Vu <thang@coongwallet.io>",
   "scripts": {

@@ -1,6 +1,6 @@
 {
   "name": "@coong/utils",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Utilities for Coong wallet",
   "author": "Thang X. Vu <thang@coongwallet.io>",
   "main": "index.js",
