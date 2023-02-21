@@ -19,8 +19,7 @@
     "dist"
   ],
   "publishConfig": {
-    "access": "public",
-    "directory": "dist"
+    "access": "public"
   },
   "license": "Apache-2.0"
 }
