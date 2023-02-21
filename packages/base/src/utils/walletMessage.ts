@@ -1,6 +1,7 @@
 import {
   MessageId,
   MessageType,
+  WalletInfo,
   WalletRequest,
   WalletRequestMessage,
   WalletResponse,
@@ -42,12 +43,13 @@ export const newWalletErrorResponse = (error: string, id?: MessageId): WalletRes
   };
 };
 
-export const newWalletSignal = (signal: WalletSignal, id?: MessageId): WalletSignalMessage => {
+export const newWalletSignal = (signal: WalletSignal, walletInfo: WalletInfo): WalletSignalMessage => {
   return {
     type: MessageType.SIGNAL,
-    id: id || newMessageId(),
+    id: newMessageId(),
     signal,
     origin: currentOrigin(),
+    walletInfo,
   };
 };
 
@@ -74,6 +76,14 @@ export const isWalletSignal = (message?: WalletSignalMessage) => {
     return false;
   }
 
-  const { id, type, origin, signal } = message;
-  return origin && isMessageId(id) && type === MessageType.SIGNAL && WalletSignals.includes(signal);
+  const { id, type, origin, signal, walletInfo } = message;
+  return origin && isMessageId(id) && type === MessageType.SIGNAL && WalletSignals.includes(signal) && !!walletInfo;
+};
+
+export const compareWalletInfo = (info1?: WalletInfo, info2?: WalletInfo) => {
+  if (!info1 || !info2) {
+    return false;
+  }
+
+  return info1.name === info2.name && info1.version === info2.version && info1.instanceId === info2.instanceId;
 };

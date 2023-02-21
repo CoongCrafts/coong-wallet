@@ -81,6 +81,7 @@ export interface WalletResponseMessage<TRequestName extends RequestName = Reques
 
 export interface WalletSignalMessage extends WalletMessage {
   signal: WalletSignal;
+  walletInfo: WalletInfo;
 }
 
 interface Resolver<T> {
@@ -96,4 +97,10 @@ export interface NetworkInfo {
   networkId: string;
   displayName: string;
   prefix: number;
+}
+
+export interface WalletInfo {
+  name: string;
+  version: string;
+  instanceId: string;
 }
