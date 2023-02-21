@@ -16,6 +16,7 @@ import InvalidRequest from 'components/pages/Request/InvalidRequest';
 import RequestContent from 'components/pages/Request/RequestContent';
 import { Props } from 'types';
 import { isChildTabOrPopup, openerWindow } from 'utils/browser';
+import { walletInfo } from 'walletInfo';
 
 const Request: FC<Props> = ({ className = '' }) => {
   const [searchParams] = useSearchParams();
@@ -48,10 +49,10 @@ const Request: FC<Props> = ({ className = '' }) => {
   });
 
   useEffectOnce(() => {
-    openerWindow().postMessage(newWalletSignal(WalletSignal.WALLET_TAB_INITIALIZED), '*');
+    openerWindow().postMessage(newWalletSignal(WalletSignal.WALLET_TAB_INITIALIZED, walletInfo), '*');
 
     const onUnload = () => {
-      openerWindow().postMessage(newWalletSignal(WalletSignal.WALLET_TAB_UNLOADED), '*');
+      openerWindow().postMessage(newWalletSignal(WalletSignal.WALLET_TAB_UNLOADED, walletInfo), '*');
     };
 
     window.addEventListener('unload', onUnload);

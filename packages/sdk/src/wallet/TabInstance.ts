@@ -1,4 +1,5 @@
-import { WalletSignal } from '@coong/base/types';
+import { compareWalletInfo } from '@coong/base';
+import { WalletSignal, WalletSignalMessage } from '@coong/base/types';
 import { StandardCoongError } from '@coong/utils';
 import WalletInstance from 'wallet/WalletInstance';
 
@@ -19,10 +20,11 @@ export default class TabInstance extends WalletInstance {
     return tabWalletWindow;
   }
 
-  protected onSignal(signal: WalletSignal) {
+  protected onSignal({ signal, walletInfo }: WalletSignalMessage) {
     if (signal === WalletSignal.WALLET_TAB_INITIALIZED) {
       this.ready = true;
-    } else if (signal === WalletSignal.WALLET_TAB_UNLOADED) {
+      this.walletInfo = walletInfo;
+    } else if (signal === WalletSignal.WALLET_TAB_UNLOADED && compareWalletInfo(this.walletInfo, walletInfo)) {
       this.ready = false;
     }
   }

@@ -1,11 +1,12 @@
 import { isWalletSignal } from '@coong/base';
-import { WalletSignal, WalletSignalMessage } from '@coong/base/types';
+import { WalletInfo, WalletSignalMessage } from '@coong/base/types';
 import { StandardCoongError } from '@coong/utils';
 
 export default abstract class WalletInstance {
   public readonly walletUrl: string;
   public ready: boolean;
   public walletWindow?: Window;
+  public walletInfo?: WalletInfo;
 
   constructor(_walletUrl: string) {
     this.ready = false;
@@ -34,16 +35,14 @@ export default abstract class WalletInstance {
         return;
       }
 
-      const { signal } = data;
-
-      this.onSignal(signal as WalletSignal);
+      this.onSignal(data);
     };
 
     // TODO clean up message event on closing the wallet
     window.addEventListener('message', onMessage);
   }
 
-  protected onSignal(signal: WalletSignal) {
+  protected onSignal(message: WalletSignalMessage) {
     throw new StandardCoongError('Implement this method');
   }
 }

@@ -12,6 +12,7 @@ import { styled } from '@mui/material';
 import CoongTextLogo from 'components/shared/misc/CoongTextLogo';
 import { Props } from 'types';
 import { isInsideIframe, topWindow } from 'utils/browser';
+import { walletInfo } from 'walletInfo';
 
 const Embed: FC<Props> = ({ className = '' }: Props) => {
   const loadedInsideIframe = !topWindow() || !isInsideIframe();
@@ -22,10 +23,10 @@ const Embed: FC<Props> = ({ className = '' }: Props) => {
       return;
     }
 
-    topWindow().postMessage(newWalletSignal(WalletSignal.WALLET_EMBED_INITIALIZED), '*');
+    topWindow().postMessage(newWalletSignal(WalletSignal.WALLET_EMBED_INITIALIZED, walletInfo), '*');
 
     const onUnload = () => {
-      topWindow().postMessage(newWalletSignal(WalletSignal.WALLET_EMBED_UNLOADED), '*');
+      topWindow().postMessage(newWalletSignal(WalletSignal.WALLET_EMBED_UNLOADED, walletInfo), '*');
     };
 
     window.addEventListener('unload', onUnload);

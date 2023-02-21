@@ -1,4 +1,5 @@
-import { WalletSignal } from '@coong/base/types';
+import { compareWalletInfo } from '@coong/base';
+import { WalletSignal, WalletSignalMessage } from '@coong/base/types';
 import WalletInstance from 'wallet/WalletInstance';
 
 export default class EmbedInstance extends WalletInstance {
@@ -23,10 +24,11 @@ export default class EmbedInstance extends WalletInstance {
     return iframe.contentWindow!;
   }
 
-  protected onSignal(signal: WalletSignal) {
+  protected onSignal({ signal, walletInfo }: WalletSignalMessage) {
     if (signal === WalletSignal.WALLET_EMBED_INITIALIZED) {
       this.ready = true;
-    } else if (signal === WalletSignal.WALLET_EMBED_UNLOADED) {
+      this.walletInfo = walletInfo;
+    } else if (signal === WalletSignal.WALLET_EMBED_UNLOADED && compareWalletInfo(this.walletInfo, walletInfo)) {
       this.ready = false;
     }
   }
