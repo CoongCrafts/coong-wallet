@@ -7,7 +7,7 @@
     "build": "tsc --build",
     "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo"
   },
-  "main": "dist/index.js",
+  "main": "index.js",
   "dependencies": {
     "@polkadot/ui-keyring": "^2.11.2",
     "crypto-js": "^4.1.1"
@@ -18,7 +18,7 @@
     "@types/crypto-js": "^4.1.1"
   },
   "files": [
-    "dist"
+    "dist/**/*"
   ],
   "publishConfig": {
     "access": "public"
