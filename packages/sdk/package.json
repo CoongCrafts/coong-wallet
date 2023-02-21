@@ -1,6 +1,6 @@
 {
   "name": "@coong/sdk",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Coong SDK to integrate Coong Wallet into dapps",
   "author": "Thang X. Vu <thang@coongwallet.io>",
   "main": "index.js",
@@ -9,7 +9,7 @@
     "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@coong/base": "^0.0.4"
+    "@coong/base": "^0.0.5"
   },
   "devDependencies": {
     "@polkadot/api": "^9.10.5",
