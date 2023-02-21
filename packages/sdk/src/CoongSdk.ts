@@ -39,7 +39,7 @@ export default class CoongSdk {
 
     setupWalletMessageHandler(this.#walletUrl);
 
-    injectWalletAPI();
+    injectWalletAPI(this.#embedInstance);
 
     this.#initialized = true;
 

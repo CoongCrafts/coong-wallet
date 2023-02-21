@@ -6,6 +6,7 @@ import { assert } from '@coong/utils';
 import CoongSdk from 'CoongSdk';
 import SubstrateInjected from 'injection/Injected';
 import { Handlers } from 'types';
+import WalletInstance from 'wallet/WalletInstance';
 
 const handlers: Handlers = {};
 
@@ -82,9 +83,14 @@ export const enable = async (appName: string): Promise<Injected> => {
   return new SubstrateInjected(sendMessage);
 };
 
-export const injectWalletAPI = () => {
+export const injectWalletAPI = (walletInstance: WalletInstance) => {
+  const walletInfo = walletInstance.walletInfo;
+  assert(walletInfo, `Unknown wallet info!`);
+
+  const { name, version } = walletInfo!;
+
   injectExtension(enable, {
-    name: 'coong',
-    version: '0.0.1', // TODO get package version
+    name,
+    version,
   });
 };
