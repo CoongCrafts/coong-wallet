@@ -15,11 +15,9 @@
     "@polkadot/api": "^9.10.5",
     "@polkadot/extension-inject": "^0.44.7"
   },
-  "files": [
-    "dist/**/*"
-  ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "directory": "dist"
   },
   "license": "Apache-2.0"
 }

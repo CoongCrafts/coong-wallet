@@ -8,11 +8,9 @@
     "build": "tsc --build",
     "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo"
   },
-  "files": [
-    "dist/**/*"
-  ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "directory": "dist"
   },
   "license": "Apache-2.0"
 }
