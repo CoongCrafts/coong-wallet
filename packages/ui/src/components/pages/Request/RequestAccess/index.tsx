@@ -16,7 +16,7 @@ const RequestAccess: FC<RequestProps> = ({ className = '', message }) => {
   } = useSelector((state: RootState) => state);
   const acceptAccess = async () => {
     try {
-      state.approveRequestAccess(selectedAccounts.map((one) => one.address));
+      await state.approveRequestAccess(selectedAccounts.map((one) => one.address));
     } catch (e: any) {
       toast.error(e.message);
     }
