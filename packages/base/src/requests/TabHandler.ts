@@ -19,6 +19,8 @@ export default class TabHandler extends Handler {
       case 'tab/signExtrinsic': {
         const { address } = request.body as SignerPayloadJSON | SignerPayloadRaw;
         this.state.ensureAccountAuthorized(fromUrl, address);
+        // TODO if account is not authorized,
+        //      add a view for request access to that particular account
         break;
       }
       case 'tab/requestAccess':

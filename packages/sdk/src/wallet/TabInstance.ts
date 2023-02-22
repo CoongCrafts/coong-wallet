@@ -10,6 +10,8 @@ export default class TabInstance extends WalletInstance {
     const tabWalletWindow = window.open(`${this.walletUrl}${path}`, '_blank');
 
     if (!tabWalletWindow) {
+      // TODO show a popup asking users to allow popup
+      //      with instructions to enable that
       throw new StandardCoongError('Error open wallet tab');
     }
 
