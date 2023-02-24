@@ -1,5 +1,4 @@
 import { InjectedAccount, InjectedAccounts, Unsubcall } from '@polkadot/extension-inject/types';
-import { getAuthorizedAccounts } from '../message';
 import { SendMessage } from '../types';
 
 let sendMessage: SendMessage;
@@ -10,11 +9,11 @@ export default class Accounts implements InjectedAccounts {
   }
 
   get(anyType?: boolean): Promise<InjectedAccount[]> {
-    return Promise.resolve(getAuthorizedAccounts());
+    return sendMessage({ name: 'embed/authorizedAccounts', body: { anyType } });
   }
 
   subscribe(cb: (accounts: InjectedAccount[]) => void | Promise<void>): Unsubcall {
-    // Not support subscription for now!
+    // TODO add subscription
     return () => {};
   }
 }

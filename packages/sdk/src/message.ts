@@ -1,5 +1,5 @@
 import { injectExtension } from '@polkadot/extension-inject';
-import { Injected, InjectedAccount } from '@polkadot/extension-inject/types';
+import { Injected } from '@polkadot/extension-inject/types';
 import { isWalletResponse, newMessageId, newWalletRequest } from '@coong/base';
 import { RequestName, WalletRequest, WalletResponse, WalletResponseMessage } from '@coong/base/types';
 import { assert } from '@coong/utils';
@@ -73,22 +73,11 @@ export function sendMessage<TRequestName extends RequestName>(
   });
 }
 
-const AUTHORIZED_ACCOUNTS_KEY = 'coongwallet:AUTHORIZED_ACCOUNTS';
-
-export const getAuthorizedAccounts = (): InjectedAccount[] => {
-  try {
-    const authorizedAccounts = localStorage.getItem(AUTHORIZED_ACCOUNTS_KEY) || '[]';
-    return JSON.parse(authorizedAccounts) as InjectedAccount[];
-  } catch {
-    return [];
-  }
-};
-
 export const enable = async (appName: string): Promise<Injected> => {
-  const authorizedAccounts = getAuthorizedAccounts();
-  if (authorizedAccounts.length === 0) {
-    const response = await sendMessage({ name: 'tab/requestAccess', body: { appName } });
-    localStorage.setItem(AUTHORIZED_ACCOUNTS_KEY, JSON.stringify(response.authorizedAccounts));
+  try {
+    await sendMessage({ name: 'embed/accessAuthorized', body: { appName } });
+  } catch (e: any) {
+    await sendMessage({ name: 'tab/requestAccess', body: { appName } });
   }
 
   return new SubstrateInjected(sendMessage);

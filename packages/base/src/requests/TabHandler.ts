@@ -24,7 +24,6 @@ export default class TabHandler extends Handler {
         break;
       }
       case 'tab/requestAccess':
-        // TODO return if the app is ready approved access
         break;
       default:
         throw new CoongError(ErrorCode.UnknownRequest);

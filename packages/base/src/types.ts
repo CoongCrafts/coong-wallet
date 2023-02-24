@@ -28,7 +28,7 @@ export interface ResponseSigning {
 
 export interface ResponseAppRequestAccess {
   result: AccessStatus;
-  authorizedAccounts: InjectedAccount[];
+  authorizedAccounts: string[];
 }
 
 export interface RequestSignatures {
