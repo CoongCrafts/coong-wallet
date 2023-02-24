@@ -1,6 +1,8 @@
+import { InjectedAccount } from '@polkadot/extension-inject/types';
 import { TypeRegistry } from '@polkadot/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { encodeAddress } from '@polkadot/util-crypto';
+import { KeypairType } from '@polkadot/util-crypto/types';
 import { assert, StandardCoongError } from '@coong/utils';
 import { BehaviorSubject } from 'rxjs';
 import keyring from '../keyring';
@@ -27,6 +29,10 @@ const URL_PROTOCOLS = ['http://', 'https://'];
 
 type NullableRequestWithResolver = WalletRequestWithResolver | null;
 
+export function canDerive(type?: KeypairType): boolean {
+  return !!type && ['ed25519', 'sr25519', 'ecdsa', 'ethereum'].includes(type);
+}
+
 export default class WalletState {
   #authorizedApps: AuthorizedApps = {};
   #requestMessageSubject: BehaviorSubject<NullableRequestWithResolver> =
@@ -49,6 +55,13 @@ export default class WalletState {
 
   #saveAuthorizedApps() {
     localStorage.setItem(AUTHORIZED_ACCOUNTS_KEY, JSON.stringify(this.#authorizedApps));
+  }
+
+  async getInjectedAccounts(anyType = false): Promise<InjectedAccount[]> {
+    const accounts = await keyring.getAccounts();
+    return accounts
+      .filter(({ type }) => (anyType ? true : canDerive(type)))
+      .map(({ address, genesisHash, name, type }) => ({ address, genesisHash, name, type }));
   }
 
   extractAppId(url: string) {
