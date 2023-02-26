@@ -151,7 +151,7 @@ export default class WalletState {
     const payloadJSON = request.body as SignerPayloadJSON;
 
     const pair = keyring.getSigningPair(payloadJSON.address);
-    pair.unlock();
+    pair.unlock(password);
 
     const registry = new TypeRegistry();
     registry.setSignedExtensions(payloadJSON.signedExtensions);
