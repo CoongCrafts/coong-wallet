@@ -8,9 +8,7 @@ export interface AccountInfo extends KeyringPair$Meta {
   isHardware?: boolean;
   isHidden?: boolean;
   name?: string;
-  parentAddress?: string;
-  suri?: string;
   type?: KeypairType;
   whenCreated?: number;
-  index?: number; // TODO Add account index
+  derivationPath?: string;
 }

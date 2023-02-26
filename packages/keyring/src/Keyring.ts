@@ -144,8 +144,9 @@ export default class Keyring {
       throw new CoongError(ErrorCode.AccountNameUsed);
     }
 
-    const nextPath = `${this.#mnemonic}${this.#nextAccountPath()}`;
-    const keypair = this.#keyring.createFromUri(nextPath, { name }, DEFAULT_KEY_TYPE);
+    const derivationPath = this.#nextAccountPath();
+    const nextPath = `${this.#mnemonic}${derivationPath}`;
+    const keypair = this.#keyring.createFromUri(nextPath, { name, derivationPath }, DEFAULT_KEY_TYPE);
 
     this.#keyring.saveAccount(keypair, password);
     this.#increaseAccountsIndex();
