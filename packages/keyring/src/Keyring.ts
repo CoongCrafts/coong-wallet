@@ -129,12 +129,10 @@ export default class Keyring {
   }
 
   async createNewAccount(name: string, password?: string): Promise<AccountInfo> {
-    if (this.locked()) {
-      if (password) {
-        await this.unlock(password);
-      } else {
-        throw new CoongError(ErrorCode.KeyringLocked);
-      }
+    if (password) {
+      await this.unlock(password);
+    } else {
+      throw new CoongError(ErrorCode.PasswordRequired);
     }
 
     if (!name) {
@@ -149,13 +147,10 @@ export default class Keyring {
     const nextPath = `${this.#mnemonic}${this.#nextAccountPath()}`;
     const keypair = this.#keyring.createFromUri(nextPath, { name }, DEFAULT_KEY_TYPE);
 
-    // TODO: encrypt data
-    this.#keyring.saveAccount(keypair);
+    this.#keyring.saveAccount(keypair, password);
     this.#increaseAccountsIndex();
 
-    if (password) {
-      this.lock();
-    }
+    this.lock();
 
     return this.getAccount(keypair.address);
   }

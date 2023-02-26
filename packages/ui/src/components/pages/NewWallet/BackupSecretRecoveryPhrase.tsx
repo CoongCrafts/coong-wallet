@@ -39,8 +39,7 @@ const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ class
       }
 
       await keyring.initialize(secretPhrase!, password);
-      await keyring.unlock(password);
-      await keyring.createNewAccount('My first account');
+      await keyring.createNewAccount('My first account', password);
 
       dispatch(appActions.seedReady());
       dispatch(appActions.unlock());
