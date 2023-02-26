@@ -37,6 +37,7 @@ const NetworksSelection: FC<Props> = () => {
       )}
       getOptionLabel={(option) => option.displayName}
       options={networks}
+      blurOnSelect
     />
   );
 };
