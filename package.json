@@ -8,10 +8,9 @@
   ],
   "scripts": {
     "start": "yarn workspace @coong/ui start",
-    "build": "yarn clean && npx lerna run build",
+    "build": "yarn clean && npx lerna run build && yarn copy-files-to-dist",
     "clean": "npx lerna run clean",
     "prettify": "npx prettier --write .",
-    "prepublish": "yarn copy-files-to-dist",
     "generate-package-info-file": "lerna exec -- node \\$LERNA_ROOT_PATH/scripts/generate-package-info-file.js",
     "copy-files-to-dist": "lerna exec -- node \\$LERNA_ROOT_PATH/scripts/copy-files-to-dist.js"
   },
