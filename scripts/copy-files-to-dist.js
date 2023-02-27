@@ -16,5 +16,14 @@ filesToCopy.forEach((file) => {
     return;
   }
 
-  fs.copyFileSync(filePath, `${targetDir}/${file}`);
+  let fileContent = fs.readFileSync(filePath, { encoding: 'utf8' });
+
+  if (file === 'package.json') {
+    const pkgJson = JSON.parse(fileContent);
+    pkgJson.main = 'index.js';
+
+    fileContent = JSON.stringify(pkgJson, null, 2);
+  }
+
+  fs.writeFileSync(path.join(currentDir, targetDir, file), fileContent);
 });

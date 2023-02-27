@@ -3,7 +3,7 @@
   "version": "0.0.11",
   "description": "Utilities for Coong wallet",
   "author": "Thang X. Vu <thang@coongwallet.io>",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc --build",
     "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo"

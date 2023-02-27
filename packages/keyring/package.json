@@ -7,7 +7,7 @@
     "build": "tsc --build",
     "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo"
   },
-  "main": "index.js",
+  "main": "dist/index.js",
   "dependencies": {
     "@coong/utils": "^0.0.11",
     "@polkadot/ui-keyring": "^2.11.2",
