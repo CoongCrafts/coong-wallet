@@ -11,7 +11,8 @@
     "build": "yarn clean && npx lerna run build",
     "clean": "npx lerna run clean",
     "prettify": "npx prettier --write .",
-    "prepublishOnly": "yarn generate-package-info-file && yarn copy-files-to-dist",
+    "version": "yarn generate-package-info-file",
+    "prepublishOnly": "yarn copy-files-to-dist",
     "generate-package-info-file": "lerna exec -- node \\$LERNA_ROOT_PATH/scripts/generate-package-info-file.js",
     "copy-files-to-dist": "lerna exec -- node \\$LERNA_ROOT_PATH/scripts/copy-files-to-dist.js"
   },
