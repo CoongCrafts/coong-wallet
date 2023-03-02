@@ -4,6 +4,7 @@ export enum ErrorCode {
   UnknownRequestOrigin = 'UnknownRequestOrigin',
   InvalidMessageFormat = 'InvalidMessageFormat',
   KeypairNotFound = 'KeypairNotFound',
+  AccountNotFound = 'AccountNotFound',
 
   KeyringNotInitialized = 'KeyringNotInitialized',
   PasswordIncorrect = 'PasswordIncorrect',
@@ -38,4 +39,12 @@ export const getErrorMessage = (error: Error) => {
   }
 
   return ErrorCode.InternalError;
+};
+
+export const isCoongError = (error: Error) => {
+  return error instanceof CoongError;
+};
+
+export const isStandardCoongError = (error: Error) => {
+  return error instanceof StandardCoongError;
 };

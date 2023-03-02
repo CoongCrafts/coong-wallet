@@ -1,22 +1,21 @@
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
-import { assert, CoongError, ErrorCode } from '@coong/utils';
+import { assert, CoongError, ErrorCode, isCoongError } from '@coong/utils';
 import CryptoJS from 'crypto-js';
 import { AccountInfo } from './types';
 
-const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
-const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
-const DEFAULT_KEY_TYPE = 'sr25519';
+export const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
+export const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
+export const DEFAULT_KEY_TYPE = 'sr25519';
 
 export default class Keyring {
-  #keyring: InnerKeyring;
+  #keyring!: InnerKeyring;
   #mnemonic: string | null;
 
   constructor() {
     this.#mnemonic = null;
 
-    this.#keyring = new InnerKeyring();
-    this.#keyring.loadAll({});
+    this.reload();
   }
 
   reload() {
@@ -128,7 +127,7 @@ export default class Keyring {
       .sort((a, b) => (a.whenCreated || 0) - (b.whenCreated || 0));
   }
 
-  async createNewAccount(name: string, password?: string): Promise<AccountInfo> {
+  async createNewAccount(name: string, password: string): Promise<AccountInfo> {
     if (password) {
       await this.unlock(password);
     } else {
@@ -139,8 +138,7 @@ export default class Keyring {
       throw new CoongError(ErrorCode.AccountNameRequired);
     }
 
-    const existingAccount = await this.getAccountByName(name);
-    if (existingAccount) {
+    if (await this.existsName(name)) {
       throw new CoongError(ErrorCode.AccountNameUsed);
     }
 
@@ -168,13 +166,44 @@ export default class Keyring {
     }
   }
 
-  getAccount(address: string): AccountInfo {
-    const pair = this.getSigningPair(address);
+  async #getAccount(predicate: (one: AccountInfo) => boolean): Promise<AccountInfo> {
+    const accounts = await this.getAccounts();
+    const targetAccount = accounts.find(predicate);
 
-    return { address: pair.address, type: pair.type, ...pair.meta };
+    if (!targetAccount) {
+      throw new CoongError(ErrorCode.AccountNotFound);
+    }
+
+    return targetAccount;
+  }
+
+  async getAccount(address: string) {
+    try {
+      const pair = this.getSigningPair(address);
+
+      return this.#getAccount((one) => one.address === pair.address);
+    } catch (e: any) {
+      if (isCoongError(e)) {
+        throw new CoongError(ErrorCode.AccountNotFound);
+      }
+
+      throw e;
+    }
   }
 
   async getAccountByName(name: string) {
-    return (await this.getAccounts()).find((one) => one.name === name);
+    return this.#getAccount((one) => one.name === name);
+  }
+
+  async existsName(name: string): Promise<boolean> {
+    try {
+      return !!(await this.getAccountByName(name));
+    } catch (e: any) {
+      if (isCoongError(e) && e.code === ErrorCode.AccountNotFound) {
+        return false;
+      }
+
+      throw e;
+    }
   }
 }
