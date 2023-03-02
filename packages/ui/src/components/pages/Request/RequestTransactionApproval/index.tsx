@@ -2,7 +2,7 @@ import { FC, FormEvent, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Form } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useToggle } from 'react-use';
+import { useAsync, useToggle } from 'react-use';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { keyring, state } from '@coong/base';
@@ -10,17 +10,32 @@ import { Button, TextField } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
 import RequestDetails from 'components/pages/Request/RequestTransactionApproval/RequestDetails';
 import { RequestProps } from 'components/pages/Request/types';
+import useThrowError from 'hooks/useThrowError';
 import { RootState } from 'redux/store';
+import { AccountInfoExt } from 'types';
 
 const RequestTransactionApproval: FC<RequestProps> = ({ className, message }) => {
   const { addressPrefix } = useSelector((state: RootState) => state.app);
   const [password, setPassword] = useState<string>('');
   const { request } = message;
   const [loading, toggleLoading] = useToggle(false);
+  const [targetAccount, setTargetAccount] = useState<AccountInfoExt>();
+  const throwError = useThrowError();
 
-  const payloadJSON = request.body as SignerPayloadJSON;
-  const targetAccount = keyring.getAccount(payloadJSON.address);
-  const currentNetworkAddress = encodeAddress(targetAccount.address, addressPrefix);
+  useAsync(async () => {
+    try {
+      const payloadJSON = request.body as SignerPayloadJSON;
+      const account = await keyring.getAccount(payloadJSON.address);
+      const networkAddress = encodeAddress(account.address, addressPrefix);
+
+      setTargetAccount({
+        ...account,
+        networkAddress,
+      });
+    } catch (e: any) {
+      throwError(e);
+    }
+  }, []);
 
   const approveTransaction = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,7 +64,7 @@ const RequestTransactionApproval: FC<RequestProps> = ({ className, message }) =>
     <div className={className}>
       <h2 className='text-center'>Transaction Approval Request</h2>
       <p className='mb-2'>You are approving a transaction with account</p>
-      <AccountCard account={{ ...targetAccount, networkAddress: currentNetworkAddress }} />
+      {targetAccount && <AccountCard account={targetAccount} />}
       <RequestDetails className='my-4' message={message} />
       <Form className='mt-8' onSubmit={approveTransaction}>
         <TextField

@@ -10,8 +10,7 @@ import {
   newWalletSignal,
 } from '@coong/base';
 import { WalletRequestMessage, WalletResponse, WalletSignal } from '@coong/base/types';
-import { CoongError, ErrorCode } from '@coong/utils';
-import { getErrorMessage } from '@coong/utils/errors';
+import { CoongError, ErrorCode, getErrorMessage } from '@coong/utils';
 import InvalidRequest from 'components/pages/Request/InvalidRequest';
 import RequestContent from 'components/pages/Request/RequestContent';
 import { Props } from 'types';
