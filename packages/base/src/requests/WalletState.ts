@@ -3,9 +3,9 @@ import { TypeRegistry } from '@polkadot/types';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { KeypairType } from '@polkadot/util-crypto/types';
+import Keyring from '@coong/keyring';
 import { assert, StandardCoongError } from '@coong/utils';
 import { BehaviorSubject } from 'rxjs';
-import keyring from '../keyring';
 import { defaultNetwork } from '../networks';
 import {
   AccessStatus,
@@ -24,8 +24,8 @@ export interface AppInfo {
 }
 export type AuthorizedApps = Record<AppId, AppInfo>;
 
-const AUTHORIZED_ACCOUNTS_KEY = 'AUTHORIZED_ACCOUNTS';
-const URL_PROTOCOLS = ['http://', 'https://'];
+export const AUTHORIZED_ACCOUNTS_KEY = 'AUTHORIZED_ACCOUNTS';
+export const URL_PROTOCOLS = ['http://', 'https://'];
 
 type NullableRequestWithResolver = WalletRequestWithResolver | null;
 
@@ -34,11 +34,14 @@ export function canDerive(type?: KeypairType): boolean {
 }
 
 export default class WalletState {
+  readonly #keyring: Keyring;
   #authorizedApps: AuthorizedApps = {};
   #requestMessageSubject: BehaviorSubject<NullableRequestWithResolver> =
     new BehaviorSubject<NullableRequestWithResolver>(null);
 
-  constructor() {
+  constructor(keyring: Keyring) {
+    this.#keyring = keyring;
+
     this.#loadAuthorizedAccounts();
 
     window.addEventListener('storage', (event) => {
@@ -58,7 +61,7 @@ export default class WalletState {
   }
 
   async getInjectedAccounts(anyType = false): Promise<InjectedAccount[]> {
-    const accounts = await keyring.getAccounts();
+    const accounts = await this.#keyring.getAccounts();
     return accounts
       .filter(({ type }) => (anyType ? true : canDerive(type)))
       .map(({ address, genesisHash, name, type }) => ({ address, genesisHash, name, type }));
@@ -143,14 +146,14 @@ export default class WalletState {
   };
 
   async approveSignExtrinsic(password: string) {
-    await keyring.verifyPassword(password);
+    await this.#keyring.verifyPassword(password);
 
     const currentMessage = this.getCurrentRequestMessage('tab/signExtrinsic');
 
     const { id, request, resolve } = currentMessage;
     const payloadJSON = request.body as SignerPayloadJSON;
 
-    const pair = keyring.getSigningPair(payloadJSON.address);
+    const pair = this.#keyring.getSigningPair(payloadJSON.address);
     pair.unlock(password);
 
     const registry = new TypeRegistry();
@@ -196,5 +199,9 @@ export default class WalletState {
 
   reloadState() {
     this.#loadAuthorizedAccounts();
+  }
+
+  get keyring() {
+    return this.#keyring;
   }
 }
