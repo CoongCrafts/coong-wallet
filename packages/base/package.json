@@ -18,7 +18,9 @@
   },
   "devDependencies": {
     "@polkadot/extension-inject": "^0.44.7",
-    "@polkadot/ui-keyring": "^2.11.2"
+    "@polkadot/ui-keyring": "^2.11.2",
+    "jsdom": "^21.1.0",
+    "vitest": "^0.29.2"
   },
   "publishConfig": {
     "access": "public",
