@@ -5,7 +5,8 @@
   "author": "Thang X. Vu <thang@coongwallet.io>",
   "scripts": {
     "build": "tsc --build",
-    "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo"
+    "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo",
+    "test": "vitest --watch=false"
   },
   "main": "dist/index.js",
   "dependencies": {
@@ -18,9 +19,7 @@
   },
   "devDependencies": {
     "@polkadot/extension-inject": "^0.44.7",
-    "@polkadot/ui-keyring": "^2.11.2",
-    "jsdom": "^21.1.0",
-    "vitest": "^0.29.2"
+    "@polkadot/ui-keyring": "^2.11.2"
   },
   "publishConfig": {
     "access": "public",

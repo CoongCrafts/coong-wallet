@@ -13,8 +13,5 @@
     "access": "public",
     "directory": "dist"
   },
-  "license": "Apache-2.0",
-  "devDependencies": {
-    "vitest": "^0.29.2"
-  }
+  "license": "Apache-2.0"
 }

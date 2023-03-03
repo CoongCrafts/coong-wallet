@@ -158,35 +158,35 @@ describe('getCurrentRequestMessage', () => {
   });
 });
 
-describe('approveRequestAccess', () => {
+describe.todo('approveRequestAccess', () => {
   // should throw error if no accounts are authorized
   // should merge new authorized accounts with existing authorized accounts
   // should persist new authorized app to storage
   // should resolve current request message
 });
 
-describe('rejectRequestAccess', () => {
+describe.todo('rejectRequestAccess', () => {
   // should reject current request message
 });
 
-describe('approveSignExtrinsic', () => {
+describe.todo('approveSignExtrinsic', () => {
   // should throw error if password is not correct
   // should throw error is keypair is not existed
   // should resolve current request message with the signature
 });
 
-describe('cancelSignExtrinsic', () => {
+describe.todo('cancelSignExtrinsic', () => {
   // should reject current request message
 });
 
-describe('newRequestMessage', () => {
+describe.todo('newRequestMessage', () => {
   // should put new message to the
 });
 
-describe('reset', () => {
+describe.todo('reset', () => {
   // should reset all persistent storage
 });
 
-describe('reloadState', () => {
+describe.todo('reloadState', () => {
   // should reload persistent storage
 });
