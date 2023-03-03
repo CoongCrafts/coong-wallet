@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["**/__tests__/*"],
+  "references": [
+    {
+      "path": "../keyring/tsconfig.json"
+    },
+    {
+      "path": "../utils/tsconfig.json"
+    }
+  ]
+}
