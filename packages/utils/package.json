@@ -3,6 +3,12 @@
   "version": "0.0.18",
   "description": "Utilities for Coong wallet",
   "author": "Thang X. Vu <thang@coongwallet.io>",
+  "homepage": "https://github.com/CoongCrafts/coong-wallet/tree/main/packages/utils#readme",
+  "repository": {
+    "directory": "packages/utils",
+    "type": "git",
+    "url": "https://github.com/CoongCrafts/coong-wallet.git"
+  },
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc --project tsconfig.build.json",

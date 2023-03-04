@@ -3,6 +3,12 @@
   "version": "0.0.18",
   "description": "Keyring for Coong wallet",
   "author": "Thang X. Vu <thang@coongwallet.io>",
+  "homepage": "https://github.com/CoongCrafts/coong-wallet/tree/main/packages/keyring#readme",
+  "repository": {
+    "directory": "packages/keyring",
+    "type": "git",
+    "url": "https://github.com/CoongCrafts/coong-wallet.git"
+  },
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo ./tsconfig.build.tsbuildinfo",
