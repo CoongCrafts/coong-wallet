@@ -5,8 +5,8 @@
   "author": "Thang X. Vu <thang@coongwallet.io>",
   "main": "src/index.ts",
   "scripts": {
-    "build": "tsc --build",
-    "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo",
+    "build": "tsc --project tsconfig.build.json",
+    "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo ./tsconfig.build.tsbuildinfo",
     "test": "vitest --watch=false"
   },
   "publishConfig": {

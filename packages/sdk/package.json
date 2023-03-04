@@ -5,8 +5,8 @@
   "author": "Thang X. Vu <thang@coongwallet.io>",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc --build",
-    "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo"
+    "build": "tsc --project tsconfig.json",
+    "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo ./tsconfig.build.tsbuildinfo"
   },
   "dependencies": {
     "@coong/base": "^0.0.17",
