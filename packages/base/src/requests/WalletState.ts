@@ -109,19 +109,15 @@ export default class WalletState {
   };
 
   approveRequestAccess(authorizedAccounts: string[]) {
-    const currentMessage = this.getCurrentRequestMessage('tab/requestAccess');
+    const { origin: url, request, resolve } = this.getCurrentRequestMessage('tab/requestAccess');
 
-    const { origin: url, request, resolve } = currentMessage;
     const requestBody = request.body as RequestAppRequestAccess;
 
     const appId = this.extractAppId(url);
     const existingApp = this.#authorizedApps[appId];
-
     if (existingApp) {
-      resolve({
-        result: AccessStatus.APPROVED,
-        authorizedAccounts: existingApp.authorizedAccounts,
-      });
+      const newAccounts = authorizedAccounts.filter((one) => !existingApp.authorizedAccounts.includes(one));
+      authorizedAccounts = newAccounts.concat(existingApp.authorizedAccounts);
     }
 
     assert(authorizedAccounts && authorizedAccounts.length, 'Please choose at least one account to connect');
@@ -141,8 +137,8 @@ export default class WalletState {
   }
 
   rejectRequestAccess = () => {
-    const currentRequestMessage = this.getCurrentRequestMessage('tab/requestAccess');
-    currentRequestMessage.reject(new StandardCoongError(AccessStatus.DENIED));
+    const { reject } = this.getCurrentRequestMessage('tab/requestAccess');
+    reject(new StandardCoongError(AccessStatus.DENIED));
   };
 
   async approveSignExtrinsic(password: string) {
