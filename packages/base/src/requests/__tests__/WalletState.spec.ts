@@ -1,10 +1,10 @@
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { newWalletRequest } from '@coong/base';
 import WalletState, { AppInfo, AUTHORIZED_ACCOUNTS_KEY, AuthorizedApps } from '@coong/base/requests/WalletState';
-import { AccessStatus, RequestName, WalletRequest, WalletRequestMessage, WalletResponse } from '@coong/base/types';
+import { AccessStatus, WalletRequestMessage, WalletResponse } from '@coong/base/types';
 import Keyring from '@coong/keyring';
 import { AccountInfo } from '@coong/keyring/types';
-import { StandardCoongError } from '@coong/utils';
+import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 let state: WalletState;
@@ -178,11 +178,8 @@ describe('approveRequestAccess', () => {
       const [response, _] = await Promise.all([
         state.newRequestMessage(currentMessage),
         new Promise<void>((resolve) => {
-          // Make sure the request is registered into the state before we can approve it
-          setTimeout(() => {
-            state.approveRequestAccess(authorizedAccounts);
-            resolve();
-          });
+          state.approveRequestAccess(authorizedAccounts);
+          resolve();
         }),
       ]);
 
@@ -227,7 +224,7 @@ describe('approveRequestAccess', () => {
 });
 
 describe('rejectRequestAccess', () => {
-  it('should reject current request message', async () => {
+  it('should reject current request message', () => {
     const currentMessage = newWalletRequest({
       name: 'tab/requestAccess',
       body: {
@@ -239,23 +236,109 @@ describe('rejectRequestAccess', () => {
       Promise.all([
         state.newRequestMessage(currentMessage),
         new Promise<void>((resolve) => {
-          // Make sure the request is registered into the state before we can approve it
-          setTimeout(() => {
-            state.rejectRequestAccess();
-            resolve();
-          });
+          state.rejectRequestAccess();
+          resolve();
         }),
       ]),
     ).rejects.toThrowError(new StandardCoongError(AccessStatus.DENIED));
   });
 });
 
-describe('approveSignExtrinsic', () => {
-  it.todo('should throw error if password is not correct', () => {});
-  it.todo('should throw error is keypair is not existed', () => {});
-  it.todo('should resolve current request message with the signature', () => {});
-});
+describe('sign extrinsic', () => {
+  let account01: AccountInfo;
 
-describe('cancelSignExtrinsic', () => {
-  it.todo('should reject current request message', () => {});
+  beforeEach(async () => {
+    account01 = await state.keyring.createNewAccount('Account 01', PASSWORD);
+  });
+
+  const newSignExtrinsicRequest = (address: string) => {
+    return newWalletRequest({
+      name: 'tab/signExtrinsic',
+      body: newPayload(address),
+    });
+  };
+
+  const newPayload = (address: string) => {
+    return {
+      specVersion: '0x00002490',
+      transactionVersion: '0x00000013',
+      address,
+      blockHash: '0x740c0ff582a5f5ed089a83afe396be64db42486397ee23611811e123a70bd63f',
+      blockNumber: '0x00dd836d',
+      era: '0xd502',
+      genesisHash: '0x91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3',
+      method: '0x050000004769bbe59968882c1597ec1151621f0193547285125f1c1337371c013ff61f02890700',
+      nonce: '0x00000000',
+      signedExtensions: [
+        'CheckNonZeroSender',
+        'CheckSpecVersion',
+        'CheckTxVersion',
+        'CheckGenesis',
+        'CheckMortality',
+        'CheckNonce',
+        'CheckWeight',
+        'ChargeTransactionPayment',
+        'PrevalidateAttests',
+      ],
+      tip: '0x00000000000000000000000000000000',
+      version: 4,
+    };
+  };
+
+  describe('approveSignExtrinsic', () => {
+    const handleSignExtrinsicApproval = async (address: string, password: string) => {
+      const message = newSignExtrinsicRequest(address);
+      let [response, _] = await Promise.all([
+        state.newRequestMessage(message),
+        new Promise<void>(async (resolve, reject) => {
+          try {
+            await state.approveSignExtrinsic(password);
+            resolve();
+          } catch (e) {
+            reject(e);
+          }
+        }),
+      ]);
+
+      response = response as WalletResponse<'tab/signExtrinsic'>;
+
+      return {
+        response,
+        message,
+      };
+    };
+
+    it('should throw error if password is not correct', () => {
+      expect(handleSignExtrinsicApproval(account01.address, 'incorrect-password')).rejects.toThrowError(
+        new CoongError(ErrorCode.PasswordIncorrect),
+      );
+    });
+
+    it('should throw error is keypair is not existed', async () => {
+      expect(handleSignExtrinsicApproval('0xNotExistedAddress', PASSWORD)).rejects.toThrowError(
+        new CoongError(ErrorCode.KeypairNotFound),
+      );
+    });
+
+    it('should resolve current request message with the signature', async () => {
+      const { response, message } = await handleSignExtrinsicApproval(account01.address, PASSWORD);
+      expect(response.id).toEqual(message.id);
+      expect(response.signature).toBeTypeOf('string');
+    });
+  });
+
+  describe('cancelSignExtrinsic', () => {
+    it('should reject current request message', () => {
+      const message = newSignExtrinsicRequest(account01.address);
+      expect(
+        Promise.all([
+          state.newRequestMessage(message),
+          new Promise<void>((resolve) => {
+            state.cancelSignExtrinsic();
+            resolve();
+          }),
+        ]),
+      ).rejects.toThrowError(new StandardCoongError('Cancelled'));
+    });
+  });
 });
