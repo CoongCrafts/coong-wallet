@@ -24,9 +24,9 @@ beforeEach(async () => {
 });
 
 describe('handle', () => {
-  it('should throw error if request is not supported', () => {
-    setupAuthorizedApps(tabHandler.state, [], window.location.origin);
-    expect(
+  it('should throw error if request is not supported', async () => {
+    setupAuthorizedApps(tabHandler.state, [], currentWindowOrigin);
+    await expect(
       tabHandler.handle(
         newWalletRequest({
           // @ts-ignore
