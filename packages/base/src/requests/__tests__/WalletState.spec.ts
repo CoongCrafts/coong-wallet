@@ -1,11 +1,10 @@
-import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { newWalletRequest } from '@coong/base';
-import WalletState, { AppInfo, AUTHORIZED_ACCOUNTS_KEY, AuthorizedApps } from '@coong/base/requests/WalletState';
 import { AccessStatus, WalletRequestMessage, WalletResponse } from '@coong/base/types';
-import Keyring from '@coong/keyring';
 import { AccountInfo } from '@coong/keyring/types';
 import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
 import { beforeEach, describe, expect, it } from 'vitest';
+import WalletState, { AppInfo, AUTHORIZED_ACCOUNTS_KEY } from '../WalletState';
+import { newWalletState, PASSWORD, setupAuthorizedApps } from './setup';
 
 let state: WalletState;
 
@@ -24,41 +23,8 @@ beforeEach(async () => {
   await initWalletState();
 });
 
-const PASSWORD = 'supersecretpassword';
-const MNEMONIC = generateMnemonic(12);
-
-const initializeNewKeyring = async () => {
-  const keyring = new Keyring();
-  await keyring.initialize(MNEMONIC, PASSWORD);
-
-  return keyring;
-};
 const initWalletState = async () => {
-  const keyring = await initializeNewKeyring();
-  state = new WalletState(keyring);
-};
-
-const setupAuthorizedApps = (authorizedAccounts: string[] = [], appUrl?: string) => {
-  const randomAppUrl = appUrl || 'https://random-app.com';
-  const randomAppId = randomAppUrl.split('//')[1];
-
-  const randomAppInfo = {
-    name: 'Random App',
-    url: randomAppUrl,
-    authorizedAccounts: authorizedAccounts,
-  };
-
-  const authorizedApps: AuthorizedApps = {
-    [randomAppId]: randomAppInfo,
-  };
-
-  localStorage.setItem(AUTHORIZED_ACCOUNTS_KEY, JSON.stringify(authorizedApps));
-
-  if (state) {
-    state.reloadState();
-  }
-
-  return { randomAppUrl, randomAppInfo, authorizedApps };
+  state = await newWalletState();
 };
 
 describe('extractAppId', () => {
@@ -83,7 +49,7 @@ describe('getAuthorizedApp', () => {
   });
 
   it('should return app info is the app is authorized', async () => {
-    const { randomAppInfo, randomAppUrl } = setupAuthorizedApps();
+    const { randomAppInfo, randomAppUrl } = setupAuthorizedApps(state);
 
     expect(state.getAuthorizedApp(randomAppUrl)).toEqual(randomAppInfo);
   });
@@ -103,7 +69,7 @@ describe('ensureAccountAuthorized', () => {
   });
 
   it('should throw error if address is not authorized for the app', async () => {
-    const { randomAppUrl } = setupAuthorizedApps();
+    const { randomAppUrl } = setupAuthorizedApps(state);
 
     expect(() => state.ensureAccountAuthorized(randomAppUrl, account.address)).toThrowError(
       new StandardCoongError(
@@ -113,7 +79,7 @@ describe('ensureAccountAuthorized', () => {
   });
 
   it('should not throw anything if address is authorized for the app', async () => {
-    const { randomAppUrl } = setupAuthorizedApps([account.address]);
+    const { randomAppUrl } = setupAuthorizedApps(state, [account.address]);
 
     expect(state.ensureAccountAuthorized(randomAppUrl, account.address)).toBeUndefined();
   });
@@ -203,7 +169,7 @@ describe('approveRequestAccess', () => {
     });
 
     it('should merge new authorized accounts with existing authorized accounts', async () => {
-      setupAuthorizedApps([account01.address], currentWindowUrl);
+      setupAuthorizedApps(state, [account01.address], currentWindowUrl);
 
       const account02 = await state.keyring.createNewAccount('Account 02', PASSWORD);
       const response = await handleRequestAccessApproval([account02.address]);
@@ -213,7 +179,7 @@ describe('approveRequestAccess', () => {
     });
 
     it('should not merge duplicated authorized accounts to existing authorized accounts', async () => {
-      setupAuthorizedApps([account01.address], currentWindowUrl);
+      setupAuthorizedApps(state, [account01.address], currentWindowUrl);
 
       const response = await handleRequestAccessApproval([account01.address]);
 
@@ -224,7 +190,7 @@ describe('approveRequestAccess', () => {
 });
 
 describe('rejectRequestAccess', () => {
-  it('should reject current request message', () => {
+  it('should reject current request message', async () => {
     const currentMessage = newWalletRequest({
       name: 'tab/requestAccess',
       body: {
@@ -232,7 +198,7 @@ describe('rejectRequestAccess', () => {
       },
     });
 
-    expect(
+    await expect(
       Promise.all([
         state.newRequestMessage(currentMessage),
         new Promise<void>((resolve) => {
@@ -308,14 +274,14 @@ describe('sign extrinsic', () => {
       };
     };
 
-    it('should throw error if password is not correct', () => {
-      expect(handleSignExtrinsicApproval(account01.address, 'incorrect-password')).rejects.toThrowError(
+    it('should throw error if password is not correct', async () => {
+      await expect(handleSignExtrinsicApproval(account01.address, 'incorrect-password')).rejects.toThrowError(
         new CoongError(ErrorCode.PasswordIncorrect),
       );
     });
 
     it('should throw error is keypair is not existed', async () => {
-      expect(handleSignExtrinsicApproval('0xNotExistedAddress', PASSWORD)).rejects.toThrowError(
+      await expect(handleSignExtrinsicApproval('0xNotExistedAddress', PASSWORD)).rejects.toThrowError(
         new CoongError(ErrorCode.KeypairNotFound),
       );
     });
@@ -328,9 +294,9 @@ describe('sign extrinsic', () => {
   });
 
   describe('cancelSignExtrinsic', () => {
-    it('should reject current request message', () => {
+    it('should reject current request message', async () => {
       const message = newSignExtrinsicRequest(account01.address);
-      expect(
+      await expect(
         Promise.all([
           state.newRequestMessage(message),
           new Promise<void>((resolve) => {

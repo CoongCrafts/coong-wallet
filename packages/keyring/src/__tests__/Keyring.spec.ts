@@ -5,7 +5,6 @@ import { CoongError, ErrorCode } from '@coong/utils';
 import { beforeEach, describe, expect, it } from 'vitest';
 import Keyring, { ACCOUNTS_INDEX, ENCRYPTED_MNEMONIC } from '../Keyring';
 
-
 let keyring: Keyring;
 
 beforeEach(async () => {
@@ -89,27 +88,29 @@ describe('verifyPassword', () => {
   it('should throw out error if wallet is not initialized', async () => {
     const keyring = new Keyring();
 
-    expect(keyring.verifyPassword(PASSWORD)).rejects.toThrowError(new CoongError(ErrorCode.KeyringNotInitialized));
+    await expect(keyring.verifyPassword(PASSWORD)).rejects.toThrowError(
+      new CoongError(ErrorCode.KeyringNotInitialized),
+    );
   });
 
   it('should throw out error if password is not correct', async () => {
     await initializeNewKeyring();
 
-    expect(keyring.verifyPassword('incorrect')).rejects.toThrowError(new CoongError(ErrorCode.PasswordIncorrect));
+    await expect(keyring.verifyPassword('incorrect')).rejects.toThrowError(new CoongError(ErrorCode.PasswordIncorrect));
   });
 
   it('should not throw out anything if password is correct', async () => {
     await initializeNewKeyring();
 
-    expect(keyring.verifyPassword(PASSWORD)).resolves.toBeUndefined();
+    await expect(keyring.verifyPassword(PASSWORD)).resolves.toBeUndefined();
   });
 });
 
 // get accounts
 describe('getAccounts', () => {
-  it('should return empty array', () => {
+  it('should return empty array', async () => {
     const keyring = new Keyring();
-    expect(keyring.getAccounts()).resolves.toEqual([]);
+    await expect(keyring.getAccounts()).resolves.toEqual([]);
   });
 
   it('should return accounts', async () => {
@@ -131,19 +132,19 @@ describe('createNewAccount', () => {
     });
 
     it('should required account name to create new account', async () => {
-      expect(keyring.createNewAccount('', PASSWORD)).rejects.toThrowError(
+      await expect(keyring.createNewAccount('', PASSWORD)).rejects.toThrowError(
         new CoongError(ErrorCode.AccountNameRequired),
       );
     });
 
     it('should required password to create new account', async () => {
-      expect(keyring.createNewAccount('Account name', '')).rejects.toThrowError(
+      await expect(keyring.createNewAccount('Account name', '')).rejects.toThrowError(
         new CoongError(ErrorCode.PasswordRequired),
       );
     });
 
     it('should throw out error if password is incorrect', async () => {
-      expect(keyring.createNewAccount('Account name', 'incorrect')).rejects.toThrowError(
+      await expect(keyring.createNewAccount('Account name', 'incorrect')).rejects.toThrowError(
         new CoongError(ErrorCode.PasswordIncorrect),
       );
     });
@@ -151,7 +152,7 @@ describe('createNewAccount', () => {
     it('should throw out error if name is already used', async () => {
       await keyring.createNewAccount('Account 01', PASSWORD);
 
-      expect(keyring.createNewAccount('Account 01', PASSWORD)).rejects.toThrowError(
+      await expect(keyring.createNewAccount('Account 01', PASSWORD)).rejects.toThrowError(
         new CoongError(ErrorCode.AccountNameUsed),
       );
     });
@@ -176,9 +177,9 @@ describe('createNewAccount', () => {
   });
 
   describe('wallet uninitialized', () => {
-    it('should throw out error', () => {
+    it('should throw out error', async () => {
       const keyring = new Keyring();
-      expect(keyring.createNewAccount('Account name', PASSWORD)).rejects.toThrowError(
+      await expect(keyring.createNewAccount('Account name', PASSWORD)).rejects.toThrowError(
         new CoongError(ErrorCode.KeyringNotInitialized),
       );
     });
@@ -192,20 +193,22 @@ describe('getAccount', () => {
     account = await keyring.createNewAccount('Account 01', PASSWORD);
   });
 
-  it('should throw out error if account not found', () => {
-    expect(keyring.getAccount('0xNotExistedAddress')).rejects.toThrowError(new CoongError(ErrorCode.AccountNotFound));
+  it('should throw out error if account not found', async () => {
+    await expect(keyring.getAccount('0xNotExistedAddress')).rejects.toThrowError(
+      new CoongError(ErrorCode.AccountNotFound),
+    );
   });
 
-  it('should return account using generic address', () => {
-    expect(keyring.getAccount(account.address)).resolves.toEqual(account);
+  it('should return account using generic address', async () => {
+    await expect(keyring.getAccount(account.address)).resolves.toEqual(account);
   });
 
-  it('should return account using different network address', () => {
+  it('should return account using different network address', async () => {
     const polkadotAddress = encodeAddress(account.address, 0);
-    expect(keyring.getAccount(polkadotAddress)).resolves.toEqual(account);
+    await expect(keyring.getAccount(polkadotAddress)).resolves.toEqual(account);
 
     const kusamaAddress = encodeAddress(account.address, 2);
-    expect(keyring.getAccount(kusamaAddress)).resolves.toEqual(account);
+    await expect(keyring.getAccount(kusamaAddress)).resolves.toEqual(account);
   });
 });
 
@@ -216,12 +219,14 @@ describe('getAccountByName', () => {
     account = await keyring.createNewAccount('Account 01', PASSWORD);
   });
 
-  it('should throw out error if account not found', () => {
-    expect(keyring.getAccountByName('NotExistedName')).rejects.toThrowError(new CoongError(ErrorCode.AccountNotFound));
+  it('should throw out error if account not found', async () => {
+    await expect(keyring.getAccountByName('NotExistedName')).rejects.toThrowError(
+      new CoongError(ErrorCode.AccountNotFound),
+    );
   });
 
-  it('should return account for existed name', () => {
-    expect(keyring.getAccountByName('Account 01')).resolves.toEqual(account);
+  it('should return account for existed name', async () => {
+    await expect(keyring.getAccountByName('Account 01')).resolves.toEqual(account);
   });
 });
 
@@ -250,12 +255,12 @@ describe('existsName', () => {
     await keyring.createNewAccount('Account 01', PASSWORD);
   });
 
-  it('should return true if account exists', () => {
-    expect(keyring.existsName('NotExistedName')).resolves.toEqual(false);
+  it('should return true if account exists', async () => {
+    await expect(keyring.existsName('NotExistedName')).resolves.toEqual(false);
   });
 
-  it('should return false if account not exists', () => {
-    expect(keyring.existsName('Account 01')).resolves.toEqual(true);
+  it('should return false if account not exists', async () => {
+    await expect(keyring.existsName('Account 01')).resolves.toEqual(true);
   });
 });
 

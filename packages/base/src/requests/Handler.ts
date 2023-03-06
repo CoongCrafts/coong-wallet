@@ -7,7 +7,7 @@ export default abstract class Handler {
     this.#state = state;
   }
 
-  protected get state() {
+  get state() {
     return this.#state;
   }
 }
