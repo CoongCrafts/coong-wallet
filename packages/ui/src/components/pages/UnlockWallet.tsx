@@ -22,6 +22,7 @@ const UnlockWallet: FC<Props> = ({ className = '' }) => {
     }
 
     try {
+      await keyring.verifyPassword(password);
       dispatch(appActions.unlock());
     } catch (e: any) {
       setValidation(e.message);
