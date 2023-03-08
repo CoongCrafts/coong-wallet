@@ -1,9 +1,5 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { render, screen } from '__tests__/testUtils';
 import PageTitle from '../PageTitle';
-
-afterEach(() => {
-  cleanup();
-});
 
 describe('PageTitle', () => {
   it('should render page title', () => {
