@@ -2,6 +2,8 @@ import { render, RenderOptions } from '@testing-library/react';
 import React, { FC } from 'react';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
+import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
+import Keyring from '@coong/keyring';
 import { ThemeProvider } from '@mui/material';
 import { PreloadedState } from '@reduxjs/toolkit';
 import { newStore } from 'redux/store';
@@ -47,3 +49,17 @@ const customRender = (ui: React.ReactElement, options?: CustomRenderOptions) => 
 
 export * from '@testing-library/react';
 export { customRender as render };
+
+export const PASSWORD = 'supersecretpassword';
+export const MNEMONIC = generateMnemonic(12);
+
+export const initializeKeyring = async () => {
+  const keyring = new Keyring();
+  while (await keyring.initialized()) {
+    await keyring.reset();
+    localStorage.clear();
+  }
+  await keyring.initialize(MNEMONIC, PASSWORD);
+
+  return keyring;
+};
