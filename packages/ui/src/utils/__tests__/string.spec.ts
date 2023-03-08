@@ -5,12 +5,19 @@ describe('shortenAddress', () => {
   it.each(['', null, undefined])('should return empty string if input = %s', (input) => {
     expect(shortenAddress(input as string)).toEqual('');
   });
-  it("should return the whole address if address's length is less than or equal 15 chars", () => {
-    expect(shortenAddress('0x123456789123')).toEqual('0x123456789123');
-    expect(shortenAddress('0x1234567891234')).toEqual('0x1234567891234');
-  });
-  it("should return the shortened address if address's length is longer than 15 chars", () => {
-    expect(shortenAddress('0x12345678912345')).toEqual('0x1234...912345');
-    expect(shortenAddress('1EgNYYD1g2dSYavyTT13wkMZ8co2MzELtWuRabjRdQoxXPp')).toEqual('1EgNYY...QoxXPp');
+
+  it.each(['0x123456789123', '0x1234567891234'])(
+    "should return the whole address if address's length <= 15 chars - (`%s`)",
+    (input) => {
+      expect(input.length).lessThanOrEqual(15);
+      expect(shortenAddress(input)).toEqual(input);
+    },
+  );
+  it.each([
+    { input: '0x12345678912345', expected: '0x1234...912345' },
+    { input: '0xdafea492d9c6733ae3d56b7ed1adb60692c98bc5', expected: '0xdafe...c98bc5' },
+    { input: '1EgNYYD1g2dSYavyTT13wkMZ8co2MzELtWuRabjRdQoxXPp', expected: '1EgNYY...QoxXPp' },
+  ])("should return the shortened address if address's length > 15 chars - $input", ({ input, expected }) => {
+    expect(shortenAddress(input)).toEqual(expected);
   });
 });
