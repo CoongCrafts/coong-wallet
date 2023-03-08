@@ -6,6 +6,8 @@ import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import Keyring from '@coong/keyring';
 import { ThemeProvider } from '@mui/material';
 import { PreloadedState } from '@reduxjs/toolkit';
+import userEvent from '@testing-library/user-event';
+import { Options } from '@testing-library/user-event/options';
 import { newStore } from 'redux/store';
 import light from 'themes/light';
 import { Props } from 'types';
@@ -62,4 +64,8 @@ export const initializeKeyring = async () => {
   await keyring.initialize(MNEMONIC, PASSWORD);
 
   return keyring;
+};
+
+export const newUser = (options?: Options) => {
+  return userEvent.setup(options);
 };
