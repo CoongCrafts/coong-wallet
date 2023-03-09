@@ -1,8 +1,7 @@
 import { waitFor } from '@testing-library/react';
 import Keyring from '@coong/keyring';
 import { AccountInfo } from '@coong/keyring/types';
-import { UserEvent } from '@testing-library/user-event/setup/setup';
-import { initializeKeyring, newUser, PASSWORD, render, screen } from '__tests__/testUtils';
+import { initializeKeyring, newUser, PASSWORD, render, screen, UserEvent } from '__tests__/testUtils';
 import { beforeEach, vi } from 'vitest';
 import NewAccountButton from '../NewAccountButton';
 

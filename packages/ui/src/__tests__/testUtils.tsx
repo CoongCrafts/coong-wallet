@@ -66,6 +66,7 @@ export const initializeKeyring = async () => {
   return keyring;
 };
 
+export type { UserEvent } from '@testing-library/user-event/setup/setup';
 export const newUser = (options?: Options) => {
   return userEvent.setup(options);
 };
