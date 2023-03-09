@@ -1,12 +1,13 @@
 import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
-import { keyring, state } from '@coong/base';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import { IconButton } from '@mui/material';
+import { useWalletState } from 'contexts/WalletStateContext';
 import { persistor, RootState } from 'redux/store';
 import { Props } from 'types';
 
 const ResetWalletButton: FC<Props> = () => {
+  const { keyring, walletState } = useWalletState();
   const { seedReady, locked } = useSelector((state: RootState) => state.app);
 
   if (!seedReady || locked) {
@@ -20,7 +21,7 @@ const ResetWalletButton: FC<Props> = () => {
     }
 
     await keyring.reset();
-    state.reset();
+    walletState.reset();
     await persistor.purge();
     window.location.reload();
   };

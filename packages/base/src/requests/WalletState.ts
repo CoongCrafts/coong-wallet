@@ -195,6 +195,7 @@ export default class WalletState {
 
   reloadState() {
     this.#loadAuthorizedAccounts();
+    this.keyring.reload();
   }
 
   get keyring() {

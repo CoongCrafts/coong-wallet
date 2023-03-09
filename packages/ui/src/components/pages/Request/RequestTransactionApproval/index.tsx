@@ -5,16 +5,17 @@ import { toast } from 'react-toastify';
 import { useAsync, useToggle } from 'react-use';
 import { SignerPayloadJSON } from '@polkadot/types/types';
 import { encodeAddress } from '@polkadot/util-crypto';
-import { keyring, state } from '@coong/base';
 import { Button, TextField } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
 import RequestDetails from 'components/pages/Request/RequestTransactionApproval/RequestDetails';
 import { RequestProps } from 'components/pages/Request/types';
+import { useWalletState } from 'contexts/WalletStateContext';
 import useThrowError from 'hooks/useThrowError';
 import { RootState } from 'redux/store';
 import { AccountInfoExt } from 'types';
 
 const RequestTransactionApproval: FC<RequestProps> = ({ className, message }) => {
+  const { keyring, walletState } = useWalletState();
   const { addressPrefix } = useSelector((state: RootState) => state.app);
   const [password, setPassword] = useState<string>('');
   const { request } = message;
@@ -48,7 +49,7 @@ const RequestTransactionApproval: FC<RequestProps> = ({ className, message }) =>
     // TODO: Moving CPU-intensive operations to worker
     setTimeout(async () => {
       try {
-        await state.approveSignExtrinsic(password);
+        await walletState.approveSignExtrinsic(password);
       } catch (e: any) {
         toggleLoading(false);
         toast.error(e.message);
@@ -57,7 +58,7 @@ const RequestTransactionApproval: FC<RequestProps> = ({ className, message }) =>
   };
 
   const cancelRequest = () => {
-    state.cancelSignExtrinsic();
+    walletState.cancelSignExtrinsic();
   };
 
   return (

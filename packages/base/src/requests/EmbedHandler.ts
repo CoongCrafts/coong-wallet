@@ -1,10 +1,9 @@
 import { InjectedAccount } from '@polkadot/extension-inject/types';
 import { CoongError, ErrorCode } from '@coong/utils';
-import keyring from '../keyring';
 import { RequestAuthorizedAccounts, RequestName, WalletRequestMessage, WalletResponse } from '../types';
 import Handler from './Handler';
 
-export class EmbedHandler extends Handler {
+export default class EmbedHandler extends Handler {
   async authorizedAccounts(fromUrl: string, { anyType }: RequestAuthorizedAccounts): Promise<InjectedAccount[]> {
     const app = this.state.getAuthorizedApp(fromUrl);
     const accounts = await this.state.getInjectedAccounts(anyType);
@@ -25,7 +24,6 @@ export class EmbedHandler extends Handler {
     // Make sure the state is refreshed before handling embed requests
     // TODO better check when to reload states
     this.state.reloadState();
-    keyring.reload();
 
     switch (name) {
       case 'embed/accessAuthorized':

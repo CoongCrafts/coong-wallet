@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useEffectOnce } from 'react-use';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
-import { keyring } from '@coong/base';
 import { LoadingButton } from '@mui/lab';
 import { Button, Checkbox, FormControlLabel, FormGroup, styled } from '@mui/material';
 import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
+import { useWalletState } from 'contexts/WalletStateContext';
 import { appActions } from 'redux/slices/app';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';
@@ -17,6 +17,7 @@ interface BackupSecretRecoveryPhraseProps extends Props {
 }
 
 const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ className = '', onWalletSetup }) => {
+  const { keyring } = useWalletState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { password } = useSelector((state: RootState) => state.setupWallet);

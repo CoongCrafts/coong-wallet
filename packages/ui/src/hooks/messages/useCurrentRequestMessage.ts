@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useBoolean, useEffectOnce } from 'react-use';
-import { state } from '@coong/base';
 import { WalletRequestWithResolver } from '@coong/base/types';
+import { useWalletState } from 'contexts/WalletStateContext';
 
 export default function useCurrentRequestMessage(): [boolean, WalletRequestWithResolver | undefined] {
+  const { walletState } = useWalletState();
   const [ready, toggleReady] = useBoolean(false);
   const [currentMessage, setCurrentMessage] = useState<WalletRequestWithResolver>();
 
   useEffectOnce(() => {
-    const unsub = state.subscribeToNewRequestMessage((message) => {
+    const unsub = walletState.subscribeToNewRequestMessage((message) => {
       setCurrentMessage(message);
       toggleReady();
     });

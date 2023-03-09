@@ -1,20 +1,16 @@
 import React, { FC } from 'react';
 import { useEffectOnce } from 'react-use';
-import {
-  handleWalletRequest,
-  isWalletRequest,
-  newWalletErrorResponse,
-  newWalletResponse,
-  newWalletSignal,
-} from '@coong/base';
+import { isWalletRequest, newWalletErrorResponse, newWalletResponse, newWalletSignal } from '@coong/base';
 import { WalletRequestMessage, WalletResponse, WalletSignal } from '@coong/base/types';
 import { styled } from '@mui/material';
 import CoongTextLogo from 'components/shared/misc/CoongTextLogo';
 import { Props } from 'types';
 import { isInsideIframe, topWindow } from 'utils/browser';
 import { walletInfo } from 'walletInfo';
+import { useWalletState } from '../../contexts/WalletStateContext';
 
 const Embed: FC<Props> = ({ className = '' }: Props) => {
+  const { handleWalletRequest } = useWalletState();
   const loadedInsideIframe = !topWindow() || !isInsideIframe();
 
   useEffectOnce(() => {

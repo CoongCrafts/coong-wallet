@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { PersistGate } from 'redux-persist/integration/react';
 import { CssBaseline, GlobalStyles, ThemeProvider } from '@mui/material';
 import App from 'App';
+import { WalletStateProvider } from 'contexts/WalletStateContext';
 import { persistor, store } from 'redux/store';
 import { globalStyles } from 'styles';
 import light from 'themes/light';
@@ -17,18 +18,20 @@ root.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ThemeProvider theme={light}>
-          <CssBaseline />
-          <GlobalStyles styles={globalStyles} />
-          <App />
-          <ToastContainer
-            position='top-center'
-            closeOnClick
-            pauseOnHover
-            theme='colored'
-            autoClose={ALERT_TIMEOUT}
-            hideProgressBar
-            limit={2}
-          />
+          <WalletStateProvider>
+            <CssBaseline />
+            <GlobalStyles styles={globalStyles} />
+            <App />
+            <ToastContainer
+              position='top-center'
+              closeOnClick
+              pauseOnHover
+              theme='colored'
+              autoClose={ALERT_TIMEOUT}
+              hideProgressBar
+              limit={2}
+            />
+          </WalletStateProvider>
         </ThemeProvider>
       </PersistGate>
     </Provider>

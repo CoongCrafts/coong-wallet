@@ -1,13 +1,14 @@
 import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { keyring } from '@coong/base';
 import { Lock } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
+import { useWalletState } from 'contexts/WalletStateContext';
 import { appActions } from 'redux/slices/app';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 
 const LockWalletButton: FC<Props> = () => {
+  const { keyring } = useWalletState();
   const dispatch = useDispatch();
   const { seedReady, locked } = useSelector((state: RootState) => state.app);
   if (!seedReady || locked) {

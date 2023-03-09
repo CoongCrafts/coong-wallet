@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "@coong/base": "*",
+    "@coong/keyring": "*",
+    "@coong/utils": "*",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.11.0",
@@ -39,7 +41,6 @@
     "redux-persist": "^6.0.0"
   },
   "devDependencies": {
-    "@coong/keyring": "*",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",

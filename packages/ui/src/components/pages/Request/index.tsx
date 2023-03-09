@@ -2,23 +2,19 @@ import { FC } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useSearchParams } from 'react-router-dom';
 import { useEffectOnce } from 'react-use';
-import {
-  handleWalletRequest,
-  isWalletRequest,
-  newWalletErrorResponse,
-  newWalletResponse,
-  newWalletSignal,
-} from '@coong/base';
+import { isWalletRequest, newWalletErrorResponse, newWalletResponse, newWalletSignal } from '@coong/base';
 import { WalletRequestMessage, WalletResponse, WalletSignal } from '@coong/base/types';
 import { CoongError, ErrorCode, getErrorMessage } from '@coong/utils';
 import InvalidRequest from 'components/pages/Request/InvalidRequest';
 import RequestContent from 'components/pages/Request/RequestContent';
+import { useWalletState } from 'contexts/WalletStateContext';
 import { Props } from 'types';
 import { isChildTabOrPopup, openerWindow } from 'utils/browser';
 import { walletInfo } from 'walletInfo';
 
 const Request: FC<Props> = ({ className = '' }) => {
   const [searchParams] = useSearchParams();
+  const { handleWalletRequest } = useWalletState();
 
   if (!isChildTabOrPopup()) {
     console.error('This page should not be open directly!');

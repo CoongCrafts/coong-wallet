@@ -1,7 +1,6 @@
 import { FC, FormEvent, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useUpdateEffect } from 'react-use';
-import { keyring } from '@coong/base';
 import { AccountInfo } from '@coong/keyring/types';
 import { Add } from '@mui/icons-material';
 import {
@@ -15,6 +14,7 @@ import {
   IconButton,
   TextField,
 } from '@mui/material';
+import { useWalletState } from 'contexts/WalletStateContext';
 import { Props } from 'types';
 
 interface NewAccountButtonProps extends Props {
@@ -22,6 +22,7 @@ interface NewAccountButtonProps extends Props {
 }
 
 const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
+  const { keyring } = useWalletState();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');

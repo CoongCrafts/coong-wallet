@@ -433,6 +433,7 @@ __metadata:
   dependencies:
     "@coong/base": "*"
     "@coong/keyring": "*"
+    "@coong/utils": "*"
     "@emotion/react": ^11.10.5
     "@emotion/styled": ^11.10.5
     "@mui/icons-material": ^5.11.0
@@ -464,7 +465,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@coong/utils@^0.0.19, @coong/utils@workspace:packages/utils":
+"@coong/utils@*, @coong/utils@^0.0.19, @coong/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@coong/utils@workspace:packages/utils"
   languageName: unknown

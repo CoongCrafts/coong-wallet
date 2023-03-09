@@ -3,14 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { useEffectOnce } from 'react-use';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import { keyring } from '@coong/base';
 import SplashScreen from 'components/pages/SplashScreen';
 import { appActions } from 'redux/slices/app';
 import { RootState } from 'redux/store';
 import router from 'router';
 import { Props } from 'types';
+import { useWalletState } from './contexts/WalletStateContext';
 
 const App: FC<Props> = () => {
+  const { keyring } = useWalletState();
   const { ready } = useSelector((state: RootState) => state.app);
   const dispatch = useDispatch();
 

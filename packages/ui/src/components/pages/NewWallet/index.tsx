@@ -2,11 +2,11 @@ import { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useEffectOnce } from 'react-use';
-import { keyring } from '@coong/base';
 import BackupSecretRecoveryPhrase from 'components/pages/NewWallet/BackupSecretRecoveryPhrase';
 import ChooseWalletPassword from 'components/pages/NewWallet/ChooseWalletPassword';
 import ConfirmWalletPassword from 'components/pages/NewWallet/ConfirmWalletPassword';
 import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
+import { useWalletState } from 'contexts/WalletStateContext';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 
@@ -28,6 +28,7 @@ const ScreenStep: FC<NewWalletProps> = ({ onWalletSetup }) => {
 };
 
 const NewWallet: FC<NewWalletProps> = ({ className = '', onWalletSetup }) => {
+  const { keyring } = useWalletState();
   const navigate = useNavigate();
 
   useEffectOnce(() => {

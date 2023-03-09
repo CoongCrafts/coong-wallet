@@ -1,29 +1,30 @@
 import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { state } from '@coong/base';
 import { RequestAppRequestAccess } from '@coong/base/types';
 import { Button } from '@mui/material';
 import AccountsSelection from 'components/pages/Request/RequestAccess/AccountsSelection';
 import SetupWalletButton from 'components/pages/Request/RequestAccess/SetupWalletButton';
 import { RequestProps } from 'components/pages/Request/types';
+import { useWalletState } from 'contexts/WalletStateContext';
 import { RootState } from 'redux/store';
 
 const RequestAccess: FC<RequestProps> = ({ className = '', message }) => {
+  const { walletState } = useWalletState();
   const {
     app: { seedReady },
     accounts: { selectedAccounts },
   } = useSelector((state: RootState) => state);
   const acceptAccess = async () => {
     try {
-      state.approveRequestAccess(selectedAccounts.map((one) => one.address));
+      walletState.approveRequestAccess(selectedAccounts.map((one) => one.address));
     } catch (e: any) {
       toast.error(e.message);
     }
   };
 
   const rejectAccess = () => {
-    state.rejectRequestAccess();
+    walletState.rejectRequestAccess();
   };
 
   const { origin, request } = message;
