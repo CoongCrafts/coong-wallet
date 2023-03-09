@@ -61,7 +61,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
   return (
     <>
       <Button
-        className='max-xs:hidden'
+        className='max-xs:hidden new-account-btn'
         size='small'
         variant='outlined'
         startIcon={<Add />}

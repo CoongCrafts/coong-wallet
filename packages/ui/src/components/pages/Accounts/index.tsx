@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { useBoolean } from 'react-use';
 import { Search, SearchOff } from '@mui/icons-material';
-import { IconButton, Theme, useMediaQuery } from '@mui/material';
+import { Button, IconButton, Theme, useMediaQuery } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
 import NetworksSelection from 'components/shared/NetworksSelection';
 import NewAccountButton from 'components/shared/NewAccountButton';
@@ -44,9 +44,23 @@ const Accounts: FC<Props> = ({ className = '' }) => {
             <AccountCard key={account.address} account={account} />
           ))}
           {displayAccounts.length === 0 && (
-            <p className='text-gray-500 my-4'>
-              No accounts meet search query: <strong>{query}</strong>
-            </p>
+            <div className='text-gray-500 my-6 text-center'>
+              {query ? (
+                <span>
+                  No accounts meet search query: <strong>{query}</strong>
+                </span>
+              ) : (
+                <>
+                  <h5 className='mt-8'>No accounts found in wallet</h5>
+                  <Button
+                    className='mt-4'
+                    onClick={() => document.querySelector<HTMLButtonElement>('button.new-account-btn')?.click()}
+                    variant='outlined'>
+                    Create your first account now!
+                  </Button>
+                </>
+              )}
+            </div>
           )}
         </div>
       </div>
