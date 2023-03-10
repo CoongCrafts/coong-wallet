@@ -3,7 +3,7 @@ import { newWalletRequest } from '@coong/base';
 import { WalletRequestMessage } from '@coong/base/types';
 import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { EmbedHandler } from '../EmbedHandler';
+import EmbedHandler from '../EmbedHandler';
 import { newWalletState, PASSWORD, setupAuthorizedApps } from './setup';
 
 let embedHandler: EmbedHandler, currentWindowOrigin: string;
