@@ -24,7 +24,7 @@ const SetupWalletButton: FC<Props> = ({ className = '' }) => {
   return (
     <>
       <Button size='large' onClick={doOpen} className={className}>
-        Setup wallet
+        Set up wallet
       </Button>
       <Dialog open={open} onClose={doClose} fullScreen={true}>
         <AppBar position='relative'>

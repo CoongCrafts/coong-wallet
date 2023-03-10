@@ -36,11 +36,9 @@ export const WalletStateProvider: FC<Props> = ({ children }) => {
 
     if (isMessageId(id)) {
       if (name.startsWith('tab/')) {
-        const tabHandler = new TabHandler(walletState);
-        return tabHandler.handle(message);
+        return new TabHandler(walletState).handle(message);
       } else if (name.startsWith('embed/')) {
-        const embedHandler = new EmbedHandler(walletState);
-        return embedHandler.handle(message);
+        return new EmbedHandler(walletState).handle(message);
       }
     }
 

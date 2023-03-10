@@ -1,6 +1,7 @@
 import { render, RenderOptions } from '@testing-library/react';
 import React, { FC } from 'react';
 import { Provider } from 'react-redux';
+import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import Keyring from '@coong/keyring';
@@ -8,6 +9,7 @@ import { ThemeProvider } from '@mui/material';
 import { PreloadedState } from '@reduxjs/toolkit';
 import userEvent from '@testing-library/user-event';
 import { Options } from '@testing-library/user-event/options';
+import { WalletStateProvider } from 'contexts/WalletStateContext';
 import { newStore } from 'redux/store';
 import light from 'themes/light';
 import { Props } from 'types';
@@ -23,16 +25,18 @@ const Wrapper: FC<WrapperProps> = ({ children, preloadedState }) => {
   return (
     <Provider store={store}>
       <ThemeProvider theme={light}>
-        {children}
-        <ToastContainer
-          position='top-center'
-          closeOnClick
-          pauseOnHover
-          theme='colored'
-          autoClose={ALERT_TIMEOUT}
-          hideProgressBar
-          limit={2}
-        />
+        <WalletStateProvider>
+          {children}
+          <ToastContainer
+            position='top-center'
+            closeOnClick
+            pauseOnHover
+            theme='colored'
+            autoClose={ALERT_TIMEOUT}
+            hideProgressBar
+            limit={2}
+          />
+        </WalletStateProvider>
       </ThemeProvider>
     </Provider>
   );
@@ -69,4 +73,24 @@ export const initializeKeyring = async () => {
 export type { UserEvent } from '@testing-library/user-event/setup/setup';
 export const newUser = (options?: Options) => {
   return userEvent.setup(options);
+};
+
+interface RouterWrapperProps extends Props {
+  path: string;
+  currentUrl: string;
+}
+
+export const RouterWrapper: FC<RouterWrapperProps> = ({ children, path, currentUrl }: Props) => {
+  const router = createMemoryRouter(
+    [
+      {
+        element: children,
+        index: true,
+        path,
+      },
+    ],
+    { initialEntries: [currentUrl] },
+  );
+
+  return <RouterProvider router={router} />;
 };
