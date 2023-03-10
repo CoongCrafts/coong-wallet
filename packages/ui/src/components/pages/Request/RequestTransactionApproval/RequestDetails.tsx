@@ -70,7 +70,7 @@ const RequestDetails: FC<RequestProps> = ({ className, message }) => {
   return (
     <div className={`${className}`}>
       {requestDetails.map(({ name, value, breakWord }) => (
-        <div key={name} className='flex items-start mb-2 gap-2'>
+        <div key={name} className='flex items-start mb-2 gap-2' data-testid={`row-${name.replace(' ', '-')}`}>
           <div className='text-gray-500 min-w-[100px] text-right'>{name}: </div>
           <div>
             <strong className={clsx({ 'break-all': breakWord })}>{value}</strong>

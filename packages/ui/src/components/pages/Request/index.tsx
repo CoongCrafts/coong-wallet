@@ -22,6 +22,17 @@ const Request: FC<Props> = ({ className = '' }) => {
   }
 
   useEffectOnce(() => {
+    openerWindow().postMessage(newWalletSignal(WalletSignal.WALLET_TAB_INITIALIZED, walletInfo), '*');
+
+    const onUnload = () => {
+      openerWindow().postMessage(newWalletSignal(WalletSignal.WALLET_TAB_UNLOADED, walletInfo), '*');
+    };
+
+    window.addEventListener('unload', onUnload);
+    return () => window.removeEventListener('unload', onUnload);
+  });
+
+  useEffectOnce(() => {
     const message = JSON.parse(searchParams.get('message')!) as WalletRequestMessage;
 
     if (!isWalletRequest(message)) {
@@ -41,17 +52,6 @@ const Request: FC<Props> = ({ className = '' }) => {
       .finally(() => {
         window.close();
       });
-  });
-
-  useEffectOnce(() => {
-    openerWindow().postMessage(newWalletSignal(WalletSignal.WALLET_TAB_INITIALIZED, walletInfo), '*');
-
-    const onUnload = () => {
-      openerWindow().postMessage(newWalletSignal(WalletSignal.WALLET_TAB_UNLOADED, walletInfo), '*');
-    };
-
-    window.addEventListener('unload', onUnload);
-    return () => window.removeEventListener('unload', onUnload);
   });
 
   return (
