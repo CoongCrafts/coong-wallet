@@ -1,11 +1,12 @@
 import { FC, useEffect } from 'react';
 import { useBoolean } from 'react-use';
 import { Search, SearchOff } from '@mui/icons-material';
-import { Button, IconButton, Theme, useMediaQuery } from '@mui/material';
+import { IconButton, Theme, useMediaQuery } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
 import NetworksSelection from 'components/shared/NetworksSelection';
 import NewAccountButton from 'components/shared/NewAccountButton';
 import PageTitle from 'components/shared/PageTitle';
+import NoAccountsPlaceholder from 'components/shared/accounts/NoAccountsPlaceholder';
 import SearchBox from 'components/shared/accounts/SearchBox';
 import useHighlightNewAccount from 'hooks/accounts/useHighlightNewAccount';
 import useSearchAccounts from 'hooks/accounts/useSearchAccounts';
@@ -43,25 +44,7 @@ const Accounts: FC<Props> = ({ className = '' }) => {
           {displayAccounts.map((account) => (
             <AccountCard key={account.address} account={account} />
           ))}
-          {displayAccounts.length === 0 && (
-            <div className='text-gray-500 my-6 text-center'>
-              {query ? (
-                <span>
-                  No accounts meet search query: <strong>{query}</strong>
-                </span>
-              ) : (
-                <>
-                  <h5 className='mt-8'>No accounts found in wallet</h5>
-                  <Button
-                    className='mt-4'
-                    onClick={() => document.querySelector<HTMLButtonElement>('button.new-account-btn')?.click()}
-                    variant='outlined'>
-                    Create your first account now!
-                  </Button>
-                </>
-              )}
-            </div>
-          )}
+          {displayAccounts.length === 0 && <NoAccountsPlaceholder query={query} />}
         </div>
       </div>
     </div>

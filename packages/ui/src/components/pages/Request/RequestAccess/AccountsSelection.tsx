@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, styled } from '@mui/material';
 import NewAccountButton from 'components/shared/NewAccountButton';
+import NoAccountsPlaceholder from 'components/shared/accounts/NoAccountsPlaceholder';
 import SearchBox from 'components/shared/accounts/SearchBox';
 import SelectableAccountCard from 'components/shared/accounts/SelectableAccountCard';
 import useAccounts from 'hooks/accounts/useAccounts';
@@ -47,13 +48,9 @@ const AccountsSelection: FC<Props> = ({ className }) => {
         {displayAccounts.map((account) => (
           <SelectableAccountCard key={account.address} account={account} />
         ))}
-        {displayAccounts.length === 0 && (
-          <p className='text-gray-500'>
-            No accounts meet search query: <strong>{query}</strong>
-          </p>
-        )}
+        {displayAccounts.length === 0 && <NoAccountsPlaceholder query={query} />}
       </div>
-      <div className='accounts-selection--bottom'>
+      <div className='accounts-selection--bottom' data-testid='number-of-selected-accounts'>
         <div>
           {selectedAccounts.length ? (
             <span>
