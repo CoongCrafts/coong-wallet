@@ -10,7 +10,7 @@
     "start": "yarn workspace @coong/ui start",
     "build": "yarn clean && npx lerna run build",
     "clean": "npx lerna run clean",
-    "test": "npx lerna run --no-bail test",
+    "test": "npx lerna run --no-bail --verbose test",
     "prettify": "npx prettier --write .",
     "version": "yarn generate-package-info-file",
     "prepublishOnly": "yarn copy-files-to-dist",
