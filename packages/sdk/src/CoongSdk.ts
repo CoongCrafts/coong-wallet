@@ -4,7 +4,7 @@ import { injectWalletAPI, setupWalletMessageHandler } from './message';
 import EmbedInstance from './wallet/EmbedInstance';
 import TabInstance from './wallet/TabInstance';
 
-const DEFAULT_WALLET_URL = 'https://coongwallet.io';
+const DEFAULT_WALLET_URL = 'https://app.coongwallet.io';
 
 export default class CoongSdk {
   static #instance: CoongSdk;
