@@ -10,7 +10,7 @@
     "url": "https://github.com/CoongCrafts/coong-wallet.git"
   },
   "scripts": {
-    "start": "vite --port 3030",
+    "start": "vite --port 3030 --host 0.0.0.0",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo ./tsconfig.build.tsbuildinfo",
