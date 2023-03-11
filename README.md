@@ -1,4 +1,4 @@
-<p align="center"></p><p align="center"></p>
+<br/>
 <p align="center">
   <img src="https://user-images.githubusercontent.com/6867026/223087394-fb37466f-3cb8-4cc8-ac83-e807514dc366.png" height="50">
 </p>
@@ -21,7 +21,7 @@ A website-based multichain crypto wallet for <a href="https://polkadot.network/"
 ## What to expect from Coong Wallet?
 - No need for extra steps to install browser extensions or mobile apps, Coong Wallet is just a website running on your browser
 - Works on both desktop and mobile
-- Compatible with [Polkadot.js extension](https://github.com/polkadot-js/extension) wallet, [integrate Coong Wallet](#integrate-coong-wallet-into-your-dapps) into your dapp within just a few steps
+- Compatible with [Polkadot.js extension](https://github.com/polkadot-js/extension) API, [integrate Coong Wallet](#integrate-coong-wallet-into-your-dapps) into your dapp within just a few steps
 - One seed phrase to recover all created accounts (excluding imported accounts/private keys)
 - Private keys and seed phrase are encrypted with a user chosen wallet password
 
