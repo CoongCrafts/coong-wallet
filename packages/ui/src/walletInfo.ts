@@ -3,7 +3,7 @@ import { packageInfo } from 'packageInfo';
 import { randomWalletInstanceId } from 'utils/string';
 
 export const walletInfo: WalletInfo = {
-  name: 'coong',
+  name: 'coongwallet',
   version: packageInfo.version,
   instanceId: randomWalletInstanceId(),
 };
