@@ -68,6 +68,10 @@ Notes:
 ```typescript
   await CoongSdk.instance().initialize('https://beta.coongwallet.io')  
 ```
+
+## How to run tests
+1. [Set up the development environment](#set-up-development-environment).
+2. Simply run `yarn test` to trigger testing for all packages
   
 ## Known issues
 1. Coong Wallet relies on the cross-tab/cross-origin communication mechanism via `window.postMessage` API to send messages from Dapp to Wallet (an iframe) to retrieve information in the wallet. So Coong will **not work properly** if you enable the setting `Block third-party cookies` on your browser. Though Coong does not use any cookies, but this will also disable/block access to website data (`localStorage`, `IndexedDB`, ...) of Coong instance loaded inside the iframe. **So for now, make sure to enable `Third-party cookies` setting on your browser to enjoy Coong Wallet.** Note: You should be good to go if you're using Google Chrome, since Chrome has the `Block third-party cookies` setting disabled by default.
