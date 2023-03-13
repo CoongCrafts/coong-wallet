@@ -42,7 +42,7 @@ const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
 
       <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={next}>
         <TextField
-          label='Wallet Password'
+          label='Wallet password'
           fullWidth
           autoFocus
           type='password'
