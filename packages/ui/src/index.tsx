@@ -4,20 +4,20 @@ import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { PersistGate } from 'redux-persist/integration/react';
-import { CssBaseline, GlobalStyles, ThemeProvider } from '@mui/material';
+import { CssBaseline, GlobalStyles } from '@mui/material';
 import App from 'App';
 import { WalletStateProvider } from 'contexts/WalletStateContext';
 import { persistor, store } from 'redux/store';
 import { globalStyles } from 'styles';
-import light from 'themes/light';
 import { ALERT_TIMEOUT } from 'utils/constants';
+import ThemeProvider from 'themes/ThemeProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <ThemeProvider theme={light}>
+        <ThemeProvider>
           <WalletStateProvider>
             <CssBaseline />
             <GlobalStyles styles={globalStyles} />

@@ -11,7 +11,7 @@ import userEvent from '@testing-library/user-event';
 import { Options } from '@testing-library/user-event/options';
 import { WalletStateProvider } from 'contexts/WalletStateContext';
 import { newStore } from 'redux/store';
-import light from 'themes/light';
+import light from 'themes/themes';
 import { Props } from 'types';
 import { ALERT_TIMEOUT } from 'utils/constants';
 

@@ -1,6 +1,6 @@
-import { createTheme } from '@mui/material';
+import { createTheme, PaletteMode } from '@mui/material';
 
-export default createTheme({
+const theme = (mode: PaletteMode) => createTheme({
   breakpoints: {
     values: {
       xs: 450,
@@ -16,6 +16,7 @@ export default createTheme({
       "  'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
   },
   palette: {
+    mode: mode,
     primary: {
       main: '#1A88DB',
     },
@@ -44,3 +45,6 @@ export default createTheme({
     },
   },
 });
+
+export default theme;
+

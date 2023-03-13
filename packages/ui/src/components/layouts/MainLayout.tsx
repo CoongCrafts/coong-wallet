@@ -5,6 +5,7 @@ import LockWalletButton from 'components/shared/LockWalletButton';
 import ResetWalletButton from 'components/shared/ResetWalletButton';
 import CoongTextLogo from 'components/shared/misc/CoongTextLogo';
 import { Props } from 'types';
+import SettingWalletButton from 'components/shared/SettingWalletButton';
 
 interface MainLayoutProps extends Props {
   headerActions?: boolean;
@@ -13,7 +14,7 @@ interface MainLayoutProps extends Props {
 const MainLayout: React.FC<MainLayoutProps> = ({ className = '', headerActions }: MainLayoutProps) => {
   return (
     <div className={className}>
-      <header className='main-header'>
+      <header className='main-header dark:bg-stone-800'>
         <Container maxWidth='sm'>
           <div className='main-header__inner'>
             <CoongTextLogo />
@@ -21,6 +22,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ className = '', headerActions }
               <div className='main-header__actions'>
                 {!import.meta.env.PROD && <ResetWalletButton />}
                 <LockWalletButton />
+                <SettingWalletButton />
               </div>
             )}
           </div>

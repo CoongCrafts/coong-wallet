@@ -52,6 +52,7 @@ const SearchBox: FC<SearchBoxProps> = ({
         setQuery(event.target.value);
       }}
       autoFocus={autoFocus}
+      color='primary'
     />
   );
 };
