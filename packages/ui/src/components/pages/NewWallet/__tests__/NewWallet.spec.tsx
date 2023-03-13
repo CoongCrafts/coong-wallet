@@ -1,4 +1,3 @@
-import { abortControllerWithReason } from '@reduxjs/toolkit/dist/listenerMiddleware/utils';
 import { UserEvent } from '@testing-library/user-event/setup/setup';
 import { initializeKeyring, newUser, render, screen, waitFor } from '__tests__/testUtils';
 import NewWallet from '../index';
