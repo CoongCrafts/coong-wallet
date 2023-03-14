@@ -1,4 +1,3 @@
-import { waitFor } from '@testing-library/react';
 import { defaultNetwork, newWalletErrorResponse, newWalletRequest } from '@coong/base';
 import { WalletRequestMessage } from '@coong/base/types';
 import Keyring from '@coong/keyring';
@@ -13,6 +12,7 @@ import {
   screen,
   setupAuthorizedApps,
   UserEvent,
+  waitFor,
 } from '__tests__/testUtils';
 import { Mock } from 'vitest';
 import Request from '../../index';
