@@ -37,7 +37,7 @@ const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
       <h3>First, choose your wallet password</h3>
       <p className='mb-6'>
         Your password will be used to <b>encrypt accounts as well as unlock the wallet</b>, make sure to pick a{' '}
-        <b>strong & easy-to-member</b> password.
+        <b>strong & easy-to-remember</b> password.
       </p>
 
       <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={next}>
