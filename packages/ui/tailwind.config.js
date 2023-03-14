@@ -34,4 +34,5 @@ module.exports = {
     preflight: false,
     container: false,
   },
+  darkMode: 'class',
 };
