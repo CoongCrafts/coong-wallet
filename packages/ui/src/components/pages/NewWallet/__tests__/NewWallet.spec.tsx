@@ -1,4 +1,5 @@
-import { initializeKeyring, render, screen, waitFor } from '__tests__/testUtils';
+import { UserEvent } from '@testing-library/user-event/setup/setup';
+import { initializeKeyring, newUser, render, screen, waitFor } from '__tests__/testUtils';
 import NewWallet from '../index';
 import { NewWalletScreenStep } from '../types';
 
@@ -15,6 +16,11 @@ beforeEach(() => {
 });
 
 describe('NewWallet', () => {
+  let user: UserEvent;
+  beforeEach(() => {
+    user = newUser();
+  });
+
   describe('keyring is initialized', () => {
     beforeEach(() => {
       initializeKeyring();
@@ -39,23 +45,136 @@ describe('NewWallet', () => {
   });
 
   describe('keyring is not initialized', () => {
-    it('should render ChooseWalletPassword view', async () => {
-      render(<NewWallet />);
-      expect(screen.queryByText('First, choose your wallet password')).toBeInTheDocument();
+    describe('ChooseWalletPassword', () => {
+      beforeEach(() => {
+        render(<NewWallet />);
+      });
+
+      it('should render the page correctly', async () => {
+        expect(await screen.findByText('First, choose your wallet password')).toBeInTheDocument();
+        const passwordField = await screen.findByLabelText('Wallet password');
+        expect(passwordField).toBeEnabled();
+        expect(passwordField).toHaveFocus();
+
+        expect(await screen.findByRole('button', { name: /Next/ })).toBeDisabled();
+      });
+
+      it('should show error message if password is less than 6 chars', async () => {
+        const passwordField = await screen.findByLabelText('Wallet password');
+        await user.type(passwordField, 'short');
+
+        expect(await screen.findByRole('button', { name: /Next/ })).toBeDisabled();
+        expect(await screen.findByText("Password's too short")).toBeInTheDocument();
+      });
+
+      it('should render ConfirmWalletPassword view after choosing password', async () => {
+        const passwordField = await screen.findByLabelText('Wallet password');
+        await user.type(passwordField, 'valid-password');
+
+        const nextButton = await screen.findByRole('button', { name: /Next/ });
+        expect(nextButton).toBeEnabled();
+        await user.click(nextButton);
+
+        expect(await screen.findByText('Next, confirm your wallet password')).toBeInTheDocument();
+      });
     });
 
-    it('should render ConfirmWalletPassword view', async () => {
-      render(<NewWallet />, {
-        preloadedState: { setupWallet: { newWalletScreenStep: NewWalletScreenStep.ConfirmWalletPassword } },
+    describe('ConfirmWalletPassword', () => {
+      beforeEach(() => {
+        render(<NewWallet />, {
+          preloadedState: {
+            setupWallet: {
+              password: 'random-password',
+              newWalletScreenStep: NewWalletScreenStep.ConfirmWalletPassword,
+            },
+          },
+        });
       });
-      expect(screen.queryByText('Next, confirm your wallet password')).toBeInTheDocument();
+
+      it('should render the page correctly', async () => {
+        expect(await screen.findByText('Next, confirm your wallet password')).toBeInTheDocument();
+
+        const passwordField = await screen.findByLabelText('Confirm wallet password');
+        expect(passwordField).toBeEnabled();
+        expect(passwordField).toHaveFocus();
+
+        expect(await screen.findByRole('button', { name: /Next/ })).toBeDisabled();
+        expect(await screen.findByRole('button', { name: /Back/ })).toBeEnabled();
+      });
+
+      it('should go back to ChooseWalletPassword', async () => {
+        await user.click(await screen.findByRole('button', { name: /Back/ }));
+
+        expect(await screen.findByText('First, choose your wallet password')).toBeInTheDocument();
+      });
+
+      it('should show error message if password does not match', async () => {
+        const passwordField = await screen.findByLabelText('Confirm wallet password');
+        await user.type(passwordField, 'wrong-password');
+
+        expect(await screen.findByText('Password does not match')).toBeInTheDocument();
+      });
+
+      it('should render BackupSecretRecoveryPhrase after confirming the password', async () => {
+        const passwordField = await screen.findByLabelText('Confirm wallet password');
+        await user.type(passwordField, 'random-password');
+
+        const nextButton = await screen.findByRole('button', { name: /Next/ });
+        expect(nextButton).toBeEnabled();
+        await user.click(nextButton);
+
+        expect(await screen.findByText('Finally, back up your secret recovery phrase')).toBeInTheDocument();
+      });
     });
 
-    it('should render BackupSecretRecoveryPhrase view', async () => {
-      render(<NewWallet />, {
-        preloadedState: { setupWallet: { newWalletScreenStep: NewWalletScreenStep.BackupSecretRecoveryPhrase } },
+    describe('BackupSecretRecoveryPhrase', () => {
+      const renderView = (onWalletSetup?: () => void) => {
+        render(<NewWallet onWalletSetup={onWalletSetup} />, {
+          preloadedState: {
+            setupWallet: {
+              password: 'password',
+              newWalletScreenStep: NewWalletScreenStep.BackupSecretRecoveryPhrase,
+            },
+          },
+        });
+      };
+
+      it('should render the page correctly', async () => {
+        renderView();
+        expect(await screen.findByText('Finally, back up your secret recovery phrase')).toBeInTheDocument();
+        expect(await screen.findByLabelText(/I have backed up my recovery phrase/)).toBeInTheDocument();
+        expect(await screen.findByRole('button', { name: /Finish/ })).toBeDisabled();
+        expect(await screen.findByRole('button', { name: /Back/ })).toBeInTheDocument();
       });
-      expect(screen.queryByText('Finally, back up your secret recovery phrase')).toBeInTheDocument();
+
+      it('should go back to ChooseWalletPassword page', async () => {
+        renderView();
+        await user.click(await screen.findByRole('button', { name: /Back/ }));
+
+        expect(await screen.findByText('First, choose your wallet password')).toBeInTheDocument();
+      });
+
+      it('should go to homepage(/) page after confirm backup', async () => {
+        renderView();
+        await user.click(await screen.findByLabelText(/I have backed up my recovery phrase/));
+        await user.click(await screen.findByRole('button', { name: /Finish/ }));
+
+        await waitFor(() => {
+          expect(navigate).toBeCalledWith('/');
+        });
+      });
+
+      it('should trigger onWalletSetup callback', async () => {
+        const onWalletSetup = vi.fn();
+        renderView(onWalletSetup);
+
+        await user.click(await screen.findByLabelText(/I have backed up my recovery phrase/));
+        await user.click(await screen.findByRole('button', { name: /Finish/ }));
+
+        await waitFor(() => {
+          expect(onWalletSetup).toBeCalled();
+        });
+      });
     });
   });
 });

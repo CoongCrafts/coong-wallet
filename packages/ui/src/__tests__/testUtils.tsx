@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
+import { AUTHORIZED_ACCOUNTS_KEY, AuthorizedApps } from '@coong/base/requests/WalletState';
 import Keyring from '@coong/keyring';
 import { ThemeProvider } from '@mui/material';
 import { PreloadedState } from '@reduxjs/toolkit';
@@ -77,7 +78,7 @@ export const newUser = (options?: Options) => {
 
 interface RouterWrapperProps extends Props {
   path: string;
-  currentUrl: string;
+  currentUrl?: string;
 }
 
 export const RouterWrapper: FC<RouterWrapperProps> = ({ children, path, currentUrl }: Props) => {
@@ -89,8 +90,27 @@ export const RouterWrapper: FC<RouterWrapperProps> = ({ children, path, currentU
         path,
       },
     ],
-    { initialEntries: [currentUrl] },
+    { initialEntries: [currentUrl || path] },
   );
 
   return <RouterProvider router={router} />;
+};
+
+export const setupAuthorizedApps = (authorizedAccounts: string[] = [], appUrl?: string) => {
+  const randomAppUrl = appUrl || 'https://random-app.com';
+  const randomAppId = randomAppUrl.split('//')[1];
+
+  const randomAppInfo = {
+    name: 'Random App',
+    url: randomAppUrl,
+    authorizedAccounts: authorizedAccounts,
+  };
+
+  const authorizedApps: AuthorizedApps = {
+    [randomAppId]: randomAppInfo,
+  };
+
+  localStorage.setItem(AUTHORIZED_ACCOUNTS_KEY, JSON.stringify(authorizedApps));
+
+  return { randomAppUrl, randomAppInfo, authorizedApps };
 };

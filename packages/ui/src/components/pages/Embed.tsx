@@ -4,17 +4,17 @@ import { isWalletRequest, newWalletErrorResponse, newWalletResponse, newWalletSi
 import { WalletRequestMessage, WalletResponse, WalletSignal } from '@coong/base/types';
 import { styled } from '@mui/material';
 import CoongTextLogo from 'components/shared/misc/CoongTextLogo';
+import { useWalletState } from 'contexts/WalletStateContext';
 import { Props } from 'types';
 import { isInsideIframe, topWindow } from 'utils/browser';
 import { walletInfo } from 'walletInfo';
-import { useWalletState } from '../../contexts/WalletStateContext';
 
 const Embed: FC<Props> = ({ className = '' }: Props) => {
   const { handleWalletRequest } = useWalletState();
-  const loadedInsideIframe = !topWindow() || !isInsideIframe();
+  const loadedInsideIframe = isInsideIframe() && !!topWindow();
 
   useEffectOnce(() => {
-    if (loadedInsideIframe) {
+    if (!loadedInsideIframe) {
       console.error('This page should be loaded inside an iframe!');
       return;
     }
@@ -30,7 +30,7 @@ const Embed: FC<Props> = ({ className = '' }: Props) => {
   });
 
   useEffectOnce(() => {
-    if (loadedInsideIframe) {
+    if (!loadedInsideIframe) {
       return;
     }
 

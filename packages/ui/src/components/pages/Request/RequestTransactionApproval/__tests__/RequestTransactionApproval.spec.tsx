@@ -1,11 +1,19 @@
-import { waitFor } from '@testing-library/react';
 import { defaultNetwork, newWalletErrorResponse, newWalletRequest } from '@coong/base';
-import { AUTHORIZED_ACCOUNTS_KEY, AuthorizedApps } from '@coong/base/requests/WalletState';
 import { WalletRequestMessage } from '@coong/base/types';
 import Keyring from '@coong/keyring';
 import { AccountInfo } from '@coong/keyring/types';
 import { SpyInstance } from '@vitest/spy';
-import { initializeKeyring, newUser, PASSWORD, render, RouterWrapper, screen, UserEvent } from '__tests__/testUtils';
+import {
+  initializeKeyring,
+  newUser,
+  PASSWORD,
+  render,
+  RouterWrapper,
+  screen,
+  setupAuthorizedApps,
+  UserEvent,
+  waitFor,
+} from '__tests__/testUtils';
 import { Mock } from 'vitest';
 import Request from '../../index';
 
@@ -34,25 +42,6 @@ const newPayload = (address: string) => {
     tip: '0x00000000000000000000000000000000',
     version: 4,
   };
-};
-
-export const setupAuthorizedApps = (authorizedAccounts: string[] = [], appUrl?: string) => {
-  const randomAppUrl = appUrl || 'https://random-app.com';
-  const randomAppId = randomAppUrl.split('//')[1];
-
-  const randomAppInfo = {
-    name: 'Random App',
-    url: randomAppUrl,
-    authorizedAccounts: authorizedAccounts,
-  };
-
-  const authorizedApps: AuthorizedApps = {
-    [randomAppId]: randomAppInfo,
-  };
-
-  localStorage.setItem(AUTHORIZED_ACCOUNTS_KEY, JSON.stringify(authorizedApps));
-
-  return { randomAppUrl, randomAppInfo, authorizedApps };
 };
 
 describe('RequestTransactionApproval', () => {
