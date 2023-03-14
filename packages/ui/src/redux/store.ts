@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import accountsSlice from 'redux/slices/accounts';
 import appSlice from 'redux/slices/app';
 import setupWalletSlice from 'redux/slices/setup-wallet';
+import settingSlice from './slices/settings';
 
 const appPersistConfig = {
   key: 'app',
@@ -11,10 +12,17 @@ const appPersistConfig = {
   whitelist: ['locked', 'lastUsedAt', 'addressPrefix'],
 };
 
+const settingPersistConfig = {
+  key: 'settings',
+  storage: storage,
+  whitelist: ['themeMode'],
+}
+
 const rootReducer = combineReducers({
   [appSlice.name]: persistReducer(appPersistConfig, appSlice.reducer),
   [setupWalletSlice.name]: setupWalletSlice.reducer,
   [accountsSlice.name]: accountsSlice.reducer,
+  [settingSlice.name]: persistReducer(settingPersistConfig, settingSlice.reducer),
 });
 
 export const newStore = (preloadedState?: PreloadedState<any>) => {

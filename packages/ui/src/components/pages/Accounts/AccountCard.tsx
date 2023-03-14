@@ -13,7 +13,7 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account }) => {
   const { networkAddress, name } = account;
 
   return (
-    <div id={networkAddress} className={`${className} account-card transition-colors duration-200`}>
+    <div id={networkAddress} className={`${className} account-card transition-colors duration-200 dark:border-slate-600`}>
       <div className='account-card--icon'>
         <CopyAddressTooltip address={networkAddress} name={name}>
           <Identicon value={networkAddress} size={36} theme='polkadot' />
