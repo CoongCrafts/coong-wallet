@@ -2,7 +2,7 @@ import { FC, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "redux/store";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material";
-import theme from "./themes";
+import theme from ".";
 import { Props } from "types";
 import { ThemeMode } from "redux/slices/settings";
 
