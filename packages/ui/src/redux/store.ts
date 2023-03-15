@@ -16,7 +16,7 @@ const settingPersistConfig = {
   key: 'settings',
   storage: storage,
   whitelist: ['themeMode'],
-}
+};
 
 const rootReducer = combineReducers({
   [appSlice.name]: persistReducer(appPersistConfig, appSlice.reducer),

@@ -2,7 +2,6 @@ import { shallowEqual } from 'react-redux';
 import { initializeKeyring, newUser, render, screen, UserEvent, waitFor } from '__tests__/testUtils';
 import SettingsWalletButton from '../SettingsWalletButton';
 
-
 describe('SettingsWalletButton', () => {
   it('should hide the dialog by default', () => {
     render(<SettingsWalletButton />, { preloadedState: { app: { seedReady: true, ready: true, locked: false } } });
@@ -13,7 +12,9 @@ describe('SettingsWalletButton', () => {
     let user: UserEvent, container: HTMLElement;
     beforeEach(() => {
       user = newUser();
-      const result = render(<SettingsWalletButton />, { preloadedState: { app: { seedReady: true, ready: true, locked: false } } });
+      const result = render(<SettingsWalletButton />, {
+        preloadedState: { app: { seedReady: true, ready: true, locked: false } },
+      });
       container = result.container;
       const button = screen.getByTitle('Open settings');
       user.click(button);
@@ -21,8 +22,8 @@ describe('SettingsWalletButton', () => {
 
     it('should active dark button and dark theme when clicking the on it', async () => {
       const button = await screen.findByRole('button', { name: /Dark/ });
-      user.click(button); 
-      
+      user.click(button);
+
       await waitFor(() => {
         expect(button).toHaveClass('MuiButton-contained');
         expect(container.querySelector('.dark')).toBeInTheDocument();
@@ -57,7 +58,7 @@ describe('SettingsWalletButton', () => {
   describe('keyring initialized', () => {
     beforeEach(async () => {
       await initializeKeyring();
-    })
+    });
     it('should be hidden if the wallet is locked', () => {
       render(<SettingsWalletButton />, { preloadedState: { app: { seedReady: true, ready: true, locked: true } } });
       expect(screen.queryByTitle('Open settings')).not.toBeInTheDocument();

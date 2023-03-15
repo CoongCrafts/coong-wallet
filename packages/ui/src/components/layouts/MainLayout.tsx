@@ -3,9 +3,9 @@ import { Outlet } from 'react-router-dom';
 import { Container, styled } from '@mui/material';
 import LockWalletButton from 'components/shared/LockWalletButton';
 import ResetWalletButton from 'components/shared/ResetWalletButton';
+import SettingsWalletButton from 'components/shared/SettingsWalletButton';
 import CoongTextLogo from 'components/shared/misc/CoongTextLogo';
 import { Props } from 'types';
-import SettingsWalletButton from 'components/shared/SettingsWalletButton';
 
 interface MainLayoutProps extends Props {
   headerActions?: boolean;

@@ -1,4 +1,4 @@
-import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 
 export enum ThemeMode {
   Dark,
@@ -12,7 +12,7 @@ export interface SettingState {
 
 const initialState: SettingState = {
   themeMode: ThemeMode.System,
-}
+};
 
 const settingSlice = createSlice({
   name: 'settings',
@@ -20,10 +20,9 @@ const settingSlice = createSlice({
   reducers: {
     switchThemeMode: (state: Draft<SettingState>, action: PayloadAction<ThemeMode>) => {
       state.themeMode = action.payload;
-    }
-  }
-})
-
+    },
+  },
+});
 
 export const settingActions = settingSlice.actions;
 export default settingSlice;
