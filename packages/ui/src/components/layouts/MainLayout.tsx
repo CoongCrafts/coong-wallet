@@ -5,7 +5,7 @@ import LockWalletButton from 'components/shared/LockWalletButton';
 import ResetWalletButton from 'components/shared/ResetWalletButton';
 import CoongTextLogo from 'components/shared/misc/CoongTextLogo';
 import { Props } from 'types';
-import SettingWalletButton from 'components/shared/SettingWalletButton';
+import SettingsWalletButton from 'components/shared/SettingsWalletButton';
 
 interface MainLayoutProps extends Props {
   headerActions?: boolean;
@@ -22,7 +22,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ className = '', headerActions }
               <div className='main-header__actions'>
                 {!import.meta.env.PROD && <ResetWalletButton />}
                 <LockWalletButton />
-                <SettingWalletButton />
+                <SettingsWalletButton />
               </div>
             )}
           </div>

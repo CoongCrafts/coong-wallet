@@ -11,7 +11,7 @@ import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
 import DialogTitle from "components/shared/DialogTitle";
 
 
-const SettingWalletButton: FC<Props> = () => {
+const SettingsWalletButton: FC<Props> = () => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const { themeMode } = useSelector((state: RootState) => state.settings);
@@ -61,4 +61,4 @@ const SettingWalletButton: FC<Props> = () => {
   );
 }
 
-export default SettingWalletButton;
+export default SettingsWalletButton;

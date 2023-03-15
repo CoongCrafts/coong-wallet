@@ -1,11 +1,11 @@
 import { shallowEqual } from 'react-redux';
 import { initializeKeyring, newUser, render, screen, UserEvent, waitFor } from '__tests__/testUtils';
-import SettingWalletButton from '../SettingWalletButton';
+import SettingsWalletButton from '../SettingsWalletButton';
 
 
-describe('SettingWalletButton', () => {
+describe('SettingsWalletButton', () => {
   it('should hide the dialog by default', () => {
-    render(<SettingWalletButton />, { preloadedState: { app: { seedReady: true, ready: true, locked: false } } });
+    render(<SettingsWalletButton />, { preloadedState: { app: { seedReady: true, ready: true, locked: false } } });
     expect(screen.queryByText('Settings')).not.toBeInTheDocument();
   });
 
@@ -13,13 +13,13 @@ describe('SettingWalletButton', () => {
     let user: UserEvent, container: HTMLElement;
     beforeEach(() => {
       user = newUser();
-      const result = render(<SettingWalletButton />, { preloadedState: { app: { seedReady: true, ready: true, locked: false } } });
+      const result = render(<SettingsWalletButton />, { preloadedState: { app: { seedReady: true, ready: true, locked: false } } });
       container = result.container;
       const button = screen.getByTitle('Open settings');
       user.click(button);
     });
 
-    it('should active dark button when clicking the on it', async () => {
+    it('should active dark button and dark theme when clicking the on it', async () => {
       const button = await screen.findByRole('button', { name: /Dark/ });
       user.click(button); 
       
@@ -49,7 +49,7 @@ describe('SettingWalletButton', () => {
 
   describe('keyring not initialized', () => {
     it('should be hidden', () => {
-      render(<SettingWalletButton />, { preloadedState: { app: { seedReady: false, ready: true, locked: false } } });
+      render(<SettingsWalletButton />, { preloadedState: { app: { seedReady: false, ready: true, locked: false } } });
       expect(screen.queryByTitle('Open settings')).not.toBeInTheDocument();
     });
   });
@@ -59,11 +59,11 @@ describe('SettingWalletButton', () => {
       await initializeKeyring();
     })
     it('should be hidden if the wallet is locked', () => {
-      render(<SettingWalletButton />, { preloadedState: { app: { seedReady: true, ready: true, locked: true } } });
+      render(<SettingsWalletButton />, { preloadedState: { app: { seedReady: true, ready: true, locked: true } } });
       expect(screen.queryByTitle('Open settings')).not.toBeInTheDocument();
     });
     it('should be visible if the wallet is unlocked', () => {
-      render(<SettingWalletButton />, { preloadedState: { app: { seedReady: true, ready: true, locked: false } } });
+      render(<SettingsWalletButton />, { preloadedState: { app: { seedReady: true, ready: true, locked: false } } });
       expect(screen.queryByTitle('Open settings')).toBeInTheDocument();
     });
   });
