@@ -8,7 +8,7 @@ import { settingActions, ThemeMode } from "redux/slices/settings";
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
-import DialogTitle from "./DialogTitle";
+import DialogTitle from "components/shared/DialogTitle";
 
 
 const SettingWalletButton: FC<Props> = () => {
@@ -28,7 +28,7 @@ const SettingWalletButton: FC<Props> = () => {
 
   return (
     <>
-      <IconButton size='small' title='Open setting' onClick={() => setOpen(true)}>
+      <IconButton size='small' title='Open settings' onClick={() => setOpen(true)}>
         <SettingsIcon />
       </IconButton>
       <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
