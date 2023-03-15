@@ -1,17 +1,15 @@
-import { FC, useMemo } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "redux/store";
-import { ThemeProvider as MuiThemeProvider } from "@mui/material";
-import theme from ".";
-import { Props } from "types";
-import { ThemeMode } from "redux/slices/settings";
+import { FC, useEffect, useMemo, useState } from 'react';
+import { ThemeProvider as MuiThemeProvider } from '@mui/material';
+import useThemeMode from 'hooks/useThemeMode';
+import { Props, ThemeMode } from 'types';
+import newTheme from '.';
 
-const ThemeProvider: FC<Props> = ({children}) => {
-  const { themeMode } = useSelector((state: RootState) => state.settings);
+const ThemeProvider: FC<Props> = ({ children }) => {
+  const themeMode = useThemeMode();
 
   const themeColor = useMemo(() => {
     switch (themeMode) {
-      case ThemeMode.Dark: 
+      case ThemeMode.Dark:
         return 'dark';
       case ThemeMode.Light:
         return 'light';
@@ -21,13 +19,15 @@ const ThemeProvider: FC<Props> = ({children}) => {
     }
   }, [themeMode]);
 
+  const theme = useMemo(() => {
+    return newTheme(themeColor);
+  }, [themeColor]);
+
   return (
-    <MuiThemeProvider theme={theme(themeColor)}>
-      <div className={themeColor}>
-        { children }
-      </div>
+    <MuiThemeProvider theme={theme}>
+      <body className={themeColor}>{children}</body>
     </MuiThemeProvider>
-  )
-}
+  );
+};
 
 export default ThemeProvider;

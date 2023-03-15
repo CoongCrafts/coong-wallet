@@ -28,6 +28,13 @@ module.exports = {
       '5xl': '2rem', // 32px - h1
       '6xl': '2.625rem', // 42px
     },
+    colors: {
+      transparent: 'transparent',
+      current: 'currentColor',
+      'gray-1': '#292929',
+      'gray-2': 'rgba(255, 255, 255, 0.15)',
+      'gray-3': 'rgba(255, 255, 255, 0.23)',
+    },
   },
   plugins: [],
   corePlugins: {

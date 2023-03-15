@@ -3,8 +3,8 @@ import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, R
 import storage from 'redux-persist/lib/storage';
 import accountsSlice from 'redux/slices/accounts';
 import appSlice from 'redux/slices/app';
+import settingSlice from 'redux/slices/settings';
 import setupWalletSlice from 'redux/slices/setup-wallet';
-import settingSlice from './slices/settings';
 
 const appPersistConfig = {
   key: 'app',

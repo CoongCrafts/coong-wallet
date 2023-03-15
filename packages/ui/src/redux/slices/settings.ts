@@ -1,10 +1,5 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
-
-export enum ThemeMode {
-  Dark,
-  Light,
-  System,
-}
+import { ThemeMode } from 'types';
 
 export interface SettingState {
   themeMode: ThemeMode;

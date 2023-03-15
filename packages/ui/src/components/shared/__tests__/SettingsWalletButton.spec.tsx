@@ -1,11 +1,10 @@
-import { shallowEqual } from 'react-redux';
 import { initializeKeyring, newUser, render, screen, UserEvent, waitFor } from '__tests__/testUtils';
 import SettingsWalletButton from '../SettingsWalletButton';
 
 describe('SettingsWalletButton', () => {
-  it('should hide the dialog by default', () => {
-    render(<SettingsWalletButton />, { preloadedState: { app: { seedReady: true, ready: true, locked: false } } });
-    expect(screen.queryByText('Settings')).not.toBeInTheDocument();
+  it('should hide the dialog by default', async () => {
+    render(<SettingsWalletButton />, { preloadedState: { app: { seedReady: false, ready: true, locked: true } } });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   describe('when the dialog is open', () => {
@@ -40,11 +39,11 @@ describe('SettingsWalletButton', () => {
     });
 
     it('should show the dialog when clicking the setting wallet button', async () => {
-      expect(await screen.findByText('Settings')).toBeInTheDocument();
-      expect(await screen.findByText('Dark')).toBeInTheDocument();
-      expect(await screen.findByText('Light')).toBeInTheDocument();
-      expect(await screen.findByText('System')).toBeInTheDocument();
-      expect(await screen.findByTitle('Close settings')).toBeInTheDocument();
+      expect(await screen.findByRole('dialog')).toBeInTheDocument();
+      expect(await screen.findByRole('button', { name: /Dark/ })).toBeInTheDocument();
+      expect(await screen.findByRole('button', { name: /Light/ })).toBeInTheDocument();
+      expect(await screen.findByRole('button', { name: /System/ })).toBeInTheDocument();
+      expect(await screen.findByRole('button', { name: /Close settings/ })).toBeInTheDocument();
     });
   });
 

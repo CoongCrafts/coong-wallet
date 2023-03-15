@@ -14,7 +14,7 @@ interface MainLayoutProps extends Props {
 const MainLayout: React.FC<MainLayoutProps> = ({ className = '', headerActions }: MainLayoutProps) => {
   return (
     <div className={className}>
-      <header className='main-header dark:bg-stone-800'>
+      <header className='main-header dark:bg-gray-1 dark:border-gray-2'>
         <Container maxWidth='sm'>
           <div className='main-header__inner'>
             <CoongTextLogo />

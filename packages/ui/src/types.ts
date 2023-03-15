@@ -10,3 +10,10 @@ export interface Props {
 export interface AccountInfoExt extends AccountInfo {
   networkAddress: string; // Network address changing following the `addressPrefix`
 }
+
+export enum ThemeMode {
+  Dark = 'dark',
+  Light = 'light',
+  System = 'system',
+}
+
