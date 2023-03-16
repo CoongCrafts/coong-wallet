@@ -29,6 +29,9 @@ const newTheme = (mode: PaletteMode) =>
             background: {
               default: '#313131',
             },
+            action: {
+              active: '#f0f0f0',
+            },
           }
         : {}),
     },
