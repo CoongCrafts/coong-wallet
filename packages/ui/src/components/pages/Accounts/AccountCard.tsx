@@ -13,7 +13,9 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account }) => {
   const { networkAddress, name } = account;
 
   return (
-    <div id={networkAddress} className={`${className} account-card transition-colors duration-200 dark:border-gray-3`}>
+    <div
+      id={networkAddress}
+      className={`${className} account-card transition-colors duration-200 border border-black/10 dark:border-white/15 `}>
       <div className='account-card--icon'>
         <CopyAddressTooltip address={networkAddress} name={name}>
           <Identicon value={networkAddress} size={36} theme='polkadot' />
@@ -28,7 +30,6 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account }) => {
 };
 
 export default styled(AccountCard)`
-  border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 0.5rem;
   display: flex;
   align-items: center;

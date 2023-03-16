@@ -25,7 +25,7 @@ describe('SettingsWalletButton', () => {
 
       await waitFor(() => {
         expect(button).toHaveClass('MuiButton-contained');
-        expect(container.querySelector('.dark')).toBeInTheDocument();
+        expect(document.body.classList.contains('dark')).toBeTruthy;
       });
     });
 

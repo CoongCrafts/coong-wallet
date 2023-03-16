@@ -21,19 +21,17 @@ const newTheme = (mode: PaletteMode) =>
       primary: {
         main: '#1A88DB',
       },
-      ...(mode === 'dark'
-        ? {
-            text: {
-              primary: '#f0f0f0',
-            },
-            background: {
-              default: '#313131',
-            },
-            action: {
-              active: '#f0f0f0',
-            },
-          }
-        : {}),
+      ...(mode === 'dark' && {
+        text: {
+          primary: '#f0f0f0',
+        },
+        background: {
+          default: '#313131',
+        },
+        action: {
+          active: '#f0f0f0',
+        },
+      }),
     },
     components: {
       MuiButton: {
@@ -49,6 +47,13 @@ const newTheme = (mode: PaletteMode) =>
       MuiTextField: {
         defaultProps: {
           variant: 'outlined',
+        },
+      },
+      MuiOutlinedInput: {
+        styleOverrides: {
+          notchedOutline: {
+            borderColor: mode === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.10)',
+          },
         },
       },
       MuiTooltip: {

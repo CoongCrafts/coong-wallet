@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { Close, Search } from '@mui/icons-material';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import clsx from 'clsx';
+import useThemeMode from 'hooks/useThemeMode';
 import { Props } from 'types';
 
 interface SearchBoxProps extends Props {
@@ -19,6 +20,7 @@ const SearchBox: FC<SearchBoxProps> = ({
   size = 'xs',
 }) => {
   const [query, setQuery] = useState<string>('');
+  const themeMode = useThemeMode();
 
   useEffect(() => {
     onChange(query);

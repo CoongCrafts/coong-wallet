@@ -43,7 +43,7 @@ const SettingsWalletButton: FC<Props> = () => {
       <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
         <DialogTitle onClose={handleClose}>Settings</DialogTitle>
         <DialogContent>
-          <DialogContentText className='mb-1'>Themes</DialogContentText>
+          <DialogContentText className='mb-1'>Theme Mode</DialogContentText>
           <ButtonGroup orientation={xs ? 'vertical' : 'horizontal'} fullWidth>
             <Button
               variant={themeMode == ThemeMode.Dark ? 'contained' : 'outlined'}
