@@ -52,16 +52,16 @@ const SettingsWalletButton: FC<Props> = () => {
               Dark
             </Button>
             <Button
-              variant={themeMode == ThemeMode.Light ? 'contained' : 'outlined'}
-              onClick={() => switchThemeMode(ThemeMode.Light)}>
-              <LightModeIcon className='mr-2' fontSize='small' />
-              Light
-            </Button>
-            <Button
               variant={themeMode == ThemeMode.System ? 'contained' : 'outlined'}
               onClick={() => switchThemeMode(ThemeMode.System)}>
               <SettingsBrightnessIcon className='mr-2' fontSize='small' />
               System
+            </Button>
+            <Button
+              variant={themeMode == ThemeMode.Light ? 'contained' : 'outlined'}
+              onClick={() => switchThemeMode(ThemeMode.Light)}>
+              <LightModeIcon className='mr-2' fontSize='small' />
+              Light
             </Button>
           </ButtonGroup>
         </DialogContent>

@@ -10,10 +10,10 @@ import { PreloadedState } from '@reduxjs/toolkit';
 import userEvent from '@testing-library/user-event';
 import { Options } from '@testing-library/user-event/options';
 import { WalletStateProvider } from 'contexts/WalletStateContext';
+import ThemeProvider from 'providers/ThemeProvider';
 import { newStore } from 'redux/store';
 import { Props } from 'types';
 import { ALERT_TIMEOUT } from 'utils/constants';
-import ThemeProvider from 'themes/ThemeProvider';
 
 interface WrapperProps extends Props {
   preloadedState?: PreloadedState<any>;

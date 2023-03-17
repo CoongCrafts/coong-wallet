@@ -14,9 +14,7 @@ module.exports = {
     extend: {
       colors: {
         primary: '#1A88DB',
-        'gray-1': '#292929',
-        'gray-2': 'rgba(255, 255, 255, 0.15)',
-        'gray-3': 'rgba(255, 255, 255, 0.23)',
+        'header-dark': '#292929',
       },
       opacity: {
         15: '.15',

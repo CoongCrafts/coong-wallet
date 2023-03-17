@@ -8,8 +8,8 @@ export default function useThemeMode() {
 
   return useMemo(() => {
     if (themeMode === ThemeMode.System) {
-      const isSystemUserPreferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      return isSystemUserPreferDark ? ThemeMode.Dark : ThemeMode.Light;
+      const isSystemPrefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return isSystemPrefersDarkMode ? ThemeMode.Dark : ThemeMode.Light;
     }
 
     return themeMode;

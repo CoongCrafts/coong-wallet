@@ -31,7 +31,7 @@ const SelectableAccountCard: FC<SelectableAccountCardProps> = ({ className = '',
   return (
     <div
       id={networkAddress}
-      className={`${className} selectable-account-card ${selected ? 'selected' : ''}`}
+      className={`${className} selectable-account-card ${selected ? 'selected' : ''} dark:border-white/15`}
       onClick={doSelect}
       role='button'>
       <div className='selectable-account-card__left'>

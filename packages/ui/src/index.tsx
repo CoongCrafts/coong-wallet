@@ -7,10 +7,10 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { CssBaseline, GlobalStyles } from '@mui/material';
 import App from 'App';
 import { WalletStateProvider } from 'contexts/WalletStateContext';
+import ThemeProvider from 'providers/ThemeProvider';
 import { persistor, store } from 'redux/store';
 import { globalStyles } from 'styles';
 import { ALERT_TIMEOUT } from 'utils/constants';
-import ThemeProvider from 'themes/ThemeProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(

@@ -67,7 +67,7 @@ const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ class
       <p className='mb-4'>Write down the below 12 words and keep it in a safe place.</p>
 
       <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={doSetupWallet}>
-        <div className='secret-phrase-box dark:bg-gray-2'>{secretPhrase}</div>
+        <div className='secret-phrase-box dark:bg-white/15'>{secretPhrase}</div>
         <FormGroup>
           <FormControlLabel
             control={<Checkbox checked={checked} onChange={handleCheckbox} disabled={loading} />}
