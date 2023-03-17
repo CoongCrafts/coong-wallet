@@ -17,6 +17,14 @@ export const globalStyles = css`
     display: flow-root;
   }
 
+  .dark {
+    .iden-icon {
+      circle:first-child {
+        fill: #585858;
+      }
+    }
+  }
+
   ::selection {
     background-color: rgba(79, 170, 245, 0.3);
   }

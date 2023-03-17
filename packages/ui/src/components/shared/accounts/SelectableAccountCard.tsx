@@ -37,7 +37,7 @@ const SelectableAccountCard: FC<SelectableAccountCardProps> = ({ className = '',
       <div className='selectable-account-card__left'>
         <div className='selectable-account-card__icon'>
           <CopyAddressTooltip address={networkAddress} name={name}>
-            <Identicon value={networkAddress} size={24} theme='polkadot' />
+            <Identicon value={networkAddress} size={24} theme='polkadot' className='iden-icon' />
           </CopyAddressTooltip>
         </div>
         <div className='selectable-account-card__info'>
