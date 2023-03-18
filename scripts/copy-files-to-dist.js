@@ -4,26 +4,30 @@ const path = require('path');
 const filesToCopy = ['package.json', 'README.md', 'LICENSE'];
 const targetDir = 'dist';
 
-if (!fs.existsSync(targetDir)) {
-  return;
-}
-
-const currentDir = process.cwd();
-
-filesToCopy.forEach((file) => {
-  const filePath = path.join(currentDir, file);
-  if (!fs.existsSync(filePath)) {
+const main = () => {
+  if (!fs.existsSync(targetDir)) {
     return;
   }
 
-  let fileContent = fs.readFileSync(filePath, { encoding: 'utf8' });
+  const currentDir = process.cwd();
 
-  if (file === 'package.json') {
-    const pkgJson = JSON.parse(fileContent);
-    pkgJson.main = 'index.js';
+  filesToCopy.forEach((file) => {
+    const filePath = path.join(currentDir, file);
+    if (!fs.existsSync(filePath)) {
+      return;
+    }
 
-    fileContent = JSON.stringify(pkgJson, null, 2);
-  }
+    let fileContent = fs.readFileSync(filePath, { encoding: 'utf8' });
 
-  fs.writeFileSync(path.join(currentDir, targetDir, file), fileContent);
-});
+    if (file === 'package.json') {
+      const pkgJson = JSON.parse(fileContent);
+      pkgJson.main = 'index.js';
+
+      fileContent = JSON.stringify(pkgJson, null, 2);
+    }
+
+    fs.writeFileSync(path.join(currentDir, targetDir, file), fileContent);
+  });
+};
+
+main();

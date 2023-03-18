@@ -12,14 +12,14 @@
     "build": "yarn clean && npx lerna run build",
     "clean": "npx lerna run clean",
     "test": "npx lerna run --no-bail --verbose test",
-    "prettify": "npx prettier --write .",
+    "prettify": "npx prettier --write \"{packages,scripts}/{**/*,*}.{js,ts,jsx,tsx,json}\"",
     "version": "yarn generate-package-info-file",
     "prepublishOnly": "yarn copy-files-to-dist",
     "generate-package-info-file": "lerna exec -- node \\$LERNA_ROOT_PATH/scripts/generate-package-info-file.js",
     "copy-files-to-dist": "lerna exec -- node \\$LERNA_ROOT_PATH/scripts/copy-files-to-dist.js"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "jsdom": "^21.1.0",
     "lerna": "^6.5.1",
     "prettier": "^2.8.4",
