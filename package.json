@@ -15,7 +15,7 @@
     "prettify": "npx prettier --write \"{packages,scripts}/{**/*,*}.{js,ts,jsx,tsx,json}\"",
     "version": "yarn generate-package-info-file",
     "prepublishOnly": "yarn copy-files-to-dist",
-    "prepare": "husky install",
+    "postinstall": "husky install",
     "generate-package-info-file": "lerna exec -- node \\$LERNA_ROOT_PATH/scripts/generate-package-info-file.js",
     "copy-files-to-dist": "lerna exec -- node \\$LERNA_ROOT_PATH/scripts/copy-files-to-dist.js"
   },
