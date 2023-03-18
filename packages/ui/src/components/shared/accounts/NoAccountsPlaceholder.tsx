@@ -10,7 +10,7 @@ const NoAccountsPlaceholder: FC<NoAccountsPlaceholder> = ({ query }) => {
   const newAccountButton = document.querySelector<HTMLButtonElement>('button.new-account-btn');
 
   return (
-    <div className='text-gray-500 mt-6 mb-12 text-center'>
+    <div className='text-gray-500 dark:text-gray-200 mt-6 mb-12 text-center'>
       {query ? (
         <span>
           No accounts meet search query: <strong>{query}</strong>
