@@ -6,7 +6,7 @@ import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { LoadingButton } from '@mui/lab';
 import { Button, Checkbox, FormControlLabel, FormGroup, styled } from '@mui/material';
 import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
-import { useWalletState } from 'contexts/WalletStateContext';
+import { useWalletState } from 'providers/WalletStateProvider';
 import { appActions } from 'redux/slices/app';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';

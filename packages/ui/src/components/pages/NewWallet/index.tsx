@@ -6,7 +6,7 @@ import BackupSecretRecoveryPhrase from 'components/pages/NewWallet/BackupSecretR
 import ChooseWalletPassword from 'components/pages/NewWallet/ChooseWalletPassword';
 import ConfirmWalletPassword from 'components/pages/NewWallet/ConfirmWalletPassword';
 import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
-import { useWalletState } from 'contexts/WalletStateContext';
+import { useWalletState } from 'providers/WalletStateProvider';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 

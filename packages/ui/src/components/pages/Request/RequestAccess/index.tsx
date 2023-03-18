@@ -6,7 +6,7 @@ import { Button } from '@mui/material';
 import AccountsSelection from 'components/pages/Request/RequestAccess/AccountsSelection';
 import SetupWalletButton from 'components/pages/Request/RequestAccess/SetupWalletButton';
 import { RequestProps } from 'components/pages/Request/types';
-import { useWalletState } from 'contexts/WalletStateContext';
+import { useWalletState } from 'providers/WalletStateProvider';
 import { RootState } from 'redux/store';
 
 const RequestAccess: FC<RequestProps> = ({ className = '', message }) => {

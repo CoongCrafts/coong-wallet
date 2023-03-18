@@ -4,11 +4,11 @@ import { RouterProvider } from 'react-router-dom';
 import { useEffectOnce } from 'react-use';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import SplashScreen from 'components/pages/SplashScreen';
+import { useWalletState } from 'providers/WalletStateProvider';
 import { appActions } from 'redux/slices/app';
 import { RootState } from 'redux/store';
 import router from 'router';
 import { Props } from 'types';
-import { useWalletState } from './contexts/WalletStateContext';
 
 const App: FC<Props> = () => {
   const { keyring } = useWalletState();

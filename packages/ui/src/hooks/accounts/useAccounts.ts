@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffectOnce } from 'react-use';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { AccountInfo } from '@coong/keyring/types';
-import { useWalletState } from 'contexts/WalletStateContext';
+import { useWalletState } from 'providers/WalletStateProvider';
 import { accountsActions } from 'redux/slices/accounts';
 import { RootState } from 'redux/store';
 import { AccountInfoExt } from 'types';

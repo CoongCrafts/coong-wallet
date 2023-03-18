@@ -14,7 +14,7 @@ import {
   IconButton,
   TextField,
 } from '@mui/material';
-import { useWalletState } from 'contexts/WalletStateContext';
+import { useWalletState } from 'providers/WalletStateProvider';
 import { Props } from 'types';
 
 interface NewAccountButtonProps extends Props {

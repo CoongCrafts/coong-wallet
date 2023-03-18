@@ -9,8 +9,8 @@ import { Button, TextField } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
 import RequestDetails from 'components/pages/Request/RequestTransactionApproval/RequestDetails';
 import { RequestProps } from 'components/pages/Request/types';
-import { useWalletState } from 'contexts/WalletStateContext';
 import useThrowError from 'hooks/useThrowError';
+import { useWalletState } from 'providers/WalletStateProvider';
 import { RootState } from 'redux/store';
 import { AccountInfoExt } from 'types';
 

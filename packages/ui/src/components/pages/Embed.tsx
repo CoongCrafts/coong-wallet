@@ -4,7 +4,7 @@ import { isWalletRequest, newWalletErrorResponse, newWalletResponse, newWalletSi
 import { WalletRequestMessage, WalletResponse, WalletSignal } from '@coong/base/types';
 import { styled } from '@mui/material';
 import CoongTextLogo from 'components/shared/misc/CoongTextLogo';
-import { useWalletState } from 'contexts/WalletStateContext';
+import { useWalletState } from 'providers/WalletStateProvider';
 import { Props } from 'types';
 import { isInsideIframe, topWindow } from 'utils/browser';
 import { walletInfo } from 'walletInfo';

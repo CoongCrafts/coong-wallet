@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Lock } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
-import { useWalletState } from 'contexts/WalletStateContext';
+import { useWalletState } from 'providers/WalletStateProvider';
 import { appActions } from 'redux/slices/app';
 import { RootState } from 'redux/store';
 import { Props } from 'types';

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import { IconButton } from '@mui/material';
-import { useWalletState } from 'contexts/WalletStateContext';
+import { useWalletState } from 'providers/WalletStateProvider';
 import { persistor, RootState } from 'redux/store';
 import { Props } from 'types';
 

@@ -7,7 +7,7 @@ import { WalletRequestMessage, WalletResponse, WalletSignal } from '@coong/base/
 import { CoongError, ErrorCode, getErrorMessage } from '@coong/utils';
 import InvalidRequest from 'components/pages/Request/InvalidRequest';
 import RequestContent from 'components/pages/Request/RequestContent';
-import { useWalletState } from 'contexts/WalletStateContext';
+import { useWalletState } from 'providers/WalletStateProvider';
 import { Props } from 'types';
 import { isChildTabOrPopup, openerWindow } from 'utils/browser';
 import { walletInfo } from 'walletInfo';
