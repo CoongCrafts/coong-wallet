@@ -17,14 +17,6 @@ export const globalStyles = css`
     display: flow-root;
   }
 
-  .dark {
-    .iden-icon {
-      circle:first-child {
-        fill: #585858;
-      }
-    }
-  }
-
   ::selection {
     background-color: rgba(79, 170, 245, 0.3);
   }
@@ -79,5 +71,14 @@ export const globalStyles = css`
 
   h6 {
     font-size: 1rem;
+  }
+
+  // DARK MODE
+  body.dark {
+    .ui--IdentityIcon {
+      svg circle:first-child {
+        fill: #585858;
+      }
+    }
   }
 `;

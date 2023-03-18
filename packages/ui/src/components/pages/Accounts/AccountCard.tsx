@@ -18,7 +18,7 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account }) => {
       className={`${className} account-card transition-colors duration-200 border border-black/10 dark:border-white/15 `}>
       <div className='account-card--icon'>
         <CopyAddressTooltip address={networkAddress} name={name}>
-          <Identicon value={networkAddress} size={36} theme='polkadot' className='iden-icon' />
+          <Identicon value={networkAddress} size={36} theme='polkadot' />
         </CopyAddressTooltip>
       </div>
       <div>
