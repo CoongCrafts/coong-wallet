@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { Container, styled } from '@mui/material';
 import LockWalletButton from 'components/shared/LockWalletButton';
 import ResetWalletButton from 'components/shared/ResetWalletButton';
+import SettingsWalletButton from 'components/shared/SettingsWalletButton';
 import CoongTextLogo from 'components/shared/misc/CoongTextLogo';
 import { Props } from 'types';
 
@@ -13,7 +14,7 @@ interface MainLayoutProps extends Props {
 const MainLayout: React.FC<MainLayoutProps> = ({ className = '', headerActions }: MainLayoutProps) => {
   return (
     <div className={className}>
-      <header className='main-header'>
+      <header className='main-header border-b border-black/10 dark:bg-header-dark dark:border-white/15'>
         <Container maxWidth='sm'>
           <div className='main-header__inner'>
             <CoongTextLogo />
@@ -21,6 +22,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ className = '', headerActions }
               <div className='main-header__actions'>
                 {!import.meta.env.PROD && <ResetWalletButton />}
                 <LockWalletButton />
+                <SettingsWalletButton />
               </div>
             )}
           </div>
@@ -37,8 +39,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ className = '', headerActions }
 
 export default styled(MainLayout)`
   .main-header {
-    color: #fff;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
     z-index: 1000;

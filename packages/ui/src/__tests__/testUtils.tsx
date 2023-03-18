@@ -6,13 +6,12 @@ import { ToastContainer } from 'react-toastify';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { AUTHORIZED_ACCOUNTS_KEY, AuthorizedApps } from '@coong/base/requests/WalletState';
 import Keyring from '@coong/keyring';
-import { ThemeProvider } from '@mui/material';
 import { PreloadedState } from '@reduxjs/toolkit';
 import userEvent from '@testing-library/user-event';
 import { Options } from '@testing-library/user-event/options';
 import { WalletStateProvider } from 'contexts/WalletStateContext';
+import ThemeProvider from 'providers/ThemeProvider';
 import { newStore } from 'redux/store';
-import light from 'themes/light';
 import { Props } from 'types';
 import { ALERT_TIMEOUT } from 'utils/constants';
 
@@ -25,7 +24,7 @@ const Wrapper: FC<WrapperProps> = ({ children, preloadedState }) => {
 
   return (
     <Provider store={store}>
-      <ThemeProvider theme={light}>
+      <ThemeProvider>
         <WalletStateProvider>
           {children}
           <ToastContainer

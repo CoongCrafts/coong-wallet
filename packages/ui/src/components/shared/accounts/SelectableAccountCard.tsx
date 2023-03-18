@@ -31,13 +31,13 @@ const SelectableAccountCard: FC<SelectableAccountCardProps> = ({ className = '',
   return (
     <div
       id={networkAddress}
-      className={`${className} selectable-account-card ${selected ? 'selected' : ''}`}
+      className={`${className} selectable-account-card ${selected ? 'selected' : ''} dark:border-white/15`}
       onClick={doSelect}
       role='button'>
       <div className='selectable-account-card__left'>
         <div className='selectable-account-card__icon'>
           <CopyAddressTooltip address={networkAddress} name={name}>
-            <Identicon value={networkAddress} size={24} theme='polkadot' />
+            <Identicon value={networkAddress} size={24} theme='polkadot' className='iden-icon' />
           </CopyAddressTooltip>
         </div>
         <div className='selectable-account-card__info'>

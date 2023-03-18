@@ -3,6 +3,7 @@ import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, R
 import storage from 'redux-persist/lib/storage';
 import accountsSlice from 'redux/slices/accounts';
 import appSlice from 'redux/slices/app';
+import settingSlice from 'redux/slices/settings';
 import setupWalletSlice from 'redux/slices/setup-wallet';
 
 const appPersistConfig = {
@@ -11,10 +12,17 @@ const appPersistConfig = {
   whitelist: ['locked', 'lastUsedAt', 'addressPrefix'],
 };
 
+const settingPersistConfig = {
+  key: 'settings',
+  storage: storage,
+  whitelist: ['themeMode'],
+};
+
 const rootReducer = combineReducers({
   [appSlice.name]: persistReducer(appPersistConfig, appSlice.reducer),
   [setupWalletSlice.name]: setupWalletSlice.reducer,
   [accountsSlice.name]: accountsSlice.reducer,
+  [settingSlice.name]: persistReducer(settingPersistConfig, settingSlice.reducer),
 });
 
 export const newStore = (preloadedState?: PreloadedState<any>) => {
