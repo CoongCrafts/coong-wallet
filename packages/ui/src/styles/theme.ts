@@ -1,6 +1,6 @@
 import { createTheme, PaletteMode } from '@mui/material';
 
-const newTheme = (mode: PaletteMode) =>
+export const newTheme = (mode: PaletteMode) =>
   createTheme({
     breakpoints: {
       values: {
@@ -64,5 +64,3 @@ const newTheme = (mode: PaletteMode) =>
       },
     },
   });
-
-export default newTheme;

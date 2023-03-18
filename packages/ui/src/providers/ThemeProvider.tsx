@@ -1,8 +1,8 @@
 import { FC, useEffect, useMemo } from 'react';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material';
 import useThemeMode from 'hooks/useThemeMode';
+import { newTheme } from 'styles/theme';
 import { Props, ThemeMode } from 'types';
-import newTheme from '../themes';
 
 const ThemeProvider: FC<Props> = ({ children }) => {
   const themeMode = useThemeMode();

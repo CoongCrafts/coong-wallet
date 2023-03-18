@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
-import 'tailwind.css';
+import 'react-toastify/dist/ReactToastify.css';
+import 'styles/tailwind.css';
 
 export const globalStyles = css`
   // Fix border style when disable Tailwind prelight-mode
