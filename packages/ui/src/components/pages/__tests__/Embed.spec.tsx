@@ -1,5 +1,13 @@
 import { newWalletErrorResponse, newWalletRequest, newWalletResponse, WalletState } from '@coong/base';
-import { waitFor, initializeKeyring, PASSWORD, render, RouterWrapper, screen, setupAuthorizedApps } from '__tests__/testUtils';
+import {
+  waitFor,
+  initializeKeyring,
+  PASSWORD,
+  render,
+  RouterWrapper,
+  screen,
+  setupAuthorizedApps,
+} from '__tests__/testUtils';
 import { Mock } from 'vitest';
 import Embed from '../Embed';
 

@@ -11,7 +11,7 @@
       "@coong/keyring": ["../../keyring/src"],
       "@coong/keyring/*": ["../../keyring/src/*"],
       "@coong/utils": ["../../utils/src"],
-      "@coong/utils/*": ["../../utils/src/*"],
+      "@coong/utils/*": ["../../utils/src/*"]
     },
     "types": ["vitest/globals"]
   },

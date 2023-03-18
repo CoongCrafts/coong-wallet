@@ -13,5 +13,5 @@ export default function useThemeMode() {
     }
 
     return themeMode;
-  }, [themeMode]) 
+  }, [themeMode]);
 }
