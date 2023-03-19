@@ -200,8 +200,8 @@ describe('RequestAccess', () => {
 
       expect(await screen.findByRole('dialog')).toBeVisible();
       expect(await screen.findByText(/Set up new wallet/)).toBeVisible();
-      expect(await screen.findByRole('button', { name: /Create new wallet/ })).toBeVisible();
-      expect(await screen.findByRole('button', { name: /Restore existing wallet/ })).toBeDisabled();
+      expect(await screen.findByRole('button', { name: /Create New wallet/ })).toBeVisible();
+      expect(await screen.findByRole('button', { name: /Restore Existing wallet/ })).toBeDisabled();
     });
   });
 });
