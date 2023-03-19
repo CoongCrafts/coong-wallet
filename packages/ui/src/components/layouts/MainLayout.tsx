@@ -6,6 +6,7 @@ import ResetWalletButton from 'components/shared/ResetWalletButton';
 import SettingsWalletButton from 'components/shared/SettingsWalletButton';
 import CoongTextLogo from 'components/shared/misc/CoongTextLogo';
 import { Props } from 'types';
+import MainFooter from './MainFooter';
 
 interface MainLayoutProps extends Props {
   headerActions?: boolean;
@@ -33,6 +34,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ className = '', headerActions }
           <Outlet />
         </Container>
       </main>
+      <MainFooter />
     </div>
   );
 };
