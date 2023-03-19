@@ -8,7 +8,7 @@ Coong Wallet
 </h1>
 
 <p align="center">
-A website-based multichain crypto wallet for <a href="https://polkadot.network/">Polkadot</a> & <a href="https://kusama.network/">Kusama</a> ecosystem
+A website-based multi-chain crypto wallet for <a href="https://polkadot.network/">Polkadot</a> & <a href="https://kusama.network/">Kusama</a> ecosystem
 <p>
 
 <p align="center">

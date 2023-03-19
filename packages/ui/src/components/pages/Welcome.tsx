@@ -24,20 +24,21 @@ const Welcome: React.FC<WelcomeProps> = ({ className = '', onCreateNewWallet }) 
       <div className='welcome'>
         <h1>Welcome to Coong</h1>
         <p className='text-2xl'>
-          A multichain crypto wallet
+          A multi-chain crypto wallet
           <br />
           for <strong>Polkadot & Kusama</strong> ecosystem
         </p>
       </div>
       <div className='mt-8'>
-        <h4 className='mb-4'>Set up your Coong wallet now</h4>
+        <h4 className='mb-4'>Set up your Coong Wallet now</h4>
 
         <div className='flex flex-col gap-4 items-center'>
           <Button size='large' className='min-w-[270px]' onClick={doCreateNewWallet}>
-            Create new wallet
+            Create New Wallet
           </Button>
           <Button size='large' className='min-w-[270px]' variant='outlined' onClick={doRestoreWallet} disabled={true}>
-            <span className='pr-1'>Restore existing wallet</span> <small>(Coming soon)</small>
+            <span className='whitespace-nowrap pr-1'>Restore Existing Wallet</span>{' '}
+            <small className='whitespace-nowrap'>(Coming soon)</small>
           </Button>
         </div>
       </div>
