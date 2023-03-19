@@ -14,7 +14,6 @@ module.exports = {
     extend: {
       colors: {
         primary: '#1A88DB',
-        'header-dark': '#292929',
       },
       opacity: {
         15: '.15',
