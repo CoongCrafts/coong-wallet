@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import { Tooltip } from '@mui/material';
+import i18next from 'i18next';
 import { Props } from 'types';
 import { isTouchDevice } from 'utils/device';
 
@@ -10,8 +11,8 @@ interface AddressCopiedTooltipProps extends Props {
 }
 
 const touchDevice = isTouchDevice();
-const CLICK_TO_COPY = 'Click to copy address';
-const ADDRESS_COPIED = 'Address copied!';
+const CLICK_TO_COPY = i18next.t<string>('Click to copy address');
+const ADDRESS_COPIED = i18next.t<string>('Address copied!');
 
 const CopyAddressTooltip: FC<AddressCopiedTooltipProps> = ({ address, name, children }) => {
   const [_, copyToClipboard] = useCopyToClipboard();

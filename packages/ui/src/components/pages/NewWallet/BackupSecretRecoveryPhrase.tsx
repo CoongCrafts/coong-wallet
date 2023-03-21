@@ -1,4 +1,5 @@
 import { ChangeEvent, FC, FormEvent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useEffectOnce } from 'react-use';
@@ -24,6 +25,7 @@ const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ class
   const [checked, setChecked] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>();
   const [secretPhrase, setSecretPhrase] = useState<string>();
+  const { t } = useTranslation();
 
   useEffectOnce(() => {
     setSecretPhrase(generateMnemonic(12));
@@ -40,7 +42,7 @@ const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ class
       }
 
       await keyring.initialize(secretPhrase!, password);
-      await keyring.createNewAccount('My first account', password);
+      await keyring.createNewAccount(t<string>('My first account'), password);
 
       dispatch(appActions.seedReady());
       dispatch(appActions.unlock());
@@ -63,23 +65,23 @@ const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ class
 
   return (
     <div className={className}>
-      <h3>Finally, back up your secret recovery phrase</h3>
-      <p className='mb-4'>Write down the below 12 words and keep it in a safe place.</p>
+      <h3>{t<string>('Finally, back up your secret recovery phrase')}</h3>
+      <p className='mb-4'>{t<string>('Write down the below 12 words and keep it in a safe place.')}</p>
 
       <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={doSetupWallet}>
         <div className='secret-phrase-box dark:bg-white/15'>{secretPhrase}</div>
         <FormGroup>
           <FormControlLabel
             control={<Checkbox checked={checked} onChange={handleCheckbox} disabled={loading} />}
-            label='I have backed up my recovery phrase'
+            label={t<string>('I have backed up my recovery phrase')}
           />
         </FormGroup>
         <div className='flex flex-row gap-4'>
           <Button variant='text' onClick={back} disabled={loading}>
-            Back
+            {t<string>('Back')}
           </Button>
           <LoadingButton type='submit' fullWidth disabled={!checked} loading={loading} variant='contained' size='large'>
-            Finish
+            {t<string>('Finish')}
           </LoadingButton>
         </div>
       </form>

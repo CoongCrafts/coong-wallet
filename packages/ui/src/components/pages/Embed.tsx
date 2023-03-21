@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useEffectOnce } from 'react-use';
 import { isWalletRequest, newWalletErrorResponse, newWalletResponse, newWalletSignal } from '@coong/base';
 import { WalletRequestMessage, WalletResponse, WalletSignal } from '@coong/base/types';
@@ -11,11 +12,12 @@ import { walletInfo } from 'walletInfo';
 
 const Embed: FC<Props> = ({ className = '' }: Props) => {
   const { handleWalletRequest } = useWalletState();
+  const { t } = useTranslation();
   const loadedInsideIframe = isInsideIframe() && !!topWindow();
 
   useEffectOnce(() => {
     if (!loadedInsideIframe) {
-      console.error('This page should be loaded inside an iframe!');
+      console.error(t<string>('This page should be loaded inside an iframe!'));
       return;
     }
 
@@ -59,9 +61,9 @@ const Embed: FC<Props> = ({ className = '' }: Props) => {
   return (
     <div className={className}>
       <CoongTextLogo />
-      <h2>Welcome to Coong Wallet!</h2>
-      <h3>This page should be loaded inside an iframe!</h3>
-      <p>If you open this page by accident, it's safe to close it now.</p>
+      <h2>{t<string>('Welcome to Coong Wallet!')}</h2>
+      <h3>{t<string>('This page should be loaded inside an iframe!')}</h3>
+      <p>{t<string>("If you open this page by accident, it's safe to close it now.")}</p>
     </div>
   );
 };

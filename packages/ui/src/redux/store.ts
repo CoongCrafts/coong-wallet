@@ -15,7 +15,7 @@ const appPersistConfig = {
 const settingPersistConfig = {
   key: 'settings',
   storage: storage,
-  whitelist: ['themeMode'],
+  whitelist: ['themeMode', 'language'],
 };
 
 const rootReducer = combineReducers({

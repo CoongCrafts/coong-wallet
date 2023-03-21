@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useToggle } from 'react-use';
 import { Close } from '@mui/icons-material';
@@ -11,6 +12,7 @@ import { Props } from 'types';
 const SetupWalletButton: FC<Props> = ({ className = '' }) => {
   const [open, toggleOpen] = useToggle(false);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const doOpen = () => {
     toggleOpen(true);
@@ -24,13 +26,13 @@ const SetupWalletButton: FC<Props> = ({ className = '' }) => {
   return (
     <>
       <Button size='large' onClick={doOpen} className={className}>
-        Set up wallet
+        {t<string>('Set up wallet')}
       </Button>
       <Dialog open={open} onClose={doClose} fullScreen={true}>
         <AppBar position='relative'>
           <Container maxWidth='sm' disableGutters>
             <Toolbar>
-              <h5 className='mb-0 flex-1'>Set up new wallet</h5>
+              <h5 className='mb-0 flex-1'>{t<string>('Set up new wallet')}</h5>
               <IconButton edge='start' color='inherit' onClick={doClose} aria-label='close'>
                 <Close />
               </IconButton>
