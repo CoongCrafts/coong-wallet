@@ -6,6 +6,29 @@ import TabInstance from './wallet/TabInstance';
 
 const DEFAULT_WALLET_URL = 'https://app.coongwallet.io';
 
+/**
+ * @name CoongSdk
+ * @description A helper to initialize/inject Coong Wallet API
+ * and interact with wallet instances (tab/embed)
+ *
+ * ## Initialize & interact with Coong Wallet
+ *
+ * ```javascript
+ * import CoongSdk from '@coong/sdk';
+ *
+ *
+ * const initializeCoongWallet = async () => {
+ *   // Inject Coong Wallet API
+ *   await CoongSdk.instance().initialize();
+ *
+ *   // We can now interact with the wallet using the similar Polkadot{.js} extension API
+ *   const coongInjected = await window['injectedWeb3']['coongwallet'].enable('Awesome Dapp');
+ *   const approvedAccounts = await coongInjected.accounts.get();
+ * }
+ *
+ * initializeCoongWallet();
+ * ```
+ */
 export default class CoongSdk {
   static #instance: CoongSdk;
   #embedInstance?: EmbedInstance;
@@ -25,6 +48,11 @@ export default class CoongSdk {
     return this.#instance;
   }
 
+  /**
+   * Initialize & inject wallet API
+   *
+   * @param walletUrl customize wallet url, by default the SDK will connect to the official url defined at `DEFAULT_WALLET_URL`
+   */
   async initialize(walletUrl?: string) {
     assert(typeof window !== 'undefined', 'Coong SDK only works in browser environment!');
     assertFalse(this.#initialized, 'Coong Sdk is already initialized!');
@@ -70,6 +98,11 @@ export default class CoongSdk {
     await this.openWalletWindow(`/request?${params.toString()}`);
   }
 
+  /**
+   * Send a message to wallet instance (embed or tab) based on the request name
+   *
+   * @param message
+   */
   async sendMessageToWallet(message: WalletRequestMessage) {
     const { type, request } = message;
     assert(type === MessageType.REQUEST && request, 'Invalid message format');
@@ -85,6 +118,9 @@ export default class CoongSdk {
     }
   }
 
+  /**
+   * Making sure the wallet has been initialized, else an error will be thrown out
+   */
   ensureSdkInitialized() {
     assert(this.#initialized, 'CoongSdk has not been initialized!');
   }
