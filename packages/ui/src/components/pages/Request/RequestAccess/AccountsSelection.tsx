@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, styled } from '@mui/material';
 import NewAccountButton from 'components/shared/NewAccountButton';
@@ -54,9 +54,13 @@ const AccountsSelection: FC<Props> = ({ className }) => {
       </div>
       <div className='accounts-selection--bottom' data-testid='number-of-selected-accounts'>
         <div>
-          <span>
-            <Trans values={{ count: selectedAccounts.length }}>Accounts selected</Trans>
-          </span>
+          {selectedAccounts.length ? (
+            <span>
+              <strong>{selectedAccounts.length}</strong> {t<string>('account(s) selected')}
+            </span>
+          ) : (
+            <span>{t<string>('No accounts selected')}</span>
+          )}
         </div>
         <NewAccountButton onCreated={(account) => setTimeout(() => setNewAccount(account))} />
       </div>

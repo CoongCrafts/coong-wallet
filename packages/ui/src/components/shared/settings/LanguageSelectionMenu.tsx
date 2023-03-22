@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import { Button, Menu, MenuItem } from '@mui/material';
-import { settingActions } from 'redux/slices/settings';
+import { settingsActions } from 'redux/slices/settings';
 import { RootState } from 'redux/store';
 import { Language, Props } from 'types';
 
@@ -18,7 +18,7 @@ const LanguageSelectionMenu: FC<Props> = () => {
 
   const switchLanguage = (language: Language) => {
     setAnchorEl(null);
-    dispatch(settingActions.switchLanguage(language));
+    dispatch(settingsActions.switchLanguage(language));
   };
 
   const handleClose = () => setAnchorEl(null);

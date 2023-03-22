@@ -24,5 +24,5 @@ const settingsSlice = createSlice({
   },
 });
 
-export const settingActions = settingsSlice.actions;
+export const settingsActions = settingsSlice.actions;
 export default settingsSlice;
