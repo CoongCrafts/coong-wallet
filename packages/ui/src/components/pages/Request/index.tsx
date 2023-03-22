@@ -19,8 +19,8 @@ const Request: FC<Props> = ({ className = '' }) => {
   const { t } = useTranslation();
 
   if (!isChildTabOrPopup()) {
-    console.error(t<string>('This page should not be open directly!'));
-    throw new CoongError(ErrorCode.UnknownRequestOrigin);
+    console.error('This page should not be open directly!');
+    throw new CoongError(t(ErrorCode.UnknownRequestOrigin));
   }
 
   useEffectOnce(() => {
@@ -38,7 +38,7 @@ const Request: FC<Props> = ({ className = '' }) => {
     const message = JSON.parse(searchParams.get('message')!) as WalletRequestMessage;
 
     if (!isWalletRequest(message)) {
-      throw new CoongError(ErrorCode.InvalidMessageFormat);
+      throw new CoongError(t(ErrorCode.InvalidMessageFormat));
     }
 
     const { origin, id } = message;
