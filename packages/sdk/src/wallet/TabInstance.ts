@@ -3,6 +3,11 @@ import { WalletSignal, WalletSignalMessage } from '@coong/base/types';
 import { StandardCoongError } from '@coong/utils';
 import WalletInstance from './WalletInstance';
 
+/**
+ * @name TabInstance
+ * @description Represent a tab instance of the wallet loaded inside a browser tab or popup,
+ * we can interact with the instance after calling `openWalletWindow` via the `walletWindow` object
+ */
 export default class TabInstance extends WalletInstance {
   async openWalletWindow(path = ''): Promise<Window> {
     this.registerEvent();

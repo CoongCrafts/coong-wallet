@@ -3,6 +3,11 @@ import { CoongError, ErrorCode } from '@coong/utils';
 import { RequestAuthorizedAccounts, RequestName, WalletRequestMessage, WalletResponse } from '../types';
 import Handler from './Handler';
 
+/**
+ * @name EmbedHandler
+ * @description Handler for wallet requests from an embed wallet instance
+ * @see packages/sdk/src/wallet/EmbedInstance.ts
+ */
 export default class EmbedHandler extends Handler {
   async authorizedAccounts(fromUrl: string, { anyType }: RequestAuthorizedAccounts): Promise<InjectedAccount[]> {
     const app = this.state.getAuthorizedApp(fromUrl);

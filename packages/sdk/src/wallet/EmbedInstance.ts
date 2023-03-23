@@ -2,6 +2,11 @@ import { compareWalletInfo } from '@coong/base';
 import { WalletSignal, WalletSignalMessage } from '@coong/base/types';
 import WalletInstance from './WalletInstance';
 
+/**
+ * @name EmbedInstance
+ * @description Represent an embed instance of the wallet loaded inside an iframe,
+ * we can interact with the instance after calling `initialize()` via the `walletWindow` object
+ */
 export default class EmbedInstance extends WalletInstance {
   async initialize() {
     this.registerEvent();
