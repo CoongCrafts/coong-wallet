@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import { PersistGate } from 'redux-persist/integration/react';
 import { CssBaseline, GlobalStyles } from '@mui/material';
 import App from 'App';
+import i18nInstance from 'i18n';
 import LanguageProvider from 'providers/LanguageProvider';
 import ThemeProvider from 'providers/ThemeProvider';
 import { WalletStateProvider } from 'providers/WalletStateProvider';
@@ -17,7 +18,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <LanguageProvider>
+        <LanguageProvider i18nInstance={i18nInstance}>
           <ThemeProvider>
             <WalletStateProvider>
               <CssBaseline />

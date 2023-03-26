@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useCopyToClipboard } from 'react-use';
 import { Tooltip } from '@mui/material';
-import i18next from 'i18next';
 import { Props } from 'types';
 import { isTouchDevice } from 'utils/device';
 
@@ -11,17 +11,16 @@ interface AddressCopiedTooltipProps extends Props {
 }
 
 const touchDevice = isTouchDevice();
-const CLICK_TO_COPY = i18next.t<string>('Click to copy address');
-const ADDRESS_COPIED = i18next.t<string>('Address copied!');
 
 const CopyAddressTooltip: FC<AddressCopiedTooltipProps> = ({ address, name, children }) => {
+  const { t } = useTranslation();
   const [_, copyToClipboard] = useCopyToClipboard();
   const [open, setOpen] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>(CLICK_TO_COPY);
+  const [title, setTitle] = useState<string>(t<string>('Click to copy address'));
 
   const doCopy = () => {
     copyToClipboard(address);
-    setTitle(ADDRESS_COPIED);
+    setTitle(t<string>('Address copied!'));
 
     if (touchDevice) {
       setOpen(true);
@@ -41,7 +40,7 @@ const CopyAddressTooltip: FC<AddressCopiedTooltipProps> = ({ address, name, chil
     );
   } else {
     const onOpen = () => {
-      setTitle(CLICK_TO_COPY);
+      setTitle(t<string>('Click to copy address'));
     };
 
     return (

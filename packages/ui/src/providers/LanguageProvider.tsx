@@ -1,19 +1,24 @@
 import { FC, useEffect } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import i18next from 'i18n';
+import { useAsync } from 'react-use';
+import { i18n } from 'i18next';
 import { changeLanguage } from 'i18next';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 
-const LanguageProvider: FC<Props> = ({ children }) => {
+interface LanguageProviderProps extends Props {
+  i18nInstance: i18n;
+}
+
+const LanguageProvider: FC<LanguageProviderProps> = ({ children, i18nInstance }) => {
   const { language } = useSelector((state: RootState) => state.settings);
 
-  useEffect(() => {
-    changeLanguage(language);
+  useAsync(async () => {
+    await changeLanguage(language);
   }, [language]);
 
-  return <I18nextProvider i18n={i18next}>{children}</I18nextProvider>;
+  return <I18nextProvider i18n={i18nInstance}>{children}</I18nextProvider>;
 };
 
 export default LanguageProvider;
