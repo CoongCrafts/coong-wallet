@@ -38,12 +38,13 @@ describe('SettingsWalletButton', () => {
       });
     });
 
-    it('should show the dialog when clicking the setting wallet button', async () => {
+    it('should show theme mode button and language selection when dialog open', async () => {
       expect(await screen.findByRole('dialog')).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /Dark/ })).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /Light/ })).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /System/ })).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /Close settings/ })).toBeInTheDocument();
+      expect(await screen.findByRole('button', { name: /English/ })).toBeInTheDocument();
     });
   });
 
