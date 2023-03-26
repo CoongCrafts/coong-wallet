@@ -15,7 +15,7 @@ const LanguageProvider: FC<LanguageProviderProps> = ({ children, i18nInstance })
   const { language } = useSelector((state: RootState) => state.settings);
 
   useAsync(async () => {
-    await changeLanguage(language);
+    await i18nInstance.changeLanguage(language);
   }, [language]);
 
   return <I18nextProvider i18n={i18nInstance}>{children}</I18nextProvider>;

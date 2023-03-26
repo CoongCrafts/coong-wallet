@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Dialog, DialogContent, DialogContentText, IconButton } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
-import LanguageSelectionMenu from 'components/shared/settings/LanguageSelectionMenu';
+import LanguageSelection from 'components/shared/settings/LanguageSelection';
 import ThemeModeButton from 'components/shared/settings/ThemeModeButton';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
@@ -31,7 +31,7 @@ const SettingsWalletButton: FC<Props> = () => {
           <DialogContentText className='mb-1'>{t<string>('Theme Mode')}</DialogContentText>
           <ThemeModeButton />
           <DialogContentText className='mb-1 mt-4'>{t<string>('Language')}</DialogContentText>
-          <LanguageSelectionMenu />
+          <LanguageSelection />
         </DialogContent>
       </Dialog>
     </>
