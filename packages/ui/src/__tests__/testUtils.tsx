@@ -9,6 +9,9 @@ import Keyring from '@coong/keyring';
 import { PreloadedState } from '@reduxjs/toolkit';
 import userEvent from '@testing-library/user-event';
 import { Options } from '@testing-library/user-event/options';
+import i18next from 'i18next';
+import Backend from 'i18next-http-backend';
+import LanguageProvider from 'providers/LanguageProvider';
 import ThemeProvider from 'providers/ThemeProvider';
 import { WalletStateProvider } from 'providers/WalletStateProvider';
 import { newStore } from 'redux/store';
@@ -19,25 +22,51 @@ interface WrapperProps extends Props {
   preloadedState?: PreloadedState<any>;
 }
 
+const i18nInstance = i18next.createInstance();
+i18nInstance.use(Backend).init({
+  fallbackLng: 'en',
+  returnEmptyString: false,
+  react: {
+    useSuspense: false,
+  },
+  backend: {
+    request: function (
+      options: any,
+      url: string,
+      payload: any,
+      callback: (err: null, res: { status: any; data: string }) => {},
+    ) {
+      import(`../../public/${url}`).then(({ default: resources }) => {
+        return callback(null, {
+          status: 200,
+          data: JSON.stringify(resources),
+        });
+      });
+    },
+  },
+});
+
 const Wrapper: FC<WrapperProps> = ({ children, preloadedState }) => {
   const store = newStore(preloadedState);
 
   return (
     <Provider store={store}>
-      <ThemeProvider>
-        <WalletStateProvider>
-          {children}
-          <ToastContainer
-            position='top-center'
-            closeOnClick
-            pauseOnHover
-            theme='colored'
-            autoClose={ALERT_TIMEOUT}
-            hideProgressBar
-            limit={2}
-          />
-        </WalletStateProvider>
-      </ThemeProvider>
+      <LanguageProvider i18nInstance={i18nInstance}>
+        <ThemeProvider>
+          <WalletStateProvider>
+            {children}
+            <ToastContainer
+              position='top-center'
+              closeOnClick
+              pauseOnHover
+              theme='colored'
+              autoClose={ALERT_TIMEOUT}
+              hideProgressBar
+              limit={2}
+            />
+          </WalletStateProvider>
+        </ThemeProvider>
+      </LanguageProvider>
     </Provider>
   );
 };
