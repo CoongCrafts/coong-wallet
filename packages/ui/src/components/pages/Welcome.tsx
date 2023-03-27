@@ -34,11 +34,11 @@ const Welcome: React.FC<WelcomeProps> = ({ className = '', onCreateNewWallet }) 
 
         <div className='flex flex-col gap-4 items-center'>
           <Button size='large' className='min-w-[270px]' onClick={doCreateNewWallet}>
-            {t<string>('Create new wallet')}
+            {t<string>('Create New Wallet')}
           </Button>
           <Button size='large' className='min-w-[270px]' variant='outlined' onClick={doRestoreWallet} disabled={true}>
-            <span className='pr-1'>{t<string>('Restore existing wallet')}</span>{' '}
-            <small>{`(${t<string>('Coming soon')})`}</small>
+            <span className='whitespace-nowrap pr-1'>{t<string>('Restore Existing Wallet')}</span>{' '}
+            <small className='whitespace-nowrap'>{`(${t<string>('Coming soon')})`}</small>
           </Button>
         </div>
       </div>

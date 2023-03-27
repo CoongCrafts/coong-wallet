@@ -6,6 +6,7 @@ import Request from '../index';
 
 beforeEach(() => {
   vi.spyOn(window, 'close').mockImplementation(() => vi.fn());
+  vi.spyOn(console, 'error').mockImplementation(() => vi.fn());
 });
 
 describe('Request', () => {

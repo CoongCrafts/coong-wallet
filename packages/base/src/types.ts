@@ -31,6 +31,7 @@ export interface ResponseAppRequestAccess {
   authorizedAccounts: string[];
 }
 
+// RequestName: [RequestBody, ResponseBody]
 export interface RequestSignatures {
   'tab/requestAccess': [RequestAppRequestAccess, ResponseAppRequestAccess];
   'tab/signRaw': [SignerPayloadRaw, ResponseSigning];

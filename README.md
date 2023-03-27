@@ -8,7 +8,7 @@ Coong Wallet
 </h1>
 
 <p align="center">
-A website-based multichain crypto wallet for <a href="https://polkadot.network/">Polkadot</a> & <a href="https://kusama.network/">Kusama</a> ecosystem
+A website-based multi-chain crypto wallet for <a href="https://polkadot.network/">Polkadot</a> & <a href="https://kusama.network/">Kusama</a> ecosystem
 <p>
 
 <p align="center">
@@ -17,6 +17,9 @@ A website-based multichain crypto wallet for <a href="https://polkadot.network/"
   <img src="https://img.shields.io/github/package-json/v/CoongCrafts/coong-wallet?filename=packages%2Fui%2Fpackage.json&style=flat-square"/>
 </p>
 
+<p align="center">
+  <img width="479" src="https://user-images.githubusercontent.com/6867026/227230786-0796214a-3e3f-42af-94e9-d4122c730b62.png">
+</p>
 
 ## What to expect from Coong Wallet?
 - No need for extra steps to install browser extensions or mobile apps, Coong Wallet is just a website running on your browser
@@ -76,7 +79,7 @@ Notes:
 ## Known issues
 1. Coong Wallet relies on the cross-tab/cross-origin communication mechanism via `window.postMessage` API to send messages from Dapp to Wallet (an iframe) to retrieve information in the wallet. So Coong will **not work properly** if you enable the setting `Block third-party cookies` on your browser. Though Coong does not use any cookies, but this will also disable/block access to website data (`localStorage`, `IndexedDB`, ...) of Coong instance loaded inside the iframe. **So for now, make sure to enable `Third-party cookies` setting on your browser to enjoy Coong Wallet.** Note: You should be good to go if you're using Google Chrome, since Chrome has the `Block third-party cookies` setting disabled by default.
 
-2. Coong Wallet uses the `window.open` API to open a wallet instance (browser tab) when dapps need to ask for permissions from users (e.g: Request to access wallet accounts, request to sign a transaction...), some browsers (Firebox, Safari, ...) will block this open popup API depending on various reasons, so you (users) need to allow dapp (browsers) to open popup of Coong Wallet when making these interactions (The browsers will ask for your consent to open Coong Wallet popup). Note: If you're using Chromium browsers (Chrome, Brave, Edge), you might not get into this issue.
+2. Coong Wallet uses the `window.open` API to open a wallet instance (a browser tab/window) when dapps need to ask for permissions from users (e.g: Request to access wallet accounts, request to sign a transaction...), some browsers (Firebox, Safari, ...) will block this open popup API depending on various reasons, so you (users) need to allow dapp (browsers) to open popup of Coong Wallet when making these interactions (The browsers will ask for your consent to open Coong Wallet popup). Note: If you're using Chromium browsers (Chrome, Brave, Edge), you might not get into this issue.
   
 ## License
 

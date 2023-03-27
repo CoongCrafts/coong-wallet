@@ -33,6 +33,11 @@ export function canDerive(type?: KeypairType): boolean {
   return !!type && ['ed25519', 'sr25519', 'ecdsa', 'ethereum'].includes(type);
 }
 
+/**
+ * @name WalletState
+ * @description Internal state of the wallet which abstracts away
+ * logic to interact with wallet via messages
+ */
 export default class WalletState {
   readonly #keyring: Keyring;
   #authorizedApps: AuthorizedApps = {};

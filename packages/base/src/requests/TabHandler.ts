@@ -3,6 +3,11 @@ import { CoongError, ErrorCode } from '@coong/utils';
 import { RequestName, WalletRequestMessage, WalletResponse } from '../types';
 import Handler from './Handler';
 
+/**
+ * @name TabHandler
+ * @description Handler for wallet requests from a tab wallet instance
+ * @see packages/sdk/src/wallet/TabInstance.ts
+ */
 export default class TabHandler extends Handler {
   async handle<TRequestName extends RequestName>(
     message: WalletRequestMessage<TRequestName>,
