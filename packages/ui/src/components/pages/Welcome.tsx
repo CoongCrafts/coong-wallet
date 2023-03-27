@@ -18,7 +18,7 @@ const Welcome: React.FC<WelcomeProps> = ({ className = '', onCreateNewWallet }) 
   };
 
   const doRestoreWallet = () => {
-    toast.info('Coming soon!');
+    toast.info(`${t<string>('Coming soon')}!`);
   };
 
   return (
@@ -38,7 +38,7 @@ const Welcome: React.FC<WelcomeProps> = ({ className = '', onCreateNewWallet }) 
           </Button>
           <Button size='large' className='min-w-[270px]' variant='outlined' onClick={doRestoreWallet} disabled={true}>
             <span className='pr-1'>{t<string>('Restore existing wallet')}</span>{' '}
-            <small>{t<string>('(Coming soon)')}</small>
+            <small>{`(${t<string>('Coming soon')})`}</small>
           </Button>
         </div>
       </div>

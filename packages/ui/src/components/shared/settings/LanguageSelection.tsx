@@ -9,15 +9,17 @@ import { Language, Props } from 'types';
 
 const LanguageSelection: FC<Props> = () => {
   const dispatch = useDispatch();
-  const { i18n } = useTranslation();
+  const {
+    i18n: { resolvedLanguage },
+  } = useTranslation();
   const { language } = useSelector((state: RootState) => state.settings);
-  const [loading, setLoading] = useState(i18n.resolvedLanguage !== language);
+  const [loading, setLoading] = useState(resolvedLanguage !== language);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
   useEffect(() => {
-    if (i18n.resolvedLanguage === language) setLoading(false);
-  }, [i18n.resolvedLanguage]);
+    if (resolvedLanguage === language) setLoading(false);
+  }, [resolvedLanguage]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -25,6 +27,7 @@ const LanguageSelection: FC<Props> = () => {
 
   const switchLanguage = (language: Language) => {
     setAnchorEl(null);
+    if (language === resolvedLanguage) return null;
     setLoading(true);
     dispatch(settingsActions.switchLanguage(language));
   };
@@ -33,12 +36,17 @@ const LanguageSelection: FC<Props> = () => {
 
   return (
     <>
-      <div className='flex items-center'>
-        <Button variant='contained' onClick={(e) => handleClick(e)} endIcon={<KeyboardArrowDown />} disabled={loading}>
+      <div className='flex items-center gap-2'>
+        <Button
+          variant='outlined'
+          onClick={handleClick}
+          endIcon={<KeyboardArrowDown />}
+          disabled={loading}
+          className='flex justify-between min-w-[50%] xs:min-w-[25%]'>
           {language === Language.English && 'English'}
           {language === Language.Vietnamese && 'Vietnamese'}
         </Button>
-        {loading && <CircularProgress size={20} thickness={8} className='ml-2' />}
+        {loading && <CircularProgress size={20} thickness={8} />}
       </div>
       <Menu open={open} anchorEl={anchorEl} onClose={() => handleClose()}>
         <MenuItem onClick={() => switchLanguage(Language.English)}>English</MenuItem>
