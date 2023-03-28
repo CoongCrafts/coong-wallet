@@ -61,7 +61,7 @@ describe('NewAccountButton', () => {
 
       await user.click(await screen.findByRole('button', { name: /Create/ }));
 
-      expect(await screen.findByText('PasswordIncorrect')).toBeInTheDocument();
+      expect(await screen.findByText('Password incorrect')).toBeInTheDocument();
     });
 
     it('should show validation error if account name is used', async () => {
@@ -78,7 +78,7 @@ describe('NewAccountButton', () => {
       const createButton = await screen.findByRole('button', { name: /Create/ });
       await user.click(createButton);
 
-      expect(await screen.findByText('AccountNameUsed')).toBeInTheDocument();
+      expect(await screen.findByText('Account name is already picked')).toBeInTheDocument();
     });
 
     it('should hide the dialog & call onCreated after creation', async () => {

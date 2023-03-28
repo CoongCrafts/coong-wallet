@@ -11,7 +11,6 @@ import { Language, Props } from 'types';
 
 const LanguageOptions: { [key in Language]: string } = {
   [Language.English]: 'English',
-  [Language.Vietnamese]: 'Tiếng Việt',
 };
 
 const LanguageSelection: FC<Props> = () => {

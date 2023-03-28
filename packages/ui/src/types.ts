@@ -19,5 +19,4 @@ export enum ThemeMode {
 
 export enum Language {
   English = 'en',
-  Vietnamese = 'vi',
 }

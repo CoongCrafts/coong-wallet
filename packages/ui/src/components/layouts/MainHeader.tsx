@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 import { Container, styled } from '@mui/material';
 import LockWalletButton from 'components/shared/LockWalletButton';
 import ResetWalletButton from 'components/shared/ResetWalletButton';
-import SettingsWalletButton from 'components/shared/SettingsWalletButton';
 import CoongTextLogo from 'components/shared/misc/CoongTextLogo';
+import SettingsWalletButton from 'components/shared/settings/SettingsWalletButton';
 import { Props } from 'types';
 
 interface MainLayoutProps extends Props {

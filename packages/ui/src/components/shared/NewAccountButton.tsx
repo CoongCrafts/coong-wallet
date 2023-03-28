@@ -52,7 +52,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
       onCreated && onCreated(newAccount);
       handleClose();
     } catch (e: any) {
-      toast.error(e.message);
+      toast.error(t<string>(e.message));
     }
   };
 

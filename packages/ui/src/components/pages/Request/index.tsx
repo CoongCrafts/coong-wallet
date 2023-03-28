@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
-import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { useEffectOnce } from 'react-use';
 import { isWalletRequest, newWalletErrorResponse, newWalletResponse, newWalletSignal } from '@coong/base';
@@ -16,11 +15,10 @@ import { walletInfo } from 'walletInfo';
 const Request: FC<Props> = ({ className = '' }) => {
   const [searchParams] = useSearchParams();
   const { handleWalletRequest } = useWalletState();
-  const { t } = useTranslation();
 
   if (!isChildTabOrPopup()) {
     console.error('This page should not be open directly!');
-    throw new CoongError(t(ErrorCode.UnknownRequestOrigin));
+    throw new CoongError(ErrorCode.UnknownRequestOrigin);
   }
 
   useEffectOnce(() => {
@@ -38,7 +36,7 @@ const Request: FC<Props> = ({ className = '' }) => {
     const message = JSON.parse(searchParams.get('message')!) as WalletRequestMessage;
 
     if (!isWalletRequest(message)) {
-      throw new CoongError(t(ErrorCode.InvalidMessageFormat));
+      throw new CoongError(ErrorCode.InvalidMessageFormat);
     }
 
     const { origin, id } = message;

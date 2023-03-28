@@ -133,7 +133,7 @@ describe('RequestTransactionApproval', () => {
       expect(approvalButton).toBeEnabled();
       await user.click(approvalButton);
 
-      expect(await screen.findByText('PasswordIncorrect')).toBeInTheDocument();
+      expect(await screen.findByText('Password incorrect')).toBeInTheDocument();
     });
 
     it('should post back message and close window for correct password', async () => {

@@ -21,7 +21,7 @@ const RequestAccess: FC<RequestProps> = ({ className = '', message }) => {
     try {
       walletState.approveRequestAccess(selectedAccounts.map((one) => one.address));
     } catch (e: any) {
-      toast.error(e.message);
+      toast.error(t<string>(e.message));
     }
   };
 
