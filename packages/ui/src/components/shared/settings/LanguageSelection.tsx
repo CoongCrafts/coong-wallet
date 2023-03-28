@@ -57,7 +57,9 @@ const LanguageSelection: FC<Props> = () => {
 
       <Menu open={open} anchorEl={anchorEl} onClose={() => handleClose()}>
         {Object.entries(LanguageOptions).map(([lang, label]) => (
-          <MenuItem onClick={() => switchLanguage(lang as Language)}>{label}</MenuItem>
+          <MenuItem key={lang} onClick={() => switchLanguage(lang as Language)}>
+            {label}
+          </MenuItem>
         ))}
       </Menu>
     </>
