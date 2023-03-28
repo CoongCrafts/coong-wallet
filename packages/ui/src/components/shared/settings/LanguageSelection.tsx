@@ -2,10 +2,17 @@ import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { KeyboardArrowDown } from '@mui/icons-material';
-import { Button, CircularProgress, Menu, MenuItem } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Menu, MenuItem } from '@mui/material';
 import { settingsActions } from 'redux/slices/settings';
 import { RootState } from 'redux/store';
 import { Language, Props } from 'types';
+import useThemeMode from '../../../hooks/useThemeMode';
+
+const LanguageOptions: { [key in Language]: string } = {
+  [Language.English]: 'English',
+  [Language.Vietnamese]: 'Tiếng Việt',
+};
 
 const LanguageSelection: FC<Props> = () => {
   const dispatch = useDispatch();
@@ -16,6 +23,7 @@ const LanguageSelection: FC<Props> = () => {
   const [loading, setLoading] = useState(resolvedLanguage !== language);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const { dark } = useThemeMode();
 
   useEffect(() => {
     if (resolvedLanguage === language) setLoading(false);
@@ -36,21 +44,21 @@ const LanguageSelection: FC<Props> = () => {
 
   return (
     <>
-      <div className='flex items-center gap-2'>
-        <Button
-          variant='outlined'
-          onClick={handleClick}
-          endIcon={<KeyboardArrowDown />}
-          disabled={loading}
-          className='flex justify-between min-w-[50%] xs:min-w-[25%]'>
-          {language === Language.English && 'English'}
-          {language === Language.Vietnamese && 'Vietnamese'}
-        </Button>
-        {loading && <CircularProgress size={20} thickness={8} />}
-      </div>
+      <LoadingButton
+        variant='outlined'
+        color={dark ? 'grayLight' : 'gray'}
+        onClick={handleClick}
+        endIcon={<KeyboardArrowDown />}
+        disabled={loading}
+        loading={loading}
+        className='flex justify-between xs:min-w-[200px] min-w-full'>
+        {LanguageOptions[language]}
+      </LoadingButton>
+
       <Menu open={open} anchorEl={anchorEl} onClose={() => handleClose()}>
-        <MenuItem onClick={() => switchLanguage(Language.English)}>English</MenuItem>
-        <MenuItem onClick={() => switchLanguage(Language.Vietnamese)}>Vietnamese</MenuItem>
+        {Object.entries(LanguageOptions).map(([lang, label]) => (
+          <MenuItem onClick={() => switchLanguage(lang as Language)}>{label}</MenuItem>
+        ))}
       </Menu>
     </>
   );

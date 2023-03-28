@@ -4,14 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
-import { ButtonGroup, Button, useMediaQuery, Theme } from '@mui/material';
+import { Button, ButtonGroup, Theme, useMediaQuery } from '@mui/material';
 import { settingsActions } from 'redux/slices/settings';
 import { RootState } from 'redux/store';
 import { Props, ThemeMode } from 'types';
+import useThemeMode from '../../../hooks/useThemeMode';
 
 const ThemeModeButton: FC<Props> = () => {
   const dispatch = useDispatch();
   const { themeMode } = useSelector((state: RootState) => state.settings);
+  const { dark } = useThemeMode();
   const xs = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
   const { t } = useTranslation();
 
@@ -19,24 +21,32 @@ const ThemeModeButton: FC<Props> = () => {
     dispatch(settingsActions.switchThemeMode(mode));
   };
 
+  const defaultColor = dark ? 'grayLight' : 'gray';
+
   return (
     <ButtonGroup orientation={xs ? 'vertical' : 'horizontal'} fullWidth>
       <Button
-        variant={themeMode == ThemeMode.Dark ? 'contained' : 'outlined'}
-        onClick={() => switchThemeMode(ThemeMode.Dark)}>
-        <DarkModeIcon className='mr-2' fontSize='small' />
+        variant='outlined'
+        color={themeMode == ThemeMode.Dark ? 'primary' : defaultColor}
+        onClick={() => switchThemeMode(ThemeMode.Dark)}
+        endIcon={<DarkModeIcon fontSize='small' />}
+        className='flex justify-between'>
         {t<string>('Dark')}
       </Button>
       <Button
-        variant={themeMode == ThemeMode.System ? 'contained' : 'outlined'}
-        onClick={() => switchThemeMode(ThemeMode.System)}>
-        <SettingsBrightnessIcon className='mr-2' fontSize='small' />
+        variant='outlined'
+        color={themeMode == ThemeMode.System ? 'primary' : defaultColor}
+        onClick={() => switchThemeMode(ThemeMode.System)}
+        endIcon={<SettingsBrightnessIcon fontSize='small' />}
+        className='flex justify-between'>
         {t<string>('System')}
       </Button>
       <Button
-        variant={themeMode == ThemeMode.Light ? 'contained' : 'outlined'}
-        onClick={() => switchThemeMode(ThemeMode.Light)}>
-        <LightModeIcon className='mr-2' fontSize='small' />
+        variant='outlined'
+        color={themeMode == ThemeMode.Light ? 'primary' : defaultColor}
+        onClick={() => switchThemeMode(ThemeMode.Light)}
+        endIcon={<LightModeIcon fontSize='small' />}
+        className='flex justify-between'>
         {t<string>('Light')}
       </Button>
     </ButtonGroup>

@@ -1,4 +1,7 @@
 import { createTheme, PaletteMode } from '@mui/material';
+import { grey } from '@mui/material/colors';
+
+const { palette } = createTheme();
 
 export const newTheme = (mode: PaletteMode) =>
   createTheme({
@@ -21,6 +24,8 @@ export const newTheme = (mode: PaletteMode) =>
       primary: {
         main: '#1A88DB',
       },
+      gray: palette.augmentColor({ color: { main: grey['700'] } }),
+      grayLight: palette.augmentColor({ color: { main: grey['300'] } }),
       ...(mode === 'dark' && {
         text: {
           primary: '#f0f0f0',
