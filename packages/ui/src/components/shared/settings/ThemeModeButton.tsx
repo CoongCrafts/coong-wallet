@@ -5,10 +5,10 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
 import { Button, ButtonGroup, Theme, useMediaQuery } from '@mui/material';
+import useThemeMode from 'hooks/useThemeMode';
 import { settingsActions } from 'redux/slices/settings';
 import { RootState } from 'redux/store';
 import { Props, ThemeMode } from 'types';
-import useThemeMode from '../../../hooks/useThemeMode';
 
 const ThemeModeButton: FC<Props> = () => {
   const dispatch = useDispatch();

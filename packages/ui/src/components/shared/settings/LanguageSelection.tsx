@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { Menu, MenuItem } from '@mui/material';
+import useThemeMode from 'hooks/useThemeMode';
 import { settingsActions } from 'redux/slices/settings';
 import { RootState } from 'redux/store';
 import { Language, Props } from 'types';
-import useThemeMode from '../../../hooks/useThemeMode';
 
 const LanguageOptions: { [key in Language]: string } = {
   [Language.English]: 'English',
