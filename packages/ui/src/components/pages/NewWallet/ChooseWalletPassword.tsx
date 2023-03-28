@@ -1,4 +1,5 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, TextField } from '@mui/material';
 import EmptySpace from 'components/shared/misc/EmptySpace';
@@ -9,11 +10,12 @@ const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
   const dispatch = useDispatch();
   const [password, setPassword] = useState('');
   const [validation, setValidation] = useState('');
+  const { t } = useTranslation();
 
   useEffect(() => {
     // TODO Add more strict password policy & password strength indicator
     if (password && password.length <= 5) {
-      setValidation("Password's too short");
+      setValidation(t<string>("Password's too short"));
     } else {
       setValidation('');
     }
@@ -34,15 +36,17 @@ const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
 
   return (
     <div className={className}>
-      <h3>First, choose your wallet password</h3>
+      <h3>{t('First, choose your wallet password')}</h3>
       <p className='mb-6'>
-        Your password will be used to <b>encrypt accounts as well as unlock the wallet</b>, make sure to pick a{' '}
-        <b>strong & easy-to-remember</b> password.
+        <Trans>
+          Your password will be used to encrypt accounts as well as unlock the wallet, make sure to pick a strong &
+          easy-to-remember password
+        </Trans>
       </p>
 
       <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={next}>
         <TextField
-          label='Wallet password'
+          label={t<string>('Wallet password')}
           fullWidth
           autoFocus
           type='password'
@@ -52,7 +56,7 @@ const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
           helperText={validation || <EmptySpace />}
         />
         <Button type='submit' fullWidth disabled={!password || !!validation} size='large'>
-          Next
+          {t<string>('Next')}
         </Button>
       </form>
     </div>

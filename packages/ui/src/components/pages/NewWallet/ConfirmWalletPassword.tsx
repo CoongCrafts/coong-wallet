@@ -1,4 +1,5 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, TextField } from '@mui/material';
 import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
@@ -12,6 +13,7 @@ const ConfirmWalletPassword: FC<Props> = ({ className = '' }: Props) => {
   const { password } = useSelector((state: RootState) => state.setupWallet);
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [notMatch, setNotMatch] = useState<boolean>(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setNotMatch(password !== passwordConfirmation);
@@ -37,26 +39,26 @@ const ConfirmWalletPassword: FC<Props> = ({ className = '' }: Props) => {
 
   return (
     <div className={className}>
-      <h3>Next, confirm your wallet password</h3>
-      <p className='mb-6'>Type again your chosen password to ensure you remember it.</p>
+      <h3>{t<string>('Next, confirm your wallet password')}</h3>
+      <p className='mb-6'>{t<string>('Type again your chosen password to ensure you remember it.')}</p>
 
       <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={next}>
         <TextField
-          label='Confirm wallet password'
+          label={t<string>('Confirm wallet password')}
           fullWidth
           autoFocus
           type='password'
           onChange={handleChange}
           value={passwordConfirmation}
           error={!!passwordConfirmation && notMatch}
-          helperText={!!passwordConfirmation && notMatch ? 'Password does not match' : <EmptySpace />}
+          helperText={!!passwordConfirmation && notMatch ? t<string>('Password does not match') : <EmptySpace />}
         />
         <div className='flex flex-row gap-4'>
           <Button variant='text' onClick={back}>
-            Back
+            {t<string>('Back')}
           </Button>
           <Button type='submit' fullWidth disabled={notMatch} size='large'>
-            Next
+            {t<string>('Next')}
           </Button>
         </div>
       </form>

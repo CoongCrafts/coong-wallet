@@ -1,4 +1,5 @@
 import { FC, FormEvent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Form } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -22,6 +23,7 @@ const RequestTransactionApproval: FC<RequestProps> = ({ className, message }) =>
   const [loading, toggleLoading] = useToggle(false);
   const [targetAccount, setTargetAccount] = useState<AccountInfoExt>();
   const throwError = useThrowError();
+  const { t } = useTranslation();
 
   useAsync(async () => {
     try {
@@ -52,7 +54,7 @@ const RequestTransactionApproval: FC<RequestProps> = ({ className, message }) =>
         await walletState.approveSignExtrinsic(password);
       } catch (e: any) {
         toggleLoading(false);
-        toast.error(e.message);
+        toast.error(t<string>(e.message));
       }
     }, 200);
   };

@@ -1,4 +1,5 @@
 import { FC, FormEvent, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useUpdateEffect } from 'react-use';
 import { AccountInfo } from '@coong/keyring/types';
@@ -27,6 +28,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const passwordInputRef = useRef<HTMLInputElement>(null);
+  const { t } = useTranslation();
 
   useUpdateEffect(() => {
     if (open) {
@@ -50,7 +52,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
       onCreated && onCreated(newAccount);
       handleClose();
     } catch (e: any) {
-      toast.error(e.message);
+      toast.error(t<string>(e.message));
     }
   };
 
@@ -67,18 +69,20 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
         variant='outlined'
         startIcon={<Add />}
         onClick={() => setOpen(true)}>
-        New Account
+        {t<string>('New Account')}
       </Button>
       <IconButton color='primary' className='xs:hidden' onClick={() => setOpen(true)}>
         <Add />
       </IconButton>
       <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
-        <DialogTitle>Create new account</DialogTitle>
+        <DialogTitle>{t<string>('Create new account')}</DialogTitle>
         <Box component='form' autoComplete='off' onSubmit={doCreateNewAccount}>
           <DialogContent className='pt-0'>
-            <DialogContentText sx={{ marginBottom: '1rem' }}>Choose a name for your new account</DialogContentText>
+            <DialogContentText sx={{ marginBottom: '1rem' }}>
+              {t<string>('Choose a name for your new account')}
+            </DialogContentText>
             <TextField
-              label='New account name'
+              label={t<string>('New account name')}
               type='text'
               required
               fullWidth
@@ -90,7 +94,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
             <TextField
               inputRef={passwordInputRef}
               autoFocus
-              label='Wallet password'
+              label={t<string>('Wallet password')}
               type='password'
               fullWidth
               required
@@ -101,10 +105,10 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
           </DialogContent>
           <DialogActions>
             <Button variant='outlined' onClick={handleClose}>
-              Cancel
+              {t<string>('Cancel')}
             </Button>
             <Button type='submit' disabled={!name || !password}>
-              Create
+              {t<string>('Create')}
             </Button>
           </DialogActions>
         </Box>

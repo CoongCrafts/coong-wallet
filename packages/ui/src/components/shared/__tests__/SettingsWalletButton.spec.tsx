@@ -1,5 +1,5 @@
 import { initializeKeyring, newUser, render, screen, UserEvent, waitFor } from '__tests__/testUtils';
-import SettingsWalletButton from '../SettingsWalletButton';
+import SettingsWalletButton from '../settings/SettingsWalletButton';
 
 describe('SettingsWalletButton', () => {
   it('should hide the dialog by default', async () => {
@@ -24,7 +24,7 @@ describe('SettingsWalletButton', () => {
       user.click(button);
 
       await waitFor(() => {
-        expect(button).toHaveClass('MuiButton-contained');
+        expect(button).toHaveClass('MuiButton-outlinedPrimary');
         expect(document.body.classList.contains('dark')).toBeTruthy;
       });
     });
@@ -38,12 +38,13 @@ describe('SettingsWalletButton', () => {
       });
     });
 
-    it('should show the dialog when clicking the setting wallet button', async () => {
+    it('should show theme mode button and language selection when dialog open', async () => {
       expect(await screen.findByRole('dialog')).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /Dark/ })).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /Light/ })).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /System/ })).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /Close settings/ })).toBeInTheDocument();
+      expect(await screen.findByRole('button', { name: /English/ })).toBeInTheDocument();
     });
   });
 

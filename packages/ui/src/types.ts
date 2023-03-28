@@ -16,3 +16,7 @@ export enum ThemeMode {
   Light = 'light',
   System = 'system',
 }
+
+export enum Language {
+  English = 'en',
+}

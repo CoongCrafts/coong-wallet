@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import { IconButton } from '@mui/material';
@@ -9,6 +10,7 @@ import { Props } from 'types';
 const ResetWalletButton: FC<Props> = () => {
   const { keyring, walletState } = useWalletState();
   const { seedReady, locked } = useSelector((state: RootState) => state.app);
+  const { t } = useTranslation();
 
   if (!seedReady || locked) {
     return null;
@@ -27,7 +29,7 @@ const ResetWalletButton: FC<Props> = () => {
   };
 
   return (
-    <IconButton color='error' size='small' title='Reset wallet' onClick={doReset}>
+    <IconButton color='error' size='small' title={t<string>('Reset wallet')} onClick={doReset}>
       <RotateLeftIcon />
     </IconButton>
   );

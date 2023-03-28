@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Lock } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
@@ -11,6 +12,7 @@ const LockWalletButton: FC<Props> = () => {
   const { keyring } = useWalletState();
   const dispatch = useDispatch();
   const { seedReady, locked } = useSelector((state: RootState) => state.app);
+  const { t } = useTranslation();
   if (!seedReady || locked) {
     return null;
   }
@@ -21,7 +23,7 @@ const LockWalletButton: FC<Props> = () => {
   };
 
   return (
-    <IconButton size='small' title='Lock the wallet' onClick={doLock}>
+    <IconButton size='small' title={t<string>('Lock the wallet')} onClick={doLock}>
       <Lock />
     </IconButton>
   );

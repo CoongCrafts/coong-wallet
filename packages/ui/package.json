@@ -14,7 +14,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo ./tsconfig.build.tsbuildinfo",
-    "test": "vitest --watch=false"
+    "test": "npx vitest --watch=false"
   },
   "dependencies": {
     "@coong/base": "*",
@@ -31,9 +31,12 @@
     "@polkadot/util-crypto": "^10.4.1",
     "@reduxjs/toolkit": "^1.9.1",
     "clsx": "^1.2.1",
+    "i18next": "^22.4.13",
+    "i18next-http-backend": "^2.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^3.1.4",
+    "react-i18next": "^12.2.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.6.1",
     "react-toastify": "^9.1.1",

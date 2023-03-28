@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, styled } from '@mui/material';
 import NewAccountButton from 'components/shared/NewAccountButton';
@@ -18,6 +19,7 @@ const AccountsSelection: FC<Props> = ({ className }) => {
   const { selectedAccounts } = useSelector((state: RootState) => state.accounts);
   const { displayAccounts, query, setQuery } = useSearchAccounts();
   const { setNewAccount } = useHighlightNewAccount();
+  const { t } = useTranslation();
 
   const doSelectAll = () => {
     dispatch(accountsActions.addSelectedAccounts(accounts));
@@ -30,16 +32,16 @@ const AccountsSelection: FC<Props> = ({ className }) => {
   return (
     <div className={`${className} accounts-selection`}>
       <div className='accounts-selection--top'>
-        <SearchBox onChange={(query) => setQuery(query)} size='xxs' />
+        <SearchBox onChange={(query) => setQuery(query)} size='xxs' label={t<string>('Search by name')} />
         <div>
           {accounts.length > selectedAccounts.length && (
             <Button size='small' variant='outlined' onClick={doSelectAll}>
-              Select all
+              {t<string>('Select all')}
             </Button>
           )}
           {accounts.length == selectedAccounts.length && (
             <Button size='small' variant='outlined' onClick={doDeselectAll}>
-              Deselect all
+              {t<string>('Deselect all')}
             </Button>
           )}
         </div>
@@ -54,10 +56,10 @@ const AccountsSelection: FC<Props> = ({ className }) => {
         <div>
           {selectedAccounts.length ? (
             <span>
-              <strong>{selectedAccounts.length}</strong> account(s) selected
+              <strong>{selectedAccounts.length}</strong> {t<string>('account(s) selected')}
             </span>
           ) : (
-            <span>No accounts selected</span>
+            <span>{t<string>('No accounts selected')}</span>
           )}
         </div>
         <NewAccountButton onCreated={(account) => setTimeout(() => setNewAccount(account))} />

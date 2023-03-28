@@ -1,4 +1,5 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, TextField } from '@mui/material';
 import EmptySpace from 'components/shared/misc/EmptySpace';
@@ -11,6 +12,7 @@ const UnlockWallet: FC<Props> = ({ className = '' }) => {
   const dispatch = useDispatch();
   const [password, setPassword] = useState('');
   const [validation, setValidation] = useState('');
+  const { t } = useTranslation();
 
   useEffect(() => {
     setValidation('');
@@ -26,7 +28,7 @@ const UnlockWallet: FC<Props> = ({ className = '' }) => {
       await keyring.verifyPassword(password);
       dispatch(appActions.unlock());
     } catch (e: any) {
-      setValidation(e.message);
+      setValidation(t<string>(e.message));
     }
   };
 
@@ -36,11 +38,11 @@ const UnlockWallet: FC<Props> = ({ className = '' }) => {
 
   return (
     <div className={`${className} max-w-[450px] my-16 mx-auto`}>
-      <h6>Welcome back</h6>
-      <h2 className='mb-6'>Unlock your wallet</h2>
+      <h6>{t<string>('Welcome back')}</h6>
+      <h2 className='mb-6'>{t<string>('Unlock your wallet')}</h2>
       <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={doUnlock}>
         <TextField
-          label='Wallet password'
+          label={t<string>('Wallet password')}
           fullWidth
           autoFocus
           type='password'
@@ -50,7 +52,7 @@ const UnlockWallet: FC<Props> = ({ className = '' }) => {
           helperText={validation || <EmptySpace />}
         />
         <Button type='submit' fullWidth disabled={!password} size='large'>
-          Unlock
+          {t<string>('Unlock')}
         </Button>
       </form>
     </div>

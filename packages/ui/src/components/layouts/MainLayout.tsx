@@ -1,9 +1,9 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Container } from '@mui/material';
+import MainFooter from 'components/layouts/MainFooter';
+import MainHeader from 'components/layouts/MainHeader';
 import { Props } from 'types';
-import MainFooter from './MainFooter';
-import MainHeader from './MainHeader';
 
 interface MainLayoutProps extends Props {
   headerActions?: boolean;

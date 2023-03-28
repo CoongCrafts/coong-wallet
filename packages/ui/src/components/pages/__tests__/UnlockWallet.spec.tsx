@@ -30,6 +30,6 @@ describe('UnlockWallet', () => {
     const unlockButton = await screen.findByRole('button', { name: /Unlock/ });
     await user.click(unlockButton);
 
-    expect(await screen.findByText('PasswordIncorrect')).toBeInTheDocument();
+    expect(await screen.findByText('Password incorrect')).toBeInTheDocument();
   });
 });

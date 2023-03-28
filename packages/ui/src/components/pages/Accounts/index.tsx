@@ -1,4 +1,5 @@
 import { FC, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useBoolean } from 'react-use';
 import { Search, SearchOff } from '@mui/icons-material';
 import { IconButton, Theme, useMediaQuery } from '@mui/material';
@@ -16,6 +17,7 @@ const Accounts: FC<Props> = ({ className = '' }) => {
   const { accounts, displayAccounts, query, setQuery } = useSearchAccounts();
   const [showSearchBox, toggleSearchBox] = useBoolean(false);
   const xs = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
+  const { t } = useTranslation();
   const { setNewAccount } = useHighlightNewAccount();
 
   useEffect(() => {
@@ -27,7 +29,9 @@ const Accounts: FC<Props> = ({ className = '' }) => {
   return (
     <div className={className}>
       <header className='flex justify-between items-center'>
-        <PageTitle>Accounts {accounts.length >= 5 && <span>({accounts.length})</span>}</PageTitle>
+        <PageTitle>
+          {t<string>('Accounts')} {accounts.length >= 5 && <span>({accounts.length})</span>}
+        </PageTitle>
         <div>
           <IconButton className='xs:hidden' color={showSearchBox ? 'default' : 'primary'} onClick={toggleSearchBox}>
             {showSearchBox ? <SearchOff /> : <Search />}
@@ -37,7 +41,13 @@ const Accounts: FC<Props> = ({ className = '' }) => {
       </header>
       <div className='mt-2 mb-20'>
         <div className='my-2 flex justify-between gap-x-4 gap-y-3 flex-col-reverse xs:flex-row'>
-          {(showSearchBox || !xs) && <SearchBox onChange={(query) => setQuery(query)} autoFocus={showSearchBox} />}
+          {(showSearchBox || !xs) && (
+            <SearchBox
+              onChange={(query) => setQuery(query)}
+              autoFocus={showSearchBox}
+              label={t<string>('Search by name')}
+            />
+          )}
           <NetworksSelection />
         </div>
         <div>

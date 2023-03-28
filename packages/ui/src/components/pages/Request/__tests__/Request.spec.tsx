@@ -21,8 +21,8 @@ describe('Request', () => {
           <Request />
         </RouterWrapper>,
       );
-      expect(await screen.findByText(/Invalid Request/)).toBeInTheDocument();
-      expect(await screen.findByText(/UnknownRequestOrigin/)).toBeInTheDocument();
+      expect(await screen.findByText(/Invalid request/)).toBeInTheDocument();
+      expect(await screen.findByText(/Unknown request origin/)).toBeInTheDocument();
     });
   });
 
@@ -41,8 +41,8 @@ describe('Request', () => {
           <Request />
         </RouterWrapper>,
       );
-      expect(await screen.findByText(/Invalid Request/)).toBeInTheDocument();
-      expect(await screen.findByText(/InvalidMessageFormat/)).toBeInTheDocument();
+      expect(await screen.findByText(/Invalid request/)).toBeInTheDocument();
+      expect(await screen.findByText(/Invalid message format/)).toBeInTheDocument();
     });
   });
 });

@@ -5,7 +5,7 @@ import { newTheme } from 'styles/theme';
 import { Props, ThemeMode } from 'types';
 
 const ThemeProvider: FC<Props> = ({ children }) => {
-  const themeMode = useThemeMode();
+  const { themeMode } = useThemeMode();
 
   useEffect(() => {
     document.body.classList.remove(ThemeMode.Dark, ThemeMode.Light);

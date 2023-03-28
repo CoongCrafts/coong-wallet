@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { networks } from '@coong/base';
 import { NetworkInfo } from '@coong/base/types';
@@ -11,6 +12,7 @@ const NetworksSelection: FC<Props> = () => {
   const dispatch = useDispatch();
   const { addressPrefix } = useSelector((state: RootState) => state.app);
   const [network, setNetwork] = useState<NetworkInfo>(networks.find((one) => one.prefix === addressPrefix)!);
+  const { t } = useTranslation();
 
   useEffect(() => {
     dispatch(appActions.updateAddressPrefix(network.prefix));
@@ -27,7 +29,7 @@ const NetworksSelection: FC<Props> = () => {
         <TextField
           {...params}
           size='small'
-          label='Address format'
+          label={t<string>('Address format')}
           inputProps={{
             ...params.inputProps,
             autoComplete: 'off',

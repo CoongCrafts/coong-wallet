@@ -1,4 +1,5 @@
 import React from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
@@ -10,35 +11,34 @@ interface WelcomeProps extends Props {
 
 const Welcome: React.FC<WelcomeProps> = ({ className = '', onCreateNewWallet }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const doCreateNewWallet = () => {
     onCreateNewWallet ? onCreateNewWallet() : navigate('/new-wallet');
   };
 
   const doRestoreWallet = () => {
-    toast.info('Coming soon!');
+    toast.info(`${t<string>('Coming soon')}!`);
   };
 
   return (
     <div className={`${className} mt-8 mb-16 mx-auto text-center`}>
       <div className='welcome'>
-        <h1>Welcome to Coong</h1>
+        <h1>{t<string>('Welcome to Coong')}</h1>
         <p className='text-2xl'>
-          A multi-chain crypto wallet
-          <br />
-          for <strong>Polkadot & Kusama</strong> ecosystem
+          <Trans>A multichain crypto wallet for Polkadot & Kusama ecosystem</Trans>
         </p>
       </div>
       <div className='mt-8'>
-        <h4 className='mb-4'>Set up your Coong Wallet now</h4>
+        <h4 className='mb-4'>{t<string>('Set up your Coong wallet now')}</h4>
 
         <div className='flex flex-col gap-4 items-center'>
           <Button size='large' className='min-w-[270px]' onClick={doCreateNewWallet}>
-            Create New Wallet
+            {t<string>('Create New Wallet')}
           </Button>
           <Button size='large' className='min-w-[270px]' variant='outlined' onClick={doRestoreWallet} disabled={true}>
-            <span className='whitespace-nowrap pr-1'>Restore Existing Wallet</span>{' '}
-            <small className='whitespace-nowrap'>(Coming soon)</small>
+            <span className='whitespace-nowrap pr-1'>{t<string>('Restore Existing Wallet')}</span>{' '}
+            <small className='whitespace-nowrap'>{`(${t<string>('Coming soon')})`}</small>
           </Button>
         </div>
       </div>
