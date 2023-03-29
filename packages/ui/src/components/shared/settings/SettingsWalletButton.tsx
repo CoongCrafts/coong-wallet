@@ -8,6 +8,7 @@ import LanguageSelection from 'components/shared/settings/LanguageSelection';
 import ThemeModeButton from 'components/shared/settings/ThemeModeButton';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
+import AutoLockSelection from './AutoLockSelection';
 
 const SettingsWalletButton: FC<Props> = () => {
   const [open, setOpen] = useState(false);
@@ -32,6 +33,8 @@ const SettingsWalletButton: FC<Props> = () => {
           <ThemeModeButton />
           <DialogContentText className='mb-1 mt-4'>{t<string>('Language')}</DialogContentText>
           <LanguageSelection />
+          <DialogContentText className='mb-1 mt-4'>{t<string>('Auto-lock wallet timer')}</DialogContentText>
+          <AutoLockSelection />
         </DialogContent>
       </Dialog>
     </>

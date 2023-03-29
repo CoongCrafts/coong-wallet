@@ -4,10 +4,9 @@ import { useEffectOnce, useIdle } from 'react-use';
 import { appActions } from 'redux/slices/app';
 import { RootState } from 'redux/store';
 
-const UNLOCK_INTERVAL = 5 * 60 * 1e3; // 5 minutes
-
 export default function useLockTimer() {
   const { locked, lastUsedAt } = useSelector((state: RootState) => state.app);
+  const { autoLockInterval } = useSelector((state: RootState) => state.settings);
   const dispatch = useDispatch();
   const idle = useIdle(30e3);
 
@@ -16,7 +15,7 @@ export default function useLockTimer() {
       return;
     }
 
-    if (lastUsedAt + UNLOCK_INTERVAL < Date.now()) {
+    if (lastUsedAt + autoLockInterval < Date.now()) {
       dispatch(appActions.lock());
     }
   });
@@ -36,7 +35,7 @@ export default function useLockTimer() {
     const lockIntervalTimer = setInterval(() => {
       counter += 1e3;
 
-      if (counter > UNLOCK_INTERVAL) {
+      if (counter > autoLockInterval) {
         dispatch(appActions.lock());
       }
     }, 1000);

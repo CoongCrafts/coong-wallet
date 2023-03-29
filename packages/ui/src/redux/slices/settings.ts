@@ -1,14 +1,16 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
-import { Language, ThemeMode } from 'types';
+import { Language, ThemeMode, AutoLockInterval } from 'types';
 
 export interface SettingsState {
   themeMode: ThemeMode;
   language: Language;
+  autoLockInterval: AutoLockInterval;
 }
 
 const initialState: SettingsState = {
   themeMode: ThemeMode.System,
   language: Language.English,
+  autoLockInterval: AutoLockInterval.FiveMinutes,
 };
 
 const settingsSlice = createSlice({
@@ -20,6 +22,9 @@ const settingsSlice = createSlice({
     },
     switchLanguage: (state: Draft<SettingsState>, action: PayloadAction<Language>) => {
       state.language = action.payload;
+    },
+    switchAutoLockInterval: (state: Draft<SettingsState>, action: PayloadAction<AutoLockInterval>) => {
+      state.autoLockInterval = action.payload;
     },
   },
 });

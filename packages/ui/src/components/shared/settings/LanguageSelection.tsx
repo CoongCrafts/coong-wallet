@@ -54,7 +54,7 @@ const LanguageSelection: FC<Props> = () => {
         {LanguageOptions[language]}
       </LoadingButton>
 
-      <Menu open={open} anchorEl={anchorEl} onClose={() => handleClose()}>
+      <Menu open={open} anchorEl={anchorEl} onClose={handleClose}>
         {Object.entries(LanguageOptions).map(([lang, label]) => (
           <MenuItem key={lang} onClick={() => switchLanguage(lang as Language)}>
             {label}

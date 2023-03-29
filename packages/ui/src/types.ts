@@ -20,3 +20,9 @@ export enum ThemeMode {
 export enum Language {
   English = 'en',
 }
+
+export enum AutoLockInterval {
+  FiveMinutes = 5 * 60 * 1e3,
+  FifteenMinutes = 15 * 60 * 1e3,
+  ThirtyMinutes = 30 * 60 * 1e3,
+}
