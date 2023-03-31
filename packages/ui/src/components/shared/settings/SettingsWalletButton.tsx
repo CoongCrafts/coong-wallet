@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Dialog, DialogContent, DialogContentText, IconButton } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
+import AutoLockSelection from 'components/shared/settings/AutoLockSelection';
 import LanguageSelection from 'components/shared/settings/LanguageSelection';
 import ThemeModeButton from 'components/shared/settings/ThemeModeButton';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
-import AutoLockSelection from './AutoLockSelection';
 
 const SettingsWalletButton: FC<Props> = () => {
   const [open, setOpen] = useState(false);

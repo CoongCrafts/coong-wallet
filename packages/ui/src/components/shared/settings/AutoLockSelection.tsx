@@ -2,10 +2,10 @@ import React, { FC, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import { Menu, Button, MenuItem } from '@mui/material';
-import useThemeMode from '../../../hooks/useThemeMode';
-import { settingsActions } from '../../../redux/slices/settings';
-import { RootState } from '../../../redux/store';
-import { Props, AutoLockInterval } from '../../../types';
+import useThemeMode from 'hooks/useThemeMode';
+import { settingsActions } from 'redux/slices/settings';
+import { RootState } from 'redux/store';
+import { Props, AutoLockInterval } from 'types';
 
 const AutoLockTimerOptions: { [key in AutoLockInterval]: string } = {
   [AutoLockInterval.FiveMinutes]: '5 minutes',
