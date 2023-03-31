@@ -49,7 +49,7 @@ describe('MainScreen', () => {
       expect(await screen.findByText('Accounts')).toBeInTheDocument();
     });
 
-    it('should auto-lock the Wallet if not be used in `autoLockInterval`', async () => {
+    it('should auto-lock the Wallet after passing the `autoLockInterval`', async () => {
       vi.mock('react-use', async () => {
         const actual: any = await vi.importActual('react-use');
         return {
@@ -59,8 +59,6 @@ describe('MainScreen', () => {
       });
 
       vi.useFakeTimers();
-      const fakeTime = new Date(0);
-      vi.setSystemTime(fakeTime);
 
       render(<MainScreen />, {
         preloadedState: {
@@ -68,11 +66,11 @@ describe('MainScreen', () => {
         },
       });
 
-      await vi.advanceTimersByTime(5 * 60 * 1e3 + 1000);
-
-      expect(screen.getByText('Unlock your wallet')).toBeInTheDocument();
-
+      vi.advanceTimersByTime(5 * 60 * 1e3 + 1e3);
       vi.useRealTimers();
+
+      expect(await screen.findByText('Welcome back')).toBeInTheDocument();
+      expect(await screen.findByText('Unlock your wallet')).toBeInTheDocument();
     });
   });
 });

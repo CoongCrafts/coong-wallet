@@ -33,7 +33,7 @@ const SettingsWalletButton: FC<Props> = () => {
           <ThemeModeButton />
           <DialogContentText className='mb-1 mt-4'>{t<string>('Language')}</DialogContentText>
           <LanguageSelection />
-          <DialogContentText className='mb-1 mt-4'>{t<string>('Auto-lock wallet timer')}</DialogContentText>
+          <DialogContentText className='mb-1 mt-4'>{t<string>('Auto-lock wallet after')}</DialogContentText>
           <AutoLockSelection />
         </DialogContent>
       </Dialog>
