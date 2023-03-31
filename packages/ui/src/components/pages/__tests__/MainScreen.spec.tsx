@@ -1,5 +1,5 @@
 import { defaultNetwork } from '@coong/base';
-import { initializeKeyring, newUser, PASSWORD, render, screen, waitFor } from '__tests__/testUtils';
+import { initializeKeyring, newUser, PASSWORD, render, screen } from '__tests__/testUtils';
 import MainScreen from '../MainScreen';
 
 vi.mock('react-router-dom', async () => {
@@ -47,6 +47,32 @@ describe('MainScreen', () => {
       });
 
       expect(await screen.findByText('Accounts')).toBeInTheDocument();
+    });
+
+    it('should auto-lock the Wallet if not be used in `autoLockInterval`', async () => {
+      vi.mock('react-use', async () => {
+        const actual: any = await vi.importActual('react-use');
+        return {
+          ...actual,
+          useIdle: () => true,
+        };
+      });
+
+      vi.useFakeTimers();
+      const fakeTime = new Date(0);
+      vi.setSystemTime(fakeTime);
+
+      render(<MainScreen />, {
+        preloadedState: {
+          app: { seedReady: true, locked: false, addressPrefix: defaultNetwork.prefix },
+        },
+      });
+
+      await vi.advanceTimersByTime(5 * 60 * 1e3 + 1000);
+
+      expect(screen.getByText('Unlock your wallet')).toBeInTheDocument();
+
+      vi.useRealTimers();
     });
   });
 });
