@@ -22,7 +22,7 @@ export enum Language {
 }
 
 export enum AutoLockInterval {
-  FiveMinutes = 5 * 60 * 1e3,
-  FifteenMinutes = 15 * 60 * 1e3,
-  ThirtyMinutes = 30 * 60 * 1e3,
+  FiveMinutes = 5 * 60e3,
+  FifteenMinutes = 15 * 60e3,
+  ThirtyMinutes = 30 * 60e3,
 }

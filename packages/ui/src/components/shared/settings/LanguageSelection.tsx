@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { Menu, MenuItem } from '@mui/material';
+import useAnchorEl from 'hooks/useAnchorEl';
 import useThemeMode from 'hooks/useThemeMode';
 import { settingsActions } from 'redux/slices/settings';
 import { RootState } from 'redux/store';
@@ -20,8 +21,7 @@ const LanguageSelection: FC<Props> = () => {
   } = useTranslation();
   const { language } = useSelector((state: RootState) => state.settings);
   const [loading, setLoading] = useState(resolvedLanguage !== language);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const [anchorEl, setAnchorEl, open] = useAnchorEl();
   const { dark } = useThemeMode();
 
   useEffect(() => {
@@ -32,14 +32,14 @@ const LanguageSelection: FC<Props> = () => {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleClose = () => setAnchorEl(null);
+
   const switchLanguage = (language: Language) => {
     setAnchorEl(null);
     if (language === resolvedLanguage) return null;
     setLoading(true);
     dispatch(settingsActions.switchLanguage(language));
   };
-
-  const handleClose = () => setAnchorEl(null);
 
   return (
     <>

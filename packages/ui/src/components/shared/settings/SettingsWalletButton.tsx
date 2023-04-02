@@ -28,7 +28,7 @@ const SettingsWalletButton: FC<Props> = () => {
       </IconButton>
       <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
         <DialogTitle onClose={handleClose}>{t<string>('Settings')}</DialogTitle>
-        <DialogContent>
+        <DialogContent className='pb-8'>
           <DialogContentText className='mb-1'>{t<string>('Theme Mode')}</DialogContentText>
           <ThemeModeButton />
           <DialogContentText className='mb-1 mt-4'>{t<string>('Language')}</DialogContentText>

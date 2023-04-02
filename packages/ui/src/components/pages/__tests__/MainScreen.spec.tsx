@@ -1,11 +1,18 @@
 import { defaultNetwork } from '@coong/base';
 import { initializeKeyring, newUser, PASSWORD, render, screen } from '__tests__/testUtils';
+import { AutoLockInterval } from 'types';
 import MainScreen from '../MainScreen';
 
 vi.mock('react-router-dom', async () => {
   const reactRouter: any = await vi.importActual('react-router-dom');
 
   return { ...reactRouter, useNavigate: () => vi.fn() };
+});
+
+vi.mock('react-use', async () => {
+  const reactUse: any = await vi.importActual('react-use');
+
+  return { ...reactUse, useIdle: () => true };
 });
 
 describe('MainScreen', () => {
@@ -49,28 +56,24 @@ describe('MainScreen', () => {
       expect(await screen.findByText('Accounts')).toBeInTheDocument();
     });
 
-    it('should auto-lock the Wallet after passing the `autoLockInterval`', async () => {
-      vi.mock('react-use', async () => {
-        const actual: any = await vi.importActual('react-use');
-        return {
-          ...actual,
-          useIdle: () => true,
-        };
-      });
+    it.each([AutoLockInterval.FiveMinutes, AutoLockInterval.FifteenMinutes, AutoLockInterval.ThirtyMinutes])(
+      'should auto-lock the Wallet after passing the `autoLockInterval`: %i',
+      async (autoLockInterval) => {
+        vi.useFakeTimers();
 
-      vi.useFakeTimers();
+        render(<MainScreen />, {
+          preloadedState: {
+            app: { seedReady: true, locked: false, addressPrefix: defaultNetwork.prefix },
+            settings: { autoLockInterval: autoLockInterval },
+          },
+        });
 
-      render(<MainScreen />, {
-        preloadedState: {
-          app: { seedReady: true, locked: false, addressPrefix: defaultNetwork.prefix },
-        },
-      });
+        vi.advanceTimersByTime(autoLockInterval + 1e3);
+        vi.useRealTimers();
 
-      vi.advanceTimersByTime(5 * 60 * 1e3 + 1e3);
-      vi.useRealTimers();
-
-      expect(await screen.findByText('Welcome back')).toBeInTheDocument();
-      expect(await screen.findByText('Unlock your wallet')).toBeInTheDocument();
-    });
+        expect(await screen.findByText('Welcome back')).toBeInTheDocument();
+        expect(await screen.findByText('Unlock your wallet')).toBeInTheDocument();
+      },
+    );
   });
 });
