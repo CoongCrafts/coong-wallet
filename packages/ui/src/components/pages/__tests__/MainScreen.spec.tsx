@@ -1,6 +1,6 @@
 import { defaultNetwork } from '@coong/base';
 import { initializeKeyring, newUser, PASSWORD, render, screen } from '__tests__/testUtils';
-import { AutoLockInterval } from 'types';
+import { AutoLockTimerOptions } from 'components/shared/settings/AutoLockSelection';
 import MainScreen from '../MainScreen';
 
 vi.mock('react-router-dom', async () => {
@@ -56,19 +56,19 @@ describe('MainScreen', () => {
       expect(await screen.findByText('Accounts')).toBeInTheDocument();
     });
 
-    it.each([AutoLockInterval.FiveMinutes, AutoLockInterval.FifteenMinutes, AutoLockInterval.ThirtyMinutes])(
-      'should auto-lock the Wallet after passing the `autoLockInterval`: %i',
-      async (autoLockInterval) => {
+    it.each(AutoLockTimerOptions)(
+      'should auto-lock the Wallet after passing the `autoLockInterval`: $label',
+      async ({ interval }) => {
         vi.useFakeTimers();
 
         render(<MainScreen />, {
           preloadedState: {
             app: { seedReady: true, locked: false, addressPrefix: defaultNetwork.prefix },
-            settings: { autoLockInterval: autoLockInterval },
+            settings: { autoLockInterval: interval },
           },
         });
 
-        vi.advanceTimersByTime(autoLockInterval + 1e3);
+        vi.advanceTimersByTime(interval + 1e3);
         vi.useRealTimers();
 
         expect(await screen.findByText('Welcome back')).toBeInTheDocument();
