@@ -77,7 +77,7 @@ export const globalStyles = css`
   // DARK MODE
   body.dark {
     .ui--IdentityIcon {
-      svg circle:first-child {
+      svg circle:first-of-type {
         fill: #585858;
       }
     }
