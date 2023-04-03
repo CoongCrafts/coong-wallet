@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Dialog, DialogContent, DialogContentText, IconButton } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
+import AutoLockSelection from 'components/shared/settings/AutoLockSelection';
 import LanguageSelection from 'components/shared/settings/LanguageSelection';
 import ThemeModeButton from 'components/shared/settings/ThemeModeButton';
 import { RootState } from 'redux/store';
@@ -27,11 +28,13 @@ const SettingsWalletButton: FC<Props> = () => {
       </IconButton>
       <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
         <DialogTitle onClose={handleClose}>{t<string>('Settings')}</DialogTitle>
-        <DialogContent>
+        <DialogContent className='pb-8'>
           <DialogContentText className='mb-1'>{t<string>('Theme Mode')}</DialogContentText>
           <ThemeModeButton />
           <DialogContentText className='mb-1 mt-4'>{t<string>('Language')}</DialogContentText>
           <LanguageSelection />
+          <DialogContentText className='mb-1 mt-4'>{t<string>('Auto-lock wallet after')}</DialogContentText>
+          <AutoLockSelection />
         </DialogContent>
       </Dialog>
     </>
