@@ -1,6 +1,6 @@
 import { defaultNetwork } from '@coong/base';
 import { initializeKeyring, newUser, PASSWORD, render, screen } from '__tests__/testUtils';
-import { AutoLockTimerOptions } from 'components/shared/settings/AutoLockSelection';
+import { AutoLockTimerOptions } from '../../shared/SettingsWalletButton/Settings/AutoLockSelection';
 import MainScreen from '../MainScreen';
 
 vi.mock('react-router-dom', async () => {

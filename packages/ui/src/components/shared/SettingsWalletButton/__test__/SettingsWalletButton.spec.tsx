@@ -1,9 +1,9 @@
 import { initializeKeyring, newUser, render, screen, UserEvent, waitFor } from '__tests__/testUtils';
-import SettingsWalletButton from 'components/shared/settings/SettingsWalletButton';
+import Index from '../index';
 
 describe('SettingsWalletButton', () => {
   it('should hide the dialog by default', async () => {
-    render(<SettingsWalletButton />, { preloadedState: { app: { seedReady: false, ready: true, locked: true } } });
+    render(<Index />, { preloadedState: { app: { seedReady: false, ready: true, locked: true } } });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
@@ -12,7 +12,7 @@ describe('SettingsWalletButton', () => {
     beforeEach(() => {
       user = newUser();
 
-      render(<SettingsWalletButton />, {
+      render(<Index />, {
         preloadedState: { app: { seedReady: true, ready: true, locked: false } },
       });
 
@@ -62,7 +62,7 @@ describe('SettingsWalletButton', () => {
 
   describe('keyring not initialized', () => {
     it('should be hidden', () => {
-      render(<SettingsWalletButton />, { preloadedState: { app: { seedReady: false, ready: true, locked: false } } });
+      render(<Index />, { preloadedState: { app: { seedReady: false, ready: true, locked: false } } });
       expect(screen.queryByTitle('Open settings')).not.toBeInTheDocument();
     });
   });
@@ -72,11 +72,11 @@ describe('SettingsWalletButton', () => {
       await initializeKeyring();
     });
     it('should be hidden if the wallet is locked', () => {
-      render(<SettingsWalletButton />, { preloadedState: { app: { seedReady: true, ready: true, locked: true } } });
+      render(<Index />, { preloadedState: { app: { seedReady: true, ready: true, locked: true } } });
       expect(screen.queryByTitle('Open settings')).not.toBeInTheDocument();
     });
     it('should be visible if the wallet is unlocked', () => {
-      render(<SettingsWalletButton />, { preloadedState: { app: { seedReady: true, ready: true, locked: false } } });
+      render(<Index />, { preloadedState: { app: { seedReady: true, ready: true, locked: false } } });
       expect(screen.queryByTitle('Open settings')).toBeInTheDocument();
     });
   });
