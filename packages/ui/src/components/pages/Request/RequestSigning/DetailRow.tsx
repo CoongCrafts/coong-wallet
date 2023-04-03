@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { Props } from 'types';
 
@@ -15,6 +16,7 @@ export interface DetailRowProps extends Props {
 }
 
 const DetailRow: FC<DetailRowProps> = ({ name, value, breakWord = false, style = ValueStyle.TEXT_BOLD }) => {
+  const { t } = useTranslation();
   const renderValue = () => {
     switch (style) {
       case ValueStyle.BOX:
@@ -31,7 +33,7 @@ const DetailRow: FC<DetailRowProps> = ({ name, value, breakWord = false, style =
 
   return (
     <div className='flex items-start mb-2 gap-2' data-testid={`row-${name.replace(' ', '-')}`}>
-      <div className='text-gray-500 dark:text-gray-200 min-w-[80px] text-right'>{name}: </div>
+      <div className='text-gray-500 dark:text-gray-200 min-w-[80px] text-right'>{t<string>(name)}: </div>
       {renderValue()}
     </div>
   );
