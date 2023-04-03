@@ -77,5 +77,19 @@
   "AccountNameRequired": "Account name is required",
   "AccountNameUsed": "Account name is already picked",
   "InternalError": "Internal error",
-  "Invalid request": ""
+  "Invalid request": "",
+  "Sign Message Request": "",
+  "You are signing a message with account": "",
+  "Sign Message": "",
+  "Transaction Approval Request": "",
+  "You are approving a transaction with account": "",
+  "Approve Transaction": "",
+  "from": "",
+  "bytes": "",
+  "genesis": "",
+  "version": "",
+  "nonce": "",
+  "method data": "",
+  "life time": "",
+  "Sign": ""
 }
