@@ -64,6 +64,7 @@
   "Create your first account now!": "",
   "Click to copy address": "",
   "Address copied!": "",
+  "Auto-lock wallet after": "",
   "UnknownRequest": "Unknown request",
   "UnknownRequestOrigin": "Unknown request origin",
   "InvalidMessageFormat": "Invalid message format",
@@ -77,5 +78,8 @@
   "AccountNameRequired": "Account name is required",
   "AccountNameUsed": "Account name is already picked",
   "InternalError": "Internal error",
-  "Invalid request": ""
+  "Invalid request": "",
+  "5 minutes": "",
+  "15 minutes": "",
+  "30 minutes": ""
 }

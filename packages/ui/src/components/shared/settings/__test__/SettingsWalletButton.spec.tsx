@@ -1,5 +1,5 @@
 import { initializeKeyring, newUser, render, screen, UserEvent, waitFor } from '__tests__/testUtils';
-import SettingsWalletButton from '../settings/SettingsWalletButton';
+import SettingsWalletButton from 'components/shared/settings/SettingsWalletButton';
 
 describe('SettingsWalletButton', () => {
   it('should hide the dialog by default', async () => {
@@ -8,25 +8,36 @@ describe('SettingsWalletButton', () => {
   });
 
   describe('when the dialog is open', () => {
-    let user: UserEvent, container: HTMLElement;
+    let user: UserEvent;
     beforeEach(() => {
       user = newUser();
-      const result = render(<SettingsWalletButton />, {
+
+      render(<SettingsWalletButton />, {
         preloadedState: { app: { seedReady: true, ready: true, locked: false } },
       });
-      container = result.container;
-      const button = screen.getByTitle('Open settings');
-      user.click(button);
+
+      const settingsButton = screen.getByTitle('Open settings');
+      user.click(settingsButton);
     });
 
-    it('should active dark button and dark theme when clicking the on it', async () => {
-      const button = await screen.findByRole('button', { name: /Dark/ });
-      user.click(button);
+    it('should active dark button and switch to dark theme when clicking on the dark mode button', async () => {
+      const darkModeButton = await screen.findByRole('button', { name: /Dark/ });
+      user.click(darkModeButton);
 
       await waitFor(() => {
-        expect(button).toHaveClass('MuiButton-outlinedPrimary');
-        expect(document.body.classList.contains('dark')).toBeTruthy;
+        expect(darkModeButton).toHaveClass('MuiButton-outlinedPrimary');
+        expect(document.body.classList.contains('dark')).toBeTruthy();
       });
+    });
+
+    it("should the AutoLockSelection switch to '15 minutes' when choose 15 minutes", async () => {
+      const autoLockSelectionButton = await screen.findByRole('button', { name: /5 minutes/ });
+      user.click(autoLockSelectionButton);
+
+      const fifteenMinutesSelection = await screen.findByText(/15 minutes/);
+      user.click(fifteenMinutesSelection);
+
+      expect(await screen.findByRole('button', { name: /15 minutes/ })).toBeInTheDocument();
     });
 
     it('should close the dialog when clicking the close button', async () => {
@@ -38,13 +49,14 @@ describe('SettingsWalletButton', () => {
       });
     });
 
-    it('should show theme mode button and language selection when dialog open', async () => {
+    it('should show ThemeModeButton, LanguageSelection, AutoLockSelection', async () => {
       expect(await screen.findByRole('dialog')).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /Dark/ })).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /Light/ })).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /System/ })).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /Close settings/ })).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /English/ })).toBeInTheDocument();
+      expect(await screen.findByRole('button', { name: /5 minutes/ })).toBeInTheDocument();
     });
   });
 

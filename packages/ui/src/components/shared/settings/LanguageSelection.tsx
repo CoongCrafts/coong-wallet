@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { Menu, MenuItem } from '@mui/material';
+import useMenuDropdown from 'hooks/useMenuDropdown';
 import useThemeMode from 'hooks/useThemeMode';
 import { settingsActions } from 'redux/slices/settings';
 import { RootState } from 'redux/store';
@@ -20,8 +21,7 @@ const LanguageSelection: FC<Props> = () => {
   } = useTranslation();
   const { language } = useSelector((state: RootState) => state.settings);
   const [loading, setLoading] = useState(resolvedLanguage !== language);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const { open, anchorEl, doOpen, doClose } = useMenuDropdown();
   const { dark } = useThemeMode();
 
   useEffect(() => {
@@ -29,17 +29,15 @@ const LanguageSelection: FC<Props> = () => {
   }, [resolvedLanguage]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+    doOpen(event.currentTarget);
   };
 
   const switchLanguage = (language: Language) => {
-    setAnchorEl(null);
+    doClose();
     if (language === resolvedLanguage) return null;
     setLoading(true);
     dispatch(settingsActions.switchLanguage(language));
   };
-
-  const handleClose = () => setAnchorEl(null);
 
   return (
     <>
@@ -54,7 +52,7 @@ const LanguageSelection: FC<Props> = () => {
         {LanguageOptions[language]}
       </LoadingButton>
 
-      <Menu open={open} anchorEl={anchorEl} onClose={() => handleClose()}>
+      <Menu open={open} anchorEl={anchorEl} onClose={doClose}>
         {Object.entries(LanguageOptions).map(([lang, label]) => (
           <MenuItem key={lang} onClick={() => switchLanguage(lang as Language)}>
             {label}
