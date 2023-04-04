@@ -94,7 +94,6 @@ export default class Keyring {
   }
 
   async verifyPassword(password: string) {
-    await this.ensureWalletInitialized();
     await this.#decryptMnemonic(password);
   }
 
