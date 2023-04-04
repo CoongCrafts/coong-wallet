@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { DialogContent, DialogContentText } from '@mui/material';
-import { Props } from '../../../types';
-import DialogTitle from '../DialogTitle';
+import DialogTitle from 'components/shared/DialogTitle';
+import { Props } from 'types';
 
 interface ChangeWalletPasswordProps extends Props {
-  onClose: () => {};
+  onClose: () => void;
 }
 
 const ChangeWalletPassword: FC<ChangeWalletPasswordProps> = ({ onClose }) => {

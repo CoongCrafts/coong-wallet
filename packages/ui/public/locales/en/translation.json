@@ -81,5 +81,13 @@
   "Invalid request": "",
   "5 minutes": "",
   "15 minutes": "",
-  "30 minutes": ""
+  "30 minutes": "",
+  "Backup secret recovery phrase": "",
+  "You are about to reveal the secret recovery phrase which give access to your accounts and funds.": "",
+  "Make sure you are in a safe place.": "",
+  "Your wallet password": "",
+  "View Secret Recovery Phrase": "",
+  "Enter your wallet password to continue": "",
+  "Copy to clipboard": "",
+  "Copied!": ""
 }

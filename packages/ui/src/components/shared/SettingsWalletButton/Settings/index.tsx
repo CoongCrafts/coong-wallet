@@ -4,16 +4,17 @@ import { useDispatch } from 'react-redux';
 import KeyIcon from '@mui/icons-material/Key';
 import LockIcon from '@mui/icons-material/Lock';
 import { Button, DialogContent, DialogContentText, Divider } from '@mui/material';
-import useThemeMode from '../../../../hooks/useThemeMode';
-import { settingsDialogActions, SettingsDialogScreen } from '../../../../redux/slices/settings-dialog';
-import { Props } from '../../../../types';
-import DialogTitle from '../../DialogTitle';
-import AutoLockSelection from './AutoLockSelection';
-import LanguageSelection from './LanguageSelection';
-import ThemeModeButton from './ThemeModeButton';
+import DialogTitle from 'components/shared/DialogTitle';
+import AutoLockSelection from 'components/shared/SettingsWalletButton/Settings/AutoLockSelection';
+import LanguageSelection from 'components/shared/SettingsWalletButton/Settings/LanguageSelection';
+import ThemeModeButton from 'components/shared/SettingsWalletButton/Settings/ThemeModeButton';
+import useThemeMode from 'hooks/useThemeMode';
+import { settingsDialogActions } from 'redux/slices/settings-dialog';
+import { SettingsDialogScreen } from 'types';
+import { Props } from 'types';
 
 interface SettingsProps extends Props {
-  onClose: () => {};
+  onClose: () => void;
 }
 
 const Index: FC<SettingsProps> = ({ onClose }) => {
@@ -23,7 +24,9 @@ const Index: FC<SettingsProps> = ({ onClose }) => {
 
   return (
     <>
-      <DialogTitle onClose={onClose}>{t<string>('Settings')}</DialogTitle>
+      <DialogTitle onClose={onClose}>
+        <strong>{t<string>('Settings')}</strong>
+      </DialogTitle>
       <DialogContent className='pb-8'>
         <DialogContentText className='mb-1'>{t<string>('Theme Mode')}</DialogContentText>
         <ThemeModeButton />
@@ -40,7 +43,7 @@ const Index: FC<SettingsProps> = ({ onClose }) => {
           onClick={() =>
             dispatch(settingsDialogActions.switchSettingsDialogScreen(SettingsDialogScreen.BackupSecretPhrase))
           }>
-          Backup secret recovery phrase
+          {t<string>('Backup secret recovery phrase')}
         </Button>{' '}
         <br />
         <Button
@@ -51,7 +54,7 @@ const Index: FC<SettingsProps> = ({ onClose }) => {
           onClick={() =>
             dispatch(settingsDialogActions.switchSettingsDialogScreen(SettingsDialogScreen.ChangeWalletPassword))
           }>
-          Change wallet password
+          {t<string>('Change wallet password')}
         </Button>
       </DialogContent>
     </>

@@ -1,13 +1,9 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
+import { SettingsDialogScreen } from 'types';
 
-export enum SettingsDialogScreen {
-  Settings,
-  BackupSecretPhrase,
-  ChangeWalletPassword,
-}
 export interface SettingsDialog {
   settingsDialogScreen: SettingsDialogScreen;
-  password?: string;
+  verifiedPassword?: string;
 }
 
 const initialState: SettingsDialog = {
@@ -21,8 +17,12 @@ const settingsDialogSlice = createSlice({
     switchSettingsDialogScreen: (state: Draft<SettingsDialog>, action: PayloadAction<SettingsDialogScreen>) => {
       state.settingsDialogScreen = action.payload;
     },
-    setPassword: (state: Draft<SettingsDialog>, action: PayloadAction<string>) => {
-      state.password = action.payload;
+    setVerifiedPassword: (state: Draft<SettingsDialog>, action: PayloadAction<string>) => {
+      state.verifiedPassword = action.payload;
+    },
+    resetState: (state: Draft<SettingsDialog>) => {
+      state.settingsDialogScreen = SettingsDialogScreen.Settings;
+      state.verifiedPassword = '';
     },
   },
 });

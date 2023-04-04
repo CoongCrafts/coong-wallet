@@ -3,15 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Dialog, IconButton } from '@mui/material';
+import BackupSecretPhrase from 'components/shared/SettingsWalletButton/BackupSecretPhrase';
+import ChangeWalletPassword from 'components/shared/SettingsWalletButton/ChangeWalletPassword';
+import Settings from 'components/shared/SettingsWalletButton/Settings';
+import { settingsDialogActions } from 'redux/slices/settings-dialog';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
-import { settingsDialogActions, SettingsDialogScreen } from '../../../redux/slices/settings-dialog';
-import BackupSecretPhrase from './BackupSecretPhrase';
-import ChangeWalletPassword from './ChangeWalletPassword';
-import Settings from './Settings';
+import { SettingsDialogScreen } from 'types';
 
 interface SettingsDialogProps extends Props {
-  onClose: any;
+  onClose: () => void;
 }
 const SettingsDialog: FC<SettingsDialogProps> = ({ onClose }) => {
   const { settingsDialogScreen } = useSelector((state: RootState) => state.settingsDialog);
@@ -38,8 +39,7 @@ const SettingsWalletButton: FC<Props> = () => {
 
   const handleClose = () => {
     setOpen(false);
-    dispatch(settingsDialogActions.switchSettingsDialogScreen(SettingsDialogScreen.Settings));
-    dispatch(settingsDialogActions.setPassword(''));
+    dispatch(settingsDialogActions.resetState());
   };
 
   return (

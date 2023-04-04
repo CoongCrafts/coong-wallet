@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import { Button, Menu, MenuItem } from '@mui/material';
-import useMenuDropdown from '../../../../hooks/useMenuDropdown';
-import useThemeMode from '../../../../hooks/useThemeMode';
-import { settingsActions } from '../../../../redux/slices/settings';
-import { RootState } from '../../../../redux/store';
-import { AutoLockInterval, Props } from '../../../../types';
+import useMenuDropdown from 'hooks/useMenuDropdown';
+import useThemeMode from 'hooks/useThemeMode';
+import { settingsActions } from 'redux/slices/settings';
+import { RootState } from 'redux/store';
+import { AutoLockInterval, Props } from 'types';
 
 export const AutoLockTimerOptions = [
   {

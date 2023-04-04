@@ -26,3 +26,9 @@ export enum AutoLockInterval {
   FifteenMinutes = 15 * 60e3,
   ThirtyMinutes = 30 * 60e3,
 }
+
+export enum SettingsDialogScreen {
+  Settings,
+  BackupSecretPhrase,
+  ChangeWalletPassword,
+}

@@ -1,16 +1,18 @@
 import { ChangeEvent, FC, FormEvent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, DialogContentText, TextField } from '@mui/material';
-import { useWalletState } from '../../../../providers/WalletStateProvider';
-import { settingsDialogActions, SettingsDialogScreen } from '../../../../redux/slices/settings-dialog';
-import { Props } from '../../../../types';
-import EmptySpace from '../../misc/EmptySpace';
+import EmptySpace from 'components/shared/misc/EmptySpace';
+import { useWalletState } from 'providers/WalletStateProvider';
+import { settingsDialogActions } from 'redux/slices/settings-dialog';
+import { Props } from 'types';
 
 const VerifyingPassword: FC<Props> = () => {
   const { keyring } = useWalletState();
   const [password, setPassword] = useState('');
   const [validation, setValidation] = useState('');
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.currentTarget.value);
@@ -25,25 +27,24 @@ const VerifyingPassword: FC<Props> = () => {
 
     try {
       await keyring.verifyPassword(password);
-      dispatch(settingsDialogActions.setPassword(password));
+      dispatch(settingsDialogActions.setVerifiedPassword(password));
     } catch (e: any) {
-      setValidation(e.message);
+      setValidation(t<string>(e.message));
     }
   };
 
   const doBack = () => {
-    dispatch(settingsDialogActions.switchSettingsDialogScreen(SettingsDialogScreen.Settings));
+    dispatch(settingsDialogActions.resetState());
   };
 
   return (
     <>
-      <DialogContentText className='mt-4 mb-4'>Enter your wallet password to continue</DialogContentText>
+      <DialogContentText className='mt-4 mb-4'>{t<string>('Enter your wallet password to continue')}</DialogContentText>
       <form onSubmit={doVerify} noValidate>
         <TextField
-          className='text-center'
           type='password'
           value={password}
-          label='Your wallet password'
+          label={t<string>('Your wallet password')}
           fullWidth
           autoFocus
           error={!!validation}
@@ -52,10 +53,10 @@ const VerifyingPassword: FC<Props> = () => {
         />
         <div className='mt-4 flex gap-4'>
           <Button variant='text' onClick={doBack}>
-            Back
+            {t<string>('Back')}
           </Button>
           <Button type='submit' disabled={!password} fullWidth variant='contained'>
-            View Secret Recovery Phrase
+            {t<string>('View Secret Recovery Phrase')}
           </Button>
         </div>
       </form>
