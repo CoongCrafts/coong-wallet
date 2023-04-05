@@ -49,6 +49,13 @@ export const newTheme = (mode: PaletteMode) =>
           },
         },
       },
+      MuiDialogContentText: {
+        styleOverrides: {
+          root: {
+            color: 'inherit',
+          },
+        },
+      },
       MuiTextField: {
         defaultProps: {
           variant: 'outlined',
