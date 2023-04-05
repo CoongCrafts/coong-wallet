@@ -5,28 +5,26 @@ import KeyIcon from '@mui/icons-material/Key';
 import LockIcon from '@mui/icons-material/Lock';
 import { Button, DialogContent, DialogContentText, Divider } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
-import AutoLockSelection from 'components/shared/SettingsWalletButton/Settings/AutoLockSelection';
-import LanguageSelection from 'components/shared/SettingsWalletButton/Settings/LanguageSelection';
-import ThemeModeButton from 'components/shared/SettingsWalletButton/Settings/ThemeModeButton';
+import AutoLockSelection from 'components/shared/settings/SettingsWalletDialog/AutoLockSelection';
+import LanguageSelection from 'components/shared/settings/SettingsWalletDialog/LanguageSelection';
+import ThemeModeButton from 'components/shared/settings/SettingsWalletDialog/ThemeModeButton';
 import useThemeMode from 'hooks/useThemeMode';
 import { settingsDialogActions } from 'redux/slices/settings-dialog';
 import { SettingsDialogScreen } from 'types';
 import { Props } from 'types';
 
-interface SettingsProps extends Props {
+interface SettingsWalletDialogProps extends Props {
   onClose: () => void;
 }
 
-const Index: FC<SettingsProps> = ({ onClose }) => {
+const SettingsWalletDialog: FC<SettingsWalletDialogProps> = ({ onClose }) => {
   const { dark } = useThemeMode();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
   return (
     <>
-      <DialogTitle onClose={onClose}>
-        <strong>{t<string>('Settings')}</strong>
-      </DialogTitle>
+      <DialogTitle onClose={onClose}>{t<string>('Settings')}</DialogTitle>
       <DialogContent className='pb-8'>
         <DialogContentText className='mb-1'>{t<string>('Theme Mode')}</DialogContentText>
         <ThemeModeButton />
@@ -45,7 +43,6 @@ const Index: FC<SettingsProps> = ({ onClose }) => {
           }>
           {t<string>('Backup secret recovery phrase')}
         </Button>{' '}
-        <br />
         <Button
           className='mt-4 justify-start w-full gap-2'
           variant='outlined'
@@ -61,4 +58,4 @@ const Index: FC<SettingsProps> = ({ onClose }) => {
   );
 };
 
-export default Index;
+export default SettingsWalletDialog;

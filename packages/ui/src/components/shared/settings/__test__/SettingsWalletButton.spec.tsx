@@ -1,5 +1,5 @@
 import { initializeKeyring, newUser, render, screen, UserEvent, waitFor } from '__tests__/testUtils';
-import SettingsWalletButton from 'components/shared/SettingsWalletButton';
+import SettingsWalletButton from 'components/shared/settings/SettingsWalletButton';
 
 describe('SettingsWalletButton', () => {
   it('should hide the dialog by default', async () => {

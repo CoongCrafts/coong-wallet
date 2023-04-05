@@ -51,7 +51,7 @@ const VerifyingPassword: FC<Props> = () => {
           helperText={validation || <EmptySpace />}
           onChange={handleChange}
         />
-        <div className='mt-4 flex gap-4'>
+        <div className='mt-2.5 flex gap-4'>
           <Button variant='text' onClick={doBack}>
             {t<string>('Back')}
           </Button>

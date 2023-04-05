@@ -3,27 +3,27 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Dialog, IconButton } from '@mui/material';
-import BackupSecretPhrase from 'components/shared/SettingsWalletButton/BackupSecretPhrase';
-import ChangeWalletPassword from 'components/shared/SettingsWalletButton/ChangeWalletPassword';
-import Settings from 'components/shared/SettingsWalletButton/Settings';
 import { settingsDialogActions } from 'redux/slices/settings-dialog';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 import { SettingsDialogScreen } from 'types';
+import BackupSecretPhraseDialog from './BackupSecretPhraseDialog';
+import ChangeWalletPasswordDialog from './ChangeWalletPasswordDialog';
+import SettingsWalletDialog from './SettingsWalletDialog';
 
-interface SettingsDialogProps extends Props {
+interface SettingsDialogContent extends Props {
   onClose: () => void;
 }
-const SettingsDialog: FC<SettingsDialogProps> = ({ onClose }) => {
+const SettingsDialogContent: FC<SettingsDialogContent> = ({ onClose }) => {
   const { settingsDialogScreen } = useSelector((state: RootState) => state.settingsDialog);
 
   switch (settingsDialogScreen) {
     case SettingsDialogScreen.BackupSecretPhrase:
-      return <BackupSecretPhrase onClose={onClose} />;
+      return <BackupSecretPhraseDialog onClose={onClose} />;
     case SettingsDialogScreen.ChangeWalletPassword:
-      return <ChangeWalletPassword onClose={onClose} />;
+      return <ChangeWalletPasswordDialog onClose={onClose} />;
     default:
-      return <Settings onClose={onClose} />;
+      return <SettingsWalletDialog onClose={onClose} />;
   }
 };
 
@@ -48,7 +48,7 @@ const SettingsWalletButton: FC<Props> = () => {
         <SettingsIcon />
       </IconButton>
       <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
-        <SettingsDialog onClose={handleClose} />
+        <SettingsDialogContent onClose={handleClose} />
       </Dialog>
     </>
   );

@@ -7,7 +7,7 @@ export interface SettingsDialog {
 }
 
 const initialState: SettingsDialog = {
-  settingsDialogScreen: SettingsDialogScreen.Settings,
+  settingsDialogScreen: SettingsDialogScreen.SettingsWallet,
 };
 
 const settingsDialogSlice = createSlice({
@@ -21,7 +21,7 @@ const settingsDialogSlice = createSlice({
       state.verifiedPassword = action.payload;
     },
     resetState: (state: Draft<SettingsDialog>) => {
-      state.settingsDialogScreen = SettingsDialogScreen.Settings;
+      state.settingsDialogScreen = SettingsDialogScreen.SettingsWallet;
       state.verifiedPassword = '';
     },
   },
