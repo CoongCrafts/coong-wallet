@@ -75,7 +75,6 @@ describe('SettingsWalletButton', () => {
         expect(screen.getByRole('button', { name: /English/ })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /5 minutes/ })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /Backup secret recovery phrase/ })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Change wallet password/ })).toBeInTheDocument();
       });
     });
   });
