@@ -30,7 +30,7 @@ const BackupSecretPhraseDialog: FC<BackupSecretPhraseDialogProps> = ({ onClose }
             {t<string>('Settings')}
           </Link>
           <Typography color='text.primary' variant='h6'>
-            {t<string>('Backup recovery secret phrase')}
+            {t<string>('Backup secret recovery phrase')}
           </Typography>
         </Breadcrumbs>
       </DialogTitle>
