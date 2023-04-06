@@ -160,6 +160,8 @@ export default class WalletState {
 
     const registry = new TypeRegistry();
     registry.setSignedExtensions(payloadJSON.signedExtensions);
+
+    // https://github.com/polkadot-js/extension/blob/master/packages/extension-base/src/background/RequestExtrinsicSign.ts#L18-L22
     const payload = registry.createType('ExtrinsicPayload', payloadJSON, { version: payloadJSON.version });
     const result = payload.sign(pair);
 
@@ -185,6 +187,7 @@ export default class WalletState {
     const pair = this.#keyring.getSigningPair(payloadJSON.address);
     pair.unlock(password);
 
+    // https://github.com/polkadot-js/extension/blob/master/packages/extension-base/src/background/RequestBytesSign.ts#L20-L27
     const signature = u8aToHex(pair.sign(u8aWrapBytes(payloadJSON.data)));
 
     resolve({
