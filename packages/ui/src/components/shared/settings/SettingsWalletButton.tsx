@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Dialog, IconButton } from '@mui/material';
+import BackupSecretPhraseDialog from 'components/shared/settings/BackupSecretPhraseDialog';
+import SettingsWalletDialog from 'components/shared/settings/SettingsWalletDialog';
 import { settingsDialogActions } from 'redux/slices/settings-dialog';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 import { SettingsDialogScreen } from 'types';
-import BackupSecretPhraseDialog from './BackupSecretPhraseDialog';
-import SettingsWalletDialog from './SettingsWalletDialog';
 
 interface SettingsDialogContent extends Props {
   onClose: () => void;

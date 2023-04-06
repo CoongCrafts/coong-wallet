@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import KeyIcon from '@mui/icons-material/Key';
-import LockIcon from '@mui/icons-material/Lock';
 import { Button, DialogContent, DialogContentText, Divider } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
 import AutoLockSelection from 'components/shared/settings/SettingsWalletDialog/AutoLockSelection';

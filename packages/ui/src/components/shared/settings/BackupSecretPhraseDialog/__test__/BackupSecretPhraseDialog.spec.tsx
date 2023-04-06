@@ -1,7 +1,7 @@
 import Keyring from '@coong/keyring';
 import { initializeKeyring, newUser, render, screen, UserEvent, waitFor } from '__tests__/testUtils';
+import SettingsWalletButton from 'components/shared/settings/SettingsWalletButton';
 import { SettingsDialogScreen } from 'types';
-import SettingsWalletButton from '../../SettingsWalletButton';
 
 let user: UserEvent;
 vi.spyOn(window, 'prompt').mockImplementation(() => '');
