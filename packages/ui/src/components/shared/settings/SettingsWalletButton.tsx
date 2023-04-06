@@ -8,7 +8,6 @@ import { RootState } from 'redux/store';
 import { Props } from 'types';
 import { SettingsDialogScreen } from 'types';
 import BackupSecretPhraseDialog from './BackupSecretPhraseDialog';
-import ChangeWalletPasswordDialog from './ChangeWalletPasswordDialog';
 import SettingsWalletDialog from './SettingsWalletDialog';
 
 interface SettingsDialogContent extends Props {
@@ -20,8 +19,6 @@ const SettingsDialogContent: FC<SettingsDialogContent> = ({ onClose }) => {
   switch (settingsDialogScreen) {
     case SettingsDialogScreen.BackupSecretPhrase:
       return <BackupSecretPhraseDialog onClose={onClose} />;
-    case SettingsDialogScreen.ChangeWalletPassword:
-      return <ChangeWalletPasswordDialog onClose={onClose} />;
     default:
       return <SettingsWalletDialog onClose={onClose} />;
   }

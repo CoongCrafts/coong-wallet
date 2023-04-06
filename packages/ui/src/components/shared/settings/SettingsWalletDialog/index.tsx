@@ -42,16 +42,6 @@ const SettingsWalletDialog: FC<SettingsWalletDialogProps> = ({ onClose }) => {
             dispatch(settingsDialogActions.switchSettingsDialogScreen(SettingsDialogScreen.BackupSecretPhrase))
           }>
           {t<string>('Backup secret recovery phrase')}
-        </Button>{' '}
-        <Button
-          className='mt-4 justify-start w-full gap-2'
-          variant='outlined'
-          color={dark ? 'grayLight' : 'gray'}
-          startIcon={<LockIcon />}
-          onClick={() =>
-            dispatch(settingsDialogActions.switchSettingsDialogScreen(SettingsDialogScreen.ChangeWalletPassword))
-          }>
-          {t<string>('Change wallet password')}
         </Button>
       </DialogContent>
     </>
