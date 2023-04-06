@@ -23,6 +23,7 @@ const BackupSecretPhraseDialog: FC<BackupSecretPhraseDialogProps> = ({ onClose }
       <DialogTitle onClose={onClose}>
         <Breadcrumbs>
           <Link
+            className='cursor-pointer'
             underline='hover'
             color='inherit'
             variant='h6'
