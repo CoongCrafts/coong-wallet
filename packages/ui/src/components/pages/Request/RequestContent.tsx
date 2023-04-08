@@ -2,7 +2,8 @@ import React, { FC } from 'react';
 import { CoongError, ErrorCode } from '@coong/utils';
 import { CircularProgress } from '@mui/material';
 import RequestAccess from 'components/pages/Request/RequestAccess';
-import RequestTransactionApproval from 'components/pages/Request/RequestTransactionApproval';
+import RequestSignRawMessage from 'components/pages/Request/RequestSigning/RequestSignRawMessage';
+import RequestTransactionApproval from 'components/pages/Request/RequestSigning/RequestTransactionApproval';
 import useCurrentRequestMessage from 'hooks/messages/useCurrentRequestMessage';
 import { Props } from 'types';
 
@@ -23,6 +24,8 @@ const RequestContent: FC<Props> = () => {
     return <RequestAccess message={message!} />;
   } else if (requestName === 'tab/signExtrinsic') {
     return <RequestTransactionApproval message={message!} />;
+  } else if (requestName === 'tab/signRaw') {
+    return <RequestSignRawMessage message={message!} />;
   }
 
   throw new CoongError(ErrorCode.UnknownRequest);

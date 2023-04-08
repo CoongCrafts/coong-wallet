@@ -1,6 +1,7 @@
 import { InjectedAccount } from '@polkadot/extension-inject/types';
 import { TypeRegistry } from '@polkadot/types';
-import { SignerPayloadJSON } from '@polkadot/types/types';
+import { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
+import { u8aToHex, u8aWrapBytes } from '@polkadot/util';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { KeypairType } from '@polkadot/util-crypto/types';
 import Keyring from '@coong/keyring';
@@ -159,6 +160,8 @@ export default class WalletState {
 
     const registry = new TypeRegistry();
     registry.setSignedExtensions(payloadJSON.signedExtensions);
+
+    // https://github.com/polkadot-js/extension/blob/master/packages/extension-base/src/background/RequestExtrinsicSign.ts#L18-L22
     const payload = registry.createType('ExtrinsicPayload', payloadJSON, { version: payloadJSON.version });
     const result = payload.sign(pair);
 
@@ -170,7 +173,31 @@ export default class WalletState {
 
   cancelSignExtrinsic() {
     const currentMessage = this.getCurrentRequestMessage('tab/signExtrinsic');
+    currentMessage.reject(new StandardCoongError('Cancelled'));
+  }
 
+  async signRawMessage(password: string) {
+    await this.#keyring.verifyPassword(password);
+
+    const currentMessage = this.getCurrentRequestMessage('tab/signRaw');
+
+    const { id, request, resolve } = currentMessage;
+    const payloadJSON = request.body as SignerPayloadRaw;
+
+    const pair = this.#keyring.getSigningPair(payloadJSON.address);
+    pair.unlock(password);
+
+    // https://github.com/polkadot-js/extension/blob/master/packages/extension-base/src/background/RequestBytesSign.ts#L20-L27
+    const signature = u8aToHex(pair.sign(u8aWrapBytes(payloadJSON.data)));
+
+    resolve({
+      id,
+      signature,
+    });
+  }
+
+  cancelSignRawMessage() {
+    const currentMessage = this.getCurrentRequestMessage('tab/signRaw');
     currentMessage.reject(new StandardCoongError('Cancelled'));
   }
 
