@@ -89,8 +89,11 @@ export default class Keyring {
     }
   }
 
+  async getRawMnemonic(password: string): Promise<string> {
+    return await this.#decryptMnemonic(password);
+  }
+
   async verifyPassword(password: string) {
-    await this.ensureWalletInitialized();
     await this.#decryptMnemonic(password);
   }
 

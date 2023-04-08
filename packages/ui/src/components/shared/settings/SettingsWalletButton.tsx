@@ -1,25 +1,46 @@
 import React, { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Dialog, DialogContent, DialogContentText, IconButton } from '@mui/material';
-import DialogTitle from 'components/shared/DialogTitle';
-import AutoLockSelection from 'components/shared/settings/AutoLockSelection';
-import LanguageSelection from 'components/shared/settings/LanguageSelection';
-import ThemeModeButton from 'components/shared/settings/ThemeModeButton';
+import { Dialog, IconButton } from '@mui/material';
+import BackupSecretPhraseDialog from 'components/shared/settings/BackupSecretPhraseDialog';
+import SettingsWalletDialog from 'components/shared/settings/SettingsWalletDialog';
+import { settingsDialogActions } from 'redux/slices/settings-dialog';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
+import { SettingsDialogScreen } from 'types';
+
+interface SettingsDialogContent extends Props {
+  onClose: () => void;
+}
+const SettingsDialogContent: FC<SettingsDialogContent> = ({ onClose }) => {
+  const { settingsDialogScreen } = useSelector((state: RootState) => state.settingsDialog);
+
+  switch (settingsDialogScreen) {
+    case SettingsDialogScreen.BackupSecretPhrase:
+      return <BackupSecretPhraseDialog onClose={onClose} />;
+    default:
+      return <SettingsWalletDialog onClose={onClose} />;
+  }
+};
 
 const SettingsWalletButton: FC<Props> = () => {
   const [open, setOpen] = useState(false);
   const { seedReady, locked } = useSelector((state: RootState) => state.app);
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   if (!seedReady || locked) {
     return null;
   }
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+
+    // Make sure the dialog disappears before resetting the state
+    // to prevent the dialog content from changing in the transition
+    setTimeout(() => dispatch(settingsDialogActions.resetState()), 50);
+  };
 
   return (
     <>
@@ -27,15 +48,7 @@ const SettingsWalletButton: FC<Props> = () => {
         <SettingsIcon />
       </IconButton>
       <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
-        <DialogTitle onClose={handleClose}>{t<string>('Settings')}</DialogTitle>
-        <DialogContent className='pb-8'>
-          <DialogContentText className='mb-1'>{t<string>('Theme Mode')}</DialogContentText>
-          <ThemeModeButton />
-          <DialogContentText className='mb-1 mt-4'>{t<string>('Language')}</DialogContentText>
-          <LanguageSelection />
-          <DialogContentText className='mb-1 mt-4'>{t<string>('Auto-lock wallet after')}</DialogContentText>
-          <AutoLockSelection />
-        </DialogContent>
+        <SettingsDialogContent onClose={handleClose} />
       </Dialog>
     </>
   );
