@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import accountsSlice from 'redux/slices/accounts';
 import appSlice from 'redux/slices/app';
 import settingsSlice from 'redux/slices/settings';
+import settingsDialogSlice from 'redux/slices/settings-dialog';
 import setupWalletSlice from 'redux/slices/setup-wallet';
 
 const appPersistConfig = {
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   [setupWalletSlice.name]: setupWalletSlice.reducer,
   [accountsSlice.name]: accountsSlice.reducer,
   [settingsSlice.name]: persistReducer(settingsPersistConfig, settingsSlice.reducer),
+  [settingsDialogSlice.name]: settingsDialogSlice.reducer,
 });
 
 export const newStore = (preloadedState?: PreloadedState<any>) => {
