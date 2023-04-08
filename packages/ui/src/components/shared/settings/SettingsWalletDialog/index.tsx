@@ -1,15 +1,11 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import KeyIcon from '@mui/icons-material/Key';
-import { Button, DialogContent, DialogContentText, Divider } from '@mui/material';
+import { DialogContent, DialogContentText, Divider } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
 import AutoLockSelection from 'components/shared/settings/SettingsWalletDialog/AutoLockSelection';
+import BackupSecretPhraseButton from 'components/shared/settings/SettingsWalletDialog/BackupSecretPhraseButton';
 import LanguageSelection from 'components/shared/settings/SettingsWalletDialog/LanguageSelection';
 import ThemeModeButton from 'components/shared/settings/SettingsWalletDialog/ThemeModeButton';
-import useThemeMode from 'hooks/useThemeMode';
-import { settingsDialogActions } from 'redux/slices/settings-dialog';
-import { SettingsDialogScreen } from 'types';
 import { Props } from 'types';
 
 interface SettingsWalletDialogProps extends Props {
@@ -17,9 +13,7 @@ interface SettingsWalletDialogProps extends Props {
 }
 
 const SettingsWalletDialog: FC<SettingsWalletDialogProps> = ({ onClose }) => {
-  const { dark } = useThemeMode();
   const { t } = useTranslation();
-  const dispatch = useDispatch();
 
   return (
     <>
@@ -32,16 +26,7 @@ const SettingsWalletDialog: FC<SettingsWalletDialogProps> = ({ onClose }) => {
         <DialogContentText className='mb-1 mt-4'>{t<string>('Auto-lock wallet after')}</DialogContentText>
         <AutoLockSelection />
         <Divider className='mt-4' />
-        <Button
-          className='mt-4 justify-start w-full gap-2'
-          variant='outlined'
-          color={dark ? 'grayLight' : 'gray'}
-          startIcon={<KeyIcon />}
-          onClick={() =>
-            dispatch(settingsDialogActions.switchSettingsDialogScreen(SettingsDialogScreen.BackupSecretPhrase))
-          }>
-          {t<string>('Backup secret recovery phrase')}
-        </Button>
+        <BackupSecretPhraseButton />
       </DialogContent>
     </>
   );

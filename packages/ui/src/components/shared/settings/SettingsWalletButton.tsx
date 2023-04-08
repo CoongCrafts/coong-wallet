@@ -37,7 +37,8 @@ const SettingsWalletButton: FC<Props> = () => {
   const handleClose = () => {
     setOpen(false);
 
-    // Make sure the dialog is disappear
+    // Make sure the dialog disappears before resetting the state
+    // to prevent the dialog content from changing in the transition
     setTimeout(() => dispatch(settingsDialogActions.resetState()), 50);
   };
 
