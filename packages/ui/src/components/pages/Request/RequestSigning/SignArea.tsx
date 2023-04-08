@@ -22,6 +22,11 @@ const SignArea: FC<SignAreaProps> = ({ onSign, onCancel, cancelButtonLabel = 'Ca
     e.preventDefault();
     toggleLoading(true);
 
+    // signing & accounts decryption are synchronous operations
+    // and might take some time to do
+    // so we delay it a short amount of time to make sure the UI could be updated (disable button, ...)
+    // before the signing process begin
+    // TODO: Moving CPU-intensive operations to worker
     setTimeout(async () => {
       try {
         await onSign(password);
