@@ -2,12 +2,20 @@ import { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, DialogContentText, TextField } from '@mui/material';
-import EmptySpace from 'components/shared/misc/EmptySpace';
-import { useWalletState } from 'providers/WalletStateProvider';
-import { settingsDialogActions } from 'redux/slices/settings-dialog';
-import { Props } from 'types';
+import { useWalletState } from '../../../providers/WalletStateProvider';
+import { settingsDialogActions } from '../../../redux/slices/settings-dialog';
+import { Props } from '../../../types';
+import EmptySpace from '../misc/EmptySpace';
 
-const VerifyingPassword: FC<Props> = () => {
+interface VerifyingPasswordProps extends Props {
+  backButtonLabel?: string;
+  continueButtonLabel?: string;
+}
+
+const VerifyingPassword: FC<VerifyingPasswordProps> = ({
+  backButtonLabel = 'Back',
+  continueButtonLabel = 'Continue',
+}) => {
   const { keyring } = useWalletState();
   const [password, setPassword] = useState('');
   const [validation, setValidation] = useState('');
@@ -39,7 +47,7 @@ const VerifyingPassword: FC<Props> = () => {
 
   return (
     <>
-      <DialogContentText className='mt-4 mb-4'>{t<string>('Enter your wallet password to continue')}</DialogContentText>
+      <DialogContentText className='mt-4 mb-2'>{t<string>('Enter your wallet password to continue')}</DialogContentText>
       <form onSubmit={doVerify} noValidate>
         <TextField
           type='password'
@@ -53,10 +61,10 @@ const VerifyingPassword: FC<Props> = () => {
         />
         <div className='mt-2.5 flex gap-4'>
           <Button variant='text' onClick={doBack}>
-            {t<string>('Back')}
+            {t<string>(backButtonLabel)}
           </Button>
           <Button type='submit' disabled={!password} fullWidth variant='contained'>
-            {t<string>('View Secret Recovery Phrase')}
+            {t<string>(continueButtonLabel)}
           </Button>
         </div>
       </form>

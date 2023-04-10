@@ -5,21 +5,12 @@ import { Button, TextField } from '@mui/material';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { Props } from 'types';
+import usePasswordValidation from '../../../hooks/usePasswordValidation';
 
 const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
   const dispatch = useDispatch();
-  const [password, setPassword] = useState('');
-  const [validation, setValidation] = useState('');
+  const { password, validation, setPassword } = usePasswordValidation();
   const { t } = useTranslation();
-
-  useEffect(() => {
-    // TODO Add more strict password policy & password strength indicator
-    if (password && password.length <= 5) {
-      setValidation(t<string>("Password's too short"));
-    } else {
-      setValidation('');
-    }
-  }, [password]);
 
   const next = (e: FormEvent) => {
     e.preventDefault();

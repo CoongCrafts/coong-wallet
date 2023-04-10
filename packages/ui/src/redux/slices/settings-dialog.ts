@@ -3,7 +3,7 @@ import { SettingsDialogScreen } from 'types';
 
 export interface SettingsDialog {
   settingsDialogScreen: SettingsDialogScreen;
-  verifiedPassword?: string;
+  verifiedPassword?: string | null;
 }
 
 const initialState: SettingsDialog = {
@@ -17,12 +17,12 @@ const settingsDialogSlice = createSlice({
     switchSettingsDialogScreen: (state: Draft<SettingsDialog>, action: PayloadAction<SettingsDialogScreen>) => {
       state.settingsDialogScreen = action.payload;
     },
-    setVerifiedPassword: (state: Draft<SettingsDialog>, action: PayloadAction<string>) => {
+    setVerifiedPassword: (state: Draft<SettingsDialog>, action: PayloadAction<string | null>) => {
       state.verifiedPassword = action.payload;
     },
     resetState: (state: Draft<SettingsDialog>) => {
       state.settingsDialogScreen = SettingsDialogScreen.SettingsWallet;
-      state.verifiedPassword = '';
+      state.verifiedPassword = null;
     },
   },
 });

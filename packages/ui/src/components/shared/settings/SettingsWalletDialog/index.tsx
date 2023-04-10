@@ -7,6 +7,7 @@ import BackupSecretPhraseButton from 'components/shared/settings/SettingsWalletD
 import LanguageSelection from 'components/shared/settings/SettingsWalletDialog/LanguageSelection';
 import ThemeModeButton from 'components/shared/settings/SettingsWalletDialog/ThemeModeButton';
 import { Props } from 'types';
+import ChangeWalletPasswordButton from './ChangeWalletPasswordButton';
 
 interface SettingsWalletDialogProps extends Props {
   onClose: () => void;
@@ -27,6 +28,7 @@ const SettingsWalletDialog: FC<SettingsWalletDialogProps> = ({ onClose }) => {
         <AutoLockSelection />
         <Divider className='mt-4' />
         <BackupSecretPhraseButton />
+        <ChangeWalletPasswordButton />
       </DialogContent>
     </>
   );

@@ -9,6 +9,7 @@ import { settingsDialogActions } from 'redux/slices/settings-dialog';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 import { SettingsDialogScreen } from 'types';
+import ChangeWalletPasswordDialog from './ChangeWalletPasswordDialog/ChangeWalletPasswordDialog';
 
 interface SettingsDialogContent extends Props {
   onClose: () => void;
@@ -19,6 +20,8 @@ const SettingsDialogContent: FC<SettingsDialogContent> = ({ onClose }) => {
   switch (settingsDialogScreen) {
     case SettingsDialogScreen.BackupSecretPhrase:
       return <BackupSecretPhraseDialog onClose={onClose} />;
+    case SettingsDialogScreen.ChangeWalletPassword:
+      return <ChangeWalletPasswordDialog onClose={onClose} />;
     default:
       return <SettingsWalletDialog onClose={onClose} />;
   }
