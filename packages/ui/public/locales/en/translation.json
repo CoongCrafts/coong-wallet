@@ -103,5 +103,13 @@
   "life time": "",
   "method data": "",
   "nonce": "",
-  "version": ""
+  "version": "",
+  "The password changing process might take time if there're many accounts in the wallet, please be patient.": "",
+  "Change wallet password": "",
+  "Change password successfully!": "",
+  "This password is identical with your current password": "",
+  "Confirm new password": "",
+  "New password": "",
+  "Change password": "",
+  "Continue": ""
 }

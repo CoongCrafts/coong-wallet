@@ -51,7 +51,7 @@ const ChangingWalletPassword: FC<Props> = () => {
 
   useEffect(() => {
     if (newPassword !== verifiedPassword) return;
-    setValidation(t<string>('Password is identical with your current password'));
+    setValidation(t<string>('This password is identical with your current password'));
   }, [newPassword]);
 
   return (
