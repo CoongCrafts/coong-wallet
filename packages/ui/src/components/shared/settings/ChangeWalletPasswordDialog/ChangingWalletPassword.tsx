@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useToggle } from 'react-use';
-import { Button, TextField } from '@mui/material';
+import { Button, DialogContentText, TextField } from '@mui/material';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import usePasswordValidation from 'hooks/usePasswordValidation';
 import { useWalletState } from 'providers/WalletStateProvider';
@@ -55,35 +55,42 @@ const ChangingWalletPassword: FC<Props> = () => {
   }, [newPassword]);
 
   return (
-    <form className='mt-2 flex flex-col gap-2' onSubmit={doChangePassword}>
-      <TextField
-        type='password'
-        label={t<string>('New password')}
-        value={newPassword}
-        onChange={(e) => setNewPassword(e.target.value)}
-        fullWidth
-        autoFocus
-        error={!!validation}
-        helperText={!!validation ? validation : <EmptySpace />}
-      />
-      <TextField
-        type='password'
-        label={t<string>('Confirm new password')}
-        value={passwordConfirmation}
-        onChange={(e) => setPasswordConfirmation(e.target.value)}
-        fullWidth
-        error={!!passwordConfirmation && notMatch}
-        helperText={!!passwordConfirmation && notMatch ? t<string>('Password does not match') : <EmptySpace />}
-      />
-      <div className='flex gap-4'>
-        <Button onClick={doBack} variant='text'>
-          {t<string>('Back')}
-        </Button>
-        <Button type='submit' variant='contained' disabled={notMatch || !!validation || loading} fullWidth>
-          {t<string>('Change password')}
-        </Button>
-      </div>
-    </form>
+    <>
+      <DialogContentText className='mt-4'>{t<string>('Choose your new password to continue')}</DialogContentText>
+      <form className='mt-2 flex flex-col gap-2' onSubmit={doChangePassword}>
+        <TextField
+          type='password'
+          label={t<string>('New password')}
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+          fullWidth
+          autoFocus
+          error={!!validation}
+          helperText={!!validation ? validation : <EmptySpace />}
+        />
+        <TextField
+          type='password'
+          label={t<string>('Confirm new password')}
+          value={passwordConfirmation}
+          onChange={(e) => setPasswordConfirmation(e.target.value)}
+          fullWidth
+          error={!!passwordConfirmation && notMatch}
+          helperText={!!passwordConfirmation && notMatch ? t<string>('Password does not match') : <EmptySpace />}
+        />
+        <div className='flex gap-4'>
+          <Button onClick={doBack} variant='text'>
+            {t<string>('Back')}
+          </Button>
+          <Button
+            type='submit'
+            variant='contained'
+            disabled={!newPassword || notMatch || !!validation || loading}
+            fullWidth>
+            {t<string>('Change password')}
+          </Button>
+        </div>
+      </form>
+    </>
   );
 };
 
