@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Dialog, IconButton } from '@mui/material';
 import BackupSecretPhraseDialog from 'components/shared/settings/BackupSecretPhraseDialog';
+import ChangeWalletPasswordDialog from 'components/shared/settings/ChangeWalletPasswordDialog';
 import SettingsWalletDialog from 'components/shared/settings/SettingsWalletDialog';
 import { settingsDialogActions } from 'redux/slices/settings-dialog';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 import { SettingsDialogScreen } from 'types';
-import ChangeWalletPasswordDialog from './ChangeWalletPasswordDialog/ChangeWalletPasswordDialog';
 
 interface SettingsDialogContent extends Props {
   onClose: () => void;

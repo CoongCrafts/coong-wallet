@@ -4,10 +4,10 @@ import { DialogContent, DialogContentText, Divider } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
 import AutoLockSelection from 'components/shared/settings/SettingsWalletDialog/AutoLockSelection';
 import BackupSecretPhraseButton from 'components/shared/settings/SettingsWalletDialog/BackupSecretPhraseButton';
+import ChangeWalletPasswordButton from 'components/shared/settings/SettingsWalletDialog/ChangeWalletPasswordButton';
 import LanguageSelection from 'components/shared/settings/SettingsWalletDialog/LanguageSelection';
 import ThemeModeButton from 'components/shared/settings/SettingsWalletDialog/ThemeModeButton';
 import { Props } from 'types';
-import ChangeWalletPasswordButton from './ChangeWalletPasswordButton';
 
 interface SettingsWalletDialogProps extends Props {
   onClose: () => void;

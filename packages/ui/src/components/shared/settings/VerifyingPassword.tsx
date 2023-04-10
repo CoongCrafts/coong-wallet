@@ -2,10 +2,10 @@ import { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, DialogContentText, TextField } from '@mui/material';
-import { useWalletState } from '../../../providers/WalletStateProvider';
-import { settingsDialogActions } from '../../../redux/slices/settings-dialog';
-import { Props } from '../../../types';
-import EmptySpace from '../misc/EmptySpace';
+import EmptySpace from 'components/shared/misc/EmptySpace';
+import { useWalletState } from 'providers/WalletStateProvider';
+import { settingsDialogActions } from 'redux/slices/settings-dialog';
+import { Props } from 'types';
 
 interface VerifyingPasswordProps extends Props {
   backButtonLabel?: string;

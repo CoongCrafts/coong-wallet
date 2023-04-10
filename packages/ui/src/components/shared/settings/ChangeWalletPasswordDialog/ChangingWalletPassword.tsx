@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useToggle } from 'react-use';
 import { Button, TextField } from '@mui/material';
-import usePasswordValidation from '../../../../hooks/usePasswordValidation';
-import { useWalletState } from '../../../../providers/WalletStateProvider';
-import { settingsDialogActions } from '../../../../redux/slices/settings-dialog';
-import { RootState } from '../../../../redux/store';
-import { Props } from '../../../../types';
-import EmptySpace from '../../misc/EmptySpace';
+import EmptySpace from 'components/shared/misc/EmptySpace';
+import usePasswordValidation from 'hooks/usePasswordValidation';
+import { useWalletState } from 'providers/WalletStateProvider';
+import { settingsDialogActions } from 'redux/slices/settings-dialog';
+import { RootState } from 'redux/store';
+import { Props } from 'types';
 
 const ChangingWalletPassword: FC<Props> = () => {
   const dispatch = useDispatch();
@@ -63,8 +63,8 @@ const ChangingWalletPassword: FC<Props> = () => {
         onChange={(e) => setNewPassword(e.target.value)}
         fullWidth
         autoFocus
-        error={!!newPassword && !!validation}
-        helperText={!!newPassword && !!validation ? validation : <EmptySpace />}
+        error={!!validation}
+        helperText={!!validation ? validation : <EmptySpace />}
       />
       <TextField
         type='password'

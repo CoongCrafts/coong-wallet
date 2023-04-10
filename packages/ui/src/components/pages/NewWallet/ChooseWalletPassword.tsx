@@ -1,11 +1,11 @@
-import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FC, FormEvent } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, TextField } from '@mui/material';
 import EmptySpace from 'components/shared/misc/EmptySpace';
+import usePasswordValidation from 'hooks/usePasswordValidation';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { Props } from 'types';
-import usePasswordValidation from '../../../hooks/usePasswordValidation';
 
 const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
   const dispatch = useDispatch();

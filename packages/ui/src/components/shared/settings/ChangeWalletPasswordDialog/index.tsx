@@ -2,12 +2,12 @@ import { FC } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Breadcrumbs, DialogContent, DialogContentText, Link, Typography } from '@mui/material';
-import { settingsDialogActions } from '../../../../redux/slices/settings-dialog';
-import { RootState } from '../../../../redux/store';
-import { Props } from '../../../../types';
-import DialogTitle from '../../DialogTitle';
-import VerifyingPassword from '../VerifyingPassword';
-import ChangingWalletPassword from './ChangingWalletPassword';
+import DialogTitle from 'components/shared/DialogTitle';
+import ChangingWalletPassword from 'components/shared/settings/ChangeWalletPasswordDialog/ChangingWalletPassword';
+import VerifyingPassword from 'components/shared/settings/VerifyingPassword';
+import { settingsDialogActions } from 'redux/slices/settings-dialog';
+import { RootState } from 'redux/store';
+import { Props } from 'types';
 
 interface ChangeWalletPasswordDialogProps extends Props {
   onClose: () => void;

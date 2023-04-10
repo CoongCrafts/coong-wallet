@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import LockIcon from '@mui/icons-material/Lock';
 import { Button } from '@mui/material';
-import useThemeMode from '../../../../hooks/useThemeMode';
-import { settingsDialogActions } from '../../../../redux/slices/settings-dialog';
-import { Props, SettingsDialogScreen } from '../../../../types';
+import useThemeMode from 'hooks/useThemeMode';
+import { settingsDialogActions } from 'redux/slices/settings-dialog';
+import { Props, SettingsDialogScreen } from 'types';
 
 const ChangeWalletPasswordButton: FC<Props> = () => {
   const { t } = useTranslation();
