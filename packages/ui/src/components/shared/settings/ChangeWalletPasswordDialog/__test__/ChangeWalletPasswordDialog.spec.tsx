@@ -103,14 +103,17 @@ describe('when changing password', () => {
     expect(await screen.findByRole('button', { name: /Change password/ })).toBeEnabled();
   });
 
-  it('should disable `Change password` when before changing password begin', async () => {
-    await user.type(newPasswordField, 'valid-password');
-    await user.type(passwordConfirmationField, 'valid-password');
+  it('should switch to default settings dialog content when clicking on `Back` button', async () => {
+    const backButton = await screen.findByRole('button', { name: /Back/ });
+    await user.click(backButton);
 
-    const changePasswordButton = await screen.findByRole('button', { name: /Change password/ });
-    await user.click(changePasswordButton);
-
-    expect(await screen.findByRole('button', { name: /Change password/ })).toBeDisabled();
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /Dark/ })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /English/ })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /5 minutes/ })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Backup secret recovery phrase/ })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Change wallet password/ })).toBeInTheDocument();
+    });
   });
 
   it('should show success message when change password completed', async () => {
@@ -123,16 +126,13 @@ describe('when changing password', () => {
     expect(await screen.findByText(/Change password successfully/)).toBeInTheDocument();
   });
 
-  it('should switch to default settings dialog content when clicking on `Back` button', async () => {
-    const backButton = await screen.findByRole('button', { name: /Back/ });
-    await user.click(backButton);
+  it('should disable `Change password` when before changing password begin', async () => {
+    await user.type(newPasswordField, 'valid-password');
+    await user.type(passwordConfirmationField, 'valid-password');
 
-    await waitFor(() => {
-      expect(screen.getByRole('button', { name: /Dark/ })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /English/ })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /5 minutes/ })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /Backup secret recovery phrase/ })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /Change wallet password/ })).toBeInTheDocument();
-    });
+    const changePasswordButton = await screen.findByRole('button', { name: /Change password/ });
+    await user.click(changePasswordButton);
+
+    expect(await screen.findByRole('button', { name: /Change password/ })).toBeDisabled();
   });
 });
