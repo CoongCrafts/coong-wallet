@@ -54,12 +54,25 @@ describe('SettingsWalletButton', () => {
         name: /Backup secret recovery phrase/,
       });
 
-      user.click(BackupSecretRecoveryPhraseButton);
+      await user.click(BackupSecretRecoveryPhraseButton);
 
       await waitFor(() => {
         expect(screen.getByText(/Backup secret recovery phrase/)).toBeInTheDocument();
         expect(screen.getByText(/reveal the secret recovery phrase/)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /View Secret Recovery Phrase/ })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Back/ })).toBeInTheDocument();
+      });
+    });
+
+    it('should switch to ChangeWalletPasswordDialog content when clicking on `Change wallet password` button', async () => {
+      const ChangeWalletPasswordButton = await screen.findByRole('button', { name: /Change wallet password/ });
+
+      await user.click(ChangeWalletPasswordButton);
+
+      await waitFor(() => {
+        expect(screen.getByText(/Change wallet password/)).toBeInTheDocument();
+        expect(screen.getByText(/Enter your wallet password to continue/)).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Continue/ })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /Back/ })).toBeInTheDocument();
       });
     });
@@ -75,6 +88,7 @@ describe('SettingsWalletButton', () => {
         expect(screen.getByRole('button', { name: /English/ })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /5 minutes/ })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /Backup secret recovery phrase/ })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Change wallet password/ })).toBeInTheDocument();
       });
     });
   });
