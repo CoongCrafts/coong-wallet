@@ -13,7 +13,7 @@ export default function usePasswordValidation(password: string) {
     if (password && password.length <= 5) {
       setValidation(t<string>("Password's too short"));
     } else if (!!oldPassword && password === oldPassword) {
-      setValidation(t<string>('This password is identical with your current password'));
+      setValidation(t<string>('Please pick a different password than the previous one'));
     } else {
       setValidation('');
     }

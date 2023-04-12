@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Breadcrumbs, DialogContent, DialogContentText, Link, Typography } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
 import ShowingSecretPhrase from 'components/shared/settings/BackupSecretPhraseDialog/ShowingSecretPhrase';
+import VerifyingPassword from 'components/shared/settings/VerifyingPassword';
 import { settingsDialogActions } from 'redux/slices/settings-dialog';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
-import VerifyingPassword from '../VerifyingPassword';
 
 interface BackupSecretPhraseDialogProps extends Props {
   onClose: () => void;

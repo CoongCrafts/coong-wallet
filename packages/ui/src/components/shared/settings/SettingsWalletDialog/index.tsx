@@ -20,7 +20,7 @@ const SettingsWalletDialog: FC<SettingsWalletDialogProps> = ({ onClose }) => {
     <>
       <DialogTitle onClose={onClose}>{t<string>('Settings')}</DialogTitle>
       <DialogContent className='pb-8'>
-        <DialogContentText className='mb-1'>{t<string>('Theme Mode')}</DialogContentText>
+        <DialogContentText className='mb-1'>{t<string>('Theme mode')}</DialogContentText>
         <ThemeModeButton />
         <DialogContentText className='mb-1 mt-4'>{t<string>('Language')}</DialogContentText>
         <LanguageSelection />

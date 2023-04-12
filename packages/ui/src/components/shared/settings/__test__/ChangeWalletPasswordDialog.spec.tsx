@@ -87,7 +87,7 @@ describe('ChangeWalletPasswordDialog', () => {
     it('should show error message when typing new password is identical with current password', async () => {
       await user.type(newPasswordField, 'supersecretpassword');
 
-      expect(await screen.findByText(/This password is identical with your current password/)).toBeInTheDocument();
+      expect(await screen.findByText(/Please pick a different password than the previous one/)).toBeInTheDocument();
     });
 
     it('should show error message when typing not match password confirmation', async () => {

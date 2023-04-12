@@ -1,9 +1,9 @@
 import { FC, FormEvent, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useToggle } from 'react-use';
-import { Button, DialogContentText, TextField } from '@mui/material';
+import { Alert, Button, DialogContentText, TextField } from '@mui/material';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import usePasswordValidation from 'hooks/usePasswordValidation';
 import { useWalletState } from 'providers/WalletStateProvider';
@@ -52,8 +52,13 @@ const ChangingWalletPassword: FC<Props> = () => {
 
   return (
     <>
-      <DialogContentText className='mt-4'>{t<string>('Choose your new password to continue')}</DialogContentText>
-      <form className='mt-2 flex flex-col gap-2' onSubmit={doChangePassword}>
+      <DialogContentText>
+        <Trans>
+          Your password will be used to encrypt accounts as well as unlock the wallet, make sure to pick a strong &
+          easy-to-remember password
+        </Trans>
+      </DialogContentText>
+      <form className='mt-4 flex flex-col gap-2' onSubmit={doChangePassword}>
         <TextField
           type='password'
           label={t<string>('New password')}
@@ -86,6 +91,11 @@ const ChangingWalletPassword: FC<Props> = () => {
           </Button>
         </div>
       </form>
+      <Alert className='mt-4' severity='info'>
+        {t<string>(
+          'The password changing process might take time if there are many accounts in the wallet, please be patient.',
+        )}
+      </Alert>
     </>
   );
 };

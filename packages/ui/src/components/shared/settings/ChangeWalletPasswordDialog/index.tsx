@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Breadcrumbs, DialogContent, DialogContentText, Link, Typography } from '@mui/material';
+import { Breadcrumbs, DialogContent, Link, Typography } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
 import ChangingWalletPassword from 'components/shared/settings/ChangeWalletPasswordDialog/ChangingWalletPassword';
 import VerifyingPassword from 'components/shared/settings/VerifyingPassword';
@@ -36,17 +36,6 @@ const ChangeWalletPasswordDialog: FC<ChangeWalletPasswordDialogProps> = ({ onClo
         </Breadcrumbs>
       </DialogTitle>
       <DialogContent className='pb-8 flex-col flex gap-2'>
-        <DialogContentText>
-          <Trans>
-            Your password will be used to encrypt accounts as well as unlock the wallet, make sure to pick a strong &
-            easy-to-remember password
-          </Trans>
-        </DialogContentText>
-        <DialogContentText>
-          <Trans>
-            The password changing process might take time if there're many accounts in the wallet, please be patient.
-          </Trans>
-        </DialogContentText>
         {verifiedPassword ? <ChangingWalletPassword /> : <VerifyingPassword />}
       </DialogContent>
     </>
