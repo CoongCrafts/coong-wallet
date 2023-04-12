@@ -16,7 +16,8 @@ const ChangingWalletPassword: FC<Props> = () => {
   const { keyring } = useWalletState();
   const { t } = useTranslation();
   const { verifiedPassword } = useSelector((state: RootState) => state.settingsDialog);
-  const { password: newPassword, validation, setPassword: setNewPassword, setValidation } = usePasswordValidation();
+  const [newPassword, setNewPassword] = useState<string>('');
+  const { validation } = usePasswordValidation(newPassword);
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>('');
   const [notMatch, setNotMatch] = useState<boolean>(false);
   const [loading, setLoading] = useToggle(false);
@@ -32,11 +33,11 @@ const ChangingWalletPassword: FC<Props> = () => {
     setTimeout(async () => {
       try {
         await keyring.changePassword(verifiedPassword!, newPassword);
+        doBack();
+        toast.success(t<string>('Password changed successfully!'));
       } catch (e: any) {
-        console.error(e.message);
+        toast.error(t<string>(e.message));
       }
-      doBack();
-      toast.success(t<string>('Change password successfully!'));
     }, 200);
   };
 
@@ -48,11 +49,6 @@ const ChangingWalletPassword: FC<Props> = () => {
   useEffect(() => {
     setNotMatch(passwordConfirmation !== newPassword);
   }, [passwordConfirmation, newPassword]);
-
-  useEffect(() => {
-    if (newPassword !== verifiedPassword) return;
-    setValidation(t<string>('This password is identical with your current password'));
-  }, [newPassword]);
 
   return (
     <>

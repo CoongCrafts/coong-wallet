@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FormEvent } from 'react';
+import { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, TextField } from '@mui/material';
@@ -9,7 +9,8 @@ import { Props } from 'types';
 
 const ChooseWalletPassword: FC<Props> = ({ className = '' }: Props) => {
   const dispatch = useDispatch();
-  const { password, validation, setPassword } = usePasswordValidation();
+  const [password, setPassword] = useState<string>('');
+  const { validation } = usePasswordValidation(password);
   const { t } = useTranslation();
 
   const next = (e: FormEvent) => {

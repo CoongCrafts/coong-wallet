@@ -112,7 +112,7 @@ describe('ChangeWalletPasswordDialog', () => {
       await user.click(changePasswordButton);
 
       expect(await screen.findByRole('button', { name: /Change password/ })).toBeDisabled();
-      expect(await screen.findByText(/Change password successfully/)).toBeInTheDocument();
+      expect(await screen.findByText(/Password changed successfully/)).toBeInTheDocument();
     });
 
     it('should switch to default settings dialog content when clicking on `Back` button', async () => {

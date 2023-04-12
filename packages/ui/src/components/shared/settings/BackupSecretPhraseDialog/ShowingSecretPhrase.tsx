@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { useAsync, useCopyToClipboard } from 'react-use';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { Button, DialogContentText } from '@mui/material';
@@ -32,7 +33,7 @@ const ShowingSecretPhrase: FC<Props> = () => {
     try {
       setSecretPhrase(await keyring.getRawMnemonic(verifiedPassword!));
     } catch (e: any) {
-      console.error(e.message);
+      toast.error(e.message);
     }
   });
 

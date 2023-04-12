@@ -1,19 +1,23 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/store';
 
-export default function usePasswordValidation() {
+export default function usePasswordValidation(password: string) {
   const [validation, setValidation] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const { verifiedPassword: oldPassword } = useSelector((state: RootState) => state.settingsDialog);
   const { t } = useTranslation();
 
   useEffect(() => {
     // TODO Add more strict password policy & password strength indicator
     if (password && password.length <= 5) {
       setValidation(t<string>("Password's too short"));
+    } else if (!!oldPassword && password === oldPassword) {
+      setValidation(t<string>('This password is identical with your current password'));
     } else {
       setValidation('');
     }
   }, [password]);
 
-  return { password, validation, setPassword, setValidation };
+  return { validation };
 }
