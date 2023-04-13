@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
+import { NewWalletScreenStep, RestoreWalletScreenStep } from 'components/pages/SetupWallet/types';
 
 export interface SetupWalletState {
   newWalletScreenStep: NewWalletScreenStep;
+  restoreWalletScreenStep: RestoreWalletScreenStep;
   password?: string;
   passwordConfirmation?: string;
   secretPhrase?: string;
@@ -10,6 +11,7 @@ export interface SetupWalletState {
 
 const initialState: SetupWalletState = {
   newWalletScreenStep: NewWalletScreenStep.ChooseWalletPassword,
+  restoreWalletScreenStep: RestoreWalletScreenStep.EnterSecretRecoveryPhrase,
 };
 
 const setupWalletSlice = createSlice({
@@ -21,7 +23,12 @@ const setupWalletSlice = createSlice({
     },
     setPassword: (state, action) => {
       state.password = action.payload;
-      state.newWalletScreenStep = NewWalletScreenStep.ConfirmWalletPassword;
+    },
+    setRestoreWalletScreenStep: (state, action) => {
+      state.restoreWalletScreenStep = action.payload;
+    },
+    setSecretPhrase: (state, action) => {
+      state.secretPhrase = action.payload;
     },
   },
 });

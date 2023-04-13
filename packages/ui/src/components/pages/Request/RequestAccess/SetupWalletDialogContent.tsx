@@ -1,7 +1,8 @@
 import { FC, useState } from 'react';
-import NewWallet from 'components/pages/NewWallet';
+import NewWallet from 'components/pages/SetupWallet/NewWallet';
 import Welcome from 'components/pages/Welcome';
 import { Props } from 'types';
+import RestoreWallet from '../../SetupWallet/RestoreWallet';
 
 enum ViewStep {
   WELCOME,
@@ -15,8 +16,15 @@ const SetupWalletDialogContent: FC<Props> = () => {
   switch (viewStep) {
     case ViewStep.CREATE_NEW_WALLET:
       return <NewWallet onWalletSetup={() => {}} />;
+    case ViewStep.RESTORE_WALLET:
+      return <RestoreWallet onWalletSetup={() => {}} />;
     default:
-      return <Welcome onCreateNewWallet={() => setViewStep(ViewStep.CREATE_NEW_WALLET)} />;
+      return (
+        <Welcome
+          onCreateNewWallet={() => setViewStep(ViewStep.CREATE_NEW_WALLET)}
+          onRestoreExistingWallet={() => setViewStep(ViewStep.RESTORE_WALLET)}
+        />
+      );
   }
 };
 
