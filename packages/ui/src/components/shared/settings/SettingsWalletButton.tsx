@@ -31,6 +31,7 @@ const SettingsWalletButton: FC<Props> = () => {
   const [open, setOpen] = useState(false);
   const { seedReady, locked } = useSelector((state: RootState) => state.app);
   const { t } = useTranslation();
+  const { onChangingPassword } = useSelector((state: RootState) => state.settingsDialog);
   const dispatch = useDispatch();
 
   if (!seedReady || locked) {
@@ -38,6 +39,7 @@ const SettingsWalletButton: FC<Props> = () => {
   }
 
   const handleClose = () => {
+    if (onChangingPassword) return;
     setOpen(false);
 
     // Make sure the dialog disappears before resetting the state

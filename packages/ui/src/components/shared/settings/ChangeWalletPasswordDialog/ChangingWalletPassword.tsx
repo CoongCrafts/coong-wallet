@@ -19,11 +19,11 @@ const ChangingWalletPassword: FC<Props> = () => {
   const { validation } = usePasswordValidation(newPassword);
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>('');
   const [notMatch, setNotMatch] = useState<boolean>(false);
-  const { loading } = useSelector((state: RootState) => state.settingsDialog);
+  const { onChangingPassword } = useSelector((state: RootState) => state.settingsDialog);
 
   const doChangePassword = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(settingsDialogActions.setLoading(true));
+    dispatch(settingsDialogActions.setOnChangingPassword(true));
 
     // changing password has accounts decryption and encryption which are synchronous operations
     // and might take some time to do
@@ -77,13 +77,13 @@ const ChangingWalletPassword: FC<Props> = () => {
           helperText={!!passwordConfirmation && notMatch ? t<string>('Password does not match') : <EmptySpace />}
         />
         <div className='flex gap-4'>
-          <Button onClick={doBack} variant='text' disabled={loading}>
+          <Button onClick={doBack} variant='text' disabled={onChangingPassword}>
             {t<string>('Back')}
           </Button>
           <Button
             type='submit'
             variant='contained'
-            disabled={!newPassword || notMatch || !!validation || loading}
+            disabled={!newPassword || notMatch || !!validation || onChangingPassword}
             fullWidth>
             {t<string>('Change Password')}
           </Button>

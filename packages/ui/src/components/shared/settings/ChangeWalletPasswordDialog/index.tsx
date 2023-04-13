@@ -17,16 +17,16 @@ const ChangeWalletPasswordDialog: FC<ChangeWalletPasswordDialogProps> = ({ onClo
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { verifiedPassword } = useSelector((state: RootState) => state.settingsDialog);
-  const { loading } = useSelector((state: RootState) => state.settingsDialog);
+  const { onChangingPassword } = useSelector((state: RootState) => state.settingsDialog);
 
   return (
     <>
-      <DialogTitle onClose={onClose} disabled={loading}>
+      <DialogTitle onClose={onClose} disabled={onChangingPassword}>
         <Breadcrumbs>
           <Link
             className='cursor-pointer'
             component='button'
-            disabled={loading}
+            disabled={onChangingPassword}
             underline='hover'
             color='inherit'
             variant='h6'

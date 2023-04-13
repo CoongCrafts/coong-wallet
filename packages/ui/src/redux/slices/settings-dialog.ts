@@ -4,12 +4,12 @@ import { SettingsDialogScreen } from 'types';
 export interface SettingsDialog {
   screen: SettingsDialogScreen;
   verifiedPassword?: string | null;
-  loading: boolean;
+  onChangingPassword: boolean;
 }
 
 const initialState: SettingsDialog = {
   screen: SettingsDialogScreen.SettingsWallet,
-  loading: false,
+  onChangingPassword: false,
 };
 
 const settingsDialogSlice = createSlice({
@@ -22,12 +22,12 @@ const settingsDialogSlice = createSlice({
     setVerifiedPassword: (state: Draft<SettingsDialog>, action: PayloadAction<string | null>) => {
       state.verifiedPassword = action.payload;
     },
-    setLoading: (state: Draft<SettingsDialog>, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
+    setOnChangingPassword: (state: Draft<SettingsDialog>, action: PayloadAction<boolean>) => {
+      state.onChangingPassword = action.payload;
     },
     resetState: (state: Draft<SettingsDialog>) => {
       state.screen = SettingsDialogScreen.SettingsWallet;
-      state.loading = false;
+      state.onChangingPassword = false;
       state.verifiedPassword = null;
     },
   },

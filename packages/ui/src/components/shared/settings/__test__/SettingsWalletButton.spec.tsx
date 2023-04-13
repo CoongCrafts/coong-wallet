@@ -90,7 +90,7 @@ describe('SettingsWalletButton', () => {
       });
     });
 
-    it('should show ThemeModeButton, LanguageSelection, AutoLockSelection, `Backup Secret Recovery Phrase` button, `Change Wallet Password` button', async () => {
+    it('should show `SettingsWalletDialog` content', async () => {
       expect(await screen.findByRole('dialog')).toBeInTheDocument();
 
       await expectSettingsWalletDialog(screen);

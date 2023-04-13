@@ -8,14 +8,10 @@ import { settingsDialogActions } from 'redux/slices/settings-dialog';
 import { Props } from 'types';
 
 interface VerifyingPasswordProps extends Props {
-  backButtonLabel?: string;
   continueButtonLabel?: string;
 }
 
-const VerifyingPassword: FC<VerifyingPasswordProps> = ({
-  backButtonLabel = 'Back',
-  continueButtonLabel = 'Continue',
-}) => {
+const VerifyingPassword: FC<VerifyingPasswordProps> = ({ continueButtonLabel = 'Continue' }) => {
   const { keyring } = useWalletState();
   const [password, setPassword] = useState('');
   const [validation, setValidation] = useState('');
@@ -61,7 +57,7 @@ const VerifyingPassword: FC<VerifyingPasswordProps> = ({
         />
         <div className='mt-2.5 flex gap-4'>
           <Button variant='text' onClick={doBack}>
-            {t<string>(backButtonLabel)}
+            {t<string>('Back')}
           </Button>
           <Button type='submit' disabled={!password} fullWidth variant='contained'>
             {t<string>(continueButtonLabel)}
