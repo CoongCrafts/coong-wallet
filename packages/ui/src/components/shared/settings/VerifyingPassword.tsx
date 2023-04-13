@@ -52,7 +52,7 @@ const VerifyingPassword: FC<VerifyingPasswordProps> = ({
         <TextField
           type='password'
           value={password}
-          label={t<string>('Your wallet password')}
+          label={t<string>('Wallet password')}
           fullWidth
           autoFocus
           error={!!validation}

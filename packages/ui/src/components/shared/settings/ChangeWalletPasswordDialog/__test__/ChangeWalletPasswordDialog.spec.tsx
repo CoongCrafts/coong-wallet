@@ -1,7 +1,8 @@
 import { UserEvent } from '@testing-library/user-event/setup/setup';
-import { initializeKeyring, newUser, render, screen, waitFor } from '__tests__/testUtils';
-import { SettingsDialogScreen } from 'types';
-import SettingsWalletButton from '../SettingsWalletButton';
+import { initializeKeyring, newUser, render, screen, waitFor } from '../../../../../__tests__/testUtils';
+import { SettingsDialogScreen } from '../../../../../types';
+import SettingsWalletButton from '../../SettingsWalletButton';
+import { expectSettingsWalletDialog } from '../../__test__/SettingsWalletButton.spec';
 
 describe('ChangeWalletPasswordDialog', () => {
   let user: UserEvent;
@@ -11,7 +12,7 @@ describe('ChangeWalletPasswordDialog', () => {
     render(<SettingsWalletButton />, {
       preloadedState: {
         app: { seedReady: true, ready: true, locked: false },
-        settingsDialog: { settingsDialogScreen: SettingsDialogScreen.ChangeWalletPassword },
+        settingsDialog: { screen: SettingsDialogScreen.ChangeWalletPassword },
       },
     });
 
@@ -22,7 +23,7 @@ describe('ChangeWalletPasswordDialog', () => {
   describe('VerifyingPassword', () => {
     it('should show content of ChangeWalletPasswordDialog', async () => {
       await waitFor(() => {
-        expect(screen.getByText(/Change wallet password/)).toBeInTheDocument();
+        expect(screen.getByText(/Change Wallet Password/)).toBeInTheDocument();
         expect(screen.getByText(/Enter your wallet password to continue/)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /Continue/ })).toBeDisabled();
         expect(screen.getByRole('button', { name: /Back/ })).toBeInTheDocument();
@@ -30,7 +31,7 @@ describe('ChangeWalletPasswordDialog', () => {
     });
 
     it('should enable `Continue` button when typing password', async () => {
-      const passwordField = await screen.findByLabelText(/Your wallet password/);
+      const passwordField = await screen.findByLabelText(/Wallet password/);
       await user.type(passwordField, 'testing-password');
 
       expect(await screen.findByRole('button', { name: /Continue/ })).toBeEnabled();
@@ -39,7 +40,7 @@ describe('ChangeWalletPasswordDialog', () => {
     it('should show error message on submitting incorrect password', async () => {
       await initializeKeyring();
 
-      const passwordField = await screen.findByLabelText(/Your wallet password/);
+      const passwordField = await screen.findByLabelText(/Wallet password/);
       await user.type(passwordField, 'incorrect-password');
 
       const continueButton = await screen.findByRole('button', { name: /Continue/ });
@@ -48,17 +49,11 @@ describe('ChangeWalletPasswordDialog', () => {
       expect(await screen.findByText(/Password incorrect/)).toBeInTheDocument();
     });
 
-    it('should switch to default settings dialog content when clicking on `Back` button', async () => {
+    it('should switch to `SettingsWalletDialog` content when clicking on `Back` button', async () => {
       const backButton = await screen.findByRole('button', { name: /Back/ });
       await user.click(backButton);
 
-      await waitFor(() => {
-        expect(screen.getByRole('button', { name: /Dark/ })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /English/ })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /5 minutes/ })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Backup secret recovery phrase/ })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Change wallet password/ })).toBeInTheDocument();
-      });
+      await expectSettingsWalletDialog(screen);
     });
   });
 
@@ -68,7 +63,7 @@ describe('ChangeWalletPasswordDialog', () => {
     beforeEach(async () => {
       await initializeKeyring();
 
-      const passwordField = await screen.findByLabelText(/Your wallet password/);
+      const passwordField = await screen.findByLabelText(/Wallet password/);
       await user.type(passwordField, 'supersecretpassword');
 
       const continueButton = await screen.findByRole('button', { name: /Continue/ });
@@ -97,35 +92,31 @@ describe('ChangeWalletPasswordDialog', () => {
       expect(await screen.findByText(/Password does not match/)).toBeInTheDocument();
     });
 
-    it('should enable `Change password` when new password and password confirmation is valid', async () => {
+    it('should enable `Change Password` when new password and password confirmation is valid', async () => {
       await user.type(newPasswordField, 'valid-password');
       await user.type(passwordConfirmationField, 'valid-password');
 
-      expect(await screen.findByRole('button', { name: /Change password/ })).toBeEnabled();
+      expect(await screen.findByRole('button', { name: /Change Password/ })).toBeEnabled();
     });
 
-    it('should disable `Change password` when before changing password begin', async () => {
+    it('should disable `Change Password` when before changing password begin', async () => {
       await user.type(newPasswordField, 'valid-password');
       await user.type(passwordConfirmationField, 'valid-password');
 
-      const changePasswordButton = await screen.findByRole('button', { name: /Change password/ });
+      const changePasswordButton = await screen.findByRole('button', { name: /Change Password/ });
       await user.click(changePasswordButton);
 
-      expect(await screen.findByRole('button', { name: /Change password/ })).toBeDisabled();
+      expect(await screen.findByRole('button', { name: /Change Password/ })).toBeDisabled();
+      expect(await screen.findByRole('button', { name: /Back/ })).toBeDisabled();
+      expect(await screen.findByTitle(/Close settings/)).toBeDisabled();
       expect(await screen.findByText(/Password changed successfully/)).toBeInTheDocument();
     });
 
-    it('should switch to default settings dialog content when clicking on `Back` button', async () => {
+    it('should switch to `SettingsWalletDialog` content when clicking on `Back` button', async () => {
       const backButton = await screen.findByRole('button', { name: /Back/ });
       await user.click(backButton);
 
-      await waitFor(() => {
-        expect(screen.getByRole('button', { name: /Dark/ })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /English/ })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /5 minutes/ })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Backup secret recovery phrase/ })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Change wallet password/ })).toBeInTheDocument();
-      });
+      await expectSettingsWalletDialog(screen);
     });
   });
 });

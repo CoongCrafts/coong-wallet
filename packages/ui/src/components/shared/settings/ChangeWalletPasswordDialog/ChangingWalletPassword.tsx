@@ -2,7 +2,6 @@ import { FC, FormEvent, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { useToggle } from 'react-use';
 import { Alert, Button, DialogContentText, TextField } from '@mui/material';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import usePasswordValidation from 'hooks/usePasswordValidation';
@@ -20,11 +19,11 @@ const ChangingWalletPassword: FC<Props> = () => {
   const { validation } = usePasswordValidation(newPassword);
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>('');
   const [notMatch, setNotMatch] = useState<boolean>(false);
-  const [loading, setLoading] = useToggle(false);
+  const { loading } = useSelector((state: RootState) => state.settingsDialog);
 
   const doChangePassword = (e: FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    dispatch(settingsDialogActions.setLoading(true));
 
     // changing password has accounts decryption and encryption which are synchronous operations
     // and might take some time to do
@@ -42,7 +41,6 @@ const ChangingWalletPassword: FC<Props> = () => {
   };
 
   const doBack = () => {
-    setLoading(false);
     dispatch(settingsDialogActions.resetState());
   };
 
@@ -79,7 +77,7 @@ const ChangingWalletPassword: FC<Props> = () => {
           helperText={!!passwordConfirmation && notMatch ? t<string>('Password does not match') : <EmptySpace />}
         />
         <div className='flex gap-4'>
-          <Button onClick={doBack} variant='text'>
+          <Button onClick={doBack} variant='text' disabled={loading}>
             {t<string>('Back')}
           </Button>
           <Button
@@ -87,7 +85,7 @@ const ChangingWalletPassword: FC<Props> = () => {
             variant='contained'
             disabled={!newPassword || notMatch || !!validation || loading}
             fullWidth>
-            {t<string>('Change password')}
+            {t<string>('Change Password')}
           </Button>
         </div>
       </form>

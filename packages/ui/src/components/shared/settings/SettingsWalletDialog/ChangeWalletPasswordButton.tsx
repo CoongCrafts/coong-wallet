@@ -18,10 +18,8 @@ const ChangeWalletPasswordButton: FC<Props> = () => {
       variant='outlined'
       color={dark ? 'grayLight' : 'gray'}
       startIcon={<LockIcon />}
-      onClick={() =>
-        dispatch(settingsDialogActions.switchSettingsDialogScreen(SettingsDialogScreen.ChangeWalletPassword))
-      }>
-      {t<string>('Change wallet password')}
+      onClick={() => dispatch(settingsDialogActions.switchScreen(SettingsDialogScreen.ChangeWalletPassword))}>
+      {t<string>('Change Wallet Password')}
     </Button>
   );
 };

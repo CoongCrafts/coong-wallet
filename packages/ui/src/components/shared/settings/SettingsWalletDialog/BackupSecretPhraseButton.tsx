@@ -18,10 +18,8 @@ const BackupSecretPhraseButton: FC<Props> = () => {
       variant='outlined'
       color={dark ? 'grayLight' : 'gray'}
       startIcon={<KeyIcon />}
-      onClick={() =>
-        dispatch(settingsDialogActions.switchSettingsDialogScreen(SettingsDialogScreen.BackupSecretPhrase))
-      }>
-      {t<string>('Backup secret recovery phrase')}
+      onClick={() => dispatch(settingsDialogActions.switchScreen(SettingsDialogScreen.BackupSecretPhrase))}>
+      {t<string>('Backup Secret Recovery Phrase')}
     </Button>
   );
 };

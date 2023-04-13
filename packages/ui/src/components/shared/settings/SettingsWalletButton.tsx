@@ -15,9 +15,9 @@ interface SettingsDialogContent extends Props {
   onClose: () => void;
 }
 const SettingsDialogContent: FC<SettingsDialogContent> = ({ onClose }) => {
-  const { settingsDialogScreen } = useSelector((state: RootState) => state.settingsDialog);
+  const { screen } = useSelector((state: RootState) => state.settingsDialog);
 
-  switch (settingsDialogScreen) {
+  switch (screen) {
     case SettingsDialogScreen.BackupSecretPhrase:
       return <BackupSecretPhraseDialog onClose={onClose} />;
     case SettingsDialogScreen.ChangeWalletPassword:

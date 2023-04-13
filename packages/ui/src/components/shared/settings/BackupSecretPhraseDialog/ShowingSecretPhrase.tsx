@@ -16,7 +16,7 @@ const ShowingSecretPhrase: FC<Props> = () => {
   const [secretPhrase, setSecretPhrase] = useState('');
   const [_, copyToClipboard] = useCopyToClipboard();
   const { t } = useTranslation();
-  const [copyButtonLabel, setCopyButtonLabel] = useState('Copy to clipboard');
+  const [copyButtonLabel, setCopyButtonLabel] = useState('Copy to Clipboard');
   const dispatch = useDispatch();
 
   const doBack = () => {
@@ -26,7 +26,7 @@ const ShowingSecretPhrase: FC<Props> = () => {
   const doCopy = () => {
     copyToClipboard(secretPhrase);
     setCopyButtonLabel('Copied!');
-    setTimeout(() => setCopyButtonLabel('Copy to clipboard'), 5e3);
+    setTimeout(() => setCopyButtonLabel('Copy to Clipboard'), 5e3);
   };
 
   useAsync(async () => {
@@ -39,7 +39,8 @@ const ShowingSecretPhrase: FC<Props> = () => {
 
   return (
     <>
-      <DialogContentText className='my-8 p-4 bg-black/10 dark:bg-white/15'>{secretPhrase}</DialogContentText>
+      <DialogContentText className='mt-4 mb-2'>Your secret recovery phrase</DialogContentText>
+      <DialogContentText className='p-4 bg-black/10 dark:bg-white/15'>{secretPhrase}</DialogContentText>
       <div className='mt-4 flex gap-4'>
         <Button variant='text' onClick={doBack}>
           {t<string>('Back')}

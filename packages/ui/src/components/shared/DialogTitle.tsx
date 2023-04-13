@@ -6,15 +6,20 @@ import { Props } from 'types';
 
 export interface DialogTitleProps extends Props {
   onClose: () => void;
+  disabled?: boolean;
 }
 
-const DialogTitle: FC<DialogTitleProps> = ({ className = '', children, onClose }) => {
+const DialogTitle: FC<DialogTitleProps> = ({ className = '', children, onClose, disabled = false }) => {
   const { t } = useTranslation();
 
   return (
-    <MuiDialogTitle>
+    <MuiDialogTitle className={className}>
       {children}
-      <IconButton onClick={onClose} title={t<string>('Close settings')} className='absolute right-4 top-3'>
+      <IconButton
+        onClick={onClose}
+        disabled={disabled}
+        title={t<string>('Close settings')}
+        className='absolute right-4 top-3'>
         <CloseIcon />
       </IconButton>
     </MuiDialogTitle>

@@ -1,6 +1,19 @@
 import { newUser, render, screen, UserEvent, waitFor } from '__tests__/testUtils';
 import SettingsWalletButton from 'components/shared/settings/SettingsWalletButton';
 
+export const expectSettingsWalletDialog = async (screen: any) => {
+  await waitFor(() => {
+    expect(screen.getByRole('button', { name: /Dark/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Light/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /System/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Close settings/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /English/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /5 minutes/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Backup Secret Recovery Phrase/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Change Wallet Password/ })).toBeInTheDocument();
+  });
+};
+
 describe('SettingsWalletButton', () => {
   it('should hide the dialog by default', async () => {
     render(<SettingsWalletButton />, { preloadedState: { app: { seedReady: false, ready: true, locked: true } } });
@@ -49,47 +62,38 @@ describe('SettingsWalletButton', () => {
       });
     });
 
-    it('should switch to BackupSecretPhraseDialog content when clicking on `Backup secret recovery phrase` button', async () => {
+    it('should switch to BackupSecretPhraseDialog content when clicking on `Backup Secret Recovery Phrase` button', async () => {
       const BackupSecretRecoveryPhraseButton = await screen.findByRole('button', {
-        name: /Backup secret recovery phrase/,
+        name: /Backup Secret Recovery Phrase/,
       });
 
       await user.click(BackupSecretRecoveryPhraseButton);
 
       await waitFor(() => {
-        expect(screen.getByText(/Backup secret recovery phrase/)).toBeInTheDocument();
+        expect(screen.getByText(/Backup Secret Recovery Phrase/)).toBeInTheDocument();
         expect(screen.getByText(/reveal the secret recovery phrase/)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /View Secret Recovery Phrase/ })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /Back/ })).toBeInTheDocument();
       });
     });
 
-    it('should switch to ChangeWalletPasswordDialog content when clicking on `Change wallet password` button', async () => {
-      const ChangeWalletPasswordButton = await screen.findByRole('button', { name: /Change wallet password/ });
+    it('should switch to ChangeWalletPasswordDialog content when clicking on `Change Wallet Password` button', async () => {
+      const ChangeWalletPasswordButton = await screen.findByRole('button', { name: /Change Wallet Password/ });
 
       await user.click(ChangeWalletPasswordButton);
 
       await waitFor(() => {
-        expect(screen.getByText(/Change wallet password/)).toBeInTheDocument();
+        expect(screen.getByText(/Change Wallet Password/)).toBeInTheDocument();
         expect(screen.getByText(/Enter your wallet password to continue/)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /Continue/ })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /Back/ })).toBeInTheDocument();
       });
     });
 
-    it('should show ThemeModeButton, LanguageSelection, AutoLockSelection, `Backup secret recovery phrase` button, `Change wallet password` button', async () => {
+    it('should show ThemeModeButton, LanguageSelection, AutoLockSelection, `Backup Secret Recovery Phrase` button, `Change Wallet Password` button', async () => {
       expect(await screen.findByRole('dialog')).toBeInTheDocument();
 
-      await waitFor(() => {
-        expect(screen.getByRole('button', { name: /Dark/ })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Light/ })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /System/ })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Close settings/ })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /English/ })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /5 minutes/ })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Backup secret recovery phrase/ })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Change wallet password/ })).toBeInTheDocument();
-      });
+      await expectSettingsWalletDialog(screen);
     });
   });
 

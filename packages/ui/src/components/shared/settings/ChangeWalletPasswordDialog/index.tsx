@@ -17,13 +17,16 @@ const ChangeWalletPasswordDialog: FC<ChangeWalletPasswordDialogProps> = ({ onClo
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { verifiedPassword } = useSelector((state: RootState) => state.settingsDialog);
+  const { loading } = useSelector((state: RootState) => state.settingsDialog);
 
   return (
     <>
-      <DialogTitle onClose={onClose}>
+      <DialogTitle onClose={onClose} disabled={loading}>
         <Breadcrumbs>
           <Link
             className='cursor-pointer'
+            component='button'
+            disabled={loading}
             underline='hover'
             color='inherit'
             variant='h6'
@@ -31,7 +34,7 @@ const ChangeWalletPasswordDialog: FC<ChangeWalletPasswordDialogProps> = ({ onClo
             {t<string>('Settings')}
           </Link>
           <Typography color='text.primary' variant='h6'>
-            {t<string>('Change wallet password')}
+            {t<string>('Change Wallet Password')}
           </Typography>
         </Breadcrumbs>
       </DialogTitle>

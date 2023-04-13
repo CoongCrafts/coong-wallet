@@ -2,26 +2,32 @@ import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 import { SettingsDialogScreen } from 'types';
 
 export interface SettingsDialog {
-  settingsDialogScreen: SettingsDialogScreen;
+  screen: SettingsDialogScreen;
   verifiedPassword?: string | null;
+  loading: boolean;
 }
 
 const initialState: SettingsDialog = {
-  settingsDialogScreen: SettingsDialogScreen.SettingsWallet,
+  screen: SettingsDialogScreen.SettingsWallet,
+  loading: false,
 };
 
 const settingsDialogSlice = createSlice({
   name: 'settingsDialog',
   initialState,
   reducers: {
-    switchSettingsDialogScreen: (state: Draft<SettingsDialog>, action: PayloadAction<SettingsDialogScreen>) => {
-      state.settingsDialogScreen = action.payload;
+    switchScreen: (state: Draft<SettingsDialog>, action: PayloadAction<SettingsDialogScreen>) => {
+      state.screen = action.payload;
     },
     setVerifiedPassword: (state: Draft<SettingsDialog>, action: PayloadAction<string | null>) => {
       state.verifiedPassword = action.payload;
     },
+    setLoading: (state: Draft<SettingsDialog>, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    },
     resetState: (state: Draft<SettingsDialog>) => {
-      state.settingsDialogScreen = SettingsDialogScreen.SettingsWallet;
+      state.screen = SettingsDialogScreen.SettingsWallet;
+      state.loading = false;
       state.verifiedPassword = null;
     },
   },
