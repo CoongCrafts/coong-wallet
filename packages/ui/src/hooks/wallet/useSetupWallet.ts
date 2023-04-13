@@ -22,8 +22,7 @@ export default function useSetupWallet({ secretPhrase, password, onWalletSetup }
 
   const setup = () => {
     if (!secretPhrase || !password) {
-      // TODO polish the error message
-      throw new StandardCoongError('Invalid secret phrase or password');
+      throw new StandardCoongError('Secret recovery phrase or password are missing');
     }
 
     setLoading(true);
