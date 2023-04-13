@@ -13,11 +13,13 @@ enum ViewStep {
 const SetupWalletDialogContent: FC<Props> = () => {
   const [viewStep, setViewStep] = useState<ViewStep>(ViewStep.WELCOME);
 
+  const onWalletSetup = () => {};
+
   switch (viewStep) {
     case ViewStep.CREATE_NEW_WALLET:
-      return <NewWallet onWalletSetup={() => {}} />;
+      return <NewWallet onWalletSetup={onWalletSetup} />;
     case ViewStep.RESTORE_WALLET:
-      return <RestoreWallet onWalletSetup={() => {}} />;
+      return <RestoreWallet onWalletSetup={onWalletSetup} />;
     default:
       return (
         <Welcome

@@ -5,11 +5,10 @@ import { useEffectOnce } from 'react-use';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { LoadingButton } from '@mui/lab';
 import { Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material';
-import { NewWalletScreenStep } from 'components/pages/SetupWallet/types';
 import useSetupWallet from 'hooks/wallet/useSetupWallet';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';
-import { Props } from 'types';
+import { Props, NewWalletScreenStep } from 'types';
 
 interface BackupSecretRecoveryPhraseProps extends Props {
   onWalletSetup?: () => void;

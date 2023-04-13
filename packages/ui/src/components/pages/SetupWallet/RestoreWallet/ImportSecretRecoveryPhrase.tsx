@@ -3,10 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { validateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { Button, TextField } from '@mui/material';
-import { RestoreWalletScreenStep } from 'components/pages/SetupWallet/types';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
-import { Props } from 'types';
+import { Props, RestoreWalletScreenStep } from 'types';
 
 export default function ImportSecretRecoveryPhrase({ className = '' }: Props): JSX.Element {
   const { t } = useTranslation();

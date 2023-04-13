@@ -5,9 +5,8 @@ import { useToggle } from 'react-use';
 import { Close } from '@mui/icons-material';
 import { AppBar, Button, Container, Dialog, DialogContent, IconButton, Toolbar } from '@mui/material';
 import SetupWalletDialogContent from 'components/pages/Request/RequestAccess/SetupWalletDialogContent';
-import { NewWalletScreenStep } from 'components/pages/SetupWallet/types';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
-import { Props } from 'types';
+import { Props, NewWalletScreenStep, RestoreWalletScreenStep } from 'types';
 
 const SetupWalletButton: FC<Props> = ({ className = '' }) => {
   const [open, toggleOpen] = useToggle(false);

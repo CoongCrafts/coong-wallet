@@ -3,12 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import ChooseWalletPassword from 'components/pages/SetupWallet/ChooseWalletPassword';
 import ConfirmWalletPassword from 'components/pages/SetupWallet/ConfirmWalletPassword';
 import ImportSecretRecoveryPhrase from 'components/pages/SetupWallet/RestoreWallet/ImportSecretRecoveryPhrase';
-import { RestoreWalletScreenStep } from 'components/pages/SetupWallet/types';
 import useOnWalletInitialized from 'hooks/wallet/useOnWalletInitialized';
 import useSetupWallet from 'hooks/wallet/useSetupWallet';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';
-import { Props } from 'types';
+import { Props, RestoreWalletScreenStep } from 'types';
 
 interface RestoreWalletProps extends Props {
   onWalletSetup?: () => void;
