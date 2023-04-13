@@ -17,7 +17,7 @@ const ScreenStep: FC<NewWalletProps> = ({ onWalletSetup }) => {
   const { newWalletScreenStep } = useSelector((state: RootState) => state.setupWallet);
 
   const goto = (step: NewWalletScreenStep) => {
-    return () => dispatch(setupWalletActions.setStep(step));
+    return () => dispatch(setupWalletActions.setNewWalletScreenStep(step));
   };
 
   switch (newWalletScreenStep) {

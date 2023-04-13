@@ -33,7 +33,7 @@ const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ class
   };
 
   const back = () => {
-    dispatch(setupWalletActions.setStep(NewWalletScreenStep.ChooseWalletPassword));
+    dispatch(setupWalletActions.setNewWalletScreenStep(NewWalletScreenStep.ChooseWalletPassword));
   };
 
   const handleCheckbox = (event: ChangeEvent<HTMLInputElement>) => {

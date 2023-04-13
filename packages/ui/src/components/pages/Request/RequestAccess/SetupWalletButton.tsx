@@ -19,7 +19,7 @@ const SetupWalletButton: FC<Props> = ({ className = '' }) => {
 
   const doClose = () => {
     toggleOpen(false);
-    dispatch(setupWalletActions.setStep(NewWalletScreenStep.ChooseWalletPassword));
+    dispatch(setupWalletActions.resetState());
   };
 
   return (
