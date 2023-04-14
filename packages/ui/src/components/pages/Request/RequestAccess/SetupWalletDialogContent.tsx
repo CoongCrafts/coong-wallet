@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
 import NewWallet from 'components/pages/SetupWallet/NewWallet';
+import RestoreWallet from 'components/pages/SetupWallet/RestoreWallet';
 import Welcome from 'components/pages/Welcome';
 import { Props } from 'types';
-import RestoreWallet from '../../SetupWallet/RestoreWallet';
 
 enum ViewStep {
   WELCOME,

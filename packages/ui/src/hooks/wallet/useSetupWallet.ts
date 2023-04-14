@@ -1,11 +1,11 @@
-import { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useToggle } from 'react-use';
 import { StandardCoongError } from '@coong/utils';
-import { useWalletState } from '../../providers/WalletStateProvider';
-import { appActions } from '../../redux/slices/app';
+import { useWalletState } from 'providers/WalletStateProvider';
+import { appActions } from 'redux/slices/app';
+
 
 interface SetupWalletOptions {
   secretPhrase?: string;
