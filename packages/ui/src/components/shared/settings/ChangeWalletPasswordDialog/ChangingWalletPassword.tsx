@@ -65,7 +65,7 @@ const ChangingWalletPassword: FC<Props> = () => {
           fullWidth
           autoFocus
           error={!!validation}
-          helperText={!!validation ? validation : <EmptySpace />}
+          helperText={validation || <EmptySpace />}
         />
         <TextField
           type='password'
