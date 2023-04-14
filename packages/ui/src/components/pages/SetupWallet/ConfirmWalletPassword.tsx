@@ -1,15 +1,26 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { LoadingButton } from '@mui/lab';
 import { Button, TextField } from '@mui/material';
-import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
 import EmptySpace from 'components/shared/misc/EmptySpace';
-import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 
-const ConfirmWalletPassword: FC<Props> = ({ className = '' }: Props) => {
-  const dispatch = useDispatch();
+interface ConfirmWalletPasswordProps extends Props {
+  nextStep: () => void;
+  nextStepLabel?: string;
+  nextStepLoading?: boolean;
+  prevStep: () => void;
+}
+
+const ConfirmWalletPassword: FC<ConfirmWalletPasswordProps> = ({
+  className = '',
+  nextStep,
+  nextStepLabel = 'Next',
+  nextStepLoading,
+  prevStep,
+}) => {
   const { password } = useSelector((state: RootState) => state.setupWallet);
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [notMatch, setNotMatch] = useState<boolean>(true);
@@ -26,11 +37,7 @@ const ConfirmWalletPassword: FC<Props> = ({ className = '' }: Props) => {
       return;
     }
 
-    dispatch(setupWalletActions.setStep(NewWalletScreenStep.BackupSecretRecoveryPhrase));
-  };
-
-  const back = () => {
-    dispatch(setupWalletActions.setStep(NewWalletScreenStep.ChooseWalletPassword));
+    nextStep && nextStep();
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +46,11 @@ const ConfirmWalletPassword: FC<Props> = ({ className = '' }: Props) => {
 
   return (
     <div className={className}>
-      <h3>{t<string>('Next, confirm your wallet password')}</h3>
+      <h3>
+        {nextStepLabel === 'Next'
+          ? t<string>('Next, confirm your wallet password')
+          : t<string>('Lastly, confirm your wallet password')}
+      </h3>
       <p className='mb-6'>{t<string>('Type again your chosen password to ensure you remember it.')}</p>
 
       <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={next}>
@@ -54,12 +65,18 @@ const ConfirmWalletPassword: FC<Props> = ({ className = '' }: Props) => {
           helperText={!!passwordConfirmation && notMatch ? t<string>('Password does not match') : <EmptySpace />}
         />
         <div className='flex flex-row gap-4'>
-          <Button variant='text' onClick={back}>
+          <Button variant='text' onClick={prevStep}>
             {t<string>('Back')}
           </Button>
-          <Button type='submit' fullWidth disabled={notMatch} size='large'>
-            {t<string>('Next')}
-          </Button>
+          <LoadingButton
+            type='submit'
+            fullWidth
+            disabled={notMatch}
+            loading={nextStepLoading}
+            size='large'
+            variant='contained'>
+            {t<string>(nextStepLabel)}
+          </LoadingButton>
         </div>
       </form>
     </div>
