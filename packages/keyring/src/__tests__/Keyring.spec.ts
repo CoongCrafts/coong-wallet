@@ -280,10 +280,12 @@ describe('reset', () => {
 });
 
 describe('changePassword', () => {
+  const NEW_PASSWORD = 'valid-password';
+
   it('should throw out error if wallet is not initialized', async () => {
     const keyring = new Keyring();
 
-    await expect(keyring.changePassword(PASSWORD, 'valid-password')).rejects.toThrowError(
+    await expect(keyring.changePassword(PASSWORD, NEW_PASSWORD)).rejects.toThrowError(
       new CoongError(ErrorCode.KeyringNotInitialized),
     );
   });
@@ -291,7 +293,7 @@ describe('changePassword', () => {
   it('should throw out error if currentPassword is not correct', async () => {
     const keyring = await initializeNewKeyring();
 
-    await expect(keyring.changePassword('incorrect-password', 'valid-password')).rejects.toThrowError(
+    await expect(keyring.changePassword('incorrect-password', NEW_PASSWORD)).rejects.toThrowError(
       new CoongError(ErrorCode.PasswordIncorrect),
     );
   });
@@ -302,9 +304,9 @@ describe('changePassword', () => {
     const initializeWallet: Mock = vi.fn();
     keyring.initialize = initializeWallet;
 
-    await keyring.changePassword(PASSWORD, 'valid-password');
+    await keyring.changePassword(PASSWORD, NEW_PASSWORD);
 
-    expect(initializeWallet).toHaveBeenCalledWith(MNEMONIC, 'valid-password');
+    expect(initializeWallet).toHaveBeenCalledWith(MNEMONIC, NEW_PASSWORD);
   });
 
   it('should call `saveAccount` if currentPassword and newPassword is valid', async () => {
@@ -314,8 +316,17 @@ describe('changePassword', () => {
     await keyring.createNewAccount('account 1', PASSWORD);
 
     const saveAccountSpy = vi.spyOn(InnerKeyring.prototype as any, 'saveAccount');
-    await keyring.changePassword(PASSWORD, 'valid-password');
+    await keyring.changePassword(PASSWORD, NEW_PASSWORD);
 
     expect(saveAccountSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it('could use new password to unlock accounts after change password', async () => {
+    const keyring = await initializeNewKeyring();
+
+    await keyring.createNewAccount('test-account', PASSWORD);
+    await keyring.changePassword(PASSWORD, NEW_PASSWORD);
+
+    await expect(keyring.unlock(NEW_PASSWORD)).toBeTruthy();
   });
 });
