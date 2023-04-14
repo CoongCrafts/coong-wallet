@@ -1,15 +1,15 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
 import { Props } from 'types';
 
 interface WelcomeProps extends Props {
   onCreateNewWallet?: () => void;
+  onRestoreExistingWallet?: () => void;
 }
 
-const Welcome: React.FC<WelcomeProps> = ({ className = '', onCreateNewWallet }) => {
+const Welcome: React.FC<WelcomeProps> = ({ className = '', onCreateNewWallet, onRestoreExistingWallet }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -18,7 +18,7 @@ const Welcome: React.FC<WelcomeProps> = ({ className = '', onCreateNewWallet }) 
   };
 
   const doRestoreWallet = () => {
-    toast.info(`${t<string>('Coming soon')}!`);
+    onRestoreExistingWallet ? onRestoreExistingWallet() : navigate('/restore-wallet');
   };
 
   return (
@@ -36,9 +36,8 @@ const Welcome: React.FC<WelcomeProps> = ({ className = '', onCreateNewWallet }) 
           <Button size='large' className='min-w-[270px]' onClick={doCreateNewWallet}>
             {t<string>('Create New Wallet')}
           </Button>
-          <Button size='large' className='min-w-[270px]' variant='outlined' onClick={doRestoreWallet} disabled={true}>
-            <span className='whitespace-nowrap pr-1'>{t<string>('Restore Existing Wallet')}</span>{' '}
-            <small className='whitespace-nowrap'>{`(${t<string>('Coming soon')})`}</small>
+          <Button size='large' className='min-w-[270px]' variant='outlined' onClick={doRestoreWallet}>
+            {t<string>('Restore Existing Wallet')}
           </Button>
         </div>
       </div>

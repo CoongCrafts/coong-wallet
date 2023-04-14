@@ -1,31 +1,26 @@
 import { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { useEffectOnce } from 'react-use';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { LoadingButton } from '@mui/lab';
-import { Button, Checkbox, FormControlLabel, FormGroup, styled } from '@mui/material';
-import { NewWalletScreenStep } from 'components/pages/NewWallet/types';
-import { useWalletState } from 'providers/WalletStateProvider';
-import { appActions } from 'redux/slices/app';
+import { Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material';
+import useSetupWallet from 'hooks/wallet/useSetupWallet';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';
-import { Props } from 'types';
+import { Props, NewWalletScreenStep } from 'types';
 
 interface BackupSecretRecoveryPhraseProps extends Props {
   onWalletSetup?: () => void;
 }
 
 const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ className = '', onWalletSetup }) => {
-  const { keyring } = useWalletState();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { password } = useSelector((state: RootState) => state.setupWallet);
   const [checked, setChecked] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>();
   const [secretPhrase, setSecretPhrase] = useState<string>();
   const { t } = useTranslation();
+  const { setup, loading } = useSetupWallet({ secretPhrase, password, onWalletSetup });
 
   useEffectOnce(() => {
     setSecretPhrase(generateMnemonic(12));
@@ -34,29 +29,11 @@ const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ class
   const doSetupWallet = (e: FormEvent) => {
     e.preventDefault();
 
-    setLoading(true);
-
-    setTimeout(async () => {
-      if (!password) {
-        return;
-      }
-
-      await keyring.initialize(secretPhrase!, password);
-      await keyring.createNewAccount(t<string>('My first account'), password);
-
-      dispatch(appActions.seedReady());
-      dispatch(appActions.unlock());
-
-      if (onWalletSetup) {
-        onWalletSetup();
-      } else {
-        navigate('/');
-      }
-    }, 500); // intentionally!
+    setup();
   };
 
   const back = () => {
-    dispatch(setupWalletActions.setStep(NewWalletScreenStep.ChooseWalletPassword));
+    dispatch(setupWalletActions.setNewWalletScreenStep(NewWalletScreenStep.ChooseWalletPassword));
   };
 
   const handleCheckbox = (event: ChangeEvent<HTMLInputElement>) => {
