@@ -3,7 +3,7 @@ import { encodeAddress } from '@polkadot/util-crypto';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { AccountInfo } from '@coong/keyring/types';
 import { CoongError, ErrorCode } from '@coong/utils';
-import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import Keyring, { ACCOUNTS_INDEX, ENCRYPTED_MNEMONIC } from '../Keyring';
 
 let keyring: Keyring;
@@ -301,12 +301,11 @@ describe('changePassword', () => {
   it('should initialize the rawMnemonic with new password', async () => {
     const keyring = await initializeNewKeyring();
 
-    const initializeWallet: Mock = vi.fn();
-    keyring.initialize = initializeWallet;
+    const initializeSpy = vi.spyOn(Keyring.prototype, 'initialize');
 
     await keyring.changePassword(PASSWORD, NEW_PASSWORD);
 
-    expect(initializeWallet).toHaveBeenCalledWith(MNEMONIC, NEW_PASSWORD);
+    expect(initializeSpy).toHaveBeenCalledWith(MNEMONIC, NEW_PASSWORD);
   });
 
   it('should call `saveAccount` if currentPassword and newPassword is valid', async () => {
@@ -315,7 +314,7 @@ describe('changePassword', () => {
     await keyring.createNewAccount('account 0', PASSWORD);
     await keyring.createNewAccount('account 1', PASSWORD);
 
-    const saveAccountSpy = vi.spyOn(InnerKeyring.prototype as any, 'saveAccount');
+    const saveAccountSpy = vi.spyOn(InnerKeyring.prototype, 'saveAccount');
     await keyring.changePassword(PASSWORD, NEW_PASSWORD);
 
     expect(saveAccountSpy).toHaveBeenCalledTimes(2);
@@ -327,6 +326,10 @@ describe('changePassword', () => {
     await keyring.createNewAccount('test-account', PASSWORD);
     await keyring.changePassword(PASSWORD, NEW_PASSWORD);
 
-    await expect(keyring.unlock(NEW_PASSWORD)).toBeTruthy();
+    const testAccount = await keyring.getAccountByName('test-account');
+    const testPair = await keyring.getSigningPair(testAccount.address);
+
+    await expect(keyring.unlock(NEW_PASSWORD)).resolves;
+    expect(testPair.unlock(NEW_PASSWORD)).toBeUndefined();
   });
 });
