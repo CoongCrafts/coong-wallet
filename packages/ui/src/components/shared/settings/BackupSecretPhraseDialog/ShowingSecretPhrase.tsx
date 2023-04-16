@@ -50,7 +50,7 @@ const ShowingSecretPhrase: FC<Props> = () => {
     <>
       <div>
         <DialogContentText className='pl-4 mt-4 text-xs font-bold bg-black/20 dark:bg-white/5 flex justify-between items-center'>
-          <span>{t<string>('Your secret recovery phrase')}</span>
+          <span>{t<string>('Secret recovery phrase')}</span>
           <Button
             onClick={doCopy}
             size='small'

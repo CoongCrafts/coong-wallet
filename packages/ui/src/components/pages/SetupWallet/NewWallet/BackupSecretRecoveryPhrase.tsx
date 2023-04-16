@@ -39,7 +39,7 @@ const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ class
   const doCopy = () => {
     copyToClipboard(secretPhrase);
     setCopyButtonLabel('Copied!');
-    setTimeout(() => setCopyButtonLabel('Copy to Clipboard'), 5000);
+    setTimeout(() => setCopyButtonLabel('Copy to Clipboard'), 5e3);
   };
 
   const back = () => {
