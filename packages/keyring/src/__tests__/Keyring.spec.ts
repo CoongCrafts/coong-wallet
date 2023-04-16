@@ -1,8 +1,9 @@
+import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { AccountInfo } from '@coong/keyring/types';
 import { CoongError, ErrorCode } from '@coong/utils';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import Keyring, { ACCOUNTS_INDEX, ENCRYPTED_MNEMONIC } from '../Keyring';
 
 let keyring: Keyring;
@@ -275,5 +276,60 @@ describe('reset', () => {
     expect(localStorage.getItem(ENCRYPTED_MNEMONIC)).toBeNull();
     expect(localStorage.getItem(ACCOUNTS_INDEX)).toBeNull();
     expect(Object.keys(localStorage).filter((key) => key.startsWith('account:0x')).length).toEqual(0);
+  });
+});
+
+describe('changePassword', () => {
+  const NEW_PASSWORD = 'valid-password';
+
+  it('should throw out error if wallet is not initialized', async () => {
+    const keyring = new Keyring();
+
+    await expect(keyring.changePassword(PASSWORD, NEW_PASSWORD)).rejects.toThrowError(
+      new CoongError(ErrorCode.KeyringNotInitialized),
+    );
+  });
+
+  it('should throw out error if currentPassword is not correct', async () => {
+    const keyring = await initializeNewKeyring();
+
+    await expect(keyring.changePassword('incorrect-password', NEW_PASSWORD)).rejects.toThrowError(
+      new CoongError(ErrorCode.PasswordIncorrect),
+    );
+  });
+
+  it('should initialize the rawMnemonic with new password', async () => {
+    const keyring = await initializeNewKeyring();
+
+    const initializeSpy = vi.spyOn(Keyring.prototype, 'initialize');
+
+    await keyring.changePassword(PASSWORD, NEW_PASSWORD);
+
+    expect(initializeSpy).toHaveBeenCalledWith(MNEMONIC, NEW_PASSWORD);
+  });
+
+  it('should call `saveAccount` if currentPassword and newPassword is valid', async () => {
+    const keyring = await initializeNewKeyring();
+
+    await keyring.createNewAccount('account 0', PASSWORD);
+    await keyring.createNewAccount('account 1', PASSWORD);
+
+    const saveAccountSpy = vi.spyOn(InnerKeyring.prototype, 'saveAccount');
+    await keyring.changePassword(PASSWORD, NEW_PASSWORD);
+
+    expect(saveAccountSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it('could use new password to unlock accounts after change password', async () => {
+    const keyring = await initializeNewKeyring();
+
+    await keyring.createNewAccount('test-account', PASSWORD);
+    await keyring.changePassword(PASSWORD, NEW_PASSWORD);
+
+    const testAccount = await keyring.getAccountByName('test-account');
+    const testPair = await keyring.getSigningPair(testAccount.address);
+
+    await expect(keyring.unlock(NEW_PASSWORD)).resolves;
+    expect(testPair.unlock(NEW_PASSWORD)).toBeUndefined();
   });
 });

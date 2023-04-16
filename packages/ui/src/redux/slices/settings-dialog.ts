@@ -2,27 +2,33 @@ import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 import { SettingsDialogScreen } from 'types';
 
 export interface SettingsDialog {
-  settingsDialogScreen: SettingsDialogScreen;
-  verifiedPassword?: string;
+  screen: SettingsDialogScreen;
+  verifiedPassword?: string | null;
+  onChangingPassword: boolean;
 }
 
 const initialState: SettingsDialog = {
-  settingsDialogScreen: SettingsDialogScreen.SettingsWallet,
+  screen: SettingsDialogScreen.SettingsWallet,
+  onChangingPassword: false,
 };
 
 const settingsDialogSlice = createSlice({
   name: 'settingsDialog',
   initialState,
   reducers: {
-    switchSettingsDialogScreen: (state: Draft<SettingsDialog>, action: PayloadAction<SettingsDialogScreen>) => {
-      state.settingsDialogScreen = action.payload;
+    switchScreen: (state: Draft<SettingsDialog>, action: PayloadAction<SettingsDialogScreen>) => {
+      state.screen = action.payload;
     },
-    setVerifiedPassword: (state: Draft<SettingsDialog>, action: PayloadAction<string>) => {
+    setVerifiedPassword: (state: Draft<SettingsDialog>, action: PayloadAction<string | null>) => {
       state.verifiedPassword = action.payload;
     },
+    setOnChangingPassword: (state: Draft<SettingsDialog>, action: PayloadAction<boolean>) => {
+      state.onChangingPassword = action.payload;
+    },
     resetState: (state: Draft<SettingsDialog>) => {
-      state.settingsDialogScreen = SettingsDialogScreen.SettingsWallet;
-      state.verifiedPassword = '';
+      state.screen = SettingsDialogScreen.SettingsWallet;
+      state.onChangingPassword = false;
+      state.verifiedPassword = null;
     },
   },
 });

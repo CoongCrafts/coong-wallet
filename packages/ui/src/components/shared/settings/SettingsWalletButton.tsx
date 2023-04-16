@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Dialog, IconButton } from '@mui/material';
 import BackupSecretPhraseDialog from 'components/shared/settings/BackupSecretPhraseDialog';
+import ChangeWalletPasswordDialog from 'components/shared/settings/ChangeWalletPasswordDialog';
 import SettingsWalletDialog from 'components/shared/settings/SettingsWalletDialog';
 import { settingsDialogActions } from 'redux/slices/settings-dialog';
 import { RootState } from 'redux/store';
@@ -14,11 +15,13 @@ interface SettingsDialogContent extends Props {
   onClose: () => void;
 }
 const SettingsDialogContent: FC<SettingsDialogContent> = ({ onClose }) => {
-  const { settingsDialogScreen } = useSelector((state: RootState) => state.settingsDialog);
+  const { screen } = useSelector((state: RootState) => state.settingsDialog);
 
-  switch (settingsDialogScreen) {
+  switch (screen) {
     case SettingsDialogScreen.BackupSecretPhrase:
       return <BackupSecretPhraseDialog onClose={onClose} />;
+    case SettingsDialogScreen.ChangeWalletPassword:
+      return <ChangeWalletPasswordDialog onClose={onClose} />;
     default:
       return <SettingsWalletDialog onClose={onClose} />;
   }
@@ -28,6 +31,7 @@ const SettingsWalletButton: FC<Props> = () => {
   const [open, setOpen] = useState(false);
   const { seedReady, locked } = useSelector((state: RootState) => state.app);
   const { t } = useTranslation();
+  const { onChangingPassword } = useSelector((state: RootState) => state.settingsDialog);
   const dispatch = useDispatch();
 
   if (!seedReady || locked) {
@@ -35,6 +39,7 @@ const SettingsWalletButton: FC<Props> = () => {
   }
 
   const handleClose = () => {
+    if (onChangingPassword) return;
     setOpen(false);
 
     // Make sure the dialog disappears before resetting the state

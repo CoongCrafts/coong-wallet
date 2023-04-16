@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { useAsync, useCopyToClipboard } from 'react-use';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { Button, DialogContentText } from '@mui/material';
@@ -15,7 +16,7 @@ const ShowingSecretPhrase: FC<Props> = () => {
   const [secretPhrase, setSecretPhrase] = useState('');
   const [_, copyToClipboard] = useCopyToClipboard();
   const { t } = useTranslation();
-  const [copyButtonLabel, setCopyButtonLabel] = useState('Copy to clipboard');
+  const [copyButtonLabel, setCopyButtonLabel] = useState('Copy to Clipboard');
   const dispatch = useDispatch();
 
   const doBack = () => {
@@ -25,20 +26,21 @@ const ShowingSecretPhrase: FC<Props> = () => {
   const doCopy = () => {
     copyToClipboard(secretPhrase);
     setCopyButtonLabel('Copied!');
-    setTimeout(() => setCopyButtonLabel('Copy to clipboard'), 5e3);
+    setTimeout(() => setCopyButtonLabel('Copy to Clipboard'), 5e3);
   };
 
   useAsync(async () => {
     try {
       setSecretPhrase(await keyring.getRawMnemonic(verifiedPassword!));
     } catch (e: any) {
-      console.error(e.message);
+      toast.error(e.message);
     }
   });
 
   return (
     <>
-      <DialogContentText className='my-8 p-4 bg-black/10 dark:bg-white/15'>{secretPhrase}</DialogContentText>
+      <DialogContentText className='mt-4 mb-2'>Your secret recovery phrase</DialogContentText>
+      <DialogContentText className='p-4 bg-black/10 dark:bg-white/15'>{secretPhrase}</DialogContentText>
       <div className='mt-4 flex gap-4'>
         <Button variant='text' onClick={doBack}>
           {t<string>('Back')}

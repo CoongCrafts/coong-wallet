@@ -1,8 +1,9 @@
-import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, TextField } from '@mui/material';
 import EmptySpace from 'components/shared/misc/EmptySpace';
+import usePasswordValidation from 'hooks/usePasswordValidation';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { Props } from 'types';
 
@@ -13,18 +14,9 @@ interface ChooseWalletPasswordProps extends Props {
 
 const ChooseWalletPassword: FC<ChooseWalletPasswordProps> = ({ className = '', nextStep, prevStep }) => {
   const dispatch = useDispatch();
-  const [password, setPassword] = useState('');
-  const [validation, setValidation] = useState('');
+  const [password, setPassword] = useState<string>('');
+  const { validation } = usePasswordValidation(password);
   const { t } = useTranslation();
-
-  useEffect(() => {
-    // TODO Add more strict password policy & password strength indicator
-    if (password && password.length <= 5) {
-      setValidation(t<string>("Password's too short"));
-    } else {
-      setValidation('');
-    }
-  }, [password]);
 
   const next = (e: FormEvent) => {
     e.preventDefault();

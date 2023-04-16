@@ -7,7 +7,11 @@ import { useWalletState } from 'providers/WalletStateProvider';
 import { settingsDialogActions } from 'redux/slices/settings-dialog';
 import { Props } from 'types';
 
-const VerifyingPassword: FC<Props> = () => {
+interface VerifyingPasswordProps extends Props {
+  continueButtonLabel?: string;
+}
+
+const VerifyingPassword: FC<VerifyingPasswordProps> = ({ continueButtonLabel = 'Continue' }) => {
   const { keyring } = useWalletState();
   const [password, setPassword] = useState('');
   const [validation, setValidation] = useState('');
@@ -39,12 +43,12 @@ const VerifyingPassword: FC<Props> = () => {
 
   return (
     <>
-      <DialogContentText className='mt-4 mb-4'>{t<string>('Enter your wallet password to continue')}</DialogContentText>
+      <DialogContentText className='mt-4 mb-2'>{t<string>('Enter your wallet password to continue')}</DialogContentText>
       <form onSubmit={doVerify} noValidate>
         <TextField
           type='password'
           value={password}
-          label={t<string>('Your wallet password')}
+          label={t<string>('Wallet password')}
           fullWidth
           autoFocus
           error={!!validation}
@@ -56,7 +60,7 @@ const VerifyingPassword: FC<Props> = () => {
             {t<string>('Back')}
           </Button>
           <Button type='submit' disabled={!password} fullWidth variant='contained'>
-            {t<string>('View Secret Recovery Phrase')}
+            {t<string>(continueButtonLabel)}
           </Button>
         </div>
       </form>

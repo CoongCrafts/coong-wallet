@@ -30,6 +30,7 @@ export enum AutoLockInterval {
 export enum SettingsDialogScreen {
   SettingsWallet,
   BackupSecretPhrase,
+  ChangeWalletPassword,
 }
 
 export enum NewWalletScreenStep {

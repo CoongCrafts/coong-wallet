@@ -169,6 +169,22 @@ export default class Keyring {
     }
   }
 
+  async changePassword(currentPassword: string, newPassword: string) {
+    const rawMnemonic = await this.getRawMnemonic(currentPassword);
+
+    // initialize wallet with new password
+    await this.initialize(rawMnemonic, newPassword);
+
+    const accounts = await this.getAccounts();
+
+    accounts.forEach(({ address }) => {
+      const account = this.getSigningPair(address);
+      account.decodePkcs8(currentPassword);
+      this.#keyring.saveAccount(account, newPassword);
+      account.lock();
+    });
+  }
+
   async #getAccount(predicate: (one: AccountInfo) => boolean): Promise<AccountInfo> {
     const accounts = await this.getAccounts();
     const targetAccount = accounts.find(predicate);
