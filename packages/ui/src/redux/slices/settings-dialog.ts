@@ -3,12 +3,14 @@ import { SettingsDialogScreen } from 'types';
 
 export interface SettingsDialog {
   screen: SettingsDialogScreen;
+  open: boolean;
   verifiedPassword?: string | null;
   onChangingPassword: boolean;
 }
 
 const initialState: SettingsDialog = {
   screen: SettingsDialogScreen.SettingsWallet,
+  open: false,
   onChangingPassword: false,
 };
 
@@ -24,6 +26,9 @@ const settingsDialogSlice = createSlice({
     },
     setOnChangingPassword: (state: Draft<SettingsDialog>, action: PayloadAction<boolean>) => {
       state.onChangingPassword = action.payload;
+    },
+    setOpen: (state: Draft<SettingsDialog>, action: PayloadAction<boolean>) => {
+      state.open = action.payload;
     },
     resetState: (state: Draft<SettingsDialog>) => {
       state.screen = SettingsDialogScreen.SettingsWallet;

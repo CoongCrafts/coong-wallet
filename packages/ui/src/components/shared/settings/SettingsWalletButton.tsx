@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -28,7 +28,7 @@ const SettingsDialogContent: FC<SettingsDialogContent> = ({ onClose }) => {
 };
 
 const SettingsWalletButton: FC<Props> = () => {
-  const [open, setOpen] = useState(false);
+  const { open } = useSelector((state: RootState) => state.settingsDialog);
   const { seedReady, locked } = useSelector((state: RootState) => state.app);
   const { t } = useTranslation();
   const { onChangingPassword } = useSelector((state: RootState) => state.settingsDialog);
@@ -40,16 +40,20 @@ const SettingsWalletButton: FC<Props> = () => {
 
   const handleClose = () => {
     if (onChangingPassword) return;
-    setOpen(false);
+    dispatch(settingsDialogActions.setOpen(false));
 
     // Make sure the dialog disappears before resetting the state
     // to prevent the dialog content from changing in the transition
-    setTimeout(() => dispatch(settingsDialogActions.resetState()), 50);
+    setTimeout(() => dispatch(settingsDialogActions.resetState()), 150);
+  };
+
+  const handleClick = () => {
+    dispatch(settingsDialogActions.setOpen(true));
   };
 
   return (
     <>
-      <IconButton size='small' title={t<string>('Open settings')} onClick={() => setOpen(true)}>
+      <IconButton size='small' title={t<string>('Open settings')} onClick={handleClick}>
         <SettingsIcon />
       </IconButton>
       <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
