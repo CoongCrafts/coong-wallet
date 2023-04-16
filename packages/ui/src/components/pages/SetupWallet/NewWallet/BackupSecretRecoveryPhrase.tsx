@@ -56,14 +56,15 @@ const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ class
       <p className='mb-4'>{t<string>('Write down the below 12 words and keep it in a safe place.')}</p>
       <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={doSetupWallet}>
         <div>
-          <div className='pl-4 text-xs bg-black/20 dark:bg-white/5 flex justify-between items-center'>
-            {t<string>('Secret recovery phrase')}
+          <div className='pl-4 text-xs font-bold bg-black/20 dark:bg-white/5 flex justify-between items-center'>
+            <span>{t<string>('Secret recovery phrase')}</span>
             <Button
               onClick={doCopy}
-              className='px-4 font-normal text-xs min-w-max rounded-none'
+              className='px-4 py-2 font-normal text-xs rounded-none disabled:text-inherit'
               size='small'
               color='inherit'
               variant='text'
+              disabled={copyButtonLabel === 'Copied!'}
               startIcon={copyButtonLabel === 'Copied!' ? <CheckIcon /> : <ContentCopyIcon />}>
               {t<string>(copyButtonLabel)}
             </Button>
