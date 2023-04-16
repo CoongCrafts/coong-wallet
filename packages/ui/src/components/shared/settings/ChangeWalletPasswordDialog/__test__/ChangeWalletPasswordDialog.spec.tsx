@@ -12,7 +12,7 @@ describe('ChangeWalletPasswordDialog', () => {
     render(<SettingsWalletButton />, {
       preloadedState: {
         app: { seedReady: true, ready: true, locked: false },
-        settingsDialog: { screen: SettingsDialogScreen.ChangeWalletPassword },
+        settingsDialog: { screen: SettingsDialogScreen.ChangeWalletPassword, open: false },
       },
     });
 

@@ -13,7 +13,7 @@ describe('BackupSecretPhraseDialog', () => {
     render(<SettingsWalletButton />, {
       preloadedState: {
         app: { seedReady: true, ready: true, locked: false },
-        settingsDialog: { screen: SettingsDialogScreen.BackupSecretPhrase },
+        settingsDialog: { screen: SettingsDialogScreen.BackupSecretPhrase, open: false },
       },
     });
 
@@ -90,6 +90,13 @@ describe('BackupSecretPhraseDialog', () => {
       await user.click(backButton);
 
       await expectSettingsWalletDialog(screen);
+    });
+
+    it('should close settings dialog when clicking on `Done` button', async () => {
+      const doneButton = await screen.findByRole('button', { name: /Done/ });
+      await user.click(doneButton);
+
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
     });
   });
 });
