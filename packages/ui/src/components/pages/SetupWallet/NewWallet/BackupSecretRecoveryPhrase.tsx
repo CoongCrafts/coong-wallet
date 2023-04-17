@@ -1,12 +1,11 @@
 import { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useCopyToClipboard, useEffectOnce } from 'react-use';
+import { useEffectOnce } from 'react-use';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
-import CheckIcon from '@mui/icons-material/Check';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { LoadingButton } from '@mui/lab';
 import { Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material';
+import SecretRecoveryPhrase from 'components/shared/SecretRecoveryPhrase';
 import useSetupWallet from 'hooks/wallet/useSetupWallet';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';
@@ -17,13 +16,11 @@ interface BackupSecretRecoveryPhraseProps extends Props {
 }
 
 const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ className = '', onWalletSetup }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { password } = useSelector((state: RootState) => state.setupWallet);
   const [checked, setChecked] = useState<boolean>(false);
   const [secretPhrase, setSecretPhrase] = useState<string>('');
-  const [copyButtonLabel, setCopyButtonLabel] = useState<string>('Copy to Clipboard');
-  const [, copyToClipboard] = useCopyToClipboard();
-  const { t } = useTranslation();
   const { setup, loading } = useSetupWallet({ secretPhrase, password, onWalletSetup });
 
   useEffectOnce(() => {
@@ -34,12 +31,6 @@ const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ class
     e.preventDefault();
 
     setup();
-  };
-
-  const doCopy = () => {
-    copyToClipboard(secretPhrase);
-    setCopyButtonLabel('Copied!');
-    setTimeout(() => setCopyButtonLabel('Copy to Clipboard'), 5e3);
   };
 
   const back = () => {
@@ -55,22 +46,7 @@ const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ class
       <h3>{t<string>('Finally, back up your secret recovery phrase')}</h3>
       <p className='mb-4'>{t<string>('Write down the below 12 words and keep it in a safe place.')}</p>
       <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={doSetupWallet}>
-        <div>
-          <div className='pl-4 text-xs font-bold bg-black/20 dark:bg-white/5 flex justify-between items-center'>
-            <span>{t<string>('Secret recovery phrase')}</span>
-            <Button
-              onClick={doCopy}
-              className='px-4 py-2 font-normal text-xs rounded-none disabled:text-inherit'
-              size='small'
-              color='inherit'
-              variant='text'
-              disabled={copyButtonLabel === 'Copied!'}
-              startIcon={copyButtonLabel === 'Copied!' ? <CheckIcon /> : <ContentCopyIcon />}>
-              {t<string>(copyButtonLabel)}
-            </Button>
-          </div>
-          <div className='p-4 bg-black/10 dark:bg-white/15'>{secretPhrase}</div>
-        </div>
+        <SecretRecoveryPhrase secretPhrase={secretPhrase} />
         <FormGroup>
           <FormControlLabel
             control={<Checkbox checked={checked} onChange={handleCheckbox} disabled={loading} />}
