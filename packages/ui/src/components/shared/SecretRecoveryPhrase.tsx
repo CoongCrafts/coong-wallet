@@ -1,6 +1,6 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useCopyToClipboard } from 'react-use';
+import { useCopyToClipboard, useToggle } from 'react-use';
 import CheckIcon from '@mui/icons-material/Check';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { Button } from '@mui/material';
@@ -11,13 +11,15 @@ interface SecretRecoveryPhraseProps extends Props {
 }
 const SecretRecoveryPhrase: FC<SecretRecoveryPhraseProps> = ({ className = '', secretPhrase }) => {
   const { t } = useTranslation();
-  const [copyButtonLabel, setCopyButtonLabel] = useState<string>('Copy to Clipboard');
   const [_, copyToClipboard] = useCopyToClipboard();
+  const [copied, setCopied] = useToggle(false);
 
   const doCopy = () => {
     copyToClipboard(secretPhrase);
-    setCopyButtonLabel('Copied!');
-    setTimeout(() => setCopyButtonLabel('Copy to Clipboard'), 5e3);
+    setCopied(true);
+
+    // set the copy button label back to default label after 5s
+    setTimeout(() => setCopied(false), 5e3);
   };
 
   return (
@@ -28,10 +30,10 @@ const SecretRecoveryPhrase: FC<SecretRecoveryPhraseProps> = ({ className = '', s
           onClick={doCopy}
           variant='text'
           color='inherit'
-          className='px-4 py-3 font-normal text-xs rounded-none disabled:text-inherit'
-          disabled={copyButtonLabel === 'Copied!'}
-          startIcon={copyButtonLabel === 'Copied!' ? <CheckIcon /> : <ContentCopyIcon />}>
-          {t<string>(copyButtonLabel)}
+          className='px-4 py-2 font-normal text-xs rounded-none disabled:text-inherit'
+          disabled={copied}
+          startIcon={copied ? <CheckIcon /> : <ContentCopyIcon />}>
+          {copied ? t<string>('Copied') : t<string>('Copy to Clipboard')}
         </Button>
       </div>
     </div>

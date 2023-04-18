@@ -40,15 +40,11 @@ const SettingsWalletButton: FC<Props> = () => {
 
   const handleClose = () => {
     if (onChangingPassword) return;
-    dispatch(settingsDialogActions.setOpen(false));
-
-    // Make sure the dialog disappears before resetting the state
-    // to prevent the dialog content from changing in the transition
-    setTimeout(() => dispatch(settingsDialogActions.resetState()), 150);
+    dispatch(settingsDialogActions.close());
   };
 
   const handleClick = () => {
-    dispatch(settingsDialogActions.setOpen(true));
+    dispatch(settingsDialogActions.open());
   };
 
   return (

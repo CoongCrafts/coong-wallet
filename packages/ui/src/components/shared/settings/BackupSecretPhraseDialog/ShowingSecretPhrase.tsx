@@ -22,11 +22,7 @@ const ShowingSecretPhrase: FC<Props> = () => {
   };
 
   const doClose = () => {
-    dispatch(settingsDialogActions.setOpen(false));
-
-    // Make sure the dialog disappears before resetting the state
-    // to prevent the dialog content from changing in the transition
-    setTimeout(() => doBack(), 150);
+    dispatch(settingsDialogActions.close());
   };
 
   useAsync(async () => {
