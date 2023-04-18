@@ -33,7 +33,7 @@ const SecretRecoveryPhrase: FC<SecretRecoveryPhraseProps> = ({ className = '', s
           className='px-4 py-2 font-normal text-xs rounded-none disabled:text-inherit'
           disabled={copied}
           startIcon={copied ? <CheckIcon /> : <ContentCopyIcon />}>
-          {copied ? t<string>('Copied') : t<string>('Copy to Clipboard')}
+          {copied ? t<string>('Copied!') : t<string>('Copy to Clipboard')}
         </Button>
       </div>
     </div>
