@@ -26,11 +26,14 @@ export const globalStyles = css`
     .MuiDialog-container {
       align-items: flex-start;
 
-      //@media (min-width: 600px) {
-      //  .MuiPaper-root {
-      //    margin-top: 64px;
-      //  }
-      //}
+      @media (max-width: 400px) {
+        .MuiPaper-root {
+          margin: 0;
+          width: 100%;
+          height: 100%;
+          max-height: none;
+        }
+      }
     }
   }
 
