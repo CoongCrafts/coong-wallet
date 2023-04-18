@@ -5,7 +5,7 @@ import { DialogTitle as MuiDialogTitle, IconButton } from '@mui/material';
 import { Props } from 'types';
 
 export interface DialogTitleProps extends Props {
-  onClose: () => void;
+  onClose?: () => void;
   disabled?: boolean;
 }
 
@@ -15,13 +15,15 @@ const DialogTitle: FC<DialogTitleProps> = ({ className = '', children, onClose, 
   return (
     <MuiDialogTitle className={className}>
       {children}
-      <IconButton
-        onClick={onClose}
-        disabled={disabled}
-        title={t<string>('Close settings')}
-        className='absolute right-4 top-3'>
-        <CloseIcon />
-      </IconButton>
+      {onClose && (
+        <IconButton
+          onClick={onClose}
+          disabled={disabled}
+          title={t<string>('Close settings')}
+          className='absolute right-4 top-3'>
+          <CloseIcon />
+        </IconButton>
+      )}
     </MuiDialogTitle>
   );
 };

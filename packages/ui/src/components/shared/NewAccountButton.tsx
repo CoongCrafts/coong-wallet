@@ -4,17 +4,9 @@ import { toast } from 'react-toastify';
 import { useUpdateEffect } from 'react-use';
 import { AccountInfo } from '@coong/keyring/types';
 import { Add } from '@mui/icons-material';
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
-  TextField,
-} from '@mui/material';
+import { Box, Button, Dialog, DialogContent, DialogContentText, IconButton, TextField } from '@mui/material';
+import DialogTitle from 'components/shared/DialogTitle';
+import useDialog from 'hooks/useDialog';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { Props } from 'types';
 
@@ -24,7 +16,7 @@ interface NewAccountButtonProps extends Props {
 
 const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
   const { keyring } = useWalletState();
-  const [open, setOpen] = useState(false);
+  const { open, doOpen, doClose } = useDialog();
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const passwordInputRef = useRef<HTMLInputElement>(null);
@@ -41,7 +33,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
     }
   }, [open]);
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => doClose();
 
   const doCreateNewAccount = async (e: FormEvent) => {
     e.preventDefault();
@@ -50,7 +42,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
       resetForm();
 
       onCreated && onCreated(newAccount);
-      handleClose();
+      doClose();
     } catch (e: any) {
       toast.error(t<string>(e.message));
     }
@@ -68,19 +60,19 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
         size='small'
         variant='outlined'
         startIcon={<Add />}
-        onClick={() => setOpen(true)}>
+        onClick={doOpen}>
         {t<string>('New Account')}
       </Button>
-      <IconButton color='primary' className='xs:hidden' onClick={() => setOpen(true)}>
+      <IconButton color='primary' className='xs:hidden' onClick={doOpen}>
         <Add />
       </IconButton>
       <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
-        <DialogTitle>{t<string>('Create new account')}</DialogTitle>
-        <Box component='form' autoComplete='off' onSubmit={doCreateNewAccount}>
-          <DialogContent className='pt-0'>
-            <DialogContentText sx={{ marginBottom: '1rem' }}>
-              {t<string>('Choose a name for your new account')}
-            </DialogContentText>
+        <DialogTitle onClose={handleClose}>{t<string>('Create new account')}</DialogTitle>
+        <DialogContent className='pb-8'>
+          <DialogContentText className='mb-4'>
+            {t<string>('Choose a name and enter your password to create a new account')}
+          </DialogContentText>
+          <Box className='flex flex-col gap-8' component='form' autoComplete='off' onSubmit={doCreateNewAccount}>
             <TextField
               label={t<string>('New account name')}
               type='text'
@@ -88,8 +80,6 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
               fullWidth
               onChange={(e) => setName(e.target.value)}
               value={name}
-              className='mb-4'
-              size='small'
             />
             <TextField
               inputRef={passwordInputRef}
@@ -100,18 +90,17 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
               required
               onChange={(e) => setPassword(e.target.value)}
               value={password}
-              size='small'
             />
-          </DialogContent>
-          <DialogActions>
-            <Button variant='outlined' onClick={handleClose}>
-              {t<string>('Cancel')}
-            </Button>
-            <Button type='submit' disabled={!name || !password}>
-              {t<string>('Create')}
-            </Button>
-          </DialogActions>
-        </Box>
+            <div className='flex gap-4'>
+              <Button variant='text' onClick={handleClose}>
+                {t<string>('Cancel')}
+              </Button>
+              <Button type='submit' fullWidth disabled={!name || !password}>
+                {t<string>('Create')}
+              </Button>
+            </div>
+          </Box>
+        </DialogContent>
       </Dialog>
     </>
   );
