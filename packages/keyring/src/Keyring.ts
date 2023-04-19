@@ -2,7 +2,7 @@ import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
 import { assert, CoongError, ErrorCode, isCoongError } from '@coong/utils';
 import CryptoJS from 'crypto-js';
-import { AccountInfo } from './types';
+import { AccountInfo, WalletBackup } from './types';
 
 export const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
 export const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
@@ -224,5 +224,20 @@ export default class Keyring {
 
       throw e;
     }
+  }
+
+  async exportWallet(password: string): Promise<WalletBackup> {
+    await this.verifyPassword(password);
+
+    const addresses = (await this.getAccounts()).map((one) => one.address);
+    const accountsBackup = await this.#keyring.backupAccounts(addresses, password);
+
+    const walletBackup: WalletBackup = {
+      ...accountsBackup,
+      accountsIndex: this.getAccountsIndex(),
+      encryptedMnemonic: this.#getEncryptedMnemonic()!,
+    };
+
+    return walletBackup;
   }
 }

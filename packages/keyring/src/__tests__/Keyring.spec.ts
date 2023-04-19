@@ -333,3 +333,27 @@ describe('changePassword', () => {
     expect(testPair.unlock(NEW_PASSWORD)).toBeUndefined();
   });
 });
+
+describe('exportWallet', () => {
+  beforeEach(async () => {
+    await initializeNewKeyring();
+  });
+
+  it('should verify password', async () => {
+    const mockedVerifyPassword = vi.spyOn(Keyring.prototype, 'verifyPassword');
+    await keyring.exportWallet(PASSWORD);
+
+    expect(mockedVerifyPassword).toHaveBeenCalledWith(PASSWORD);
+  });
+
+  it('should return a wallet backup', async () => {
+    await keyring.createNewAccount('Account 01', PASSWORD);
+    await keyring.createNewAccount('Account 02', PASSWORD);
+
+    const backup = await keyring.exportWallet(PASSWORD);
+
+    expect(backup.accounts).toHaveLength(2);
+    expect(backup.accountsIndex).toEqual(2);
+    expect(backup.encryptedMnemonic).toBeTypeOf('string');
+  });
+});
