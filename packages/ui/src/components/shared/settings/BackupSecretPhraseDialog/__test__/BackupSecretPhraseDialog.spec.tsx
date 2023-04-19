@@ -1,5 +1,5 @@
 import Keyring from '@coong/keyring';
-import { initializeKeyring, newUser, render, screen, UserEvent, waitFor } from '../../../../../__tests__/testUtils';
+import { initializeKeyring, newUser, render, screen, UserEvent, waitFor } from '__tests__/testUtils';
 import SettingsWalletButton from '../../SettingsWalletButton';
 import { expectSettingsWalletDialog } from '../../__test__/SettingsWalletButton.spec';
 
