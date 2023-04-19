@@ -1,6 +1,5 @@
 import { UserEvent } from '@testing-library/user-event/setup/setup';
-import { initializeKeyring, newUser, render, screen, waitFor } from '../../../../../__tests__/testUtils';
-import { SettingsDialogScreen } from '../../../../../types';
+import { initializeKeyring, newUser, render, screen, waitFor } from '__tests__/testUtils';
 import SettingsWalletButton from '../../SettingsWalletButton';
 import { expectSettingsWalletDialog } from '../../__test__/SettingsWalletButton.spec';
 
@@ -12,12 +11,14 @@ describe('ChangeWalletPasswordDialog', () => {
     render(<SettingsWalletButton />, {
       preloadedState: {
         app: { seedReady: true, ready: true, locked: false },
-        settingsDialog: { screen: SettingsDialogScreen.ChangeWalletPassword },
       },
     });
 
     const settingsButton = screen.getByTitle('Open settings');
     await user.click(settingsButton);
+
+    const ChangeWalletPasswordButton = await screen.findByRole('button', { name: /Change Wallet Password/ });
+    await user.click(ChangeWalletPasswordButton);
   });
 
   describe('VerifyingPassword', () => {
