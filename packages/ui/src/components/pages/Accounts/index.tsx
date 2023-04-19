@@ -9,6 +9,7 @@ import NewAccountButton from 'components/shared/NewAccountButton';
 import PageTitle from 'components/shared/PageTitle';
 import NoAccountsPlaceholder from 'components/shared/accounts/NoAccountsPlaceholder';
 import SearchBox from 'components/shared/accounts/SearchBox';
+import MenuButton from 'components/shared/menu/MenuButton';
 import useHighlightNewAccount from 'hooks/accounts/useHighlightNewAccount';
 import useSearchAccounts from 'hooks/accounts/useSearchAccounts';
 import { Props } from 'types';
@@ -37,6 +38,7 @@ const Accounts: FC<Props> = ({ className = '' }) => {
             {showSearchBox ? <SearchOff /> : <Search />}
           </IconButton>
           <NewAccountButton onCreated={(newAccount) => setTimeout(() => setNewAccount(newAccount))} />
+          <MenuButton className='ml-2' />
         </div>
       </header>
       <div className='mt-2 mb-20'>
