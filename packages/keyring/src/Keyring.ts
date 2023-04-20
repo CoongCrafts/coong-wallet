@@ -1,8 +1,9 @@
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
-import { assert, CoongError, ErrorCode, isCoongError } from '@coong/utils';
+import { validateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
+import { assert, CoongError, ErrorCode, isCoongError, StandardCoongError } from '@coong/utils';
 import CryptoJS from 'crypto-js';
-import { AccountInfo, WalletBackup } from './types';
+import { AccountInfo, WalletBackup, WalletQrBackup } from './types';
 
 export const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
 export const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
@@ -130,7 +131,7 @@ export default class Keyring {
       .sort((a, b) => (a.whenCreated || 0) - (b.whenCreated || 0));
   }
 
-  async createNewAccount(name: string, password: string): Promise<AccountInfo> {
+  async createNewAccount(name: string, password: string, path?: string): Promise<AccountInfo> {
     if (password) {
       await this.unlock(password);
     } else {
@@ -145,7 +146,9 @@ export default class Keyring {
       throw new CoongError(ErrorCode.AccountNameUsed);
     }
 
-    const derivationPath = this.#nextAccountPath();
+    const derivationPath = path || this.#nextAccountPath();
+    // TODO verify derivationPath
+
     const nextPath = `${this.#mnemonic}${derivationPath}`;
     const keypair = this.#keyring.createFromUri(nextPath, { name, derivationPath }, DEFAULT_KEY_TYPE);
 
@@ -239,5 +242,36 @@ export default class Keyring {
     };
 
     return walletBackup;
+  }
+
+  async importQrBackup(backup: WalletQrBackup, password: string) {
+    if (await this.initialized()) {
+      throw new Error('Wallet is already initialized');
+    }
+
+    try {
+      const { encryptedMnemonic, accountsIndex, accounts } = backup;
+      localStorage.setItem(ACCOUNTS_INDEX, accountsIndex.toString());
+      localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedMnemonic);
+
+      // TODO validate mnemonic, move this to outside
+      const rawMnemonic = await this.#decryptMnemonic(password);
+      if (!validateMnemonic(rawMnemonic)) {
+        throw new CoongError(ErrorCode.InvalidMnemonic);
+      }
+
+      for (let account of accounts) {
+        const [path, name] = account;
+        await this.createNewAccount(name, password, path);
+      }
+    } catch (e: any) {
+      await this.reset();
+
+      if (e instanceof StandardCoongError) {
+        throw e;
+      } else {
+        throw new StandardCoongError(e.message);
+      }
+    }
   }
 }

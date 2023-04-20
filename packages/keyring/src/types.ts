@@ -26,6 +26,6 @@ export interface WalletBackup$Json {
 
 export interface WalletBackup extends KeyringPairs$Json, WalletBackup$Json {}
 
-export interface WalletQRBackup extends WalletBackup$Json {
+export interface WalletQrBackup extends WalletBackup$Json {
   accounts: CompactAccountInfo[];
 }
