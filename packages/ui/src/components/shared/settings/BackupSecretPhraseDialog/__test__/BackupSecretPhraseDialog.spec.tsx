@@ -1,6 +1,5 @@
 import Keyring from '@coong/keyring';
-import { initializeKeyring, newUser, render, screen, UserEvent, waitFor } from '../../../../../__tests__/testUtils';
-import { SettingsDialogScreen } from '../../../../../types';
+import { initializeKeyring, newUser, render, screen, UserEvent, waitFor } from '__tests__/testUtils';
 import SettingsWalletButton from '../../SettingsWalletButton';
 import { expectSettingsWalletDialog } from '../../__test__/SettingsWalletButton.spec';
 
@@ -13,12 +12,14 @@ describe('BackupSecretPhraseDialog', () => {
     render(<SettingsWalletButton />, {
       preloadedState: {
         app: { seedReady: true, ready: true, locked: false },
-        settingsDialog: { screen: SettingsDialogScreen.BackupSecretPhrase },
       },
     });
 
     const settingsButton = screen.getByTitle('Open settings');
     await user.click(settingsButton);
+
+    const BackupSecretPhraseButton = await screen.findByRole('button', { name: /Backup Secret Recovery Phrase/ });
+    await user.click(BackupSecretPhraseButton);
   });
 
   describe('VerifyingPassword', () => {
@@ -90,6 +91,13 @@ describe('BackupSecretPhraseDialog', () => {
       await user.click(backButton);
 
       await expectSettingsWalletDialog(screen);
+    });
+
+    it('should close settings dialog when clicking on `Done` button', async () => {
+      const doneButton = await screen.findByRole('button', { name: /Done/ });
+      await user.click(doneButton);
+
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
     });
   });
 });

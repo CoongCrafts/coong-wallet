@@ -5,6 +5,7 @@ import { useEffectOnce } from 'react-use';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { LoadingButton } from '@mui/lab';
 import { Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material';
+import SecretRecoveryPhrase from 'components/shared/SecretRecoveryPhrase';
 import useSetupWallet from 'hooks/wallet/useSetupWallet';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';
@@ -15,11 +16,11 @@ interface BackupSecretRecoveryPhraseProps extends Props {
 }
 
 const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ className = '', onWalletSetup }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { password } = useSelector((state: RootState) => state.setupWallet);
   const [checked, setChecked] = useState<boolean>(false);
-  const [secretPhrase, setSecretPhrase] = useState<string>();
-  const { t } = useTranslation();
+  const [secretPhrase, setSecretPhrase] = useState<string>('');
   const { setup, loading } = useSetupWallet({ secretPhrase, password, onWalletSetup });
 
   useEffectOnce(() => {
@@ -44,9 +45,8 @@ const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ class
     <div className={className}>
       <h3>{t<string>('Finally, back up your secret recovery phrase')}</h3>
       <p className='mb-4'>{t<string>('Write down the below 12 words and keep it in a safe place.')}</p>
-
       <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={doSetupWallet}>
-        <div className='p-4 bg-black/10 dark:bg-white/15'>{secretPhrase}</div>
+        <SecretRecoveryPhrase secretPhrase={secretPhrase} />
         <FormGroup>
           <FormControlLabel
             control={<Checkbox checked={checked} onChange={handleCheckbox} disabled={loading} />}

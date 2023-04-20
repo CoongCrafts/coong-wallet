@@ -11,6 +11,8 @@ vi.mock('react-router-dom', async () => {
   return { ...reactRouter, useNavigate: () => navigate };
 });
 
+vi.spyOn(window, 'prompt').mockImplementation(() => '');
+
 beforeEach(() => {
   navigate.mockReset();
 });
@@ -145,6 +147,16 @@ describe('NewWallet', () => {
         expect(await screen.findByLabelText(/I have backed up my recovery phrase/)).toBeInTheDocument();
         expect(await screen.findByRole('button', { name: /Finish/ })).toBeDisabled();
         expect(await screen.findByRole('button', { name: /Back/ })).toBeInTheDocument();
+        expect(await screen.findByRole('button', { name: /Copy to Clipboard/ })).toBeInTheDocument();
+      });
+
+      it('should change copyButtonLabel to `Copied!` and disable the button', async () => {
+        renderView();
+
+        const copyToClipboardButton = await screen.findByRole('button', { name: /Copy to Clipboard/ });
+        await user.click(copyToClipboardButton);
+
+        expect(await screen.findByRole('button', { name: /Copied!/ })).toBeDisabled();
       });
 
       it('should go back to ChooseWalletPassword page', async () => {
