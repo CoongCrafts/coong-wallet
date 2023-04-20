@@ -3,7 +3,7 @@ import React, { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useMeasure } from 'react-use';
-import { CompactAccountInfo, WalletBackup, WalletQRBackup } from '@coong/keyring/types';
+import { CompactAccountInfo, WalletBackup, WalletQrBackup } from '@coong/keyring/types';
 import { Download } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import FileSaver from 'file-saver';
@@ -13,7 +13,7 @@ interface QRCodeProps extends Props {
   walletBackup: WalletBackup;
 }
 
-const toWalletQRBackup = (backup: WalletBackup): WalletQRBackup => {
+const toWalletQRBackup = (backup: WalletBackup): WalletQrBackup => {
   const { accounts, accountsIndex, encryptedMnemonic } = backup;
 
   return {

@@ -5,6 +5,8 @@ import MainScreen from 'components/pages/MainScreen';
 import Request from 'components/pages/Request';
 import NewWallet from 'components/pages/SetupWallet/NewWallet';
 import RestoreWallet from 'components/pages/SetupWallet/RestoreWallet';
+import ImportSecretRecoveryPhrase from 'components/pages/SetupWallet/RestoreWallet/ImportSecretRecoveryPhrase';
+import ScanQrCode from 'components/pages/SetupWallet/RestoreWallet/ScanQrCode';
 
 export default createBrowserRouter(
   createRoutesFromElements([
@@ -12,6 +14,8 @@ export default createBrowserRouter(
       <Route index element={<MainScreen />} />
       <Route path='/new-wallet' element={<NewWallet />} />
       <Route path='/restore-wallet' element={<RestoreWallet />} />
+      <Route path='/restore-wallet/secret-recovery-phrase' element={<ImportSecretRecoveryPhrase />} />
+      <Route path='/restore-wallet/qrcode' element={<ScanQrCode />} />
     </Route>,
     <Route path='/embed' element={<Embed />} />,
     <Route path='/request' element={<MainLayout />}>

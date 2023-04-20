@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import ChooseWalletPassword from 'components/pages/SetupWallet/ChooseWalletPassword';
 import ConfirmWalletPassword from 'components/pages/SetupWallet/ConfirmWalletPassword';
 import BackupSecretRecoveryPhrase from 'components/pages/SetupWallet/NewWallet/BackupSecretRecoveryPhrase';
@@ -14,6 +15,7 @@ interface NewWalletProps extends Props {
 
 const ScreenStep: FC<NewWalletProps> = ({ onWalletSetup }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { newWalletScreenStep } = useSelector((state: RootState) => state.setupWallet);
 
   const goto = (step: NewWalletScreenStep) => {
@@ -31,7 +33,12 @@ const ScreenStep: FC<NewWalletProps> = ({ onWalletSetup }) => {
     case NewWalletScreenStep.BackupSecretRecoveryPhrase:
       return <BackupSecretRecoveryPhrase onWalletSetup={onWalletSetup} />;
     default:
-      return <ChooseWalletPassword nextStep={goto(NewWalletScreenStep.ConfirmWalletPassword)} />;
+      return (
+        <ChooseWalletPassword
+          prevStep={() => navigate('/')}
+          nextStep={goto(NewWalletScreenStep.ConfirmWalletPassword)}
+        />
+      );
   }
 };
 

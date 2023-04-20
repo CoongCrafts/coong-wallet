@@ -1,17 +1,19 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { validateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { Button, TextField } from '@mui/material';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { Props, RestoreWalletScreenStep } from 'types';
 
-export default function ImportSecretRecoveryPhrase({ className = '' }: Props): JSX.Element {
+export default function EnterSecretRecoveryPhrase({ className = '' }: Props): JSX.Element {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [secretPhrase, setSecretPhrase] = useState('');
   const [validation, setValidation] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!secretPhrase) {
@@ -58,9 +60,14 @@ export default function ImportSecretRecoveryPhrase({ className = '' }: Props): J
           error={!!validation}
           helperText={validation || <EmptySpace />}
         />
-        <Button type='submit' fullWidth disabled={!secretPhrase || !!validation} size='large'>
-          {t<string>('Next')}
-        </Button>
+        <div className='flex gap-4'>
+          <Button onClick={() => navigate('/restore-wallet')} variant='text'>
+            {t<string>('Back')}
+          </Button>
+          <Button type='submit' fullWidth disabled={!secretPhrase || !!validation} size='large'>
+            {t<string>('Next')}
+          </Button>
+        </div>
       </form>
     </div>
   );
