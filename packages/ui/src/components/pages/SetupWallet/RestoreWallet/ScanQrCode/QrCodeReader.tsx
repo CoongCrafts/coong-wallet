@@ -39,7 +39,7 @@ export default function QrCodeReader({ onResult }: QrCodeReaderProps) {
             const data = result?.getText();
             data && onResult(data);
           }}
-          constraints={{ facingMode: 'user' }}
+          constraints={{ facingMode: ['environment'] }}
           className='w-full'
         />
       )}
