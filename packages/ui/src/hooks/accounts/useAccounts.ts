@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffectOnce } from 'react-use';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { AccountInfo } from '@coong/keyring/types';
 import { useWalletState } from 'providers/WalletStateProvider';
@@ -23,16 +22,12 @@ export default function useAccounts() {
     dispatch(accountsActions.setAccounts(newExtendedAccounts));
   };
 
-  useEffectOnce(() => {
+  useEffect(() => {
     const subscription = keyring.accountsStore.subject.subscribe(async () => {
       setAccounts(await keyring.getAccounts());
     });
 
     return () => subscription.unsubscribe();
-  });
-
-  useEffect(() => {
-    setAccounts(accounts);
   }, [addressPrefix]);
 
   return accounts;
