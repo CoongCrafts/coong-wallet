@@ -4,6 +4,7 @@ import { AccountInfo } from '@coong/keyring/types';
 export interface Props {
   className?: string;
   children?: ReactNode;
+
   [prop: string]: any;
 }
 
@@ -43,4 +44,8 @@ export enum RestoreWalletScreenStep {
   EnterSecretRecoveryPhrase,
   ChooseWalletPassword,
   ConfirmWalletPassword,
+}
+
+export enum AccountSettingsAction {
+  RemoveAccount,
 }
