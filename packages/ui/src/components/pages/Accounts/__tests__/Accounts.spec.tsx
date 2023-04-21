@@ -1,9 +1,9 @@
+import { waitFor } from '@testing-library/react';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { defaultNetwork, networks } from '@coong/base';
 import { AccountInfo } from '@coong/keyring/types';
 import { UserEvent } from '@testing-library/user-event/setup/setup';
 import { initializeKeyring, newUser, PASSWORD, render, screen } from '__tests__/testUtils';
-import { expect } from 'vitest';
 import Accounts from '../index';
 
 const preloadedState = { app: { addressPrefix: defaultNetwork.prefix } };
@@ -90,6 +90,37 @@ describe('Accounts', () => {
 
       await user.unhover(addressText);
       expect(await screen.queryByText('Address copied!')).not.toBeVisible();
+    });
+
+    describe('AccountSettings', () => {
+      it('should show account settings menu', async () => {
+        render(<Accounts />, { preloadedState });
+
+        const accountSettingsButtons = await screen.findAllByTitle(/Open account settings/);
+        // clicking on account settings of account 01
+        await user.click(accountSettingsButtons[0]);
+
+        expect(await screen.findByRole('menuitem', { name: /Remove/ })).toBeInTheDocument();
+      });
+
+      it('should not list the account was removed', async () => {
+        render(<Accounts />, { preloadedState });
+
+        const accountSettingsButtons = await screen.findAllByTitle(/Open account settings/);
+        // clicking on account settings of account 01
+        await user.click(accountSettingsButtons[0]);
+
+        const removeActionButton = await screen.findByRole('menuitem', { name: /Remove/ });
+        await user.click(removeActionButton);
+
+        const removeAccountButton = await screen.findByRole('button', { name: /Remove this account/ });
+        await user.click(removeAccountButton);
+
+        await waitFor(() => {
+          expect(screen.getByText(/Account 01/)).not.toBeInTheDocument();
+          expect(screen.getByText(/Account 02/)).toBeInTheDocument();
+        });
+      });
     });
   });
 });

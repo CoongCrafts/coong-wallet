@@ -46,7 +46,7 @@ const AccountSettings: FC<AccountSettingsProps> = ({ className = '', account }) 
 
   return (
     <div className={className}>
-      <IconButton onClick={handleClick}>
+      <IconButton onClick={handleClick} title='Open account settings'>
         <MoreVertIcon />
       </IconButton>
       <Menu open={open} anchorEl={anchorEl} onClose={doClose}>
