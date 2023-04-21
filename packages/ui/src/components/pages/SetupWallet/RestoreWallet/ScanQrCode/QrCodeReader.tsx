@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { QrReader } from 'react-qr-reader';
-import { useNavigate } from 'react-router-dom';
+import QrReader from 'react-qr-reader';
+import { useDispatch } from 'react-redux';
 import { usePermission } from 'react-use';
 import { Alert, AlertTitle, Button } from '@mui/material';
 import QrCodeViewFinder from 'components/shared/misc/QrCodeViewFinder';
@@ -34,12 +34,12 @@ export default function QrCodeReader({ onResult }: QrCodeReaderProps) {
         </Alert>
       ) : (
         <QrReader
-          ViewFinder={QrCodeViewFinder}
-          onResult={(result) => {
-            const data = result?.getText();
+          showViewFinder
+          onScan={(data) => {
             data && onResult(data);
           }}
-          constraints={{ facingMode: ['environment'] }}
+          onError={() => {}}
+          facingMode='environment'
           className='w-full'
         />
       )}
