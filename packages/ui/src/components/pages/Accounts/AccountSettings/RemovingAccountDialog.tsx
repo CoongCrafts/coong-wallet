@@ -40,7 +40,7 @@ const RemovingAccountDialog: FC<RemovingAccountDialogProps> = ({ account, open, 
           <Button onClick={onClose} variant='text'>
             {t<string>('Cancel')}
           </Button>
-          <Button onClick={removeAccount} color='error' variant='contained'>
+          <Button onClick={removeAccount} color='error'>
             {t<string>('Remove this account')}
           </Button>
         </div>
