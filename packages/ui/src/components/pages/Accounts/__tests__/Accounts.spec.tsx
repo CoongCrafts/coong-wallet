@@ -117,8 +117,8 @@ describe('Accounts', () => {
         await user.click(removeAccountButton);
 
         await waitFor(() => {
-          expect(screen.getByText(/Account 01/)).not.toBeInTheDocument();
-          expect(screen.getByText(/Account 02/)).toBeInTheDocument();
+          expect(screen.queryByText(/Account 01/)).not.toBeInTheDocument();
+          expect(screen.queryByText(/Account 02/)).toBeInTheDocument();
         });
       });
     });

@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { Button, Dialog, DialogContent, DialogContentText } from '@mui/material';
@@ -6,13 +7,14 @@ import DialogTitle from 'components/shared/DialogTitle';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { AccountInfoExt, Props } from 'types';
 
-interface RemovingAccountProps extends Props {
+interface RemovingAccountDialogProps extends Props {
   account: AccountInfoExt;
   open: boolean;
   onClose: () => void;
 }
 
-const RemovingAccount: FC<RemovingAccountProps> = ({ account, open, onClose }) => {
+const RemovingAccountDialog: FC<RemovingAccountDialogProps> = ({ account, open, onClose }) => {
+  const { t } = useTranslation();
   const { keyring } = useWalletState();
   const { address, name } = account;
   const removeAccount = async () => {
@@ -25,21 +27,21 @@ const RemovingAccount: FC<RemovingAccountProps> = ({ account, open, onClose }) =
 
   return (
     <Dialog open={open}>
-      <DialogTitle onClose={onClose}>{`Remove account: ${name}`}</DialogTitle>
+      <DialogTitle onClose={onClose}>{`${t<string>('Remove account')}: ${name}`}</DialogTitle>
       <DialogContent className='flex flex-col gap-4'>
         <DialogContentText className='text-red-500'>
           <WarningAmberIcon className='align-sub mr-2' />
-          <span>Are you sure to remove this account?</span>
+          <span>{t<string>('Are you sure to remove this account?')}</span>
         </DialogContentText>
         <DialogContentText className='italic'>
-          Make sure you backed up your recovery phrase or private key before continuing.
+          {t<string>('Make sure you backed up your recovery phrase or private key before continuing.')}
         </DialogContentText>
         <div className='flex justify-end gap-4'>
           <Button onClick={onClose} variant='text'>
-            Cancel
+            {t<string>('Cancel')}
           </Button>
           <Button onClick={removeAccount} color='error' variant='contained'>
-            Remove this account
+            {t<string>('Remove this account')}
           </Button>
         </div>
       </DialogContent>
@@ -47,4 +49,4 @@ const RemovingAccount: FC<RemovingAccountProps> = ({ account, open, onClose }) =
   );
 };
 
-export default RemovingAccount;
+export default RemovingAccountDialog;
