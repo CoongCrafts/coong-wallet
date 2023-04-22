@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { Button, Dialog, DialogContent, DialogContentText } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
 import { useWalletState } from 'providers/WalletStateProvider';
@@ -30,8 +29,7 @@ const RemovingAccountDialog: FC<RemovingAccountDialogProps> = ({ account, open, 
       <DialogTitle onClose={onClose}>{`${t<string>('Remove account')}: ${name}`}</DialogTitle>
       <DialogContent className='flex flex-col gap-4'>
         <DialogContentText className='text-red-500'>
-          <WarningAmberIcon className='align-sub mr-2' />
-          <span>{t<string>('Are you sure to remove this account?')}</span>
+          {t<string>('Are you sure to remove this account?')}
         </DialogContentText>
         <DialogContentText className='italic'>
           {t<string>('Make sure you backed up your recovery phrase or private key before continuing.')}
