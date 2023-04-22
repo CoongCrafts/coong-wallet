@@ -27,14 +27,14 @@ const RemovingAccountDialog: FC<RemovingAccountDialogProps> = ({ account, open, 
   return (
     <Dialog open={open}>
       <DialogTitle onClose={onClose}>{`${t<string>('Remove account')}: ${name}`}</DialogTitle>
-      <DialogContent className='flex flex-col gap-4'>
+      <DialogContent className='pb-8'>
         <DialogContentText className='text-red-500'>
           {t<string>('Are you sure to remove this account?')}
         </DialogContentText>
-        <DialogContentText className='italic'>
+        <DialogContentText className='mt-2 italic'>
           {t<string>('Make sure you backed up your recovery phrase or private key before continuing.')}
         </DialogContentText>
-        <div className='flex justify-end gap-4'>
+        <div className='flex justify-end gap-4 mt-8'>
           <Button onClick={onClose} variant='text'>
             {t<string>('Cancel')}
           </Button>
