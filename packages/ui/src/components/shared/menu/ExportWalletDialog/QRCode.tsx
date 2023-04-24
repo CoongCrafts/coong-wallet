@@ -3,7 +3,7 @@ import React, { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useMeasure } from 'react-use';
-import { CompactAccountInfo, WalletBackup, WalletQrBackup } from '@coong/keyring/types';
+import { CompactAccountInfo, DerivationPath, WalletBackup, WalletQrBackup } from '@coong/keyring/types';
 import { Download } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import FileSaver from 'file-saver';
@@ -19,7 +19,7 @@ const toWalletQRBackup = (backup: WalletBackup): WalletQrBackup => {
   return {
     accountsIndex,
     encryptedMnemonic,
-    accounts: accounts.map(({ meta }) => [meta.derivationPath as string, meta.name!] as CompactAccountInfo),
+    accounts: accounts.map(({ meta }) => [meta.derivationPath as DerivationPath, meta.name!] as CompactAccountInfo),
   };
 };
 

@@ -9,6 +9,8 @@ export const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
 export const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
 export const DEFAULT_KEY_TYPE = 'sr25519';
 
+const DERIVATION_PATH_PREFIX = '//';
+
 export default class Keyring {
   #keyring!: InnerKeyring;
   #mnemonic: string | null;
@@ -146,8 +148,10 @@ export default class Keyring {
       throw new CoongError(ErrorCode.AccountNameUsed);
     }
 
-    const derivationPath = path || this.#nextAccountPath();
-    // TODO verify derivationPath
+    let derivationPath = path || this.#nextAccountPath();
+    if (!derivationPath.startsWith(DERIVATION_PATH_PREFIX)) {
+      derivationPath = DERIVATION_PATH_PREFIX + derivationPath;
+    }
 
     const nextPath = `${this.#mnemonic}${derivationPath}`;
     const keypair = this.#keyring.createFromUri(nextPath, { name, derivationPath }, DEFAULT_KEY_TYPE);
@@ -246,7 +250,7 @@ export default class Keyring {
 
   async importQrBackup(backup: WalletQrBackup, password: string) {
     if (await this.initialized()) {
-      throw new Error('Wallet is already initialized');
+      throw new StandardCoongError('Wallet is already initialized');
     }
 
     try {
@@ -254,7 +258,6 @@ export default class Keyring {
       localStorage.setItem(ACCOUNTS_INDEX, accountsIndex.toString());
       localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedMnemonic);
 
-      // TODO validate mnemonic, move this to outside
       const rawMnemonic = await this.#decryptMnemonic(password);
       if (!validateMnemonic(rawMnemonic)) {
         throw new CoongError(ErrorCode.InvalidMnemonic);
