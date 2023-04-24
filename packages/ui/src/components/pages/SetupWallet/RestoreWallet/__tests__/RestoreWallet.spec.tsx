@@ -38,7 +38,7 @@ describe('RestoreWallet', () => {
 
     it('should trigger onWalletSetup callback', async () => {
       const onWalletSetup = vi.fn();
-      render(<RestoreWallet onWalletSetup={onWalletSetup} />);
+      render(<RestoreWallet />);
 
       await waitFor(() => {
         expect(onWalletSetup).toHaveBeenCalledTimes(1);
@@ -116,7 +116,7 @@ describe('RestoreWallet', () => {
 
     describe('ConfirmWalletPassword', () => {
       const renderView = (onWalletSetup?: () => void) => {
-        render(<RestoreWallet onWalletSetup={onWalletSetup} />, {
+        render(<RestoreWallet />, {
           preloadedState: {
             setupWallet: {
               password: 'random-password',
