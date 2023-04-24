@@ -1,19 +1,15 @@
-import { useNavigate } from 'react-router-dom';
 import { useEffectOnce } from 'react-use';
+import { useWalletSetup } from 'providers/WalletSetupProvider';
 import { useWalletState } from 'providers/WalletStateProvider';
 
-export default function useOnWalletInitialized(onWalletSetup?: () => void) {
+export default function useOnWalletInitialized() {
   const { keyring } = useWalletState();
-  const navigate = useNavigate();
+  const { onWalletSetup } = useWalletSetup();
 
   useEffectOnce(() => {
     keyring.initialized().then((initialized) => {
       if (initialized) {
-        if (onWalletSetup) {
-          onWalletSetup();
-        } else {
-          navigate('/');
-        }
+        onWalletSetup();
       }
     });
   });

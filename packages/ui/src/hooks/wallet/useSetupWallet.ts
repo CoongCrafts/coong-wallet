@@ -1,24 +1,22 @@
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { useToggle } from 'react-use';
 import { StandardCoongError } from '@coong/utils';
+import { useWalletSetup } from 'providers/WalletSetupProvider';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { appActions } from 'redux/slices/app';
-
 
 interface SetupWalletOptions {
   secretPhrase?: string;
   password?: string;
-  onWalletSetup?: () => void;
 }
 
-export default function useSetupWallet({ secretPhrase, password, onWalletSetup }: SetupWalletOptions) {
+export default function useSetupWallet({ secretPhrase, password }: SetupWalletOptions) {
   const { t } = useTranslation();
   const { keyring } = useWalletState();
   const dispatch = useDispatch();
   const [loading, setLoading] = useToggle(false);
-  const navigate = useNavigate();
+  const { onWalletSetup } = useWalletSetup();
 
   const setup = () => {
     if (!secretPhrase || !password) {
@@ -34,11 +32,7 @@ export default function useSetupWallet({ secretPhrase, password, onWalletSetup }
       dispatch(appActions.seedReady());
       dispatch(appActions.unlock());
 
-      if (onWalletSetup) {
-        onWalletSetup();
-      } else {
-        navigate('/');
-      }
+      onWalletSetup();
     }, 500); // intentionally!
   };
 

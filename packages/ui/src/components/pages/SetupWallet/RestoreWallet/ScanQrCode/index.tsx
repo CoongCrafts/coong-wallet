@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { WalletQrBackup } from '@coong/keyring/types';
-import QrCodeReader from './QrCodeReader';
-import TransferWalletBackup from './TransferWalletBackup';
+import QrCodeReader from 'components/pages/SetupWallet/RestoreWallet/ScanQrCode/QrCodeReader';
+import TransferWalletBackup from 'components/pages/SetupWallet/RestoreWallet/ScanQrCode/TransferWalletBackup';
 
 export default function ScanQrCode(): JSX.Element {
-  const { t } = useTranslation();
   const [backup, setBackup] = useState<WalletQrBackup>();
 
   const onQrScanComplete = (data: string) => {
@@ -19,9 +17,13 @@ export default function ScanQrCode(): JSX.Element {
     }
   };
 
-  return (
-    <div className='max-w-[450px] mt-8 mb-16 mx-auto'>
-      {backup ? <TransferWalletBackup backup={backup} /> : <QrCodeReader onResult={onQrScanComplete} />}
-    </div>
+  const resetBackup = () => {
+    setBackup(undefined);
+  };
+
+  return backup ? (
+    <TransferWalletBackup backup={backup} resetBackup={resetBackup} />
+  ) : (
+    <QrCodeReader onResult={onQrScanComplete} />
   );
 }

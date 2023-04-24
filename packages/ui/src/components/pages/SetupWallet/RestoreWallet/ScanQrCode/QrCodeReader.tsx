@@ -3,8 +3,8 @@ import QrReader from 'react-qr-reader';
 import { useDispatch } from 'react-redux';
 import { usePermission } from 'react-use';
 import { Alert, AlertTitle, Button } from '@mui/material';
-import QrCodeViewFinder from 'components/shared/misc/QrCodeViewFinder';
 import useThemeMode from 'hooks/useThemeMode';
+import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { Props } from 'types';
 
 interface QrCodeReaderProps extends Props {
@@ -13,9 +13,14 @@ interface QrCodeReaderProps extends Props {
 
 export default function QrCodeReader({ onResult }: QrCodeReaderProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const cameraPermission = usePermission({ name: 'camera' });
   const { dark } = useThemeMode();
+  const dispatch = useDispatch();
+
+  const goBack = () => {
+    // TODO Make sure the camera is stopped when going back
+    dispatch(setupWalletActions.clearRestoreWalletMethod());
+  };
 
   return (
     <>
@@ -45,7 +50,7 @@ export default function QrCodeReader({ onResult }: QrCodeReaderProps) {
       )}
 
       <div className='mt-4'>
-        <Button onClick={() => navigate('/restore-wallet')} color={dark ? 'grayLight' : 'gray'} variant='text'>
+        <Button onClick={goBack} color={dark ? 'grayLight' : 'gray'} variant='text'>
           {t<string>('Back')}
         </Button>
       </div>

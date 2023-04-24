@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ChooseWalletPassword from 'components/pages/SetupWallet/ChooseWalletPassword';
 import ConfirmWalletPassword from 'components/pages/SetupWallet/ConfirmWalletPassword';
@@ -6,17 +6,12 @@ import EnterSecretRecoveryPhrase from 'components/pages/SetupWallet/RestoreWalle
 import useSetupWallet from 'hooks/wallet/useSetupWallet';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';
-import { Props, RestoreWalletScreenStep } from 'types';
+import { RestoreWalletScreenStep } from 'types';
 
-
-interface RestoreWalletProps extends Props {
-  onWalletSetup?: () => void;
-}
-
-const ScreenStep: FC<RestoreWalletProps> = ({ onWalletSetup }) => {
+export default function ImportSecretRecoveryPhrase(): JSX.Element {
   const dispatch = useDispatch();
   const { secretPhrase, password, restoreWalletScreenStep } = useSelector((state: RootState) => state.setupWallet);
-  const { setup, loading } = useSetupWallet({ secretPhrase, password, onWalletSetup });
+  const { setup, loading } = useSetupWallet({ secretPhrase, password });
 
   const goto = (step: RestoreWalletScreenStep) => {
     return () => dispatch(setupWalletActions.setRestoreWalletScreenStep(step));
@@ -43,14 +38,4 @@ const ScreenStep: FC<RestoreWalletProps> = ({ onWalletSetup }) => {
     default:
       return <EnterSecretRecoveryPhrase />;
   }
-};
-
-const ImportSecretRecoveryPhrase: FC<RestoreWalletProps> = ({ className = '', onWalletSetup }) => {
-  return (
-    <div className={`${className} max-w-[450px] mt-8 mb-16 mx-auto`}>
-      <ScreenStep onWalletSetup={onWalletSetup} />
-    </div>
-  );
-};
-
-export default ImportSecretRecoveryPhrase;
+}
