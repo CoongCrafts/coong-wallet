@@ -18,7 +18,6 @@ export default function QrCodeReader({ onResult }: QrCodeReaderProps) {
   const dispatch = useDispatch();
 
   const goBack = () => {
-    // TODO Make sure the camera is stopped when going back
     dispatch(setupWalletActions.clearRestoreWalletMethod());
   };
 

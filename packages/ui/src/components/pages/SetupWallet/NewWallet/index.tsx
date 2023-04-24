@@ -24,13 +24,18 @@ const ScreenStep: FC<Props> = () => {
         <ConfirmWalletPassword
           nextStep={goto(NewWalletScreenStep.BackupSecretRecoveryPhrase)}
           prevStep={goto(NewWalletScreenStep.ChooseWalletPassword)}
+          heading='Next, confirm your wallet password'
         />
       );
     case NewWalletScreenStep.BackupSecretRecoveryPhrase:
       return <BackupSecretRecoveryPhrase />;
     default:
       return (
-        <ChooseWalletPassword prevStep={onCancelSetup} nextStep={goto(NewWalletScreenStep.ConfirmWalletPassword)} />
+        <ChooseWalletPassword
+          prevStep={onCancelSetup}
+          nextStep={goto(NewWalletScreenStep.ConfirmWalletPassword)}
+          heading='First, choose your wallet password'
+        />
       );
   }
 };

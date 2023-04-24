@@ -25,6 +25,7 @@ export default function ImportSecretRecoveryPhrase(): JSX.Element {
           nextStepLabel='Finish'
           nextStepLoading={loading}
           prevStep={goto(RestoreWalletScreenStep.ChooseWalletPassword)}
+          heading='Lastly, confirm your wallet password'
         />
       );
     case RestoreWalletScreenStep.ChooseWalletPassword:
@@ -32,6 +33,7 @@ export default function ImportSecretRecoveryPhrase(): JSX.Element {
         <ChooseWalletPassword
           nextStep={goto(RestoreWalletScreenStep.ConfirmWalletPassword)}
           prevStep={goto(RestoreWalletScreenStep.EnterSecretRecoveryPhrase)}
+          heading='Next, choose your wallet password'
         />
       );
     case RestoreWalletScreenStep.EnterSecretRecoveryPhrase:
