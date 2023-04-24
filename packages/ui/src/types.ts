@@ -46,6 +46,6 @@ export enum RestoreWalletScreenStep {
   ConfirmWalletPassword,
 }
 
-export enum AccountSettingsAction {
+export enum AccountControlsAction {
   RemoveAccount,
 }

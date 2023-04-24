@@ -96,7 +96,7 @@ describe('Accounts', () => {
       it('should show account settings menu', async () => {
         render(<Accounts />, { preloadedState });
 
-        const accountSettingsButtons = await screen.findAllByTitle(/Open account settings/);
+        const accountSettingsButtons = await screen.findAllByTitle(/Open account controls/);
         // clicking on account settings of account 01
         await user.click(accountSettingsButtons[0]);
 
@@ -106,7 +106,7 @@ describe('Accounts', () => {
       it('should not list the account was removed', async () => {
         render(<Accounts />, { preloadedState });
 
-        const accountSettingsButtons = await screen.findAllByTitle(/Open account settings/);
+        const accountSettingsButtons = await screen.findAllByTitle(/Open account controls/);
         // clicking on account settings of account 01
         await user.click(accountSettingsButtons[0]);
 

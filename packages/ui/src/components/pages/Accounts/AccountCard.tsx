@@ -2,7 +2,7 @@ import { Identicon } from '@polkadot/react-identicon';
 import { FC } from 'react';
 import { styled } from '@mui/material';
 import AccountAddress from 'components/pages/Accounts/AccountAddress';
-import AccountSettings from 'components/pages/Accounts/AccountSettings/';
+import AccountControls from 'components/pages/Accounts/AccountControls/';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 import { AccountInfoExt, Props } from 'types';
 
@@ -26,7 +26,7 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account }) => {
         <div className='account-card__name'>{name}</div>
         <AccountAddress address={networkAddress} name={name} />
       </div>
-      <AccountSettings account={account} />
+      <AccountControls account={account} />
     </div>
   );
 };

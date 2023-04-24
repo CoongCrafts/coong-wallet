@@ -16,7 +16,7 @@ describe('AccountSettings', () => {
 
     render(<Accounts />);
 
-    const accountSettingsButton = await screen.findByTitle(/Open account settings/);
+    const accountSettingsButton = await screen.findByTitle(/Open account controls/);
     await user.click(accountSettingsButton);
   });
   describe('RemovingAccount', () => {
