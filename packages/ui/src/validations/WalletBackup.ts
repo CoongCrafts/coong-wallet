@@ -3,7 +3,7 @@ import { array, number, object, string, tuple } from 'yup';
 const DerivationPathRegex = /^\/\/(\d)+$/;
 
 export const CompactAccountInfoSchema = tuple([
-  string().label('DerivationPath').matches(DerivationPathRegex),
+  string().label('DerivationPath').matches(DerivationPathRegex, { excludeEmptyString: true }),
   string().label('AccountName'),
 ]);
 
