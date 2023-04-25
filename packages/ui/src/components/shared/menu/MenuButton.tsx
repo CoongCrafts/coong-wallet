@@ -15,7 +15,7 @@ export default function MenuButton({ className = '' }: Props): JSX.Element {
 
   const onClickExportWallet = () => {
     doClose();
-    triggerEvent(EventName.OPEN_EXPORT_WALLET_DIALOG);
+    triggerEvent(EventName.OpenExportWalletDialog);
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => doOpen(e.currentTarget);

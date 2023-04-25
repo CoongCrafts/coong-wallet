@@ -11,7 +11,6 @@ import useDialog from 'hooks/useDialog';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { EventName, EventRegistry } from 'utils/eventemitter';
 
-
 export default function ExportWalletDialog(): JSX.Element {
   const { t } = useTranslation();
   const { open, doOpen, doClose } = useDialog();
@@ -28,10 +27,10 @@ export default function ExportWalletDialog(): JSX.Element {
   };
 
   useEffectOnce(() => {
-    EventRegistry.on(EventName.OPEN_EXPORT_WALLET_DIALOG, doOpen);
+    EventRegistry.on(EventName.OpenExportWalletDialog, doOpen);
 
     return () => {
-      EventRegistry.off(EventName.OPEN_EXPORT_WALLET_DIALOG, doOpen);
+      EventRegistry.off(EventName.OpenExportWalletDialog, doOpen);
     };
   });
 
