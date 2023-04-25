@@ -118,8 +118,8 @@ describe('Accounts', () => {
 
         await waitFor(() => {
           expect(screen.queryByText(/Account 01 removed/)).toBeInTheDocument();
-          expect(screen.queryByText(/Account 01/)).not.toBeInTheDocument();
-          expect(screen.queryByText(/Account 02/)).toBeInTheDocument();
+          expect(screen.queryByText(account01.address)).not.toBeInTheDocument();
+          expect(screen.queryByText(account02.address)).toBeInTheDocument();
         });
       });
     });
