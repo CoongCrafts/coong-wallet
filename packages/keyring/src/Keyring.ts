@@ -149,7 +149,7 @@ export default class Keyring {
     }
 
     let derivationPath = path || this.#nextAccountPath();
-    if (!derivationPath.startsWith(DERIVATION_PATH_PREFIX)) {
+    if (!!derivationPath && !derivationPath.startsWith(DERIVATION_PATH_PREFIX)) {
       derivationPath = DERIVATION_PATH_PREFIX + derivationPath;
     }
 
