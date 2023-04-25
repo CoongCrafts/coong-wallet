@@ -157,7 +157,10 @@ export default class Keyring {
     const keypair = this.#keyring.createFromUri(nextPath, { name, derivationPath }, DEFAULT_KEY_TYPE);
 
     this.#keyring.saveAccount(keypair, password);
-    this.#increaseAccountsIndex();
+
+    if (!path) {
+      this.#increaseAccountsIndex();
+    }
 
     this.lock();
 
