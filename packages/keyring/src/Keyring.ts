@@ -148,7 +148,7 @@ export default class Keyring {
       throw new CoongError(ErrorCode.AccountNameUsed);
     }
 
-    let derivationPath = path || this.#nextAccountPath();
+    let derivationPath = path ?? this.#nextAccountPath();
     if (!!derivationPath && !derivationPath.startsWith(DERIVATION_PATH_PREFIX)) {
       derivationPath = DERIVATION_PATH_PREFIX + derivationPath;
     }
@@ -158,7 +158,8 @@ export default class Keyring {
 
     this.#keyring.saveAccount(keypair, password);
 
-    if (!path) {
+    const shouldIncreaseIndex = typeof path !== 'string';
+    if (shouldIncreaseIndex) {
       this.#increaseAccountsIndex();
     }
 
