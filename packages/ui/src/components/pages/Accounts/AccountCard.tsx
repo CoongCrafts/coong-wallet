@@ -2,7 +2,7 @@ import { Identicon } from '@polkadot/react-identicon';
 import { FC } from 'react';
 import { styled } from '@mui/material';
 import AccountAddress from 'components/pages/Accounts/AccountAddress';
-import AccountControls from 'components/pages/Accounts/AccountControls/';
+import AccountControls from 'components/pages/Accounts/AccountControls';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 import { AccountInfoExt, Props } from 'types';
 

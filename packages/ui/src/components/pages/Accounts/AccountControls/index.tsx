@@ -3,10 +3,19 @@ import { useTranslation } from 'react-i18next';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import useMenuDropdown from 'hooks/useMenuDropdown';
-import { AccountInfoExt, AccountControlsAction, Props } from 'types';
+import { AccountInfoExt, Props } from 'types';
 import { EventName, triggerEvent } from 'utils/eventemitter';
 
-const AccountControlsOptions = [{ action: AccountControlsAction.RemoveAccount, label: 'Remove' }];
+enum AccountControlsAction {
+  RemoveAccount = 'Remove',
+}
+
+const AccountControlsOptions = [
+  {
+    action: AccountControlsAction.RemoveAccount,
+    event: EventName.OpenRemoveAccountDialog,
+  },
+];
 
 interface AccountControlsProps extends Props {
   account: AccountInfoExt;
@@ -17,13 +26,10 @@ const AccountControls: FC<AccountControlsProps> = ({ className = '', account }) 
   const { open, anchorEl, doOpen, doClose } = useMenuDropdown();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => doOpen(event.currentTarget);
-  const openDialogOnAction = (action: AccountControlsAction) => {
+
+  const openDialogOnAction = (event: EventName) => {
+    triggerEvent(event, account);
     doClose();
-    switch (action) {
-      case AccountControlsAction.RemoveAccount:
-        triggerEvent(EventName.OPEN_REMOVE_ACCOUNT_DIALOG, account);
-        break;
-    }
   };
 
   return (
@@ -32,9 +38,9 @@ const AccountControls: FC<AccountControlsProps> = ({ className = '', account }) 
         <MoreVertIcon />
       </IconButton>
       <Menu open={open} anchorEl={anchorEl} onClose={doClose}>
-        {AccountControlsOptions.map(({ action, label }) => (
-          <MenuItem key={action} onClick={() => openDialogOnAction(action)}>
-            {t<string>(label)}
+        {AccountControlsOptions.map(({ action, event }) => (
+          <MenuItem key={action} onClick={() => openDialogOnAction(event)}>
+            {t<string>(action)}
           </MenuItem>
         ))}
       </Menu>

@@ -20,29 +20,32 @@ export default function RemoveAccountDialog({}: Props): JSX.Element {
   };
 
   const removeAccount = async () => {
-    onClose();
     try {
       await keyring.removeAccount(account!.address);
+      onClose();
+      toast.success(`${account!.name} removed`);
     } catch (e: any) {
       toast.error(e.message);
     }
   };
 
-  const emitted = (account: AccountInfoExt) => {
-    doOpen();
+  const onOpen = (account: AccountInfoExt) => {
     setAccount(account);
+    doOpen();
   };
 
   useEffectOnce(() => {
-    EventRegistry.on(EventName.OPEN_REMOVE_ACCOUNT_DIALOG, emitted);
+    EventRegistry.on(EventName.OpenRemoveAccountDialog, onOpen);
 
     return () => {
-      EventRegistry.off(EventName.OPEN_REMOVE_ACCOUNT_DIALOG, emitted);
+      EventRegistry.off(EventName.OpenRemoveAccountDialog, onOpen);
     };
   });
 
+  if (!account) return <></>;
+
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onClose={onClose}>
       {account && <DialogTitle onClose={onClose}>{`${t<string>('Remove account')}: ${account.name}`}</DialogTitle>}
       <DialogContent className='pb-8'>
         <DialogContentText className='text-red-500'>

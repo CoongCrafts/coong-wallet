@@ -1,10 +1,9 @@
-import Keyring from '@coong/keyring';
 import { AccountInfo } from '@coong/keyring/types';
 import { UserEvent } from '@testing-library/user-event/setup/setup';
 import { initializeKeyring, newUser, PASSWORD, render, screen, waitFor } from '__tests__/testUtils';
 import Accounts from '../../index';
 
-describe('AccountSettings', () => {
+describe('AccountControls', () => {
   let user: UserEvent, testAccount: AccountInfo;
   beforeEach(async () => {
     user = newUser();
@@ -16,23 +15,23 @@ describe('AccountSettings', () => {
 
     render(<Accounts />);
 
-    const accountSettingsButton = await screen.findByTitle(/Open account controls/);
-    await user.click(accountSettingsButton);
+    const accountControlsButton = await screen.findByTitle(/Open account controls/);
+    await user.click(accountControlsButton);
   });
-  describe('RemovingAccount', () => {
+  describe('RemoveAccountDialog', () => {
     beforeEach(async () => {
       const removeActionButton = await screen.findByRole('menuitem', { name: /Remove/ });
       await user.click(removeActionButton);
     });
 
-    it('should show content of `RemovingAccount` dialog correctly', async () => {
+    it('should show content of `RemoveAccountDialog` correctly', async () => {
       expect(await screen.findByRole('dialog')).toBeInTheDocument();
       expect(await screen.findByText(`Remove account: ${testAccount.name}`)).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /Cancel/ })).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /Remove this account/ })).toBeInTheDocument();
     });
 
-    it('should close the `RemovingAccount` dialog when clicking on `Cancel` button', async () => {
+    it('should close the `RemoveAccountDialog` when clicking on `Cancel` button', async () => {
       const cancelButton = await screen.findByRole('button', { name: /Cancel/ });
       await user.click(cancelButton);
 
@@ -40,15 +39,6 @@ describe('AccountSettings', () => {
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         expect(screen.queryByText(`Remove account: ${testAccount.name}`)).not.toBeInTheDocument();
       });
-    });
-
-    it('should call `keyring.removeAccount` function when clicking on `Remove this account` button', async () => {
-      const removeAccountSpy = vi.spyOn(Keyring.prototype, 'removeAccount');
-
-      const removeAccountButton = await screen.findByRole('button', { name: /Remove this account/ });
-      await user.click(removeAccountButton);
-
-      await waitFor(() => expect(removeAccountSpy).toBeCalled());
     });
   });
 });

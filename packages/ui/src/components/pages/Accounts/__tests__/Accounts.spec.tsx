@@ -92,13 +92,13 @@ describe('Accounts', () => {
       expect(await screen.queryByText('Address copied!')).not.toBeVisible();
     });
 
-    describe('AccountSettings', () => {
+    describe('AccountControls', () => {
       it('should show account settings menu', async () => {
         render(<Accounts />, { preloadedState });
 
-        const accountSettingsButtons = await screen.findAllByTitle(/Open account controls/);
+        const accountControlsButtons = await screen.findAllByTitle(/Open account controls/);
         // clicking on account settings of account 01
-        await user.click(accountSettingsButtons[0]);
+        await user.click(accountControlsButtons[0]);
 
         expect(await screen.findByRole('menuitem', { name: /Remove/ })).toBeInTheDocument();
       });
@@ -106,9 +106,9 @@ describe('Accounts', () => {
       it('should not list the account was removed', async () => {
         render(<Accounts />, { preloadedState });
 
-        const accountSettingsButtons = await screen.findAllByTitle(/Open account controls/);
+        const accountControlsButtons = await screen.findAllByTitle(/Open account controls/);
         // clicking on account settings of account 01
-        await user.click(accountSettingsButtons[0]);
+        await user.click(accountControlsButtons[0]);
 
         const removeActionButton = await screen.findByRole('menuitem', { name: /Remove/ });
         await user.click(removeActionButton);
@@ -117,6 +117,7 @@ describe('Accounts', () => {
         await user.click(removeAccountButton);
 
         await waitFor(() => {
+          expect(screen.queryByText(/Account 01 removed/)).toBeInTheDocument();
           expect(screen.queryByText(/Account 01/)).not.toBeInTheDocument();
           expect(screen.queryByText(/Account 02/)).toBeInTheDocument();
         });

@@ -11,5 +11,5 @@ export const triggerEventFn = (name: EventName, ...arg: any[]) => {
 };
 
 export enum EventName {
-  OPEN_REMOVE_ACCOUNT_DIALOG = 'OPEN_REMOVE_ACCOUNT_DIALOG',
+  OpenRemoveAccountDialog = 'OpenRemoveAccountDialog',
 }
