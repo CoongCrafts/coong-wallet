@@ -2,7 +2,7 @@ import { KeyringPair$Meta } from '@polkadot/keyring/types';
 import { KeyringPairs$Json } from '@polkadot/ui-keyring/types';
 import { KeypairType } from '@polkadot/util-crypto/types';
 
-export type DerivationPath = `//${string}`;
+export type DerivationPath = `//${string}` | '';
 export type AccountName = string;
 
 export interface AccountInfo extends KeyringPair$Meta {

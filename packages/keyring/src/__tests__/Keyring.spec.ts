@@ -1,8 +1,9 @@
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
-import { AccountInfo } from '@coong/keyring/types';
-import { CoongError, ErrorCode } from '@coong/utils';
+import { AccountInfo, WalletQrBackup } from '@coong/keyring/types';
+import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
+import CryptoJS from 'crypto-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import Keyring, { ACCOUNTS_INDEX, ENCRYPTED_MNEMONIC } from '../Keyring';
 
@@ -174,6 +175,18 @@ describe('createNewAccount', () => {
     it('should lock the keyring after creation', async () => {
       await keyring.createNewAccount('Account 01', PASSWORD);
       expect(keyring.locked()).toEqual(true);
+    });
+
+    it('should increase accounts index after creation', async () => {
+      const oldIndex = keyring.getAccountsIndex();
+      await keyring.createNewAccount('Account 01', PASSWORD);
+      expect(keyring.getAccountsIndex()).toEqual(oldIndex + 1);
+    });
+
+    it('should not increase accounts index when using custom derivation path', async () => {
+      const oldIndex = keyring.getAccountsIndex();
+      await keyring.createNewAccount('Account 01', PASSWORD, '//custom-path');
+      expect(keyring.getAccountsIndex()).toEqual(oldIndex);
     });
   });
 
@@ -355,5 +368,65 @@ describe('exportWallet', () => {
     expect(backup.accounts).toHaveLength(2);
     expect(backup.accountsIndex).toEqual(2);
     expect(backup.encryptedMnemonic).toBeTypeOf('string');
+  });
+});
+
+describe('importQrBackup', () => {
+  let qrBackup: WalletQrBackup;
+  beforeEach(() => {
+    qrBackup = {
+      encryptedMnemonic: CryptoJS.AES.encrypt(MNEMONIC, PASSWORD).toString(),
+      accountsIndex: 3,
+      accounts: [
+        ['', 'Account 01'],
+        ['//0', 'Account 02'],
+        ['//1', 'Account 03'],
+      ],
+    };
+  });
+
+  it('should throw error if wallet is already initialized', async () => {
+    const keyring = await initializeNewKeyring();
+
+    await expect(keyring.importQrBackup(qrBackup, PASSWORD)).rejects.toThrowError(
+      new StandardCoongError('Wallet is already initialized'),
+    );
+  });
+
+  describe('wallet is not initialized', () => {
+    beforeEach(() => {
+      keyring = new Keyring();
+    });
+
+    it('should check mnemonic validity', async () => {
+      qrBackup.encryptedMnemonic = CryptoJS.AES.encrypt('a random invalid seed phrase', PASSWORD).toString();
+
+      await expect(keyring.importQrBackup(qrBackup, PASSWORD)).rejects.toThrowError(
+        new CoongError(ErrorCode.InvalidMnemonic),
+      );
+    });
+
+    it('should store accounts index & encrypted mnemonic into localstorage', async () => {
+      await keyring.importQrBackup(qrBackup, PASSWORD);
+
+      expect(localStorage.getItem(ACCOUNTS_INDEX)).toEqual(qrBackup.accountsIndex.toString());
+      expect(localStorage.getItem(ENCRYPTED_MNEMONIC)).toEqual(qrBackup.encryptedMnemonic);
+    });
+
+    it('should import accounts from the backup', async () => {
+      await keyring.importQrBackup(qrBackup, PASSWORD);
+
+      const accounts = await keyring.getAccounts();
+      expect(accounts.length).toEqual(3);
+      expect(accounts.map((one) => [one.derivationPath, one.name])).toEqual(qrBackup.accounts);
+    });
+
+    it('should call #reset if there is an error', async () => {
+      const resetFn = vi.spyOn(keyring, 'reset');
+      vi.spyOn(keyring, 'createNewAccount').mockRejectedValue(new Error('Random error'));
+
+      await expect(keyring.importQrBackup(qrBackup, PASSWORD)).rejects.toThrowError();
+      expect(resetFn).toHaveBeenCalled();
+    });
   });
 });
