@@ -50,7 +50,7 @@ export default function QRCode({ walletBackup }: QRCodeProps) {
         {t<string>('Open Coong Wallet on another device and scan this QR Code to transfer your wallet.')}
       </p>
       <div ref={qrCodeWrapperRef}>
-        <QRCodeCanvas size={size} value={qrBackup} includeMargin />
+        <QRCodeCanvas size={size} value={qrBackup} includeMargin title='Wallet Export QR Code' />
       </div>
       <div className='mt-4'>
         <Button variant='outlined' startIcon={<Download />} onClick={downloadQRCode} size='small'>

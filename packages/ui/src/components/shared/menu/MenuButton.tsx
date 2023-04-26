@@ -23,7 +23,7 @@ export default function MenuButton({ className = '' }: Props): JSX.Element {
   return (
     <>
       <Button
-        title='Menu'
+        title={t<string>('Menu')}
         variant='outlined'
         size='small'
         color={dark ? 'grayLight' : 'gray'}
