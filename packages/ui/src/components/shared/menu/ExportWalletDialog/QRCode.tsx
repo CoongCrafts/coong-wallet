@@ -46,19 +46,19 @@ export default function QRCode({ walletBackup }: QRCodeProps) {
   return (
     <div ref={ref} className='text-center'>
       <p className='my-4 sm:px-20'>
-        {t<string>('Open Coong Wallet on your mobile device and scan this QR Code to transfer your wallet.')}
+        {t<string>('Open Coong Wallet on another device and scan this QR Code to transfer your wallet.')}
       </p>
       <div ref={qrCodeWrapperRef}>
         <QRCodeCanvas size={size} value={JSON.stringify(qrBackup)} includeMargin />
       </div>
-      <div>
-        <Button variant='outlined' startIcon={<Download />} onClick={downloadQRCode}>
+      <div className='mt-4'>
+        <Button variant='outlined' startIcon={<Download />} onClick={downloadQRCode} size='small'>
           {t<string>('Download QR Code Image')}
         </Button>
       </div>
       <p className='my-4 italic sm:px-20 text-sm'>
         {t<string>(
-          'You will be prompted to enter your wallet password to complete the transfer process on your mobile device.',
+          'You will be prompted to enter your wallet password to complete the transfer process on the other device.',
         )}
       </p>
     </div>

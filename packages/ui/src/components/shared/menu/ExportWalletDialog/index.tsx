@@ -49,7 +49,7 @@ export default function ExportWalletDialog(): JSX.Element {
         ) : (
           <>
             <DialogContentText className='mb-2'>
-              {t<string>('Transfer your wallet to a different device via QR code or JSON backup file.')}
+              {t<string>('Transfer your wallet to a different device via QR code.')}
             </DialogContentText>
             <VerifyingPasswordForm onBack={onClose} onPasswordVerified={onPasswordVerified} backButtonLabel='Cancel' />
           </>
