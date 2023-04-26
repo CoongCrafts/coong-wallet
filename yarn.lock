@@ -430,6 +430,7 @@ __metadata:
     "@vitejs/plugin-react": ^3.0.0
     autoprefixer: ^10.4.13
     clsx: ^1.2.1
+    eventemitter3: ^5.0.0
     i18next: ^22.4.13
     i18next-http-backend: ^2.2.0
     postcss: ^8.4.21

@@ -4,6 +4,7 @@ import { AccountInfo } from '@coong/keyring/types';
 export interface Props {
   className?: string;
   children?: ReactNode;
+
   [prop: string]: any;
 }
 
