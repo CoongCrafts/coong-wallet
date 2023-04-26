@@ -3,6 +3,7 @@ import React, { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useMeasure } from 'react-use';
+import { base64Encode } from '@polkadot/util-crypto';
 import { CompactAccountInfo, DerivationPath, WalletBackup, WalletQrBackup } from '@coong/keyring/types';
 import { Download } from '@mui/icons-material';
 import { Button } from '@mui/material';
@@ -28,7 +29,7 @@ export default function QRCode({ walletBackup }: QRCodeProps) {
   const [ref, { width }] = useMeasure<HTMLDivElement>();
   const qrCodeWrapperRef = useRef<HTMLDivElement>(null);
 
-  const qrBackup = useMemo(() => toWalletQRBackup(walletBackup), [walletBackup]);
+  const qrBackup = useMemo<string>(() => base64Encode(JSON.stringify(toWalletQRBackup(walletBackup))), [walletBackup]);
   const size = width > 300 ? 250 : width - 64;
 
   const downloadQRCode = () => {
@@ -49,7 +50,7 @@ export default function QRCode({ walletBackup }: QRCodeProps) {
         {t<string>('Open Coong Wallet on another device and scan this QR Code to transfer your wallet.')}
       </p>
       <div ref={qrCodeWrapperRef}>
-        <QRCodeCanvas size={size} value={JSON.stringify(qrBackup)} includeMargin />
+        <QRCodeCanvas size={size} value={qrBackup} includeMargin />
       </div>
       <div className='mt-4'>
         <Button variant='outlined' startIcon={<Download />} onClick={downloadQRCode} size='small'>

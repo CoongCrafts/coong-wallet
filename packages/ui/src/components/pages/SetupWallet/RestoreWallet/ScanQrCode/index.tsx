@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { u8aToString } from '@polkadot/util';
+import { base64Decode } from '@polkadot/util-crypto';
 import { WalletQrBackup } from '@coong/keyring/types';
 import QrCodeReader from 'components/pages/SetupWallet/RestoreWallet/ScanQrCode/QrCodeReader';
 import TransferWalletBackup from 'components/pages/SetupWallet/RestoreWallet/ScanQrCode/TransferWalletBackup';
@@ -12,7 +14,8 @@ export default function ScanQrCode(): JSX.Element {
 
   const onQrScanComplete = async (data: string) => {
     try {
-      const parsedBackup = JSON.parse(data) as WalletQrBackup;
+      const decoded = u8aToString(base64Decode(data));
+      const parsedBackup = JSON.parse(decoded) as WalletQrBackup;
       await WalletQrBackupScheme.validate(parsedBackup);
 
       setBackup(parsedBackup);
