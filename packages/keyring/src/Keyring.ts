@@ -196,6 +196,10 @@ export default class Keyring {
     });
   }
 
+  async removeAccount(address: string) {
+    await this.#keyring.forgetAccount(address);
+  }
+
   async #getAccount(predicate: (one: AccountInfo) => boolean): Promise<AccountInfo> {
     const accounts = await this.getAccounts();
     const targetAccount = accounts.find(predicate);

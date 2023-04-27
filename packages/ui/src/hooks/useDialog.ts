@@ -7,7 +7,7 @@ export default function useDialog() {
     setOpen(false);
 
     // Make sure the hiding transition is completed done before executing the `afterClose`
-    afterClose && setTimeout(() => afterClose(), 100);
+    afterClose && setTimeout(() => afterClose(), 150);
   };
 
   const doOpen = () => {

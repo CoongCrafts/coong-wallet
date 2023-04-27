@@ -347,6 +347,34 @@ describe('changePassword', () => {
   });
 });
 
+describe('removeAccount', () => {
+  it('should run forgetAccount function', async () => {
+    const keyring = await initializeNewKeyring();
+
+    await keyring.createNewAccount('test-account', PASSWORD);
+
+    const forgetAccountSpy = vi.spyOn(InnerKeyring.prototype, 'forgetAccount');
+
+    const testAccount = await keyring.getAccountByName('test-account');
+    await keyring.removeAccount(testAccount.address);
+
+    expect(forgetAccountSpy).toBeCalled();
+  });
+
+  it('cannot found the account after removing', async () => {
+    const keyring = await initializeNewKeyring();
+
+    await keyring.createNewAccount('test-account', PASSWORD);
+
+    const testAccount = await keyring.getAccountByName('test-account');
+    await keyring.removeAccount(testAccount.address);
+
+    await expect(keyring.getAccountByName('test-account')).rejects.toThrowError(
+      new CoongError(ErrorCode.AccountNotFound),
+    );
+  });
+});
+
 describe('exportWallet', () => {
   beforeEach(async () => {
     await initializeNewKeyring();

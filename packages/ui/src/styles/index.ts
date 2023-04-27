@@ -27,7 +27,7 @@ export const globalStyles = css`
       align-items: flex-start;
 
       @media (max-width: 400px) {
-        .MuiPaper-root {
+        > .MuiPaper-root {
           margin: 0;
           width: 100%;
           height: 100%;

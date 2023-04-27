@@ -1,9 +1,10 @@
-import { FC, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useBoolean } from 'react-use';
 import { Search, SearchOff } from '@mui/icons-material';
 import { IconButton, Theme, useMediaQuery } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
+import RemoveAccountDialog from 'components/pages/Accounts/AccountControls/RemoveAccountDialog';
 import NetworksSelection from 'components/shared/NetworksSelection';
 import NewAccountButton from 'components/shared/NewAccountButton';
 import PageTitle from 'components/shared/PageTitle';
@@ -59,6 +60,7 @@ const Accounts: FC<Props> = ({ className = '' }) => {
           {displayAccounts.length === 0 && <NoAccountsPlaceholder query={query} />}
         </div>
       </div>
+      <RemoveAccountDialog />
     </div>
   );
 };

@@ -10,6 +10,16 @@ import { settingsActions } from 'redux/slices/settings';
 import { RootState } from 'redux/store';
 import { Props, ThemeMode } from 'types';
 
+const ThemeModeOptions = [
+  { option: ThemeMode.Dark, label: 'Dark', icon: <DarkModeIcon fontSize='small' /> },
+  {
+    option: ThemeMode.System,
+    label: 'System',
+    icon: <SettingsBrightnessIcon fontSize='small' />,
+  },
+  { option: ThemeMode.Light, label: 'Light', icon: <LightModeIcon fontSize='small' /> },
+];
+
 const ThemeModeButton: FC<Props> = () => {
   const dispatch = useDispatch();
   const { themeMode } = useSelector((state: RootState) => state.settings);
@@ -25,30 +35,17 @@ const ThemeModeButton: FC<Props> = () => {
 
   return (
     <ButtonGroup orientation={xs ? 'vertical' : 'horizontal'} fullWidth>
-      <Button
-        variant='outlined'
-        color={themeMode == ThemeMode.Dark ? 'primary' : defaultColor}
-        onClick={() => switchThemeMode(ThemeMode.Dark)}
-        endIcon={<DarkModeIcon fontSize='small' />}
-        className='flex justify-between'>
-        {t<string>('Dark')}
-      </Button>
-      <Button
-        variant='outlined'
-        color={themeMode == ThemeMode.System ? 'primary' : defaultColor}
-        onClick={() => switchThemeMode(ThemeMode.System)}
-        endIcon={<SettingsBrightnessIcon fontSize='small' />}
-        className='flex justify-between'>
-        {t<string>('System')}
-      </Button>
-      <Button
-        variant='outlined'
-        color={themeMode == ThemeMode.Light ? 'primary' : defaultColor}
-        onClick={() => switchThemeMode(ThemeMode.Light)}
-        endIcon={<LightModeIcon fontSize='small' />}
-        className='flex justify-between'>
-        {t<string>('Light')}
-      </Button>
+      {ThemeModeOptions.map(({ option, label, icon }) => (
+        <Button
+          key={option}
+          variant='outlined'
+          color={themeMode === option ? 'primary' : defaultColor}
+          onClick={() => switchThemeMode(option)}
+          endIcon={icon}
+          className='flex justify-between'>
+          {t<string>(label)}
+        </Button>
+      ))}
     </ButtonGroup>
   );
 };
