@@ -81,7 +81,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
               value={name}
               error={name.length >= 16}
               helperText={
-                name.length >= 16 ? t<string>('Account name need to be less than 16 character') : <EmptySpace />
+                name.length >= 16 ? t<string>('Account name need to be less than 16 characters') : <EmptySpace />
               }
             />
             <TextField
