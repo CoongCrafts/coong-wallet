@@ -3,6 +3,9 @@
   "30 minutes": "",
   "5 minutes": "",
   "A multichain crypto wallet for Polkadot & Kusama ecosystem": "A multichain crypto wallet <br /> for <strong>Polkadot & Kusama</strong> ecosystem",
+  "Account name": "",
+  "Account name need to be less than 16 characters": "",
+  "Account renamed": "",
   "AccountNameRequired": "Account name is required",
   "AccountNameUsed": "Account name is already picked",
   "AccountNotFound": "Account not found",
@@ -19,6 +22,7 @@
   "Change Password": "",
   "Change Wallet Password": "",
   "Choose a name and enter your password to create a new account": "",
+  "Choose a new name for your account": "",
   "Choose your new password to continue": "",
   "Click to copy address": "",
   "Close settings": "",
@@ -79,6 +83,8 @@
   "Remove": "",
   "Remove account": "",
   "Remove this account": "",
+  "Rename": "",
+  "Rename account": "",
   "Reset wallet": "",
   "Restore Existing Wallet": "",
   "Search by name": "",
@@ -124,5 +130,6 @@
   "life time": "",
   "method data": "",
   "nonce": "",
+  "removed": "",
   "version": ""
 }

@@ -58,7 +58,7 @@ export default function RenameAccountDialog({}: Props): JSX.Element {
           <TextField
             value={name}
             onChange={handleChange}
-            label='Account name'
+            label={t<string>('Account name')}
             autoFocus
             fullWidth
             error={name.length >= 16}
