@@ -5,6 +5,7 @@ import { Search, SearchOff } from '@mui/icons-material';
 import { IconButton, Theme, useMediaQuery } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
 import RemoveAccountDialog from 'components/pages/Accounts/AccountControls/RemoveAccountDialog';
+import RenameAccountDialog from 'components/pages/Accounts/AccountControls/RenameAccountDialog';
 import NetworksSelection from 'components/shared/NetworksSelection';
 import NewAccountButton from 'components/shared/NewAccountButton';
 import PageTitle from 'components/shared/PageTitle';
@@ -59,6 +60,7 @@ const Accounts: FC<Props> = ({ className = '' }) => {
         </div>
       </div>
       <RemoveAccountDialog />
+      <RenameAccountDialog />
     </div>
   );
 };
