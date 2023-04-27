@@ -1,4 +1,4 @@
-import { FC, FormEvent, useRef, useState } from 'react';
+import { FC, FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useUpdateEffect } from 'react-use';
@@ -6,6 +6,7 @@ import { AccountInfo } from '@coong/keyring/types';
 import { Add } from '@mui/icons-material';
 import { Box, Button, Dialog, DialogContent, DialogContentText, IconButton, TextField } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
+import EmptySpace from 'components/shared/misc/EmptySpace';
 import useDialog from 'hooks/useDialog';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { Props } from 'types';
@@ -19,21 +20,19 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
   const { open, doOpen, doClose } = useDialog();
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-  const passwordInputRef = useRef<HTMLInputElement>(null);
   const { t } = useTranslation();
 
   useUpdateEffect(() => {
     if (open) {
       const accountsIndex = keyring.getAccountsIndex();
       setName(`Account ${(accountsIndex + 1).toString().padStart(2, '0')}`);
-
-      setTimeout(() => {
-        passwordInputRef.current?.focus();
-      }, 50);
     }
   }, [open]);
 
-  const handleClose = () => doClose();
+  const handleClose = () => {
+    resetForm();
+    doClose();
+  };
 
   const doCreateNewAccount = async (e: FormEvent) => {
     e.preventDefault();
@@ -66,13 +65,13 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
       <IconButton color='primary' className='xs:hidden' onClick={doOpen}>
         <Add />
       </IconButton>
-      <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
+      <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth disableRestoreFocus>
         <DialogTitle onClose={handleClose}>{t<string>('Create new account')}</DialogTitle>
         <DialogContent className='pb-8'>
           <DialogContentText className='mb-4'>
             {t<string>('Choose a name and enter your password to create a new account')}
           </DialogContentText>
-          <Box className='flex flex-col gap-8' component='form' autoComplete='off' onSubmit={doCreateNewAccount}>
+          <Box className='flex flex-col gap-4' component='form' autoComplete='off' onSubmit={doCreateNewAccount}>
             <TextField
               label={t<string>('New account name')}
               type='text'
@@ -80,9 +79,12 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
               fullWidth
               onChange={(e) => setName(e.target.value)}
               value={name}
+              error={name.length >= 16}
+              helperText={
+                name.length >= 16 ? t<string>('Account name need to be less than 16 character') : <EmptySpace />
+              }
             />
             <TextField
-              inputRef={passwordInputRef}
               autoFocus
               label={t<string>('Wallet password')}
               type='password'
@@ -91,11 +93,11 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
-            <div className='flex gap-4'>
+            <div className='flex gap-4 mt-4'>
               <Button variant='text' onClick={handleClose}>
                 {t<string>('Cancel')}
               </Button>
-              <Button type='submit' fullWidth disabled={!name || !password}>
+              <Button type='submit' fullWidth disabled={!name || !password || name.length >= 16}>
                 {t<string>('Create')}
               </Button>
             </div>

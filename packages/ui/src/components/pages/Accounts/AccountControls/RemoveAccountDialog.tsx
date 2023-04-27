@@ -23,9 +23,9 @@ export default function RemoveAccountDialog({}: Props): JSX.Element {
     try {
       await keyring.removeAccount(account!.address);
       onClose();
-      toast.success(`${account!.name} removed`);
+      toast.success(`${account!.name} ${t<string>('removed')}`);
     } catch (e: any) {
-      toast.error(e.message);
+      toast.error(t<string>(e.message));
     }
   };
 
