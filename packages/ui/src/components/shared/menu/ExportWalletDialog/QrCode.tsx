@@ -10,11 +10,11 @@ import { Button } from '@mui/material';
 import FileSaver from 'file-saver';
 import { Props } from 'types';
 
-interface QRCodeProps extends Props {
+interface QrCodeProps extends Props {
   walletBackup: WalletBackup;
 }
 
-const toWalletQRBackup = (backup: WalletBackup): WalletQrBackup => {
+const toWalletQrBackup = (backup: WalletBackup): WalletQrBackup => {
   const { accounts, accountsIndex, encryptedMnemonic } = backup;
 
   return {
@@ -24,19 +24,19 @@ const toWalletQRBackup = (backup: WalletBackup): WalletQrBackup => {
   };
 };
 
-export default function QRCode({ walletBackup }: QRCodeProps) {
+export default function QrCode({ walletBackup }: QrCodeProps) {
   const { t } = useTranslation();
   const [ref, { width }] = useMeasure<HTMLDivElement>();
   const qrCodeWrapperRef = useRef<HTMLDivElement>(null);
 
-  const qrBackup = useMemo<string>(() => base64Encode(JSON.stringify(toWalletQRBackup(walletBackup))), [walletBackup]);
+  const qrBackup = useMemo<string>(() => base64Encode(JSON.stringify(toWalletQrBackup(walletBackup))), [walletBackup]);
   const size = width > 300 ? 250 : width - 64;
 
-  const downloadQRCode = () => {
+  const downloadQrCode = () => {
     const canvas = qrCodeWrapperRef.current?.querySelector<HTMLCanvasElement>('canvas')!;
     canvas.toBlob((blob) => {
       if (!blob) {
-        toast.error(t<string>('Cannot export QR Code image'));
+        toast.error(t<string>('Cannot export QR code image'));
         return;
       }
 
@@ -50,10 +50,10 @@ export default function QRCode({ walletBackup }: QRCodeProps) {
         {t<string>('Open Coong Wallet on another device and scan this QR Code to transfer your wallet.')}
       </p>
       <div ref={qrCodeWrapperRef}>
-        <QRCodeCanvas size={size} value={qrBackup} includeMargin title='Wallet Export QR Code' />
+        <QRCodeCanvas size={size} value={qrBackup} includeMargin title={t<string>('Wallet Export QR Code')} />
       </div>
       <div className='mt-4'>
-        <Button variant='outlined' startIcon={<Download />} onClick={downloadQRCode} size='small'>
+        <Button variant='outlined' startIcon={<Download />} onClick={downloadQrCode} size='small'>
           {t<string>('Download QR Code Image')}
         </Button>
       </div>

@@ -6,7 +6,7 @@ import { WalletBackup } from '@coong/keyring/types';
 import { Dialog, DialogContent, DialogContentText } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
 import VerifyingPasswordForm from 'components/shared/forms/VerifyingPasswordForm';
-import QRCode from 'components/shared/menu/ExportWalletDialog/QRCode';
+import QrCode from 'components/shared/menu/ExportWalletDialog/QrCode';
 import useDialog from 'hooks/useDialog';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { EventName, EventRegistry } from 'utils/eventemitter';
@@ -44,7 +44,7 @@ export default function ExportWalletDialog(): JSX.Element {
       <DialogContent className='pb-8'>
         {backup ? (
           <div className='my-4'>
-            <QRCode walletBackup={backup} />
+            <QrCode walletBackup={backup} />
           </div>
         ) : (
           <>

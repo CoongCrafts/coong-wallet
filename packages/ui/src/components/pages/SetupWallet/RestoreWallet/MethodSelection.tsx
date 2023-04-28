@@ -26,13 +26,19 @@ export default function MethodSelection(): JSX.Element {
           <ListItemIcon>
             <KeyIcon />
           </ListItemIcon>
-          <ListItemText primary='Secret Recovery Phrase' secondary='Enter your existing secret recovery phrase' />
+          <ListItemText
+            primary={t<string>('Secret Recovery Phrase')}
+            secondary={t<string>('Enter your existing secret recovery phrase')}
+          />
         </ListItemButton>
         <ListItemButton onClick={doSelectMethod(RestoreWalletMethod.QrCode)}>
           <ListItemIcon>
             <QrCode />
           </ListItemIcon>
-          <ListItemText primary='QR Code' secondary='Scan QR Code from Coong Wallet on a different device' />
+          <ListItemText
+            primary={t<string>('QR Code')}
+            secondary={t<string>('Scan QR Code from Coong Wallet on a different device')}
+          />
         </ListItemButton>
       </List>
       <div className='mt-4'>
