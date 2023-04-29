@@ -64,7 +64,7 @@ describe('NewAccountButton', () => {
       expect(await screen.findByText('Password incorrect')).toBeInTheDocument();
     });
 
-    it('should disable `Create` button and show error when nameField more than 15 characters or empty', async () => {
+    it('should disable `Create` button and show error when nameField more than 16 characters or empty', async () => {
       const nameField = await screen.findByLabelText(/New account name/);
 
       const passwordField = await screen.findByLabelText(/Wallet password/);
@@ -74,9 +74,9 @@ describe('NewAccountButton', () => {
       await user.clear(nameField);
       expect(await screen.findByRole('button', { name: /Create/ })).toBeDisabled();
 
-      await user.type(nameField, 'account-name-more-than-15-characters');
+      await user.type(nameField, 'Account-name-more-than-16-chars');
       expect(await screen.findByRole('button', { name: /Create/ })).toBeDisabled();
-      expect(await screen.findByText(/Account name need to be less than 16 characters/)).toBeInTheDocument();
+      expect(await screen.findByText(/Account name should not exceed 16 characters/)).toBeInTheDocument();
     });
 
     it('should show validation error if account name is used', async () => {

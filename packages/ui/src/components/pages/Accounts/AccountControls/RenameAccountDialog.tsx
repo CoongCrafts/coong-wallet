@@ -62,9 +62,7 @@ export default function RenameAccountDialog({}: Props): JSX.Element {
             autoFocus
             fullWidth
             error={name.length > 16}
-            helperText={
-              name.length > 16 ? t<string>('The account name should not exceed 16 characters') : <EmptySpace />
-            }
+            helperText={name.length > 16 ? t<string>('Account name should not exceed 16 characters') : <EmptySpace />}
           />
           <div className='flex justify-end gap-4 mt-2'>
             <Button onClick={onClose} variant='text'>

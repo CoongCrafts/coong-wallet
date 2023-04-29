@@ -124,12 +124,12 @@ describe('Accounts', () => {
 
         const accountNameField = await screen.findByLabelText(/Account name/);
         await user.clear(accountNameField);
-        await user.type(accountNameField, 'valid-name');
+        await user.type(accountNameField, 'Valid-name');
 
         const renameButton = await screen.findByRole('button', { name: /Rename/ });
         await user.click(renameButton);
 
-        expect(await screen.findByText(/valid-name/)).toBeInTheDocument();
+        expect(await screen.findByText(/Valid-name/)).toBeInTheDocument();
         expect(await screen.findByText(/Account renamed/)).toBeInTheDocument();
       });
     });

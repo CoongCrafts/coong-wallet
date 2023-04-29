@@ -80,9 +80,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
               onChange={(e) => setName(e.target.value)}
               value={name}
               error={name.length > 16}
-              helperText={
-                name.length > 16 ? t<string>('The account name should not exceed 16 characters') : <EmptySpace />
-              }
+              helperText={name.length > 16 ? t<string>('Account name should not exceed 16 characters') : <EmptySpace />}
             />
             <TextField
               autoFocus

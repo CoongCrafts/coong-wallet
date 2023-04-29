@@ -14,13 +14,11 @@ describe('AccountControls', () => {
 
     render(<Accounts />);
 
-    const accountControlsButton = await screen.findByTitle(/Open account controls/);
-    await user.click(accountControlsButton);
+    await user.click(await screen.findByTitle(/Open account controls/));
   });
   describe('RemoveAccountDialog', () => {
     beforeEach(async () => {
-      const removeActionButton = await screen.findByRole('menuitem', { name: /Remove/ });
-      await user.click(removeActionButton);
+      await user.click(await screen.findByRole('menuitem', { name: /Remove/ }));
     });
 
     it('should show content of `RemoveAccountDialog` correctly', async () => {
@@ -42,8 +40,7 @@ describe('AccountControls', () => {
   });
   describe('RenameAccountDialog', () => {
     beforeEach(async () => {
-      const renameActionButton = await screen.findByRole('menuitem', { name: /Rename/ });
-      await user.click(renameActionButton);
+      await user.click(await screen.findByRole('menuitem', { name: /Rename/ }));
     });
 
     it('should show content of `RenameAccountDialog` correctly', async () => {
@@ -53,20 +50,19 @@ describe('AccountControls', () => {
       expect(await screen.findByRole('button', { name: /Rename/ })).toBeInTheDocument();
     });
 
-    it('should disable `Rename` button and show error when `AccountNameField` more than 15 characters or empty', async () => {
+    it('should disable `Rename` button and show error when `AccountNameField` more than 16 characters or empty', async () => {
       const accountNameField = await screen.findByLabelText(/Account name/);
 
       await user.clear(accountNameField);
       expect(await screen.findByRole('button', { name: /Rename/ })).toBeDisabled();
 
-      await user.type(accountNameField, 'account-name-more-than-15-characters');
+      await user.type(accountNameField, 'Account-name-more-than-16-chars');
       expect(await screen.findByRole('button', { name: /Rename/ })).toBeDisabled();
-      expect(await screen.findByText(/Account name need to be less than 16 characters/)).toBeInTheDocument();
+      expect(await screen.findByText(/Account name should not exceed 16 characters/)).toBeInTheDocument();
     });
 
     it('should close `RenameAccountDialog` when clicking on `Cancel` button', async () => {
       const cancelButton = await screen.findByRole('button', { name: /Cancel/ });
-
       await user.click(cancelButton);
 
       await waitFor(() => {
