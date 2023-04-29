@@ -37,7 +37,7 @@ const SearchBox: FC<SearchBoxProps> = ({
       InputProps={{
         endAdornment: (
           <InputAdornment position='end'>
-            <IconButton edge='end' onClick={doClearSearchQuery}>
+            <IconButton edge='end' onClick={doClearSearchQuery} className='p-1'>
               {query ? <Close /> : <Search />}
             </IconButton>
           </InputAdornment>
