@@ -4,7 +4,7 @@
   "5 minutes": "",
   "A multichain crypto wallet for Polkadot & Kusama ecosystem": "A multichain crypto wallet <br /> for <strong>Polkadot & Kusama</strong> ecosystem",
   "Account name": "",
-  "Account name need to be less than 16 characters": "",
+  "The account name should not exceed 16 characters": "",
   "Account renamed": "",
   "AccountNameRequired": "Account name is required",
   "AccountNameUsed": "Account name is already picked",

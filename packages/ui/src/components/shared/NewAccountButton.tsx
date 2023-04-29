@@ -79,9 +79,9 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
               fullWidth
               onChange={(e) => setName(e.target.value)}
               value={name}
-              error={name.length >= 16}
+              error={name.length > 16}
               helperText={
-                name.length >= 16 ? t<string>('Account name need to be less than 16 characters') : <EmptySpace />
+                name.length > 16 ? t<string>('The account name should not exceed 16 characters') : <EmptySpace />
               }
             />
             <TextField
@@ -97,7 +97,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
               <Button variant='text' onClick={handleClose}>
                 {t<string>('Cancel')}
               </Button>
-              <Button type='submit' fullWidth disabled={!name || !password || name.length >= 16}>
+              <Button type='submit' fullWidth disabled={!name || !password || name.length > 16}>
                 {t<string>('Create')}
               </Button>
             </div>

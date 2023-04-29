@@ -50,7 +50,7 @@ export default function RenameAccountDialog({}: Props): JSX.Element {
   };
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth>
+    <Dialog open={open} onClose={onClose} fullWidth disableRestoreFocus>
       <DialogTitle onClose={onClose}>{t<string>('Rename account')}</DialogTitle>
       <DialogContent className='pb-8'>
         <DialogContentText className='mb-4'>{t<string>('Choose a new name for your account')}</DialogContentText>
@@ -61,16 +61,16 @@ export default function RenameAccountDialog({}: Props): JSX.Element {
             label={t<string>('Account name')}
             autoFocus
             fullWidth
-            error={name.length >= 16}
+            error={name.length > 16}
             helperText={
-              name.length >= 16 ? t<string>('Account name need to be less than 16 characters') : <EmptySpace />
+              name.length > 16 ? t<string>('The account name should not exceed 16 characters') : <EmptySpace />
             }
           />
           <div className='flex justify-end gap-4 mt-2'>
             <Button onClick={onClose} variant='text'>
               {t<string>('Cancel')}
             </Button>
-            <Button type='submit' disabled={!name || name.length >= 16}>
+            <Button type='submit' disabled={!name || name.length > 16}>
               {t<string>('Rename')}
             </Button>
           </div>
