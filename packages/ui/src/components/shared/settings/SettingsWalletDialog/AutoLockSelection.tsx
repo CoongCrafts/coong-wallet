@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import { Button, Menu, MenuItem } from '@mui/material';
 import useMenuDropdown from 'hooks/useMenuDropdown';
-import useThemeMode from 'hooks/useThemeMode';
 import { settingsActions } from 'redux/slices/settings';
 import { RootState } from 'redux/store';
 import { AutoLockInterval, Props } from 'types';
@@ -27,7 +26,6 @@ export const AutoLockTimerOptions = [
 const AutoLockSelection: FC<Props> = () => {
   const { autoLockInterval } = useSelector((state: RootState) => state.settings);
   const { open, anchorEl, doOpen, doClose } = useMenuDropdown();
-  const { dark } = useThemeMode();
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -45,7 +43,7 @@ const AutoLockSelection: FC<Props> = () => {
       <Button
         onClick={handleClick}
         variant='outlined'
-        color={dark ? 'grayLight' : 'gray'}
+        color='gray'
         className='flex justify-between xs:min-w-[200px] min-w-full'
         endIcon={<KeyboardArrowDown />}>
         {t<string>(AutoLockTimerOptions.find(({ interval }) => interval === autoLockInterval)!.label)}
