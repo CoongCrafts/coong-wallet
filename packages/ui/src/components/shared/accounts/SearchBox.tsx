@@ -37,8 +37,11 @@ const SearchBox: FC<SearchBoxProps> = ({
       InputProps={{
         endAdornment: (
           <InputAdornment position='end'>
-            <IconButton edge='end' onClick={doClearSearchQuery} className='p-1'>
-              {query ? <Close /> : <Search />}
+            <IconButton
+              edge='end'
+              onClick={doClearSearchQuery}
+              className={size === 'xs' ? 'p-1 mr-[-7px]' : 'p-0.5 mr-[-10px]'}>
+              {query ? <Close fontSize='small' /> : <Search fontSize='small' />}
             </IconButton>
           </InputAdornment>
         ),
