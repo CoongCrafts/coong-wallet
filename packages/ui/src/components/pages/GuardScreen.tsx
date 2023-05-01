@@ -1,25 +1,30 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import Accounts from 'components/pages/Accounts';
+import { Outlet, useLocation } from 'react-router-dom';
 import UnlockWallet from 'components/pages/UnlockWallet';
 import Welcome from 'components/pages/Welcome';
 import useLockTimer from 'hooks/wallet/useLockTimer';
 import { RootState } from 'redux/store';
 
-const MainScreen: React.FC = () => {
+export default function GuardScreen(): JSX.Element {
   const { seedReady, locked } = useSelector((state: RootState) => state.app);
+  const { pathname } = useLocation();
 
   useLockTimer();
 
   if (!seedReady) {
-    return <Welcome />;
+    const isRootPath = pathname === '/' || pathname === '';
+    if (isRootPath) {
+      return <Welcome />;
+    } else {
+      window.location.href = '/';
+      return <></>;
+    }
   }
 
   if (locked) {
     return <UnlockWallet />;
   }
 
-  return <Accounts />;
-};
-
-export default MainScreen;
+  return <Outlet />;
+}
