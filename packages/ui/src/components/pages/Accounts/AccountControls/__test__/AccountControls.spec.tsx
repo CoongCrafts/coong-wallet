@@ -1,14 +1,15 @@
+import Keyring from '@coong/keyring';
 import { AccountInfo } from '@coong/keyring/types';
 import { UserEvent } from '@testing-library/user-event/setup/setup';
 import { initializeKeyring, newUser, PASSWORD, render, screen, waitFor } from '__tests__/testUtils';
 import Accounts from '../../index';
 
 describe('AccountControls', () => {
-  let user: UserEvent, testAccount: AccountInfo;
+  let user: UserEvent, testAccount: AccountInfo, keyring: Keyring;
   beforeEach(async () => {
     user = newUser();
 
-    const keyring = await initializeKeyring();
+    keyring = await initializeKeyring();
 
     testAccount = await keyring.createNewAccount('test-account', PASSWORD);
 
@@ -47,7 +48,7 @@ describe('AccountControls', () => {
       expect(await screen.findByRole('dialog', { name: /Rename account/ })).toBeInTheDocument();
       expect(await screen.findByLabelText(/Account name/)).toBeInTheDocument();
       expect(await screen.findByText(/test-account/)).toBeInTheDocument();
-      expect(await screen.findByRole('button', { name: /Rename/ })).toBeInTheDocument();
+      expect(await screen.findByRole('button', { name: /Rename/ })).toBeDisabled();
     });
 
     it('should disable `Rename` button and show error when `AccountNameField` more than 16 characters or empty', async () => {
@@ -72,6 +73,13 @@ describe('AccountControls', () => {
     });
 
     it('should show error if account name already exists', async () => {
+      await keyring.createNewAccount('test-account-2', PASSWORD);
+
+      const accountNameField = await screen.findByLabelText(/Account name/);
+      await user.clear(accountNameField);
+
+      await user.type(accountNameField, 'test-account-2');
+
       const renameButton = await screen.findByRole('button', { name: /Rename/ });
       await user.click(renameButton);
 
