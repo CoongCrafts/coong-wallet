@@ -6,10 +6,10 @@ import { Button, Dialog, DialogContent, DialogContentText } from '@mui/material'
 import DialogTitle from 'components/shared/DialogTitle';
 import useDialog from 'hooks/useDialog';
 import { useWalletState } from 'providers/WalletStateProvider';
-import { AccountInfoExt, Props } from 'types';
+import { AccountInfoExt } from 'types';
 import { EventName, EventRegistry } from 'utils/eventemitter';
 
-export default function RemoveAccountDialog({}: Props): JSX.Element {
+export default function RemoveAccountDialog(): JSX.Element {
   const { open, doOpen, doClose } = useDialog();
   const { t } = useTranslation();
   const { keyring } = useWalletState();
@@ -23,7 +23,7 @@ export default function RemoveAccountDialog({}: Props): JSX.Element {
     try {
       await keyring.removeAccount(account!.address);
       onClose();
-      toast.success(`${account!.name} ${t<string>('removed')}`);
+      toast.success(t<string>('Account removed', { account }));
     } catch (e: any) {
       toast.error(t<string>(e.message));
     }
@@ -54,11 +54,11 @@ export default function RemoveAccountDialog({}: Props): JSX.Element {
         <DialogContentText className='mt-2 italic'>
           {t<string>('Make sure you backed up your recovery phrase or private key before continuing.')}
         </DialogContentText>
-        <div className='flex justify-end gap-4 mt-8'>
+        <div className='flex gap-4 mt-8'>
           <Button onClick={onClose} variant='text'>
             {t<string>('Cancel')}
           </Button>
-          <Button onClick={removeAccount} color='error'>
+          <Button onClick={removeAccount} color='error' fullWidth>
             {t<string>('Remove this account')}
           </Button>
         </div>

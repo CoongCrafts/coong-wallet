@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useEffectOnce } from 'react-use';
@@ -7,15 +7,17 @@ import DialogTitle from 'components/shared/DialogTitle';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import useDialog from 'hooks/useDialog';
 import { useWalletState } from 'providers/WalletStateProvider';
-import { AccountInfoExt, Props } from 'types';
+import { AccountInfoExt } from 'types';
 import { EventName, EventRegistry } from 'utils/eventemitter';
 
-export default function RenameAccountDialog({}: Props): JSX.Element {
+export default function RenameAccountDialog(): JSX.Element {
   const { keyring } = useWalletState();
   const { t } = useTranslation();
   const { open, doOpen, doClose } = useDialog();
   const [name, setName] = useState<string>('');
   const [account, setAccount] = useState<AccountInfoExt>();
+
+  const isInvalidName = useMemo(() => name.length > 16, [name]);
 
   const onOpen = (account: AccountInfoExt) => {
     setAccount(account);
@@ -49,6 +51,8 @@ export default function RenameAccountDialog({}: Props): JSX.Element {
     }
   };
 
+  if (!account) return <></>;
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth disableRestoreFocus>
       <DialogTitle onClose={onClose}>{t<string>('Rename account')}</DialogTitle>
@@ -61,14 +65,14 @@ export default function RenameAccountDialog({}: Props): JSX.Element {
             label={t<string>('Account name')}
             autoFocus
             fullWidth
-            error={name.length > 16}
-            helperText={name.length > 16 ? t<string>('Account name should not exceed 16 characters') : <EmptySpace />}
+            error={isInvalidName}
+            helperText={isInvalidName ? t<string>('Account name should not exceed 16 characters') : <EmptySpace />}
           />
-          <div className='flex justify-end gap-4 mt-2'>
+          <div className='flex gap-4 mt-2'>
             <Button onClick={onClose} variant='text'>
               {t<string>('Cancel')}
             </Button>
-            <Button type='submit' disabled={!name || name.length > 16}>
+            <Button type='submit' disabled={!name || isInvalidName || name === account.name} fullWidth>
               {t<string>('Rename')}
             </Button>
           </div>

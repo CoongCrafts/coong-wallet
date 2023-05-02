@@ -1,4 +1,4 @@
-import { FC, FormEvent, useState } from 'react';
+import { FC, FormEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useUpdateEffect } from 'react-use';
@@ -21,6 +21,8 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const { t } = useTranslation();
+
+  const isInvalidName = useMemo(() => name.length > 16, [name]);
 
   useUpdateEffect(() => {
     if (open) {
@@ -79,8 +81,8 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
               fullWidth
               onChange={(e) => setName(e.target.value)}
               value={name}
-              error={name.length > 16}
-              helperText={name.length > 16 ? t<string>('Account name should not exceed 16 characters') : <EmptySpace />}
+              error={isInvalidName}
+              helperText={isInvalidName ? t<string>('Account name should not exceed 16 characters') : <EmptySpace />}
             />
             <TextField
               autoFocus
@@ -95,7 +97,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
               <Button variant='text' onClick={handleClose}>
                 {t<string>('Cancel')}
               </Button>
-              <Button type='submit' fullWidth disabled={!name || !password || name.length > 16}>
+              <Button type='submit' fullWidth disabled={!name || !password || isInvalidName}>
                 {t<string>('Create')}
               </Button>
             </div>

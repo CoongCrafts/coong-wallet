@@ -190,7 +190,9 @@ export default class Keyring {
   }
 
   async renameAccount(address: string, newName: string) {
-    if (await this.existsName(newName)) throw new CoongError(ErrorCode.AccountNameUsed);
+    if (await this.existsName(newName)) {
+      throw new CoongError(ErrorCode.AccountNameUsed);
+    }
 
     const account = await this.getSigningPair(address);
     this.#keyring.saveAccountMeta(account, { ...account.meta, name: newName });

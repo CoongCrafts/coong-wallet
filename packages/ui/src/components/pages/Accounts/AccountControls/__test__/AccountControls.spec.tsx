@@ -44,7 +44,7 @@ describe('AccountControls', () => {
     });
 
     it('should show content of `RenameAccountDialog` correctly', async () => {
-      expect(await screen.findByText(/Rename account/)).toBeInTheDocument();
+      expect(await screen.findByRole('dialog', { name: /Rename account/ })).toBeInTheDocument();
       expect(await screen.findByLabelText(/Account name/)).toBeInTheDocument();
       expect(await screen.findByText(/test-account/)).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /Rename/ })).toBeInTheDocument();
