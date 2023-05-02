@@ -22,7 +22,7 @@ const SetupWalletButton: FC<Props> = ({ className = '' }) => {
       <Button size='large' onClick={doOpen} className={className}>
         {t<string>('Set up wallet')}
       </Button>
-      <Dialog open={open} onClose={onClose} fullScreen={true}>
+      <Dialog open={open} onClose={onClose} fullScreen>
         <AppBar position='relative'>
           <Container maxWidth='sm' disableGutters>
             <Toolbar>

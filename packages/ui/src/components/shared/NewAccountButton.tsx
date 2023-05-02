@@ -67,7 +67,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
       <IconButton color='primary' className='xs:hidden' onClick={doOpen}>
         <Add />
       </IconButton>
-      <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth disableRestoreFocus>
+      <Dialog open={open} onClose={handleClose}>
         <DialogTitle onClose={handleClose}>{t<string>('Create new account')}</DialogTitle>
         <DialogContent className='pb-8'>
           <DialogContentText className='mb-4'>
