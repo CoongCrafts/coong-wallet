@@ -5,7 +5,6 @@ import { KeyboardArrowDown } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { Menu, MenuItem } from '@mui/material';
 import useMenuDropdown from 'hooks/useMenuDropdown';
-import useThemeMode from 'hooks/useThemeMode';
 import { settingsActions } from 'redux/slices/settings';
 import { RootState } from 'redux/store';
 import { Language, Props } from 'types';
@@ -22,7 +21,6 @@ const LanguageSelection: FC<Props> = () => {
   const { language } = useSelector((state: RootState) => state.settings);
   const [loading, setLoading] = useState(resolvedLanguage !== language);
   const { open, anchorEl, doOpen, doClose } = useMenuDropdown();
-  const { dark } = useThemeMode();
 
   useEffect(() => {
     if (resolvedLanguage === language) setLoading(false);
@@ -43,7 +41,7 @@ const LanguageSelection: FC<Props> = () => {
     <>
       <LoadingButton
         variant='outlined'
-        color={dark ? 'grayLight' : 'gray'}
+        color='gray'
         onClick={handleClick}
         endIcon={<KeyboardArrowDown />}
         disabled={loading}

@@ -1,12 +1,15 @@
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
-import { assert, CoongError, ErrorCode, isCoongError } from '@coong/utils';
+import { validateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
+import { assert, CoongError, ErrorCode, isCoongError, StandardCoongError } from '@coong/utils';
 import CryptoJS from 'crypto-js';
-import { AccountInfo } from './types';
+import { AccountInfo, WalletBackup, WalletQrBackup } from './types';
 
 export const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
 export const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
 export const DEFAULT_KEY_TYPE = 'sr25519';
+
+const DERIVATION_PATH_PREFIX = '//';
 
 export default class Keyring {
   #keyring!: InnerKeyring;
@@ -130,7 +133,7 @@ export default class Keyring {
       .sort((a, b) => (a.whenCreated || 0) - (b.whenCreated || 0));
   }
 
-  async createNewAccount(name: string, password: string): Promise<AccountInfo> {
+  async createNewAccount(name: string, password: string, path?: string): Promise<AccountInfo> {
     if (password) {
       await this.unlock(password);
     } else {
@@ -145,12 +148,20 @@ export default class Keyring {
       throw new CoongError(ErrorCode.AccountNameUsed);
     }
 
-    const derivationPath = this.#nextAccountPath();
+    let derivationPath = path ?? this.#nextAccountPath();
+    if (!!derivationPath && !derivationPath.startsWith(DERIVATION_PATH_PREFIX)) {
+      derivationPath = DERIVATION_PATH_PREFIX + derivationPath;
+    }
+
     const nextPath = `${this.#mnemonic}${derivationPath}`;
     const keypair = this.#keyring.createFromUri(nextPath, { name, derivationPath }, DEFAULT_KEY_TYPE);
 
     this.#keyring.saveAccount(keypair, password);
-    this.#increaseAccountsIndex();
+
+    const shouldIncreaseIndex = typeof path !== 'string';
+    if (shouldIncreaseIndex) {
+      this.#increaseAccountsIndex();
+    }
 
     this.lock();
 
@@ -236,6 +247,51 @@ export default class Keyring {
       }
 
       throw e;
+    }
+  }
+
+  async exportWallet(password: string): Promise<WalletBackup> {
+    await this.verifyPassword(password);
+
+    const addresses = (await this.getAccounts()).map((one) => one.address);
+    const accountsBackup = await this.#keyring.backupAccounts(addresses, password);
+
+    const walletBackup: WalletBackup = {
+      ...accountsBackup,
+      accountsIndex: this.getAccountsIndex(),
+      encryptedMnemonic: this.#getEncryptedMnemonic()!,
+    };
+
+    return walletBackup;
+  }
+
+  async importQrBackup(backup: WalletQrBackup, password: string) {
+    if (await this.initialized()) {
+      throw new StandardCoongError('Wallet is already initialized');
+    }
+
+    try {
+      const { encryptedMnemonic, accountsIndex, accounts } = backup;
+      localStorage.setItem(ACCOUNTS_INDEX, accountsIndex.toString());
+      localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedMnemonic);
+
+      const rawMnemonic = await this.#decryptMnemonic(password);
+      if (!validateMnemonic(rawMnemonic)) {
+        throw new CoongError(ErrorCode.InvalidMnemonic);
+      }
+
+      for (let account of accounts) {
+        const [path, name] = account;
+        await this.createNewAccount(name, password, path);
+      }
+    } catch (e: any) {
+      await this.reset();
+
+      if (e instanceof StandardCoongError) {
+        throw e;
+      } else {
+        throw new StandardCoongError(e.message);
+      }
     }
   }
 }

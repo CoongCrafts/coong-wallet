@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { LoadingButton } from '@mui/lab';
 import { Button, TextField } from '@mui/material';
 import EmptySpace from 'components/shared/misc/EmptySpace';
@@ -12,6 +12,7 @@ interface ConfirmWalletPasswordProps extends Props {
   nextStepLabel?: string;
   nextStepLoading?: boolean;
   prevStep: () => void;
+  heading?: string;
 }
 
 const ConfirmWalletPassword: FC<ConfirmWalletPasswordProps> = ({
@@ -20,6 +21,7 @@ const ConfirmWalletPassword: FC<ConfirmWalletPasswordProps> = ({
   nextStepLabel = 'Next',
   nextStepLoading,
   prevStep,
+  heading = 'Confirm your wallet password',
 }) => {
   const { password } = useSelector((state: RootState) => state.setupWallet);
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
@@ -46,11 +48,7 @@ const ConfirmWalletPassword: FC<ConfirmWalletPasswordProps> = ({
 
   return (
     <div className={className}>
-      <h3>
-        {nextStepLabel === 'Next'
-          ? t<string>('Next, confirm your wallet password')
-          : t<string>('Lastly, confirm your wallet password')}
-      </h3>
+      <h3>{t<string>(heading)}</h3>
       <p className='mb-6'>{t<string>('Type again your chosen password to ensure you remember it.')}</p>
 
       <form className='flex flex-col gap-2' noValidate autoComplete='off' onSubmit={next}>

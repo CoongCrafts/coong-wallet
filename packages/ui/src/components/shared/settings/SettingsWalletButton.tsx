@@ -52,7 +52,7 @@ const SettingsWalletButton: FC<Props> = () => {
       <IconButton size='small' title={t<string>('Open settings')} onClick={handleClick}>
         <SettingsIcon />
       </IconButton>
-      <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
+      <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth disableRestoreFocus>
         <SettingsDialogContent onClose={handleClose} />
       </Dialog>
     </>

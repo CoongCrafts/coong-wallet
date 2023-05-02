@@ -25,7 +25,6 @@ export const newTheme = (mode: PaletteMode) =>
         main: '#1A88DB',
       },
       gray: palette.augmentColor({ color: { main: grey['700'] } }),
-      grayLight: palette.augmentColor({ color: { main: grey['300'] } }),
       ...(mode === 'dark' && {
         text: {
           primary: '#f0f0f0',
@@ -36,6 +35,7 @@ export const newTheme = (mode: PaletteMode) =>
         action: {
           active: '#f0f0f0',
         },
+        gray: palette.augmentColor({ color: { main: grey['300'] } }),
       }),
     },
     components: {

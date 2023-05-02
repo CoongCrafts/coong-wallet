@@ -5,7 +5,6 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
 import { Button, ButtonGroup, Theme, useMediaQuery } from '@mui/material';
-import useThemeMode from 'hooks/useThemeMode';
 import { settingsActions } from 'redux/slices/settings';
 import { RootState } from 'redux/store';
 import { Props, ThemeMode } from 'types';
@@ -23,7 +22,6 @@ const ThemeModeOptions = [
 const ThemeModeButton: FC<Props> = () => {
   const dispatch = useDispatch();
   const { themeMode } = useSelector((state: RootState) => state.settings);
-  const { dark } = useThemeMode();
   const xs = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'));
   const { t } = useTranslation();
 
@@ -31,15 +29,13 @@ const ThemeModeButton: FC<Props> = () => {
     dispatch(settingsActions.switchThemeMode(mode));
   };
 
-  const defaultColor = dark ? 'grayLight' : 'gray';
-
   return (
     <ButtonGroup orientation={xs ? 'vertical' : 'horizontal'} fullWidth>
       {ThemeModeOptions.map(({ option, label, icon }) => (
         <Button
           key={option}
           variant='outlined'
-          color={themeMode === option ? 'primary' : defaultColor}
+          color={themeMode === option ? 'primary' : 'gray'}
           onClick={() => switchThemeMode(option)}
           endIcon={icon}
           className='flex justify-between'>
