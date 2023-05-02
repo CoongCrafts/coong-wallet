@@ -24,11 +24,6 @@ const VerifyingPasswordForm: FC<VerifyingPasswordProps> = ({
   const [password, setPassword] = useState('');
   const [validation, setValidation] = useState('');
   const [verifying, setVerifying] = useToggle(false);
-  const passwordInputRef = useRef<HTMLInputElement>(null);
-
-  useEffectOnce(() => {
-    passwordInputRef.current?.focus();
-  });
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.currentTarget.value);
@@ -59,8 +54,8 @@ const VerifyingPasswordForm: FC<VerifyingPasswordProps> = ({
       <DialogContentText className='mb-4'>{t<string>('Enter your wallet password to continue')}</DialogContentText>
       <form onSubmit={doVerify} noValidate className='flex flex-col gap-2'>
         <TextField
-          inputRef={passwordInputRef}
           type='password'
+          autoFocus
           value={password}
           label={t<string>('Wallet password')}
           fullWidth
