@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
-import { useEffectOnce } from 'react-use';
+import { useAsync } from 'react-use';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import SplashScreen from 'components/pages/SplashScreen';
 import { useWalletState } from 'providers/WalletStateProvider';
@@ -15,22 +15,18 @@ const App: FC<Props> = () => {
   const { ready } = useSelector((state: RootState) => state.app);
   const dispatch = useDispatch();
 
-  useEffectOnce(() => {
-    cryptoWaitReady().then((cryptoReady) => {
-      if (cryptoReady) {
-        dispatch(appActions.appReady());
-      } else {
-        // TODO handle if browser does not support crypto!
-      }
-    });
+  useAsync(async () => {
+    if (await cryptoWaitReady()) {
+      dispatch(appActions.appReady());
+    } else {
+      // TODO handle if browser does not support crypto!
+    }
   });
 
-  useEffectOnce(() => {
-    keyring.initialized().then((initialized) => {
-      if (initialized) {
-        dispatch(appActions.seedReady());
-      }
-    });
+  useAsync(async () => {
+    if (await keyring.initialized()) {
+      dispatch(appActions.seedReady());
+    }
   });
 
   if (!ready) {

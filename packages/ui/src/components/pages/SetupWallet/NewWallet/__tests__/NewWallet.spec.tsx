@@ -3,18 +3,26 @@ import { initializeKeyring, newUser, render, screen, waitFor } from '__tests__/t
 import { NewWalletScreenStep } from 'types';
 import NewWallet from '../index';
 
-const navigate = vi.fn();
+const onWalletSetup = vi.fn(),
+  onCancelSetup = vi.fn();
 
-vi.mock('react-router-dom', async () => {
-  const reactRouter: any = await vi.importActual('react-router-dom');
+vi.mock('providers/WalletSetupProvider', async () => {
+  const provider: any = await vi.importActual('providers/WalletSetupProvider');
 
-  return { ...reactRouter, useNavigate: () => navigate };
+  return {
+    ...provider,
+    useWalletSetup: () => ({
+      onWalletSetup,
+      onCancelSetup,
+    }),
+  };
 });
 
 vi.spyOn(window, 'prompt').mockImplementation(() => '');
 
 beforeEach(() => {
-  navigate.mockReset();
+  onWalletSetup.mockReset();
+  onCancelSetup.mockReset();
 });
 
 describe('NewWallet', () => {
@@ -28,17 +36,8 @@ describe('NewWallet', () => {
       initializeKeyring();
     });
 
-    it('should navigate to homepage', async () => {
-      render(<NewWallet />);
-
-      await waitFor(() => {
-        expect(navigate).toHaveBeenCalledWith('/');
-      });
-    });
-
     it('should trigger onWalletSetup callback', async () => {
-      const onWalletSetup = vi.fn();
-      render(<NewWallet onWalletSetup={onWalletSetup} />);
+      render(<NewWallet />);
 
       await waitFor(() => {
         expect(onWalletSetup).toHaveBeenCalledTimes(1);
@@ -130,8 +129,8 @@ describe('NewWallet', () => {
     });
 
     describe('BackupSecretRecoveryPhrase', () => {
-      const renderView = (onWalletSetup?: () => void) => {
-        render(<NewWallet onWalletSetup={onWalletSetup} />, {
+      beforeEach(() => {
+        render(<NewWallet />, {
           preloadedState: {
             setupWallet: {
               password: 'password',
@@ -139,10 +138,9 @@ describe('NewWallet', () => {
             },
           },
         });
-      };
+      });
 
       it('should render the page correctly', async () => {
-        renderView();
         expect(await screen.findByText('Finally, back up your secret recovery phrase')).toBeInTheDocument();
         expect(await screen.findByLabelText(/I have backed up my recovery phrase/)).toBeInTheDocument();
         expect(await screen.findByRole('button', { name: /Finish/ })).toBeDisabled();
@@ -151,8 +149,6 @@ describe('NewWallet', () => {
       });
 
       it('should change copyButtonLabel to `Copied!` and disable the button', async () => {
-        renderView();
-
         const copyToClipboardButton = await screen.findByRole('button', { name: /Copy to Clipboard/ });
         await user.click(copyToClipboardButton);
 
@@ -160,26 +156,12 @@ describe('NewWallet', () => {
       });
 
       it('should go back to ChooseWalletPassword page', async () => {
-        renderView();
         await user.click(await screen.findByRole('button', { name: /Back/ }));
 
         expect(await screen.findByText('First, choose your wallet password')).toBeInTheDocument();
       });
 
-      it('should go to homepage(/) page after confirm backup', async () => {
-        renderView();
-        await user.click(await screen.findByLabelText(/I have backed up my recovery phrase/));
-        await user.click(await screen.findByRole('button', { name: /Finish/ }));
-
-        await waitFor(() => {
-          expect(navigate).toBeCalledWith('/');
-        });
-      });
-
       it('should trigger onWalletSetup callback', async () => {
-        const onWalletSetup = vi.fn();
-        renderView(onWalletSetup);
-
         await user.click(await screen.findByLabelText(/I have backed up my recovery phrase/));
         await user.click(await screen.findByRole('button', { name: /Finish/ }));
 

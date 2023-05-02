@@ -4,17 +4,15 @@ import ChooseWalletPassword from 'components/pages/SetupWallet/ChooseWalletPassw
 import ConfirmWalletPassword from 'components/pages/SetupWallet/ConfirmWalletPassword';
 import BackupSecretRecoveryPhrase from 'components/pages/SetupWallet/NewWallet/BackupSecretRecoveryPhrase';
 import useOnWalletInitialized from 'hooks/wallet/useOnWalletInitialized';
+import { useWalletSetup } from 'providers/WalletSetupProvider';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';
-import { Props, NewWalletScreenStep } from 'types';
+import { NewWalletScreenStep, Props } from 'types';
 
-interface NewWalletProps extends Props {
-  onWalletSetup?: () => void;
-}
-
-const ScreenStep: FC<NewWalletProps> = ({ onWalletSetup }) => {
+const ScreenStep: FC<Props> = () => {
   const dispatch = useDispatch();
   const { newWalletScreenStep } = useSelector((state: RootState) => state.setupWallet);
+  const { onCancelSetup } = useWalletSetup();
 
   const goto = (step: NewWalletScreenStep) => {
     return () => dispatch(setupWalletActions.setNewWalletScreenStep(step));
@@ -26,21 +24,28 @@ const ScreenStep: FC<NewWalletProps> = ({ onWalletSetup }) => {
         <ConfirmWalletPassword
           nextStep={goto(NewWalletScreenStep.BackupSecretRecoveryPhrase)}
           prevStep={goto(NewWalletScreenStep.ChooseWalletPassword)}
+          heading='Next, confirm your wallet password'
         />
       );
     case NewWalletScreenStep.BackupSecretRecoveryPhrase:
-      return <BackupSecretRecoveryPhrase onWalletSetup={onWalletSetup} />;
+      return <BackupSecretRecoveryPhrase />;
     default:
-      return <ChooseWalletPassword nextStep={goto(NewWalletScreenStep.ConfirmWalletPassword)} />;
+      return (
+        <ChooseWalletPassword
+          prevStep={onCancelSetup}
+          nextStep={goto(NewWalletScreenStep.ConfirmWalletPassword)}
+          heading='First, choose your wallet password'
+        />
+      );
   }
 };
 
-const NewWallet: FC<NewWalletProps> = ({ className = '', onWalletSetup }) => {
-  useOnWalletInitialized(onWalletSetup);
+const NewWallet: FC<Props> = ({ className = '' }) => {
+  useOnWalletInitialized();
 
   return (
     <div className={`${className} max-w-[450px] mt-8 mb-16 mx-auto`}>
-      <ScreenStep onWalletSetup={onWalletSetup} />
+      <ScreenStep />
     </div>
   );
 };

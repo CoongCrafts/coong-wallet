@@ -13,6 +13,7 @@ export enum ErrorCode {
   KeyringLocked = 'KeyringLocked',
   AccountNameRequired = 'AccountNameRequired',
   AccountNameUsed = 'AccountNameUsed',
+  InvalidMnemonic = 'InvalidMnemonic',
 }
 
 export const ErrorCodes = Object.values(ErrorCode) as string[];

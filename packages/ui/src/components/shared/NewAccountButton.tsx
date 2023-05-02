@@ -33,7 +33,10 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
     }
   }, [open]);
 
-  const handleClose = () => doClose();
+  const handleClose = () => {
+    resetForm();
+    doClose();
+  };
 
   const doCreateNewAccount = async (e: FormEvent) => {
     e.preventDefault();

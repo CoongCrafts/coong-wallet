@@ -11,17 +11,13 @@ import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';
 import { Props, NewWalletScreenStep } from 'types';
 
-interface BackupSecretRecoveryPhraseProps extends Props {
-  onWalletSetup?: () => void;
-}
-
-const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ className = '', onWalletSetup }) => {
+const BackupSecretRecoveryPhrase: FC<Props> = ({ className = '' }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { password } = useSelector((state: RootState) => state.setupWallet);
   const [checked, setChecked] = useState<boolean>(false);
   const [secretPhrase, setSecretPhrase] = useState<string>('');
-  const { setup, loading } = useSetupWallet({ secretPhrase, password, onWalletSetup });
+  const { setup, loading } = useSetupWallet({ secretPhrase, password });
 
   useEffectOnce(() => {
     setSecretPhrase(generateMnemonic(12));

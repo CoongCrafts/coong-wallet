@@ -38,7 +38,7 @@ const ChangeWalletPasswordDialog: FC<ChangeWalletPasswordDialogProps> = ({ onClo
           </Typography>
         </Breadcrumbs>
       </DialogTitle>
-      <DialogContent className='pb-8 flex-col flex gap-2'>
+      <DialogContent className='pb-8'>
         {verifiedPassword ? <ChangingWalletPassword /> : <VerifyingPassword />}
       </DialogContent>
     </>
