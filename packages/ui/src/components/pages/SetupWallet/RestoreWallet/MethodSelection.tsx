@@ -3,14 +3,12 @@ import { useDispatch } from 'react-redux';
 import { QrCode } from '@mui/icons-material';
 import KeyIcon from '@mui/icons-material/Key';
 import { Button, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import useThemeMode from 'hooks/useThemeMode';
 import { useWalletSetup } from 'providers/WalletSetupProvider';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RestoreWalletMethod } from 'types';
 
 export default function MethodSelection(): JSX.Element {
   const { t } = useTranslation();
-  const { dark } = useThemeMode();
   const dispatch = useDispatch();
   const { onCancelSetup } = useWalletSetup();
 
@@ -42,7 +40,7 @@ export default function MethodSelection(): JSX.Element {
         </ListItemButton>
       </List>
       <div className='mt-4'>
-        <Button onClick={onCancelSetup} color={dark ? 'grayLight' : 'gray'} variant='text'>
+        <Button onClick={onCancelSetup} color='gray' variant='text'>
           {t<string>('Back')}
         </Button>
       </div>
