@@ -1,5 +1,6 @@
 import { Identicon } from '@polkadot/react-identicon';
 import { FC } from 'react';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { styled } from '@mui/material';
 import AccountAddress from 'components/pages/Accounts/AccountAddress';
 import AccountControls from 'components/pages/Accounts/AccountControls';
@@ -24,7 +25,12 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account }) => {
       </div>
       <div className='flex-grow'>
         <div className='account-card__name'>{name}</div>
-        <AccountAddress address={networkAddress} name={name} />
+        <div className='flex'>
+          <AccountAddress address={networkAddress} name={name} />
+          <CopyAddressTooltip address={networkAddress} name={name}>
+            <ContentCopyIcon className='ml-1 text-base align-top' />
+          </CopyAddressTooltip>
+        </div>
       </div>
       <AccountControls account={account} />
     </div>
