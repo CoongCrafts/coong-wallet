@@ -92,23 +92,19 @@ describe('Accounts', () => {
     });
 
     describe('AccountControls', () => {
-      it('should show account settings menu', async () => {
+      beforeEach(async () => {
         render(<Accounts />, { preloadedState });
 
         const accountControlsButtons = await screen.findAllByTitle(/Open account controls/);
         // clicking on account settings of account 01
         await user.click(accountControlsButtons[0]);
-
+      });
+      it('should show account settings menu', async () => {
+        expect(await screen.findByRole('menuitem', { name: /Rename/ })).toBeInTheDocument();
         expect(await screen.findByRole('menuitem', { name: /Remove/ })).toBeInTheDocument();
       });
 
       it('should not list the account was removed', async () => {
-        render(<Accounts />, { preloadedState });
-
-        const accountControlsButtons = await screen.findAllByTitle(/Open account controls/);
-        // clicking on account settings of account 01
-        await user.click(accountControlsButtons[0]);
-
         const removeActionButton = await screen.findByRole('menuitem', { name: /Remove/ });
         await user.click(removeActionButton);
 
@@ -120,6 +116,21 @@ describe('Accounts', () => {
           expect(screen.queryByText(account01.address)).not.toBeInTheDocument();
           expect(screen.queryByText(account02.address)).toBeInTheDocument();
         });
+      });
+
+      it('should show new name and success message after renaming account', async () => {
+        const renameActionButton = await screen.findByRole('menuitem', { name: /Rename/ });
+        await user.click(renameActionButton);
+
+        const accountNameField = await screen.findByLabelText(/Account name/);
+        await user.clear(accountNameField);
+        await user.type(accountNameField, 'Valid-name');
+
+        const renameButton = await screen.findByRole('button', { name: /Rename/ });
+        await user.click(renameButton);
+
+        expect(await screen.findByText(/Valid-name/)).toBeInTheDocument();
+        expect(await screen.findByText(/Account renamed/)).toBeInTheDocument();
       });
     });
   });

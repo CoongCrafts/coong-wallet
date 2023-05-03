@@ -7,10 +7,15 @@ import { AccountInfoExt, Props } from 'types';
 import { EventName, triggerEvent } from 'utils/eventemitter';
 
 enum AccountControlsAction {
+  RenameAccount = 'Rename',
   RemoveAccount = 'Remove',
 }
 
 const AccountControlsOptions = [
+  {
+    action: AccountControlsAction.RenameAccount,
+    event: EventName.OpenRenameAccountDialog,
+  },
   {
     action: AccountControlsAction.RemoveAccount,
     event: EventName.OpenRemoveAccountDialog,

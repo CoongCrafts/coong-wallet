@@ -375,6 +375,36 @@ describe('removeAccount', () => {
   });
 });
 
+describe('renameAccount', () => {
+  let address: string, keyring: Keyring;
+  beforeEach(async () => {
+    keyring = await initializeNewKeyring();
+    address = (await keyring.createNewAccount('test-account', PASSWORD)).address;
+  });
+
+  it('should throw an error when the name already exists', async () => {
+    await expect(keyring.renameAccount(address, 'test-account')).rejects.toThrowError(
+      new CoongError(ErrorCode.AccountNameUsed),
+    );
+  });
+
+  it('should run saveAccountMeta function', async () => {
+    const renameAccountSpy = vi.spyOn(Keyring.prototype, 'renameAccount');
+
+    await keyring.renameAccount(address, 'valid-name');
+    expect(renameAccountSpy).toBeCalled();
+  });
+
+  it('should able to find the account after renaming it', async () => {
+    await keyring.renameAccount(address, 'valid-name');
+
+    await expect(keyring.getAccountByName('valid-name')).resolves;
+    await expect(keyring.getAccountByName('test-account')).rejects.toThrowError(
+      new CoongError(ErrorCode.AccountNotFound),
+    );
+  });
+});
+
 describe('exportWallet', () => {
   beforeEach(async () => {
     await initializeNewKeyring();

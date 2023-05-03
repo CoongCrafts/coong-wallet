@@ -14,6 +14,7 @@ import { SettingsDialogScreen } from 'types';
 interface SettingsDialogContent extends Props {
   onClose: () => void;
 }
+
 const SettingsDialogContent: FC<SettingsDialogContent> = ({ onClose }) => {
   const { screen } = useSelector((state: RootState) => state.settingsDialog);
 
@@ -52,7 +53,7 @@ const SettingsWalletButton: FC<Props> = () => {
       <IconButton size='small' title={t<string>('Open settings')} onClick={handleClick}>
         <SettingsIcon />
       </IconButton>
-      <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth disableRestoreFocus>
+      <Dialog open={open} onClose={handleClose}>
         <SettingsDialogContent onClose={handleClose} />
       </Dialog>
     </>
