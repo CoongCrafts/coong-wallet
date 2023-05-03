@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Close, Search } from '@mui/icons-material';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import clsx from 'clsx';
@@ -18,6 +19,7 @@ const SearchBox: FC<SearchBoxProps> = ({
   autoFocus = false,
   size = 'xs',
 }) => {
+  const { t } = useTranslation();
   const [query, setQuery] = useState<string>('');
 
   useEffect(() => {
@@ -44,9 +46,9 @@ const SearchBox: FC<SearchBoxProps> = ({
         ),
         className: clsx({ 'h-[30px] text-[0.8125rem]': size === 'xxs' }),
       }}
-      label={xxs ? '' : label}
+      label={xxs ? '' : t<string>(label)}
       hiddenLabel={xxs}
-      placeholder={xxs ? label : ''}
+      placeholder={xxs ? t<string>(label) : ''}
       className={className}
       onChange={(event) => {
         setQuery(event.target.value);
