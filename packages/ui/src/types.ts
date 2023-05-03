@@ -32,6 +32,7 @@ export enum SettingsDialogScreen {
   SettingsWallet,
   BackupSecretPhrase,
   ChangeWalletPassword,
+  ManageDappAccess,
 }
 
 export enum NewWalletScreenStep {

@@ -5,11 +5,11 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { Dialog, IconButton } from '@mui/material';
 import BackupSecretPhraseDialog from 'components/shared/settings/BackupSecretPhraseDialog';
 import ChangeWalletPasswordDialog from 'components/shared/settings/ChangeWalletPasswordDialog';
+import ManageDappAccessDialog from 'components/shared/settings/ManageDappAccessDialog';
 import SettingsWalletDialog from 'components/shared/settings/SettingsWalletDialog';
 import { settingsDialogActions } from 'redux/slices/settings-dialog';
 import { RootState } from 'redux/store';
-import { Props } from 'types';
-import { SettingsDialogScreen } from 'types';
+import { Props, SettingsDialogScreen } from 'types';
 
 interface SettingsDialogContent extends Props {
   onClose: () => void;
@@ -22,6 +22,8 @@ const SettingsDialogContent: FC<SettingsDialogContent> = ({ onClose }) => {
       return <BackupSecretPhraseDialog onClose={onClose} />;
     case SettingsDialogScreen.ChangeWalletPassword:
       return <ChangeWalletPasswordDialog onClose={onClose} />;
+    case SettingsDialogScreen.ManageDappAccess:
+      return <ManageDappAccessDialog onClose={onClose} />;
     default:
       return <SettingsWalletDialog onClose={onClose} />;
   }
