@@ -23,7 +23,7 @@ export default function RemoveAccountDialog(): JSX.Element {
     try {
       await keyring.removeAccount(account!.address);
       onClose();
-      toast.success(t<string>('Account removed', { account }));
+      toast.success(t<string>('{{account.name}} removed', { account }));
     } catch (e: any) {
       toast.error(t<string>(e.message));
     }

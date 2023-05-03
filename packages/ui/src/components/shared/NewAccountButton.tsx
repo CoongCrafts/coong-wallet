@@ -1,4 +1,4 @@
-import { FC, FormEvent, useMemo, useState } from 'react';
+import { FC, FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useUpdateEffect } from 'react-use';
@@ -22,7 +22,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
   const [password, setPassword] = useState('');
   const { t } = useTranslation();
 
-  const isInvalidName = useMemo(() => name.length > 16, [name]);
+  const isInvalidName = name.length > 16;
 
   useUpdateEffect(() => {
     if (open) {

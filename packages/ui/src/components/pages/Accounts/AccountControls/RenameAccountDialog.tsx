@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useMemo, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useEffectOnce } from 'react-use';
@@ -17,7 +17,7 @@ export default function RenameAccountDialog(): JSX.Element {
   const [name, setName] = useState<string>('');
   const [account, setAccount] = useState<AccountInfoExt>();
 
-  const isInvalidName = useMemo(() => name.length > 16, [name]);
+  const isInvalidName = name.length > 16;
 
   const onOpen = (account: AccountInfoExt) => {
     setAccount(account);
