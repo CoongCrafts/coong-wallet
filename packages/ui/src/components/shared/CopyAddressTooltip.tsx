@@ -12,7 +12,7 @@ interface AddressCopiedTooltipProps extends Props {
 
 const touchDevice = isTouchDevice();
 
-const CopyAddressTooltip: FC<AddressCopiedTooltipProps> = ({ address, name, children }) => {
+const CopyAddressTooltip: FC<AddressCopiedTooltipProps> = ({ address, name, children, className = '' }) => {
   const { t } = useTranslation();
   const [_, copyToClipboard] = useCopyToClipboard();
   const [open, setOpen] = useState<boolean>(false);
@@ -33,7 +33,7 @@ const CopyAddressTooltip: FC<AddressCopiedTooltipProps> = ({ address, name, chil
   if (touchDevice) {
     return (
       <Tooltip title={title} disableHoverListener={touchDevice} open={open}>
-        <div onClick={doCopy} style={{ cursor: 'copy' }}>
+        <div className={className} onClick={doCopy} style={{ cursor: 'copy' }}>
           {children}
         </div>
       </Tooltip>
@@ -45,7 +45,7 @@ const CopyAddressTooltip: FC<AddressCopiedTooltipProps> = ({ address, name, chil
 
     return (
       <Tooltip title={title} onOpen={onOpen}>
-        <div onClick={doCopy} style={{ cursor: 'copy' }}>
+        <div className={className} onClick={doCopy} style={{ cursor: 'copy' }}>
           {children}
         </div>
       </Tooltip>

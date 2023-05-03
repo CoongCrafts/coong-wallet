@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useWindowSize } from 'react-use';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { styled } from '@mui/material';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 import { Props } from 'types';
@@ -24,8 +25,9 @@ const AccountAddress: FC<AccountAddressProps> = ({ className, address, name }) =
   }, [width, address]);
 
   return (
-    <CopyAddressTooltip address={address} name={name}>
+    <CopyAddressTooltip className='flex gap-1' address={address} name={name}>
       <div className={className}>{displayAddress || <span>&nbsp;</span>}</div>
+      <ContentCopyIcon cursor='pointer' className='text-sm' />
     </CopyAddressTooltip>
   );
 };
