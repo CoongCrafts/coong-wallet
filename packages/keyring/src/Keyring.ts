@@ -200,6 +200,15 @@ export default class Keyring {
     await this.#keyring.forgetAccount(address);
   }
 
+  async renameAccount(address: string, newName: string) {
+    if (await this.existsName(newName)) {
+      throw new CoongError(ErrorCode.AccountNameUsed);
+    }
+
+    const account = await this.getSigningPair(address);
+    this.#keyring.saveAccountMeta(account, { ...account.meta, name: newName });
+  }
+
   async #getAccount(predicate: (one: AccountInfo) => boolean): Promise<AccountInfo> {
     const accounts = await this.getAccounts();
     const targetAccount = accounts.find(predicate);

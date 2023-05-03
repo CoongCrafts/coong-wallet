@@ -13,4 +13,5 @@ export const triggerEventFn = (name: EventName, ...args: any[]) => {
 export enum EventName {
   OpenRemoveAccountDialog = 'OpenRemoveAccountDialog',
   OpenExportWalletDialog = 'OpenExportWalletDialog',
+  OpenRenameAccountDialog = 'OpenRenameAccountDialog',
 }

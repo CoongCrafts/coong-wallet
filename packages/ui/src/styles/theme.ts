@@ -74,5 +74,11 @@ export const newTheme = (mode: PaletteMode) =>
           arrow: true,
         },
       },
+      MuiDialog: {
+        defaultProps: {
+          disableRestoreFocus: true,
+          fullWidth: true,
+        },
+      },
     },
   });

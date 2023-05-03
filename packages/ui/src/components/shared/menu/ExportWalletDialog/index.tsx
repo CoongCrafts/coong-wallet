@@ -39,7 +39,7 @@ export default function ExportWalletDialog(): JSX.Element {
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth='sm' fullWidth>
+    <Dialog open={open} onClose={onClose}>
       <DialogTitle onClose={onClose}>{t<string>('Export Wallet')}</DialogTitle>
       <DialogContent className='pb-8'>
         {backup ? (
