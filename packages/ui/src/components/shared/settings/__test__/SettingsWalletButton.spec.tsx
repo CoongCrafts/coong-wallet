@@ -11,6 +11,7 @@ export const expectSettingsWalletDialog = async (screen: any) => {
     expect(screen.getByRole('button', { name: /5 minutes/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Backup Secret Recovery Phrase/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Change Wallet Password/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Manage Dapp Access/ })).toBeInTheDocument();
   });
 };
 
@@ -63,31 +64,37 @@ describe('SettingsWalletButton', () => {
     });
 
     it('should switch to BackupSecretPhraseDialog content when clicking on `Backup Secret Recovery Phrase` button', async () => {
-      const BackupSecretRecoveryPhraseButton = await screen.findByRole('button', {
+      const backupSecretRecoveryPhraseButton = await screen.findByRole('button', {
         name: /Backup Secret Recovery Phrase/,
       });
 
-      await user.click(BackupSecretRecoveryPhraseButton);
+      await user.click(backupSecretRecoveryPhraseButton);
 
       await waitFor(() => {
-        expect(screen.getByText(/Backup Secret Recovery Phrase/)).toBeInTheDocument();
+        expect(screen.getByRole('dialog', { name: /Backup Secret Recovery Phrase/ })).toBeInTheDocument();
         expect(screen.getByText(/reveal the secret recovery phrase/)).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /View Secret Recovery Phrase/ })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /View Secret Recovery Phrase/ })).toBeDisabled();
         expect(screen.getByRole('button', { name: /Back/ })).toBeInTheDocument();
       });
     });
 
     it('should switch to ChangeWalletPasswordDialog content when clicking on `Change Wallet Password` button', async () => {
-      const ChangeWalletPasswordButton = await screen.findByRole('button', { name: /Change Wallet Password/ });
+      const changeWalletPasswordButton = await screen.findByRole('button', { name: /Change Wallet Password/ });
 
-      await user.click(ChangeWalletPasswordButton);
+      await user.click(changeWalletPasswordButton);
 
       await waitFor(() => {
-        expect(screen.getByText(/Change Wallet Password/)).toBeInTheDocument();
+        expect(screen.getByRole('dialog', { name: /Change Wallet Password/ })).toBeInTheDocument();
         expect(screen.getByText(/Enter your wallet password to continue/)).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Continue/ })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Continue/ })).toBeDisabled();
         expect(screen.getByRole('button', { name: /Back/ })).toBeInTheDocument();
       });
+    });
+
+    it('should show ManageDappAccessDialog when clicking `Manage Dapp Access` button', async () => {
+      const manageDappAccessButton = await screen.findByRole('button', { name: /Manage Dapp Access/ });
+      await user.click(manageDappAccessButton);
+      expect(await screen.findByRole('dialog', { name: /Manage Dapp Access/ })).toBeInTheDocument();
     });
 
     it('should show `SettingsWalletDialog` content', async () => {
