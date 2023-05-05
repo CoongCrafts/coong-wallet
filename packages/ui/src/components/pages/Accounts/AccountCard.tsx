@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { styled } from '@mui/material';
 import AccountAddress from 'components/pages/Accounts/AccountAddress';
 import AccountControls from 'components/pages/Accounts/AccountControls';
+import ShowAddressQrCodeButton from 'components/pages/Accounts/ShowAddressQrCodeButton';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 import { AccountInfoExt, Props } from 'types';
 
@@ -19,14 +20,17 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account }) => {
       className={`${className} account-card transition-colors duration-200 border border-black/10 dark:border-white/15 `}>
       <div className='account-card--icon'>
         <CopyAddressTooltip address={networkAddress} name={name}>
-          <Identicon value={networkAddress} size={36} theme='polkadot' />
+          <Identicon value={networkAddress} size={32} theme='polkadot' />
         </CopyAddressTooltip>
       </div>
       <div className='flex-grow'>
         <div className='account-card__name'>{name}</div>
-        <AccountAddress address={networkAddress} name={name} />
+        <AccountAddress address={networkAddress} name={name} className='text-xs' />
       </div>
-      <AccountControls account={account} />
+      <div className='flex gap-1'>
+        <ShowAddressQrCodeButton account={account} className='max-[300px]:hidden' />
+        <AccountControls account={account} />
+      </div>
     </div>
   );
 };
@@ -46,6 +50,9 @@ export default styled(AccountCard)`
   .account-card__name {
     font-weight: 600;
     font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 1px;
   }
 
   .account-card__address {

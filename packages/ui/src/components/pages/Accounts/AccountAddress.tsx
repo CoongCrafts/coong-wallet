@@ -1,7 +1,7 @@
-import { FC, useEffect, useState } from 'react';
-import { useWindowSize } from 'react-use';
+import { FC, useState } from 'react';
+import { useUpdateEffect } from 'react-use';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { styled } from '@mui/material';
+import { styled, useMediaQuery } from '@mui/material';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 import { Props } from 'types';
 import { shortenAddress } from 'utils/string';
@@ -12,22 +12,21 @@ interface AccountAddressProps extends Props {
 }
 
 const AccountAddress: FC<AccountAddressProps> = ({ className, address, name }) => {
-  const { width } = useWindowSize();
-  const showShortAddress = width < 500;
+  const showShortAddress = useMediaQuery('(max-width: 600px)');
   const getDisplayAddress = () => {
     return showShortAddress ? shortenAddress(address) : address;
   };
 
   const [displayAddress, setDisplayAddress] = useState(getDisplayAddress());
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     setDisplayAddress(getDisplayAddress());
-  }, [width, address]);
+  }, [showShortAddress, address]);
 
   return (
-    <CopyAddressTooltip className='flex gap-1' address={address} name={name}>
-      <div className={className}>{displayAddress || <span>&nbsp;</span>}</div>
-      <ContentCopyIcon cursor='pointer' className='text-sm' />
+    <CopyAddressTooltip className='flex gap-1 items-center' address={address} name={name}>
+      <div className={`${className} font-mono`}>{displayAddress || <span>&nbsp;</span>}</div>
+      <ContentCopyIcon className='text-sm' />
     </CopyAddressTooltip>
   );
 };

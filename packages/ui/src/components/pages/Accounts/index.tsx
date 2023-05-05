@@ -6,6 +6,7 @@ import { IconButton, Theme, useMediaQuery } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
 import RemoveAccountDialog from 'components/pages/Accounts/AccountControls/RemoveAccountDialog';
 import RenameAccountDialog from 'components/pages/Accounts/AccountControls/RenameAccountDialog';
+import ShowAddressQrCodeDialog from 'components/pages/Accounts/AccountControls/ShowAddressQrCodeDialog';
 import NetworksSelection from 'components/shared/NetworksSelection';
 import NewAccountButton from 'components/shared/NewAccountButton';
 import PageTitle from 'components/shared/PageTitle';
@@ -63,6 +64,7 @@ const Accounts: FC<Props> = ({ className = '' }) => {
       </div>
       <RemoveAccountDialog />
       <RenameAccountDialog />
+      <ShowAddressQrCodeDialog />
     </div>
   );
 };

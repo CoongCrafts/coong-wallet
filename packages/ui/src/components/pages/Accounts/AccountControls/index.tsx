@@ -9,12 +9,18 @@ import { EventName, triggerEvent } from 'utils/eventemitter';
 enum AccountControlsAction {
   RenameAccount = 'Rename',
   RemoveAccount = 'Remove',
+  ShowAddressQrCode = 'Show QR Code',
 }
 
 const AccountControlsOptions = [
   {
     action: AccountControlsAction.RenameAccount,
     event: EventName.OpenRenameAccountDialog,
+  },
+  {
+    action: AccountControlsAction.ShowAddressQrCode,
+    event: EventName.OpenShowAddressQrCodeDialog,
+    className: 'min-[300px]:hidden',
   },
   {
     action: AccountControlsAction.RemoveAccount,
@@ -43,8 +49,8 @@ const AccountControls: FC<AccountControlsProps> = ({ className = '', account }) 
         <MoreVertIcon />
       </IconButton>
       <Menu open={open} anchorEl={anchorEl} onClose={doClose}>
-        {AccountControlsOptions.map(({ action, event }) => (
-          <MenuItem key={action} onClick={() => openDialogOnAction(event)}>
+        {AccountControlsOptions.map(({ action, event, className = '' }) => (
+          <MenuItem key={action} onClick={() => openDialogOnAction(event)} className={className}>
             {t<string>(action)}
           </MenuItem>
         ))}

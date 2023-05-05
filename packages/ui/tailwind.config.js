@@ -11,6 +11,9 @@ module.exports = {
       lg: '1200px',
       xl: '1536px',
     },
+    fontFamily: {
+      mono: ['Roboto Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+    },
     extend: {
       colors: {
         primary: '#1A88DB',
