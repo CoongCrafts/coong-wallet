@@ -3,9 +3,10 @@
   "30 minutes": "",
   "5 minutes": "",
   "A multichain crypto wallet for Polkadot & Kusama ecosystem": "A multichain crypto wallet <br /> for <strong>Polkadot & Kusama</strong> ecosystem",
+  "Account Address QR Code": "",
+  "Account address": "",
   "Account name": "",
   "Account name should not exceed 16 characters": "",
-  "{{account.name}} removed": "",
   "Account renamed": "",
   "AccountNameRequired": "Account name is required",
   "AccountNameUsed": "Account name is already picked",
@@ -114,6 +115,7 @@
   "Set up your Coong wallet now": "",
   "Settings": "",
   "Setup your Coong wallet now to connect": "",
+  "Show QR Code": "",
   "Sign": "",
   "Sign Message": "",
   "Sign Message Request": "",
@@ -154,5 +156,6 @@
   "life time": "",
   "method data": "",
   "nonce": "",
-  "version": ""
+  "version": "",
+  "{{account.name}} removed": ""
 }

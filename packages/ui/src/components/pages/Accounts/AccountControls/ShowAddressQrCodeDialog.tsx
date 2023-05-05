@@ -1,5 +1,6 @@
 import { QRCodeCanvas } from 'qrcode.react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useEffectOnce } from 'react-use';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { Dialog, DialogContent } from '@mui/material';
@@ -12,6 +13,7 @@ import { AccountInfoExt } from 'types';
 import { EventName, EventRegistry } from 'utils/eventemitter';
 
 export default function ShowAddressQrCodeDialog(): JSX.Element {
+  const { t } = useTranslation();
   const { open, doOpen, doClose } = useDialog();
   const { ref, size } = useQrCode();
   const [address, setAddress] = useState<string>('');
@@ -45,10 +47,10 @@ export default function ShowAddressQrCodeDialog(): JSX.Element {
 
   return (
     <Dialog ref={ref} open={open} onClose={onClose}>
-      <DialogTitle onClose={onClose}>{`Account address: ${name}`}</DialogTitle>
+      <DialogTitle onClose={onClose}>{`${t<string>('Account address')}: ${name}`}</DialogTitle>
       <DialogContent className='pb-8 flex gap-4 flex-col items-center'>
         <NetworksSelection onNetworkChange={handleNetworkChange} className='mt-4 xs:w-3/4 w-full' />
-        <QRCodeCanvas value={address} includeMargin size={size} />
+        <QRCodeCanvas value={address} includeMargin size={size} title={t<string>('Account Address QR Code')} />
         <AccountAddress address={address} className='text-base' />
       </DialogContent>
     </Dialog>
