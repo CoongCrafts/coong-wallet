@@ -1,9 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { Button, Dialog, DialogContent, DialogContentText } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
-import useAuthorizedApps from 'components/shared/settings/ManageDappAccessDialog/useAuthorizedApps';
 import useDialog from 'hooks/useDialog';
+import useAuthorizedApps from 'hooks/wallet/useAuthorizedApps';
 import { useWalletState } from 'providers/WalletStateProvider';
 
 export default function RemoveAllAccessButton() {
@@ -15,6 +16,7 @@ export default function RemoveAllAccessButton() {
   const removeAllAccess = () => {
     walletState.removeAllAuthorizedApps();
     doClose();
+    toast.success(t<string>('All authorized dapps have been removed'));
   };
 
   const onClose = () => {

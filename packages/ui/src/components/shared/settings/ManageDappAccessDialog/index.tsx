@@ -7,7 +7,7 @@ import DialogTitle from 'components/shared/DialogTitle';
 import SearchBox from 'components/shared/accounts/SearchBox';
 import DappAccessItem from 'components/shared/settings/ManageDappAccessDialog/DappAccessItem';
 import RemoveAllAccessButton from 'components/shared/settings/ManageDappAccessDialog/RemoveAllAccessButton';
-import useAuthorizedApps from 'components/shared/settings/ManageDappAccessDialog/useAuthorizedApps';
+import useAuthorizedApps from 'hooks/wallet/useAuthorizedApps';
 import { settingsDialogActions } from 'redux/slices/settings-dialog';
 
 interface ManageDappAccessProps {
@@ -59,10 +59,10 @@ export default function ManageDappAccessDialog({ onClose }: ManageDappAccessProp
           </Typography>
         </Breadcrumbs>
       </DialogTitle>
-      <DialogContent className='pb-4'>
+      <DialogContent className='pb-6'>
         {authorizedApps.length > 0 && (
           <div className='mb-2'>
-            <SearchBox className='w-full sm:w-auto' label='Search by name or url' onChange={setQuery} size='xxs' />
+            <SearchBox className='w-full sm:w-auto' label='Search by name or URL' onChange={setQuery} size='xxs' />
           </div>
         )}
         <div className='flex-col flex gap-2 max-h-[350px] overflow-y-auto'>
@@ -81,7 +81,7 @@ export default function ManageDappAccessDialog({ onClose }: ManageDappAccessProp
           ))}
         </div>
 
-        <div className='mt-4 flex flex-row justify-between'>
+        <div className='mt-2 flex justify-between'>
           <Button size='small' variant='text' onClick={goBack}>
             {t<string>('Back')}
           </Button>
