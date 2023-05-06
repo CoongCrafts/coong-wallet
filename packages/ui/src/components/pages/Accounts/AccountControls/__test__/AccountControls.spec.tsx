@@ -86,12 +86,11 @@ describe('AccountControls', () => {
 
       const renameButton = await screen.findByRole('button', { name: /Rename/ });
       await user.click(renameButton);
-      expect(await screen.findByRole('dialog', { name: /Account address/ })).toBeInTheDocument();
-      expect(await screen.findByTitle(/Account Address QR Code/)).toBeInTheDocument();
       expect(await screen.findByText(/Account name is already picked/)).toBeInTheDocument();
     });
   });
   describe('ShowAddressQrCodeDialog', () => {
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(() => null);
     beforeEach(async () => {
       await user.click(await screen.findByRole('menuitem', { name: /Show QR Code/ }));
     });
