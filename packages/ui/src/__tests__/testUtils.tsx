@@ -129,9 +129,11 @@ export const setupAuthorizedApps = (authorizedAccounts: string[] = [], appUrl?: 
   const randomAppId = randomAppUrl.split('//')[1];
 
   const randomAppInfo = {
+    id: randomAppId,
     name: 'Random App',
     url: randomAppUrl,
     authorizedAccounts: authorizedAccounts,
+    createdAt: Date.now(),
   };
 
   const authorizedApps: AuthorizedApps = {

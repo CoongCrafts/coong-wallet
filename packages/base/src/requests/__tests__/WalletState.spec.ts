@@ -55,6 +55,26 @@ describe('getAuthorizedApp', () => {
   });
 });
 
+describe('getAuthorizedApps', () => {
+  it('should return empty list', () => {
+    expect(state.getAuthorizedApps()).toEqual([]);
+  });
+
+  it('should return list of authorized dapps', () => {
+    setupAuthorizedApps(state);
+    expect(state.getAuthorizedApps().length).toEqual(1);
+  });
+});
+
+describe('removeAllAuthorizedApps', () => {
+  it('should remove all authorized apps', () => {
+    setupAuthorizedApps(state);
+    state.removeAllAuthorizedApps();
+    expect(state.getAuthorizedApps()).toEqual([]);
+    expect(localStorage.getItem(AUTHORIZED_ACCOUNTS_KEY)).toEqual('{}');
+  });
+});
+
 describe('ensureAccountAuthorized', () => {
   let account: AccountInfo;
   beforeEach(async () => {

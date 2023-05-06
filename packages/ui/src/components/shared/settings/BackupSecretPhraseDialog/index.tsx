@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Breadcrumbs, DialogContent, DialogContentText, Link, Typography } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
@@ -37,10 +37,10 @@ const BackupSecretPhraseDialog: FC<BackupSecretPhraseDialogProps> = ({ onClose }
       </DialogTitle>
       <DialogContent className='pb-8'>
         <DialogContentText className='mb-2'>
-          {t<string>(
-            'You are about to reveal the secret recovery phrase which give access to your accounts and funds.',
-          )}{' '}
-          <strong>{t<string>('Make sure you are in a safe place.')}</strong>
+          <Trans>
+            You are about to reveal the secret recovery phrase which give access to your accounts and funds. Make sure
+            you are in a safe place.
+          </Trans>
         </DialogContentText>
         {verifiedPassword ? (
           <ShowingSecretPhrase />

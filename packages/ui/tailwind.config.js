@@ -5,6 +5,7 @@ module.exports = {
   theme: {
     // https://mui.com/material-ui/customization/breakpoints/#default-breakpoints
     screens: {
+      xxs: '400px',
       xs: '450px',
       sm: '600px',
       md: '900px',
