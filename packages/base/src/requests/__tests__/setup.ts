@@ -21,9 +21,11 @@ export const setupAuthorizedApps = (state: WalletState, authorizedAccounts: stri
   const randomAppId = randomAppUrl.split('//')[1];
 
   const randomAppInfo = {
+    id: randomAppId,
     name: 'Random App',
     url: randomAppUrl,
     authorizedAccounts: authorizedAccounts,
+    createdAt: Date.now(),
   };
 
   const authorizedApps: AuthorizedApps = {
