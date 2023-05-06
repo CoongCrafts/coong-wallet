@@ -55,7 +55,7 @@ export default function ManageDappAccessDialog({ onClose }: ManageDappAccessProp
             {t<string>('Settings')}
           </Link>
           <Typography color='text.primary' variant='h6'>
-            {t<string>('Manage Dapp Access')}
+            {t<string>('Manage Dapps Access')}
           </Typography>
         </Breadcrumbs>
       </DialogTitle>

@@ -17,7 +17,7 @@ export default function ManageDappAccessButton(): JSX.Element {
       color='gray'
       startIcon={<RuleIcon />}
       onClick={() => dispatch(settingsDialogActions.switchScreen(SettingsDialogScreen.ManageDappAccess))}>
-      {t<string>('Manage Dapp Access')}
+      {t<string>('Manage Dapps Access')}
     </Button>
   );
 }

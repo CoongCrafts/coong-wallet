@@ -11,7 +11,7 @@ export const expectSettingsWalletDialog = async (screen: any) => {
     expect(screen.getByRole('button', { name: /5 minutes/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Backup Secret Recovery Phrase/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Change Wallet Password/ })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Manage Dapp Access/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Manage Dapps Access/ })).toBeInTheDocument();
   });
 };
 
@@ -91,10 +91,10 @@ describe('SettingsWalletButton', () => {
       });
     });
 
-    it('should show ManageDappAccessDialog when clicking `Manage Dapp Access` button', async () => {
-      const manageDappAccessButton = await screen.findByRole('button', { name: /Manage Dapp Access/ });
+    it('should show ManageDappAccessDialog when clicking `Manage Dapps Access` button', async () => {
+      const manageDappAccessButton = await screen.findByRole('button', { name: /Manage Dapps Access/ });
       await user.click(manageDappAccessButton);
-      expect(await screen.findByRole('dialog', { name: /Manage Dapp Access/ })).toBeInTheDocument();
+      expect(await screen.findByRole('dialog', { name: /Manage Dapps Access/ })).toBeInTheDocument();
     });
 
     it('should show `SettingsWalletDialog` content', async () => {
