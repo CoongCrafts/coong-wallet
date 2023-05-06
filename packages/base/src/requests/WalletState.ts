@@ -19,9 +19,11 @@ import {
 
 export type AppId = string;
 export interface AppInfo {
+  id: string;
   name: string;
   url: string;
   authorizedAccounts: string[];
+  createdAt: number;
 }
 export type AuthorizedApps = Record<AppId, AppInfo>;
 
@@ -41,7 +43,7 @@ export function canDerive(type?: KeypairType): boolean {
  */
 export default class WalletState {
   readonly #keyring: Keyring;
-  #authorizedApps: AuthorizedApps = {};
+  #authorizedAppsSubject: BehaviorSubject<AuthorizedApps> = new BehaviorSubject<AuthorizedApps>({});
   #requestMessageSubject: BehaviorSubject<NullableRequestWithResolver> =
     new BehaviorSubject<NullableRequestWithResolver>(null);
 
@@ -55,15 +57,36 @@ export default class WalletState {
         this.#loadAuthorizedAccounts();
       }
     });
+
+    this.#authorizedAppsSubject.subscribe(() => {
+      this.#saveAuthorizedApps();
+    });
   }
 
   #loadAuthorizedAccounts() {
     const authorizedAccountsString = localStorage.getItem(AUTHORIZED_ACCOUNTS_KEY) || '{}';
-    this.#authorizedApps = JSON.parse(authorizedAccountsString) as AuthorizedApps;
+    const authorizedApps = JSON.parse(authorizedAccountsString) as AuthorizedApps;
+    this.#authorizedAppsSubject.next(authorizedApps);
   }
 
   #saveAuthorizedApps() {
-    localStorage.setItem(AUTHORIZED_ACCOUNTS_KEY, JSON.stringify(this.#authorizedApps));
+    localStorage.setItem(AUTHORIZED_ACCOUNTS_KEY, JSON.stringify(this.authorizedApps));
+  }
+
+  get authorizedApps() {
+    return this.#authorizedAppsSubject.value;
+  }
+
+  get authorizedAppsSubject() {
+    return this.#authorizedAppsSubject;
+  }
+
+  getAuthorizedApps() {
+    return Object.values(this.authorizedApps).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+  }
+
+  removeAllAuthorizedApps() {
+    this.#authorizedAppsSubject.next({});
   }
 
   async getInjectedAccounts(anyType = false): Promise<InjectedAccount[]> {
@@ -80,7 +103,7 @@ export default class WalletState {
   }
 
   getAuthorizedApp(url: string): AppInfo {
-    const appInfo = this.#authorizedApps[this.extractAppId(url)];
+    const appInfo = this.authorizedApps[this.extractAppId(url)];
 
     assert(appInfo, `The app at ${url} has not been authorized yet!`);
 
@@ -120,7 +143,8 @@ export default class WalletState {
     const requestBody = request.body as RequestAppRequestAccess;
 
     const appId = this.extractAppId(url);
-    const existingApp = this.#authorizedApps[appId];
+    const authorizedApps = this.authorizedApps;
+    const existingApp = authorizedApps[appId];
     if (existingApp) {
       const newAccounts = authorizedAccounts.filter((one) => !existingApp.authorizedAccounts.includes(one));
       authorizedAccounts = newAccounts.concat(existingApp.authorizedAccounts);
@@ -128,13 +152,15 @@ export default class WalletState {
 
     assert(authorizedAccounts && authorizedAccounts.length, 'Please choose at least one account to connect');
 
-    this.#authorizedApps[appId] = {
+    authorizedApps[appId] = {
+      id: appId,
       name: requestBody.appName,
       url,
       authorizedAccounts,
+      createdAt: Date.now(),
     };
 
-    this.#saveAuthorizedApps();
+    this.#authorizedAppsSubject.next(authorizedApps);
 
     resolve({
       result: AccessStatus.APPROVED,
