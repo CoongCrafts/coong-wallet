@@ -56,7 +56,7 @@ export default function RenameAccountDialog(): JSX.Element {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle onClose={onClose}>{t<string>('Rename account')}</DialogTitle>
-      <DialogContent className='pb-8'>
+      <DialogContent>
         <DialogContentText className='mb-4'>{t<string>('Choose a new name for your account')}</DialogContentText>
         <form onSubmit={doRename} noValidate>
           <TextField

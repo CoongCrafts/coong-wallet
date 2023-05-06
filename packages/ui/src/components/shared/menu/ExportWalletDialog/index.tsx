@@ -41,7 +41,7 @@ export default function ExportWalletDialog(): JSX.Element {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle onClose={onClose}>{t<string>('Export Wallet')}</DialogTitle>
-      <DialogContent className='pb-8'>
+      <DialogContent>
         {backup ? (
           <div className='my-4'>
             <QrCode walletBackup={backup} />

@@ -30,7 +30,7 @@ export default function RemoveAllAccessButton() {
       </Button>
       <Dialog open={open} onClose={onClose}>
         <DialogTitle onClose={onClose}>{t<string>('Remove All Dapps Access')}</DialogTitle>
-        <DialogContent className='pb-8'>
+        <DialogContent>
           <DialogContentText>{t<string>('Are you sure to remove all dapps access to your wallet?')}</DialogContentText>
           <DialogContentText className='font-semibold'>{t<string>('This cannot be undone!')}</DialogContentText>
           <div className='flex gap-4 mt-8'>

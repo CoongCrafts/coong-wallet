@@ -20,7 +20,7 @@ const AccountControlsOptions = [
   {
     action: AccountControlsAction.ShowAddressQrCode,
     event: EventName.OpenShowAddressQrCodeDialog,
-    className: 'min-[300px]:hidden',
+    className: 'min-[301px]:hidden',
   },
   {
     action: AccountControlsAction.RemoveAccount,
