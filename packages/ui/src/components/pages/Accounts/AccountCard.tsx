@@ -28,11 +28,12 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account, showAccoun
         <div className='account-card__name'>{name}</div>
         <AccountAddress address={networkAddress} name={name} className='text-xs' />
       </div>
-        {showAccountControls &&
-      <div className='flex gap-1'>
-        <ShowAddressQrCodeButton account={account} className='max-[300px]:hidden' />
-        <AccountControls account={account} />
-      </div>}
+      {showAccountControls && (
+        <div className='flex gap-1'>
+          <ShowAddressQrCodeButton account={account} className='max-[300px]:hidden' />
+          <AccountControls account={account} />
+        </div>
+      )}
     </div>
   );
 };

@@ -19,7 +19,11 @@ const NetworksSelection: FC<NetworksSelectionProps> = ({ className, onNetworkCha
   const { t } = useTranslation();
 
   useEffect(() => {
-    onNetworkChange ? onNetworkChange(network.prefix) : dispatch(appActions.updateAddressPrefix(network.prefix));
+    if (onNetworkChange) {
+      onNetworkChange(network.prefix);
+    } else {
+      dispatch(appActions.updateAddressPrefix(network.prefix));
+    }
   }, [network]);
 
   return (
