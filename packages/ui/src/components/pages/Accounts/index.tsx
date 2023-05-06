@@ -56,7 +56,7 @@ const Accounts: FC<Props> = ({ className = '' }) => {
         </div>
         <div>
           {displayAccounts.map((account) => (
-            <AccountCard key={account.address} account={account} />
+            <AccountCard key={account.address} account={account} showAccountControls />
           ))}
           {displayAccounts.length === 0 && <NoAccountsPlaceholder query={query} />}
         </div>

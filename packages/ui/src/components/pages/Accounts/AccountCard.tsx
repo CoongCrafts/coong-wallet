@@ -8,9 +8,10 @@ import { AccountInfoExt, Props } from 'types';
 
 interface AccountCardProps extends Props {
   account: AccountInfoExt;
+  showAccountControls?: boolean;
 }
 
-const AccountCard: FC<AccountCardProps> = ({ className = '', account }) => {
+const AccountCard: FC<AccountCardProps> = ({ className = '', account, showAccountControls }) => {
   const { networkAddress, name } = account;
 
   return (
@@ -26,7 +27,7 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account }) => {
         <div className='account-card__name'>{name}</div>
         <AccountAddress address={networkAddress} name={name} />
       </div>
-      <AccountControls account={account} />
+      {showAccountControls && <AccountControls account={account} />}
     </div>
   );
 };
