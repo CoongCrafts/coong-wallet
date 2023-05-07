@@ -16,7 +16,7 @@ function ShowAddressQrCodeButton({ className = '', account }: ShowAddressQrCodeB
   };
 
   return (
-    <IconButton onClick={handleClick} title={t<string>('Show QR Code')} className={className}>
+    <IconButton onClick={handleClick} title={t<string>('Show Address QR Code')} className={className}>
       <QrCodeIcon />
     </IconButton>
   );

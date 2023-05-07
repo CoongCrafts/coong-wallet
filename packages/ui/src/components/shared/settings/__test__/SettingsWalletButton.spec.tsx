@@ -55,7 +55,7 @@ describe('SettingsWalletButton', () => {
     });
 
     it('should close the dialog when clicking the close button', async () => {
-      const closeButton = await screen.findByTitle('Close');
+      const closeButton = await screen.findByRole('button', { name: /Close/ });
       await user.click(closeButton);
 
       await waitFor(() => {

@@ -92,7 +92,7 @@ describe('AccountControls', () => {
   describe('ShowAddressQrCodeDialog', () => {
     vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(() => null);
     beforeEach(async () => {
-      await user.click(await screen.findByRole('menuitem', { name: /Show QR Code/ }));
+      await user.click(await screen.findByRole('menuitem', { name: /Show Address QR Code/ }));
     });
 
     it('should show content of `ShowAddressQrCodeDialog` correctly', async () => {
@@ -113,7 +113,7 @@ describe('AccountControls', () => {
     });
 
     it('should hide the dialog', async () => {
-      const closeButton = await screen.findByTitle(/Close/);
+      const closeButton = await screen.findByRole('button', { name: /Close/ });
       await user.click(closeButton);
 
       await waitFor(() => {

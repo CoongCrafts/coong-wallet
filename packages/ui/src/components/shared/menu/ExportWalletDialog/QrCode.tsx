@@ -7,7 +7,7 @@ import { CompactAccountInfo, DerivationPath, WalletBackup, WalletQrBackup } from
 import { Download } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import FileSaver from 'file-saver';
-import useQrCode from 'hooks/useQrCode';
+import useQrCodeSize from 'hooks/useQrCodeSize';
 import { Props } from 'types';
 
 interface QrCodeProps extends Props {
@@ -26,7 +26,7 @@ const toWalletQrBackup = (backup: WalletBackup): WalletQrBackup => {
 
 export default function QrCode({ walletBackup }: QrCodeProps) {
   const { t } = useTranslation();
-  const { ref, size } = useQrCode();
+  const { containerRef, size } = useQrCodeSize();
   const qrCodeWrapperRef = useRef<HTMLDivElement>(null);
 
   const qrBackup = useMemo<string>(() => base64Encode(JSON.stringify(toWalletQrBackup(walletBackup))), [walletBackup]);
@@ -44,7 +44,7 @@ export default function QrCode({ walletBackup }: QrCodeProps) {
   };
 
   return (
-    <div ref={ref} className='text-center'>
+    <div ref={containerRef} className='text-center'>
       <p className='my-4 sm:px-20'>
         {t<string>('Open Coong Wallet on another device and scan this QR Code to transfer your wallet.')}
       </p>

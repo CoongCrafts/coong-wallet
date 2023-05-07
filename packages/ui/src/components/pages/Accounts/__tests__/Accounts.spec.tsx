@@ -94,7 +94,7 @@ describe('Accounts', () => {
     it('should show `ShowAddressQrCodeDialog` after clicking on `QR Code` button', async () => {
       render(<Accounts />, { preloadedState });
 
-      const showQrCodeButton = await screen.findAllByTitle(/Show QR Code/);
+      const showQrCodeButton = await screen.findAllByTitle(/Show Address QR Code/);
       // clicking on show qr button of account 01
       await user.click(showQrCodeButton[0]);
 

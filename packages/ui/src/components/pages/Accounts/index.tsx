@@ -36,7 +36,7 @@ const Accounts: FC<Props> = ({ className = '' }) => {
         <PageTitle>
           {t<string>('Accounts')} {accounts.length >= 5 && <span>({accounts.length})</span>}
         </PageTitle>
-        <div>
+        <div className='flex'>
           <IconButton className='xs:hidden' color={showSearchBox ? 'default' : 'primary'} onClick={toggleSearchBox}>
             {showSearchBox ? <SearchOff /> : <Search />}
           </IconButton>

@@ -8,14 +8,14 @@ import AccountAddress from 'components/pages/Accounts/AccountAddress';
 import DialogTitle from 'components/shared/DialogTitle';
 import NetworksSelection from 'components/shared/NetworksSelection';
 import useDialog from 'hooks/useDialog';
-import useQrCode from 'hooks/useQrCode';
+import useQrCodeSize from 'hooks/useQrCodeSize';
 import { AccountInfoExt } from 'types';
 import { EventName, EventRegistry } from 'utils/eventemitter';
 
 export default function ShowAddressQrCodeDialog(): JSX.Element {
   const { t } = useTranslation();
   const { open, doOpen, doClose } = useDialog();
-  const { ref, size } = useQrCode();
+  const { containerRef, size } = useQrCodeSize();
   const [address, setAddress] = useState<string>('');
   const [name, setName] = useState<string>('');
 
@@ -25,7 +25,7 @@ export default function ShowAddressQrCodeDialog(): JSX.Element {
 
   const onOpen = (account: AccountInfoExt) => {
     setAddress(account.networkAddress);
-    setName(account.name!);
+    setName(account.name ?? '');
     doOpen();
   };
 
@@ -43,15 +43,15 @@ export default function ShowAddressQrCodeDialog(): JSX.Element {
     });
   };
 
-  if (!address || !name) return <></>;
+  if (!address) return <></>;
 
   return (
-    <Dialog ref={ref} open={open} onClose={onClose}>
+    <Dialog ref={containerRef} open={open} onClose={onClose}>
       <DialogTitle onClose={onClose}>{`${t<string>('Account address')}: ${name}`}</DialogTitle>
-      <DialogContent className='flex gap-4 flex-col items-center'>
+      <DialogContent className='flex dark:gap-4 gap-2 mb-4 flex-col items-center'>
         <NetworksSelection onNetworkChange={handleNetworkChange} className='mt-4 xs:w-3/4 w-full' />
         <QRCodeCanvas value={address} includeMargin size={size} title={t<string>('Account Address QR Code')} />
-        <AccountAddress address={address} className='text-base' />
+        <AccountAddress address={address} className='text-sm' />
       </DialogContent>
     </Dialog>
   );

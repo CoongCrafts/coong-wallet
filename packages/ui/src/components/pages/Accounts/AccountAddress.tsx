@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { useUpdateEffect } from 'react-use';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { styled, useMediaQuery } from '@mui/material';
+import { styled, Theme, useMediaQuery } from '@mui/material';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 import { Props } from 'types';
 import { shortenAddress } from 'utils/string';
@@ -12,7 +12,7 @@ interface AccountAddressProps extends Props {
 }
 
 const AccountAddress: FC<AccountAddressProps> = ({ className, address, name }) => {
-  const showShortAddress = useMediaQuery('(max-width: 600px)');
+  const showShortAddress = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
   const getDisplayAddress = () => {
     return showShortAddress ? shortenAddress(address) : address;
   };

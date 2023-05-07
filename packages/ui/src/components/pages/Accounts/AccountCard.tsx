@@ -18,15 +18,17 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account, showAccoun
   return (
     <div
       id={networkAddress}
-      className={`${className} account-card transition-colors duration-200 border border-black/10 dark:border-white/15 `}>
-      <div className='account-card--icon'>
-        <CopyAddressTooltip address={networkAddress} name={name}>
-          <Identicon value={networkAddress} size={36} theme='polkadot' />
-        </CopyAddressTooltip>
-      </div>
-      <div className='flex-grow'>
-        <div className='account-card__name'>{name}</div>
-        <AccountAddress address={networkAddress} name={name} className='text-xs' />
+      className={`${className} account-card transition-colors duration-200 border border-black/10 dark:border-white/15`}>
+      <div className='flex items-center gap-2'>
+        <div className='account-card--icon'>
+          <CopyAddressTooltip address={networkAddress} name={name}>
+            <Identicon value={networkAddress} size={36} theme='polkadot' />
+          </CopyAddressTooltip>
+        </div>
+        <div>
+          <div className='account-card__name'>{name}</div>
+          <AccountAddress address={networkAddress} name={name} className='text-xs' />
+        </div>
       </div>
       {showAccountControls && (
         <div className='flex gap-1'>
@@ -42,7 +44,7 @@ export default styled(AccountCard)`
   padding: 0.5rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: space-between;
   margin-bottom: 0.5rem;
   border-radius: 4px;
 
