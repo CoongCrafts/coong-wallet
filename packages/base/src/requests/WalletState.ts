@@ -89,6 +89,21 @@ export default class WalletState {
     this.#authorizedAppsSubject.next({});
   }
 
+  saveAuthorizedApp(appInfo: AppInfo) {
+    const { id } = appInfo;
+    if (!id) {
+      return;
+    }
+
+    this.authorizedApps[id] = appInfo;
+    this.#authorizedAppsSubject.next(this.authorizedApps);
+  }
+
+  removeAuthorizedApp(id: AppId) {
+    delete this.authorizedApps[id];
+    this.#authorizedAppsSubject.next(this.authorizedApps);
+  }
+
   async getInjectedAccounts(anyType = false): Promise<InjectedAccount[]> {
     const accounts = await this.#keyring.getAccounts();
     return accounts
