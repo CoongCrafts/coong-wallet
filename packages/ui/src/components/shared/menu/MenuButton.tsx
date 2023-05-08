@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Menu as MenuIcon } from '@mui/icons-material';
-import { Button, IconButton, Menu, MenuItem } from '@mui/material';
+import IosShareIcon from '@mui/icons-material/IosShare';
+import { Button, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import ExportWalletDialog from 'components/shared/menu/ExportWalletDialog';
 import useMenuDropdown from 'hooks/useMenuDropdown';
 import { Props } from 'types';
@@ -33,7 +34,12 @@ export default function MenuButton({ className = '' }: Props): JSX.Element {
         <MenuIcon />
       </IconButton>
       <Menu open={open} anchorEl={anchorEl} onClose={doClose}>
-        <MenuItem onClick={onClickExportWallet}>{t<string>('Export Wallet')}</MenuItem>
+        <MenuItem onClick={onClickExportWallet}>
+          <ListItemIcon>
+            <IosShareIcon />
+          </ListItemIcon>
+          <ListItemText>{t<string>('Export Wallet')}</ListItemText>
+        </MenuItem>
       </Menu>
       <ExportWalletDialog />
     </>

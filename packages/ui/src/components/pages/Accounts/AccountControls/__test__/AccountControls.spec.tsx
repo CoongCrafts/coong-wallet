@@ -1,8 +1,12 @@
+import { encodeAddress } from '@polkadot/util-crypto';
+import { defaultNetwork, networks } from '@coong/base';
 import Keyring from '@coong/keyring';
 import { AccountInfo } from '@coong/keyring/types';
 import { UserEvent } from '@testing-library/user-event/setup/setup';
 import { initializeKeyring, newUser, PASSWORD, render, screen, waitFor } from '__tests__/testUtils';
 import Accounts from '../../index';
+
+const preloadedState = { app: { addressPrefix: defaultNetwork.prefix } };
 
 describe('AccountControls', () => {
   let user: UserEvent, testAccount: AccountInfo, keyring: Keyring;
@@ -13,7 +17,7 @@ describe('AccountControls', () => {
 
     testAccount = await keyring.createNewAccount('test-account', PASSWORD);
 
-    render(<Accounts />);
+    render(<Accounts />, { preloadedState });
 
     await user.click(await screen.findByTitle(/Open account controls/));
   });
@@ -82,8 +86,39 @@ describe('AccountControls', () => {
 
       const renameButton = await screen.findByRole('button', { name: /Rename/ });
       await user.click(renameButton);
-
       expect(await screen.findByText(/Account name is already picked/)).toBeInTheDocument();
+    });
+  });
+  describe('ShowAddressQrCodeDialog', () => {
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(() => null);
+    beforeEach(async () => {
+      await user.click(await screen.findByRole('menuitem', { name: /Show Address QR Code/ }));
+    });
+
+    it('should show content of `ShowAddressQrCodeDialog` correctly', async () => {
+      expect(await screen.findByRole('dialog', { name: /Account address/ })).toBeInTheDocument();
+      expect(await screen.findByTitle(/Account Address QR Code/)).toBeInTheDocument();
+    });
+
+    it('should change address format', async () => {
+      const searchField = await screen.findAllByLabelText(/Address format/);
+      await user.click(searchField[1]);
+
+      const acalaOption = await screen.findByText(/Acala/);
+      await user.click(acalaOption);
+
+      expect(searchField[1]).toHaveDisplayValue(/Acala/);
+      const { prefix } = networks.find((one) => one.displayName === 'Acala')!;
+      expect(await screen.findByText(encodeAddress(testAccount.address, prefix))).toBeInTheDocument();
+    });
+
+    it('should hide the dialog', async () => {
+      const closeButton = await screen.findByRole('button', { name: /Close/ });
+      await user.click(closeButton);
+
+      await waitFor(() => {
+        expect(screen.queryByRole('dialog', { name: /Account address/ })).not.toBeInTheDocument();
+      });
     });
   });
 });

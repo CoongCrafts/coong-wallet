@@ -69,7 +69,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
       </IconButton>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle onClose={handleClose}>{t<string>('Create new account')}</DialogTitle>
-        <DialogContent className='pb-8'>
+        <DialogContent>
           <DialogContentText className='mb-4'>
             {t<string>('Choose a name and enter your password to create a new account')}
           </DialogContentText>

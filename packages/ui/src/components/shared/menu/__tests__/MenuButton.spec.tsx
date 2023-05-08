@@ -51,6 +51,8 @@ describe('MenuButton', () => {
     });
 
     it('should show Qr Code after entering correct password', async () => {
+      vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(() => null);
+
       const passwordField = await screen.findByLabelText(/Wallet password/);
       await user.type(passwordField, PASSWORD);
       await user.click(await screen.findByRole('button', { name: /Continue/ }));

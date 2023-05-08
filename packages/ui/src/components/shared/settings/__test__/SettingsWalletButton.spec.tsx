@@ -6,7 +6,7 @@ export const expectSettingsWalletDialog = async (screen: any) => {
     expect(screen.getByRole('button', { name: /Dark/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Light/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /System/ })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Close settings/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Close/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /English/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /5 minutes/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Backup Secret Recovery Phrase/ })).toBeInTheDocument();
@@ -55,7 +55,7 @@ describe('SettingsWalletButton', () => {
     });
 
     it('should close the dialog when clicking the close button', async () => {
-      const closeButton = await screen.findByTitle('Close settings');
+      const closeButton = await screen.findByRole('button', { name: /Close/ });
       await user.click(closeButton);
 
       await waitFor(() => {

@@ -8,18 +8,27 @@ import { appActions } from 'redux/slices/app';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 
-const NetworksSelection: FC<Props> = () => {
+interface NetworksSelectionProps extends Props {
+  onNetworkChange?: (addressPrefix: number) => void;
+}
+
+const NetworksSelection: FC<NetworksSelectionProps> = ({ className, onNetworkChange }) => {
   const dispatch = useDispatch();
   const { addressPrefix } = useSelector((state: RootState) => state.app);
   const [network, setNetwork] = useState<NetworkInfo>(networks.find((one) => one.prefix === addressPrefix)!);
   const { t } = useTranslation();
 
   useEffect(() => {
-    dispatch(appActions.updateAddressPrefix(network.prefix));
+    if (onNetworkChange) {
+      onNetworkChange(network.prefix);
+    } else {
+      dispatch(appActions.updateAddressPrefix(network.prefix));
+    }
   }, [network]);
 
   return (
     <Autocomplete
+      className={className}
       disableClearable
       value={network}
       onChange={(event, newNetwork) => {

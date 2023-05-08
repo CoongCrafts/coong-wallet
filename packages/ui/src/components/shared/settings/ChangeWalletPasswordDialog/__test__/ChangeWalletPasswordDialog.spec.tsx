@@ -109,7 +109,7 @@ describe('ChangeWalletPasswordDialog', () => {
 
       expect(await screen.findByRole('button', { name: /Change Password/ })).toBeDisabled();
       expect(await screen.findByRole('button', { name: /Back/ })).toBeDisabled();
-      expect(await screen.findByTitle(/Close settings/)).toBeDisabled();
+      expect(await screen.findByTitle(/Close/)).toBeDisabled();
       expect(await screen.findByText(/Password changed successfully/)).toBeInTheDocument();
     });
 
