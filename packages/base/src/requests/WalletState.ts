@@ -111,7 +111,11 @@ export default class WalletState {
   }
 
   ensureAppAuthorized(url: string): boolean {
-    return !!this.getAuthorizedApp(url);
+    const app = this.getAuthorizedApp(url);
+
+    assert(app.authorizedAccounts.length > 0, `The app at ${url} has not been authorized to access any accounts!`);
+
+    return true;
   }
 
   ensureAccountAuthorized(url: string, accountAddress: string): void {
