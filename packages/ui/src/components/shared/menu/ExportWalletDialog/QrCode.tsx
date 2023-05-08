@@ -2,12 +2,12 @@ import { QRCodeCanvas } from 'qrcode.react';
 import React, { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useMeasure } from 'react-use';
 import { base64Encode } from '@polkadot/util-crypto';
 import { CompactAccountInfo, DerivationPath, WalletBackup, WalletQrBackup } from '@coong/keyring/types';
 import { Download } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import FileSaver from 'file-saver';
+import useQrCodeSize from 'hooks/useQrCodeSize';
 import { Props } from 'types';
 
 interface QrCodeProps extends Props {
@@ -26,11 +26,10 @@ const toWalletQrBackup = (backup: WalletBackup): WalletQrBackup => {
 
 export default function QrCode({ walletBackup }: QrCodeProps) {
   const { t } = useTranslation();
-  const [ref, { width }] = useMeasure<HTMLDivElement>();
+  const { containerRef, size } = useQrCodeSize();
   const qrCodeWrapperRef = useRef<HTMLDivElement>(null);
 
   const qrBackup = useMemo<string>(() => base64Encode(JSON.stringify(toWalletQrBackup(walletBackup))), [walletBackup]);
-  const size = width > 300 ? 250 : width - 64;
 
   const downloadQrCode = () => {
     const canvas = qrCodeWrapperRef.current?.querySelector<HTMLCanvasElement>('canvas')!;
@@ -45,7 +44,7 @@ export default function QrCode({ walletBackup }: QrCodeProps) {
   };
 
   return (
-    <div ref={ref} className='text-center'>
+    <div ref={containerRef} className='text-center'>
       <p className='my-4 sm:px-20'>
         {t<string>('Open Coong Wallet on another device and scan this QR Code to transfer your wallet.')}
       </p>

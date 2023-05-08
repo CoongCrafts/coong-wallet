@@ -35,7 +35,7 @@ const BackupSecretPhraseDialog: FC<BackupSecretPhraseDialogProps> = ({ onClose }
           </Typography>
         </Breadcrumbs>
       </DialogTitle>
-      <DialogContent className='pb-8'>
+      <DialogContent>
         <DialogContentText className='mb-2'>
           <Trans>
             You are about to reveal the secret recovery phrase which give access to your accounts and funds. Make sure

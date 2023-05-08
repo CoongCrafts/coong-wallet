@@ -47,7 +47,7 @@ export default function RemoveAccountDialog(): JSX.Element {
   return (
     <Dialog open={open} onClose={onClose}>
       {account && <DialogTitle onClose={onClose}>{`${t<string>('Remove account')}: ${account.name}`}</DialogTitle>}
-      <DialogContent className='pb-8'>
+      <DialogContent>
         <DialogContentText className='text-red-500'>
           {t<string>('Are you sure to remove this account?')}
         </DialogContentText>

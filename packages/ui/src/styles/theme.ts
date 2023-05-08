@@ -80,5 +80,12 @@ export const newTheme = (mode: PaletteMode) =>
           fullWidth: true,
         },
       },
+      MuiDialogContent: {
+        styleOverrides: {
+          root: {
+            paddingBottom: '1.5rem',
+          },
+        },
+      },
     },
   });

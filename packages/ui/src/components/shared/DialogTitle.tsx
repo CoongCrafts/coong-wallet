@@ -16,11 +16,7 @@ const DialogTitle: FC<DialogTitleProps> = ({ className = '', children, onClose, 
     <MuiDialogTitle className={`${className} flex justify-between`}>
       {children}
       {onClose && (
-        <IconButton
-          onClick={onClose}
-          disabled={disabled}
-          title={t<string>('Close settings')}
-          className='self-start p-1'>
+        <IconButton onClick={onClose} disabled={disabled} title={t<string>('Close')} className='self-start p-1'>
           <CloseIcon />
         </IconButton>
       )}

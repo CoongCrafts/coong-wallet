@@ -91,6 +91,17 @@ describe('Accounts', () => {
       expect(await screen.queryByText('Address copied!')).not.toBeVisible();
     });
 
+    it('should show `ShowAddressQrCodeDialog` after clicking on `QR Code` button', async () => {
+      render(<Accounts />, { preloadedState });
+
+      const showQrCodeButton = await screen.findAllByTitle(/Show Address QR Code/);
+      // clicking on show qr button of account 01
+      await user.click(showQrCodeButton[0]);
+
+      expect(await screen.findByRole('dialog', { name: /Account address/ })).toBeInTheDocument();
+      expect(await screen.findByTitle(/Account Address QR Code/)).toBeInTheDocument();
+    });
+
     describe('AccountControls', () => {
       beforeEach(async () => {
         render(<Accounts />, { preloadedState });
