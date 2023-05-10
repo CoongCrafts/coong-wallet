@@ -16,6 +16,7 @@ import MenuButton from 'components/shared/menu/MenuButton';
 import useHighlightNewAccount from 'hooks/accounts/useHighlightNewAccount';
 import useSearchAccounts from 'hooks/accounts/useSearchAccounts';
 import { Props } from 'types';
+import ExportAccountDialog from './AccountControls/ExportAccountDialog';
 
 const Accounts: FC<Props> = ({ className = '' }) => {
   const { accounts, displayAccounts, query, setQuery } = useSearchAccounts();
@@ -65,6 +66,7 @@ const Accounts: FC<Props> = ({ className = '' }) => {
       <RemoveAccountDialog />
       <RenameAccountDialog />
       <ShowAddressQrCodeDialog />
+      <ExportAccountDialog />
     </div>
   );
 };

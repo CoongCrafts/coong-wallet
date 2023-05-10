@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import OutputIcon from '@mui/icons-material/Output';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import useMenuDropdown from 'hooks/useMenuDropdown';
@@ -13,6 +14,7 @@ enum AccountControlsAction {
   RenameAccount = 'Rename',
   RemoveAccount = 'Remove',
   ShowAddressQrCode = 'Show Address QR Code',
+  ExportAccount = 'Export',
 }
 
 const AccountControlsOptions = [
@@ -26,6 +28,11 @@ const AccountControlsOptions = [
     action: AccountControlsAction.RenameAccount,
     event: EventName.OpenRenameAccountDialog,
     icon: <DriveFileRenameOutlineIcon />,
+  },
+  {
+    action: AccountControlsAction.ExportAccount,
+    event: EventName.OpenExportAccountDialog,
+    icon: <OutputIcon />,
   },
   {
     action: AccountControlsAction.RemoveAccount,
