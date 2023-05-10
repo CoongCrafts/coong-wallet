@@ -34,6 +34,7 @@ describe('ManageDappAccessDialog', () => {
     it('should render list of authorized dapps', async () => {
       expect(await screen.findByText(/Random App/)).toBeInTheDocument();
       expect(await screen.findByText(/2/)).toBeVisible();
+      expect(await screen.findByTestId(/DeleteIcon/)).toBeEnabled();
       expect(await screen.findByRole('button', { name: /Remove All/ })).toBeEnabled();
       expect(await screen.findByRole('button', { name: /Back/ })).toBeInTheDocument();
     });
@@ -50,6 +51,12 @@ describe('ManageDappAccessDialog', () => {
         expect(screen.queryByText(/You have not authorized any dapp\/website/)).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: /Remove All/ })).toBeDisabled();
       });
+    });
+
+    it('should show dapp access removal confirmation dialog', async () => {
+      await user.click(await screen.findByTestId(/DeleteIcon/));
+
+      expect(screen.findByRole('dialog', { name: /Remove Dapp Access: Random App/ })).toBeInTheDocument();
     });
   });
 });

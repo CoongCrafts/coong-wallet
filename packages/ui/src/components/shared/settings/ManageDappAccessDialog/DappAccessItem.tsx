@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { AppInfo } from '@coong/base/requests/WalletState';
 import clsx from 'clsx';
@@ -11,6 +12,7 @@ interface DappAccessItemProps {
   appInfo: AppInfo;
 }
 export default function DappAccessItem({ appInfo }: DappAccessItemProps): JSX.Element {
+  const { t } = useTranslation();
   const accounts = useAccounts();
   const dispatch = useDispatch();
   const { walletState } = useWalletState();
@@ -30,7 +32,10 @@ export default function DappAccessItem({ appInfo }: DappAccessItemProps): JSX.El
         'border border-black/10 dark:border-white/15 p-2 pl-4 rounded flex items-center gap-2 sm:gap-4',
         'bg-zinc-50 dark:bg-black/15 cursor-pointer hover:bg-primary/10 dark:hover:bg-white/20',
       ])}
-      onClick={onClick}>
+      onClick={onClick}
+      role='button'
+      title='View Dapp Details'
+      aria-label={t<string>('View Dapp Details')}>
       <div className='flex-grow'>
         <div className='flex items-center gap-2 sm:gap-4'>
           <img src={`https://icon.horse/icon/${appId}`} alt={`${name} icon`} width='18' />
