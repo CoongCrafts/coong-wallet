@@ -47,7 +47,10 @@ export default function RemoveDappAccessDialog() {
     }
 
     walletState.removeAuthorizedApp(id);
-    showToast && toast.success(t<string>(`Dapp access from ${name} (${url}) removed`));
+    showToast &&
+      toast.success(
+        t<string>('Dapp access from {{name}} ({{url}}) removed', { name, url, interpolation: { escapeValue: false } }),
+      );
 
     onClose();
 
