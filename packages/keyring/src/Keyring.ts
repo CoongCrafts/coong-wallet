@@ -1,11 +1,14 @@
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
+import { u8aToHex } from '@polkadot/util';
+import { sha256AsU8a } from '@polkadot/util-crypto';
 import { validateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { assert, CoongError, ErrorCode, isCoongError, StandardCoongError } from '@coong/utils';
 import CryptoJS from 'crypto-js';
-import { AccountInfo, WalletBackup, WalletQrBackup } from './types';
+import { AccountBackup, AccountInfo, WalletBackup, WalletQrBackup } from './types';
 
 export const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
+export const HASHED_MNEMONIC = 'HASHED_MNEMONIC';
 export const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
 export const DEFAULT_KEY_TYPE = 'sr25519';
 
@@ -37,6 +40,8 @@ export default class Keyring {
 
   async initialize(mnemonic: string, password: string) {
     const encryptedSeed = CryptoJS.AES.encrypt(mnemonic, password).toString();
+    const hashedSeed = sha256AsU8a(mnemonic);
+    localStorage.setItem(HASHED_MNEMONIC, u8aToHex(hashedSeed));
     localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedSeed);
   }
 
@@ -65,6 +70,7 @@ export default class Keyring {
       this.#keyring.forgetAccount(account.address);
     });
     localStorage.removeItem(ENCRYPTED_MNEMONIC);
+    localStorage.removeItem(HASHED_MNEMONIC);
     localStorage.removeItem(ACCOUNTS_INDEX);
   }
 
@@ -98,6 +104,10 @@ export default class Keyring {
 
   async verifyPassword(password: string) {
     await this.#decryptMnemonic(password);
+  }
+
+  #getHashedMnemonic(): string | null {
+    return localStorage.getItem(HASHED_MNEMONIC);
   }
 
   #getEncryptedMnemonic(): string | null {
@@ -248,6 +258,17 @@ export default class Keyring {
 
       throw e;
     }
+  }
+
+  async exportAccount(password: string, address: string): Promise<AccountBackup> {
+    await this.verifyPassword(password);
+
+    const account = this.getSigningPair(address);
+    const accountBackup = this.#keyring.backupAccount(account, password);
+
+    const hashedSeed = this.#getHashedMnemonic() ?? '';
+
+    return { ...accountBackup, hashedSeed };
   }
 
   async exportWallet(password: string): Promise<WalletBackup> {

@@ -488,3 +488,28 @@ describe('importQrBackup', () => {
     });
   });
 });
+
+describe('exportAccount', () => {
+  let keyring: Keyring, testAccount: AccountInfo;
+  beforeEach(async () => {
+    keyring = await initializeNewKeyring();
+    testAccount = await keyring.createNewAccount('test-account', PASSWORD);
+  });
+
+  it('should verify password', async () => {
+    const verifyingPasswordSpy = vi.spyOn(Keyring.prototype, 'verifyPassword');
+    await keyring.exportAccount(PASSWORD, testAccount.address);
+
+    expect(verifyingPasswordSpy).toBeCalled();
+  });
+
+  it('should return an account backup', async () => {
+    const accountBackup = await keyring.exportAccount(PASSWORD, testAccount.address);
+
+    expect(accountBackup.address).toBeTypeOf('string');
+    expect(accountBackup.encoded).toBeTypeOf('string');
+    expect(accountBackup.encoding).toBeTypeOf('object');
+    expect(accountBackup.meta).toBeTypeOf('object');
+    expect(accountBackup.hashedSeed).toBeTypeOf('string');
+  });
+});
