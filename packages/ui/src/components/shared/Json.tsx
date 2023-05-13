@@ -22,16 +22,14 @@ export default function Json({ value }: JsonProps): JSX.Element {
     <div className='text-center'>
       <p className='mt-4 sm:px-20'>
         {t<string>(
-          'Open Coong Wallet on another device and choose import account with JSON file to transfer your account',
+          'Export this account to a JSON file and import it back to Coong Wallet on this or other devices later',
         )}
       </p>
       <Button onClick={downloadJsonFile} startIcon={<Download />}>
-        {t<string>('Download JSON file')}
+        {t<string>('Download JSON File')}
       </Button>
       <p className='mt-4 italic sm:px-20 text-sm'>
-        {t<string>(
-          'You will be prompted to enter your wallet password to complete the transfer process on the other device.',
-        )}
+        {t<string>('You will be prompted to enter your wallet password to complete importing the account')}
       </p>
     </div>
   );

@@ -37,12 +37,15 @@ export default function QrCode({ value, object }: QrCodeProps) {
   return (
     <div ref={containerRef} className='text-center'>
       <p className='my-4 sm:px-20'>
-        {t<string>(
-          `Open Coong Wallet on another device and scan this QR Code to transfer your ${object.toLowerCase()}`,
-        )}
+        {t<string>('Open Coong Wallet on another device and scan this QR Code to transfer your {{object}}', { object })}
       </p>
       <div ref={qrCodeWrapperRef}>
-        <QRCodeCanvas size={size} value={rawQrValue} includeMargin title={t<string>(`${object} Export QR Code`)} />
+        <QRCodeCanvas
+          size={size}
+          value={rawQrValue}
+          includeMargin
+          title={t<string>('{{object}} Export QR Code', { object })}
+        />
       </div>
       <div className='mt-4'>
         <Button variant='outlined' startIcon={<Download />} onClick={downloadQrCode} size='small'>
