@@ -6,13 +6,13 @@ import { AccountQrBackup } from '@coong/keyring/types';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Dialog, DialogContent, Tab } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
+import Json from 'components/shared/Json';
 import QrCode from 'components/shared/QrCode';
 import VerifyingPasswordForm from 'components/shared/forms/VerifyingPasswordForm';
 import useDialog from 'hooks/useDialog';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { AccountInfoExt, ExportObject } from 'types';
 import { EventName, EventRegistry } from 'utils/eventemitter';
-import Json from '../../../shared/Json';
 
 enum ExportAccountMethod {
   QRCode = 'QR Code',
@@ -27,10 +27,6 @@ function ExportAccountDialog(): JSX.Element {
   const [backup, setBackup] = useState<AccountQrBackup>();
   const [method, setMethod] = useState<ExportAccountMethod>(ExportAccountMethod.QRCode);
 
-  const switchMethod = (_: any, method: ExportAccountMethod) => {
-    setMethod(method);
-  };
-
   const onOpen = (account: AccountInfoExt) => {
     setAccount(account);
     doOpen();
@@ -42,6 +38,10 @@ function ExportAccountDialog(): JSX.Element {
       EventRegistry.off(EventName.OpenExportAccountDialog, onOpen);
     };
   });
+
+  const switchMethod = (_: any, method: ExportAccountMethod) => {
+    setMethod(method);
+  };
 
   const onClose = () => {
     doClose(() => {

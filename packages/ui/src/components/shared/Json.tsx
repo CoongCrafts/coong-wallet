@@ -4,7 +4,7 @@ import { AccountBackup } from '@coong/keyring/types';
 import { Download } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import FileSaver from 'file-saver';
-import { Props } from '../../types';
+import { Props } from 'types';
 
 interface JsonProps extends Props {
   value: AccountBackup;
