@@ -30,7 +30,7 @@ export default function QrCode({ value, object }: QrCodeProps) {
         return;
       }
 
-      FileSaver.saveAs(blob, `coongwallet_${object}_backup_qrcode_${Date.now()}`);
+      FileSaver.saveAs(blob, `coong${object.toLowerCase()}_backup_qrcode_${Date.now()}`);
     }, 'image/png');
   };
 

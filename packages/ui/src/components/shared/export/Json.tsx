@@ -15,7 +15,7 @@ export default function Json({ value }: JsonProps): JSX.Element {
 
   const downloadJsonFile = () => {
     const blob = new Blob([JSON.stringify(value)], { type: 'text/plain;charset=utf-8' });
-    FileSaver.saveAs(blob, `coongwallet_account_backup_json_${Date.now()}.json`);
+    FileSaver.saveAs(blob, `coongaccount_backup_json_${Date.now()}.json`);
   };
 
   return (

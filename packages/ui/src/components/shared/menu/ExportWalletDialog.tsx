@@ -5,7 +5,7 @@ import { useEffectOnce } from 'react-use';
 import { CompactAccountInfo, DerivationPath, WalletBackup, WalletQrBackup } from '@coong/keyring/types';
 import { Dialog, DialogContent, DialogContentText } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
-import QrCode from 'components/shared/QrCode';
+import QrCode from 'components/shared/export/QrCode';
 import VerifyingPasswordForm from 'components/shared/forms/VerifyingPasswordForm';
 import useDialog from 'hooks/useDialog';
 import { useWalletState } from 'providers/WalletStateProvider';
