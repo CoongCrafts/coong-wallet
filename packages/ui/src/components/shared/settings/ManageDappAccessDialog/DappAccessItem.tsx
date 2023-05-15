@@ -30,7 +30,7 @@ export default function DappAccessItem({ appInfo }: DappAccessItemProps): JSX.El
     <div
       className={clsx([
         'border border-black/10 dark:border-white/15 p-2 pl-4 rounded flex items-center gap-2 sm:gap-4',
-        'bg-zinc-50 dark:bg-black/15 cursor-pointer hover:bg-primary/10 dark:hover:bg-white/20',
+        'bg-zinc-50 dark:bg-black/15 cursor-pointer hover:bg-primary/10 dark:hover:bg-white/10',
       ])}
       onClick={onClick}
       role='button'

@@ -28,11 +28,16 @@ export default function RemoveDappAccessButton({
   };
 
   return buttonIconStyle ? (
-    <IconButton size='small' onClick={openRemovalDialog}>
+    <IconButton size='small' onClick={openRemovalDialog} title={t<string>('Remove Access')}>
       <Delete fontSize='small' />
     </IconButton>
   ) : (
-    <Button size='small' color='error' variant='outlined' onClick={openRemovalDialog}>
+    <Button
+      size='small'
+      color='error'
+      variant='outlined'
+      onClick={openRemovalDialog}
+      title={t<string>('Remove Access')}>
       {t<string>('Remove Access')}
     </Button>
   );
