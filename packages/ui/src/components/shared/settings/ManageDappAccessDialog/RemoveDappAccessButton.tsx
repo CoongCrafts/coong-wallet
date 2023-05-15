@@ -9,14 +9,12 @@ import { EventName, triggerEvent } from 'utils/eventemitter';
 interface RemoveSingleDappAccessButtonProps extends Props {
   appInfo: AppInfo;
   onRemoved?: () => void;
-  showToast?: boolean;
   buttonIconStyle?: boolean;
 }
 
 export default function RemoveDappAccessButton({
   appInfo,
   onRemoved,
-  showToast,
   buttonIconStyle,
 }: RemoveSingleDappAccessButtonProps) {
   const { t } = useTranslation();
@@ -24,7 +22,7 @@ export default function RemoveDappAccessButton({
   const openRemovalDialog = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
-    triggerEvent(EventName.OpenRemoveDappAccessDialog, { appInfo, onRemoved, showToast });
+    triggerEvent(EventName.OpenRemoveDappAccessDialog, { appInfo, onRemoved });
   };
 
   return buttonIconStyle ? (

@@ -12,7 +12,6 @@ import { EventName, EventRegistry } from 'utils/eventemitter';
 interface DappAccessRemovalOptions {
   appInfo: AppInfo;
   onRemoved?: () => void;
-  showToast?: boolean;
 }
 
 export default function RemoveDappAccessDialog() {
@@ -38,7 +37,7 @@ export default function RemoveDappAccessDialog() {
     return <></>;
   }
 
-  const { appInfo, onRemoved, showToast } = options;
+  const { appInfo, onRemoved } = options;
   const { id, name, url } = appInfo;
 
   const removeAccess = () => {
@@ -47,10 +46,10 @@ export default function RemoveDappAccessDialog() {
     }
 
     walletState.removeAuthorizedApp(id);
-    showToast &&
-      toast.success(
-        t<string>('Dapp access from {{name}} ({{url}}) removed', { name, url, interpolation: { escapeValue: false } }),
-      );
+    toast.dismiss();
+    toast.success(
+      t<string>('Dapp access from {{name}} ({{url}}) removed', { name, url, interpolation: { escapeValue: false } }),
+    );
 
     onClose();
 

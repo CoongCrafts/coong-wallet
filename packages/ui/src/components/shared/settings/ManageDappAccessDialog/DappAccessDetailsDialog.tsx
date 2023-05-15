@@ -77,7 +77,7 @@ export default function DappAccessDetailsDialog() {
           <Button size='small' variant='text' onClick={onClose}>
             {t<string>('Close')}
           </Button>
-          <RemoveDappAccessButton appInfo={appInfo} onRemoved={onClose} showToast />
+          <RemoveDappAccessButton appInfo={appInfo} onRemoved={onClose} />
         </div>
       </DialogContent>
     </Dialog>
