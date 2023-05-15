@@ -2,8 +2,7 @@ import { newWalletRequest } from '@coong/base';
 import { AccessStatus, WalletRequestMessage, WalletResponse } from '@coong/base/types';
 import { AccountInfo } from '@coong/keyring/types';
 import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
-import { sample } from 'rxjs';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import WalletState, { AppInfo, AUTHORIZED_ACCOUNTS_KEY } from '../WalletState';
 import { newWalletState, PASSWORD, setupAuthorizedApps } from './setup';
 
@@ -272,6 +271,7 @@ describe('sign extrinsic', () => {
 
   beforeEach(async () => {
     account01 = await state.keyring.createNewAccount('Account 01', PASSWORD);
+    setupAuthorizedApps(state, [account01.address], window.location.origin);
   });
 
   const newSignExtrinsicRequest = (address: string) => {
@@ -338,6 +338,8 @@ describe('sign extrinsic', () => {
     });
 
     it('should throw error is keypair is not existed', async () => {
+      vi.spyOn(state, 'ensureAccountAuthorized').mockImplementation(() => true);
+
       await expect(handleSignExtrinsicApproval('0xNotExistedAddress', PASSWORD)).rejects.toThrowError(
         new CoongError(ErrorCode.KeypairNotFound),
       );
