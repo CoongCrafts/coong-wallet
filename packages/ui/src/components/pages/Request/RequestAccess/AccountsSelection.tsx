@@ -1,7 +1,8 @@
 import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, styled } from '@mui/material';
+import { CheckBox, DoneAll, RemoveDone } from '@mui/icons-material';
+import { Button, IconButton, styled, Theme, useMediaQuery } from '@mui/material';
 import NewAccountButton from 'components/shared/NewAccountButton';
 import NoAccountsPlaceholder from 'components/shared/accounts/NoAccountsPlaceholder';
 import SearchBox from 'components/shared/accounts/SearchBox';
@@ -13,37 +14,100 @@ import { accountsActions } from 'redux/slices/accounts';
 import { RootState } from 'redux/store';
 import { Props } from 'types';
 
-const AccountsSelection: FC<Props> = ({ className }) => {
+interface AccountsSelectionProps extends Props {
+  showNewAccountButton?: boolean;
+  showBothSelectionButtons?: boolean;
+}
+
+interface SelectionButton {
+  showBothSelectionButtons?: boolean;
+}
+
+const SelectAllButton = ({ showBothSelectionButtons }: SelectionButton) => {
   const accounts = useAccounts();
-  const dispatch = useDispatch();
-  const { selectedAccounts } = useSelector((state: RootState) => state.accounts);
-  const { displayAccounts, query, setQuery } = useSearchAccounts();
-  const { setNewAccount } = useHighlightNewAccount();
   const { t } = useTranslation();
+  const { selectedAccounts } = useSelector((state: RootState) => state.accounts);
+  const dispatch = useDispatch();
+  const xs = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+
+  const allSelected = selectedAccounts.length === accounts.length;
+  if (!showBothSelectionButtons && allSelected) {
+    return null;
+  }
 
   const doSelectAll = () => {
     dispatch(accountsActions.addSelectedAccounts(accounts));
   };
 
+  if (xs) {
+    return (
+      <IconButton
+        size='small'
+        color='primary'
+        onClick={doSelectAll}
+        title={t<string>('Select all')}
+        disabled={allSelected}>
+        <DoneAll />
+      </IconButton>
+    );
+  }
+
+  return (
+    <Button size='small' variant='outlined' onClick={doSelectAll} startIcon={<DoneAll />} disabled={allSelected}>
+      {t<string>('Select all')}
+    </Button>
+  );
+};
+
+const DeselectAllButton = ({ showBothSelectionButtons }: SelectionButton) => {
+  const accounts = useAccounts();
+  const { t } = useTranslation();
+  const { selectedAccounts } = useSelector((state: RootState) => state.accounts);
+  const dispatch = useDispatch();
+  const xs = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+
+  if (!showBothSelectionButtons && accounts.length !== selectedAccounts.length) {
+    return null;
+  }
+
   const doDeselectAll = () => {
     dispatch(accountsActions.removeSelectedAccounts(accounts));
   };
 
+  const disabled = selectedAccounts.length === 0;
+
+  if (xs) {
+    return (
+      <IconButton size='small' onClick={doDeselectAll} title={t<string>('Deselect all')} disabled={disabled}>
+        <RemoveDone />
+      </IconButton>
+    );
+  }
+
+  return (
+    <Button size='small' variant='outlined' onClick={doDeselectAll} startIcon={<RemoveDone />} disabled={disabled}>
+      {t<string>('Deselect all')}
+    </Button>
+  );
+};
+
+const AccountsSelection: FC<AccountsSelectionProps> = ({
+  className,
+  showNewAccountButton,
+  showBothSelectionButtons,
+}) => {
+  const { t } = useTranslation();
+  const { selectedAccounts } = useSelector((state: RootState) => state.accounts);
+  const { displayAccounts, query, setQuery } = useSearchAccounts();
+  const { setNewAccount } = useHighlightNewAccount();
+
   return (
     <div className={`${className} accounts-selection`}>
-      <div className='accounts-selection--top'>
+      <div className='accounts-selection--top gap-4'>
         <SearchBox onChange={(query) => setQuery(query)} size='xxs' label={t<string>('Search by name')} />
-        <div>
-          {accounts.length > selectedAccounts.length && (
-            <Button size='small' variant='outlined' onClick={doSelectAll}>
-              {t<string>('Select all')}
-            </Button>
-          )}
-          {accounts.length == selectedAccounts.length && (
-            <Button size='small' variant='outlined' onClick={doDeselectAll}>
-              {t<string>('Deselect all')}
-            </Button>
-          )}
+        <div className='flex gap-4 sm:gap-2'>
+          <DeselectAllButton showBothSelectionButtons={showBothSelectionButtons} />
+          <SelectAllButton showBothSelectionButtons={showBothSelectionButtons} />
         </div>
       </div>
       <div className='accounts-selection--list'>
@@ -55,14 +119,14 @@ const AccountsSelection: FC<Props> = ({ className }) => {
       <div className='accounts-selection--bottom' data-testid='number-of-selected-accounts'>
         <div>
           {selectedAccounts.length ? (
-            <span>
-              <strong>{selectedAccounts.length}</strong> {t<string>('account(s) selected')}
-            </span>
+            <Trans values={{ numberOfAccounts: selectedAccounts.length }} shouldUnescape>
+              {'{{numberOfAccounts}} account(s) selected'}
+            </Trans>
           ) : (
             <span>{t<string>('No accounts selected')}</span>
           )}
         </div>
-        <NewAccountButton onCreated={(account) => setTimeout(() => setNewAccount(account))} />
+        {showNewAccountButton && <NewAccountButton onCreated={(account) => setTimeout(() => setNewAccount(account))} />}
       </div>
     </div>
   );

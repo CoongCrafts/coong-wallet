@@ -30,6 +30,9 @@ const accountsSlice = createSlice({
     },
     addSelectedAccounts,
     removeSelectedAccounts,
+    setSelectedAccounts: (state: Draft<AccountsState>, action: PayloadAction<AccountInfoExt[]>) => {
+      state.selectedAccounts = action.payload;
+    },
   },
 });
 

@@ -46,7 +46,7 @@ const RequestAccess: FC<RequestProps> = ({ className = '', message }) => {
       {seedReady ? (
         <div>
           <h6>{t<string>("Select the accounts you'd like to connect")}</h6>
-          <AccountsSelection />
+          <AccountsSelection showNewAccountButton />
 
           <div>
             <p className='font-semibold mb-2'>{t<string>('Only connect if you trust the application')}</p>
