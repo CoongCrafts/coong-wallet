@@ -30,7 +30,8 @@ const SelectAllButton = ({ showBothSelectionButtons }: SelectionButton) => {
   const dispatch = useDispatch();
   const xs = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
-  if (!showBothSelectionButtons && accounts.length === selectedAccounts.length) {
+  const allSelected = selectedAccounts.length === accounts.length;
+  if (!showBothSelectionButtons && allSelected) {
     return null;
   }
 
@@ -40,14 +41,19 @@ const SelectAllButton = ({ showBothSelectionButtons }: SelectionButton) => {
 
   if (xs) {
     return (
-      <IconButton size='small' color='primary' onClick={doSelectAll}>
+      <IconButton
+        size='small'
+        color='primary'
+        onClick={doSelectAll}
+        title={t<string>('Select all')}
+        disabled={allSelected}>
         <DoneAll />
       </IconButton>
     );
   }
 
   return (
-    <Button size='small' variant='outlined' onClick={doSelectAll} startIcon={<DoneAll />}>
+    <Button size='small' variant='outlined' onClick={doSelectAll} startIcon={<DoneAll />} disabled={allSelected}>
       {t<string>('Select all')}
     </Button>
   );
@@ -68,16 +74,18 @@ const DeselectAllButton = ({ showBothSelectionButtons }: SelectionButton) => {
     dispatch(accountsActions.removeSelectedAccounts(accounts));
   };
 
+  const disabled = selectedAccounts.length === 0;
+
   if (xs) {
     return (
-      <IconButton size='small' onClick={doDeselectAll}>
+      <IconButton size='small' onClick={doDeselectAll} title={t<string>('Deselect all')} disabled={disabled}>
         <RemoveDone />
       </IconButton>
     );
   }
 
   return (
-    <Button size='small' variant='outlined' onClick={doDeselectAll} startIcon={<RemoveDone />}>
+    <Button size='small' variant='outlined' onClick={doDeselectAll} startIcon={<RemoveDone />} disabled={disabled}>
       {t<string>('Deselect all')}
     </Button>
   );
