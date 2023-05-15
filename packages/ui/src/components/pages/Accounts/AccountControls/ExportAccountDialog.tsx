@@ -53,10 +53,10 @@ function ExportAccountDialog(): JSX.Element {
 
   const onPasswordVerified = async (password: string) => {
     try {
-      const backup = await keyring.exportAccount(password, account!.address);
+      const backup = await keyring.exportAccount(account!.address, password);
       setBackup(backup);
     } catch (e: any) {
-      toast.error(e.message);
+      toast.error(t<string>(e.message));
     }
   };
 
@@ -76,7 +76,7 @@ function ExportAccountDialog(): JSX.Element {
               <QrCode value={backup} object={ExportObject.Account} />
             </TabPanel>
             <TabPanel value={ExportAccountMethod.JSON} className='p-0'>
-              <Json value={backup} />
+              <Json value={backup} object={ExportObject.Account} />
             </TabPanel>
           </TabContext>
         ) : (

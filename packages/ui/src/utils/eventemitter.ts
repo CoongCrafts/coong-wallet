@@ -15,6 +15,8 @@ export enum EventName {
   OpenExportWalletDialog = 'OpenExportWalletDialog',
   OpenRenameAccountDialog = 'OpenRenameAccountDialog',
   OpenShowAddressQrCodeDialog = 'OpenShowAddressQrCodeDialog',
+  OpenDappAccessDetailsDialog = 'OpenDappAccessDetailsDialog',
+  OpenRemoveDappAccessDialog = 'OpenRemoveDappAccessDialog',
   OpenExportAccountDialog = 'OpenExportAccountDialog',
   OpenImportAccountDialog = 'OpenImportAccountDialog',
 }

@@ -2,6 +2,7 @@ import { waitFor } from '@testing-library/react';
 import { WalletState } from '@coong/base';
 import { UserEvent } from '@testing-library/user-event/setup/setup';
 import { initializeKeyring, newUser, PASSWORD, render, screen, setupAuthorizedApps } from '__tests__/testUtils';
+import RemoveDappAccessDialog from '../RemoveDappAccessDialog';
 import ManageDappAccessDialog from '../index';
 
 describe('ManageDappAccessDialog', () => {
@@ -28,12 +29,18 @@ describe('ManageDappAccessDialog', () => {
 
       setupAuthorizedApps([account01.address, account02.address], window.location.origin);
 
-      render(<ManageDappAccessDialog onClose={() => {}} />);
+      render(
+        <>
+          <ManageDappAccessDialog onClose={() => {}} />
+          <RemoveDappAccessDialog />
+        </>,
+      );
     });
 
     it('should render list of authorized dapps', async () => {
       expect(await screen.findByText(/Random App/)).toBeInTheDocument();
       expect(await screen.findByText(/2/)).toBeVisible();
+      expect(await screen.findByTestId(/DeleteIcon/)).toBeEnabled();
       expect(await screen.findByRole('button', { name: /Remove All/ })).toBeEnabled();
       expect(await screen.findByRole('button', { name: /Back/ })).toBeInTheDocument();
     });
@@ -50,6 +57,12 @@ describe('ManageDappAccessDialog', () => {
         expect(screen.queryByText(/You have not authorized any dapp\/website/)).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: /Remove All/ })).toBeDisabled();
       });
+    });
+
+    it('should show dapp access removal confirmation dialog', async () => {
+      await user.click(await screen.findByTestId(/DeleteIcon/));
+
+      expect(await screen.findByRole('dialog', { name: /Remove Dapp Access: Random App/ })).toBeInTheDocument();
     });
   });
 });

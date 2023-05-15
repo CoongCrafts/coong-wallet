@@ -25,7 +25,9 @@ beforeEach(async () => {
 
 describe('handle', () => {
   it('should throw error if request is not supported', async () => {
-    setupAuthorizedApps(tabHandler.state, [], currentWindowOrigin);
+    const account01 = await tabHandler.state.keyring.createNewAccount('Account 01', PASSWORD);
+    setupAuthorizedApps(tabHandler.state, [account01.address], currentWindowOrigin);
+
     await expect(
       tabHandler.handle(
         newWalletRequest({
@@ -49,6 +51,30 @@ describe('handle', () => {
           origin: currentWindowOrigin,
         }),
       ).rejects.toThrowError(new StandardCoongError(`The app at ${currentWindowOrigin} has not been authorized yet!`));
+    },
+  );
+
+  it.each(['tab/signRaw', 'tab/signExtrinsic'])(
+    'should throw error if the app is not authorized to access any accounts',
+    async (requestName) => {
+      const account01 = await tabHandler.state.keyring.createNewAccount('Account 01', PASSWORD);
+
+      setupAuthorizedApps(tabHandler.state, [], currentWindowOrigin);
+
+      await expect(
+        tabHandler.handle({
+          ...newWalletRequest({
+            name: requestName as RequestName,
+            // @ts-ignore
+            body: {
+              address: account01.address,
+            },
+          }),
+          origin: currentWindowOrigin,
+        }),
+      ).rejects.toThrowError(
+        new StandardCoongError(`The app at ${currentWindowOrigin} has not been authorized to access any accounts!`),
+      );
     },
   );
 

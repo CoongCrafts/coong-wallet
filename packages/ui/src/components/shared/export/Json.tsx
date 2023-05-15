@@ -16,23 +16,24 @@ export default function Json({ value, object }: JsonProps): JSX.Element {
 
   const downloadJsonFile = () => {
     const blob = new Blob([JSON.stringify(value, null, 2)], { type: 'text/plain;charset=utf-8' });
-    FileSaver.saveAs(blob, `coongwallet_${object}_backup_json_${Date.now()}.json`);
+    FileSaver.saveAs(blob, `coongwallet_${object.toLowerCase()}_backup_json_${Date.now()}.json`);
   };
 
   return (
     <div className='text-center'>
       <p className='mt-4 sm:px-20'>
         {t<string>(
-          `Export this ${object.toLowerCase()} to a JSON file and import it back to Coong Wallet on this or other devices later`,
+          `Export this {{object}} to a JSON file and import it back to Coong Wallet on this or other devices later`,
+          { object: object.toLowerCase() },
         )}
       </p>
       <Button onClick={downloadJsonFile} startIcon={<Download />}>
         {t<string>('Download JSON File')}
       </Button>
       <p className='mt-4 italic sm:px-20 text-sm'>
-        {t<string>(
-          `You will be prompted to enter your wallet password to complete importing the ${object.toLowerCase()}`,
-        )}
+        {t<string>(`You will be prompted to enter your wallet password to complete importing the {{object}}`, {
+          object: object.toLowerCase(),
+        })}
       </p>
     </div>
   );

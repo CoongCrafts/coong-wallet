@@ -55,6 +55,13 @@ describe('handle', () => {
       );
     });
 
+    it('should throw error if the app is not authorized to access any accounts', async () => {
+      setupAuthorizedApps(embedHandler.state, [], currentWindowOrigin);
+      await expect(embedHandler.handle(accessAuthorizedMessage)).rejects.toThrowError(
+        new StandardCoongError(`The app at ${currentWindowOrigin} has not been authorized to access any accounts!`),
+      );
+    });
+
     it('should return true if the app is authorized', async () => {
       const account01 = await embedHandler.state.keyring.createNewAccount('Account 01', PASSWORD);
       setupAuthorizedApps(embedHandler.state, [account01.address], currentWindowOrigin);
