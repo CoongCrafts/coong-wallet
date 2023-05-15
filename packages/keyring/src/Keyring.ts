@@ -1,4 +1,5 @@
 import { KeyringPair } from '@polkadot/keyring/types';
+import { keyring } from '@polkadot/ui-keyring';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
 import { u8aToHex } from '@polkadot/util';
 import { sha256AsU8a } from '@polkadot/util-crypto';
@@ -266,9 +267,38 @@ export default class Keyring {
     const account = this.getSigningPair(address);
     const accountBackup = this.#keyring.backupAccount(account, password);
 
-    const hashedSeed = this.#getHashedMnemonic() ?? '';
+    if (accountBackup.meta.hasOwnProperty('derivationPath')) {
+      const hashedSeed = this.#getHashedMnemonic() ?? '';
+      return { ...accountBackup, hashedSeed };
+    }
 
-    return { ...accountBackup, hashedSeed };
+    return accountBackup;
+  }
+
+  isExternal(hashSeed: string) {
+    return !(hashSeed === this.#getHashedMnemonic());
+  }
+
+  async importAccount(password: string, backup: AccountBackup) {
+    const { address, hashedSeed } = backup;
+
+    const isExternal = !hashedSeed || this.isExternal(hashedSeed);
+
+    if (isExternal) {
+      if (backup.meta.hasOwnProperty('derivationPath')) {
+        delete backup.meta.derivationPath;
+      }
+    }
+
+    if (backup.meta.hasOwnProperty('hashSeed')) {
+      delete backup.meta.hashSeed;
+    }
+
+    Object.assign(backup.meta, { isExternal });
+
+    this.#keyring.restoreAccount(backup, password);
+
+    return await this.getAccount(address);
   }
 
   async exportWallet(password: string): Promise<WalletBackup> {

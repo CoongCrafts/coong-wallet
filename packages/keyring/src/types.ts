@@ -29,7 +29,7 @@ export interface WalletBackup$Json {
 export interface WalletBackup extends KeyringPairs$Json, WalletBackup$Json {}
 
 export interface AccountBackup extends KeyringPair$Json {
-  hashedSeed: string;
+  hashedSeed?: string;
 }
 
 export interface AccountQrBackup extends AccountBackup, QrBackup {}

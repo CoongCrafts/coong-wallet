@@ -1,6 +1,6 @@
 import { Identicon } from '@polkadot/react-identicon';
 import { FC } from 'react';
-import { styled } from '@mui/material';
+import { Chip, styled } from '@mui/material';
 import AccountAddress from 'components/pages/Accounts/AccountAddress';
 import AccountControls from 'components/pages/Accounts/AccountControls';
 import ShowAddressQrCodeButton from 'components/pages/Accounts/ShowAddressQrCodeButton';
@@ -13,7 +13,7 @@ interface AccountCardProps extends Props {
 }
 
 const AccountCard: FC<AccountCardProps> = ({ className = '', account, showAccountControls }) => {
-  const { networkAddress, name } = account;
+  const { networkAddress, name, isExternal } = account;
 
   return (
     <div
@@ -26,7 +26,10 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account, showAccoun
           </CopyAddressTooltip>
         </div>
         <div>
-          <div className='account-card__name'>{name}</div>
+          <div className='account-card__name'>
+            {name}
+            {isExternal && <Chip label='Imported Account' className='text-xs p-0.5' size='small' />}
+          </div>
           <AccountAddress address={networkAddress} name={name} className='text-xs' />
         </div>
       </div>
@@ -55,6 +58,9 @@ export default styled(AccountCard)`
   .account-card__name {
     font-weight: 600;
     font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   .account-card__address {
