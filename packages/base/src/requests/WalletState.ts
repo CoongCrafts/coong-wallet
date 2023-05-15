@@ -89,6 +89,21 @@ export default class WalletState {
     this.#authorizedAppsSubject.next({});
   }
 
+  saveAuthorizedApp(appInfo: AppInfo) {
+    const { id } = appInfo;
+    if (!id) {
+      return;
+    }
+
+    this.authorizedApps[id] = appInfo;
+    this.#authorizedAppsSubject.next(this.authorizedApps);
+  }
+
+  removeAuthorizedApp(id: AppId) {
+    delete this.authorizedApps[id];
+    this.#authorizedAppsSubject.next(this.authorizedApps);
+  }
+
   async getInjectedAccounts(anyType = false): Promise<InjectedAccount[]> {
     const accounts = await this.#keyring.getAccounts();
     return accounts
@@ -111,7 +126,11 @@ export default class WalletState {
   }
 
   ensureAppAuthorized(url: string): boolean {
-    return !!this.getAuthorizedApp(url);
+    const app = this.getAuthorizedApp(url);
+
+    assert(app.authorizedAccounts.length > 0, `The app at ${url} has not been authorized to access any accounts!`);
+
+    return true;
   }
 
   ensureAccountAuthorized(url: string, accountAddress: string): void {
@@ -178,8 +197,10 @@ export default class WalletState {
 
     const currentMessage = this.getCurrentRequestMessage('tab/signExtrinsic');
 
-    const { id, request, resolve } = currentMessage;
+    const { id, request, resolve, origin: fromUrl } = currentMessage;
     const payloadJSON = request.body as SignerPayloadJSON;
+
+    this.ensureAccountAuthorized(fromUrl, payloadJSON.address);
 
     const pair = this.#keyring.getSigningPair(payloadJSON.address);
     pair.unlock(password);
@@ -207,8 +228,10 @@ export default class WalletState {
 
     const currentMessage = this.getCurrentRequestMessage('tab/signRaw');
 
-    const { id, request, resolve } = currentMessage;
+    const { id, request, resolve, origin: fromUrl } = currentMessage;
     const payloadJSON = request.body as SignerPayloadRaw;
+
+    this.ensureAccountAuthorized(fromUrl, payloadJSON.address);
 
     const pair = this.#keyring.getSigningPair(payloadJSON.address);
     pair.unlock(password);

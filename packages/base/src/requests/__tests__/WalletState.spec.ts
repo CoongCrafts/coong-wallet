@@ -2,7 +2,7 @@ import { newWalletRequest } from '@coong/base';
 import { AccessStatus, WalletRequestMessage, WalletResponse } from '@coong/base/types';
 import { AccountInfo } from '@coong/keyring/types';
 import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import WalletState, { AppInfo, AUTHORIZED_ACCOUNTS_KEY } from '../WalletState';
 import { newWalletState, PASSWORD, setupAuthorizedApps } from './setup';
 
@@ -71,6 +71,42 @@ describe('removeAllAuthorizedApps', () => {
     setupAuthorizedApps(state);
     state.removeAllAuthorizedApps();
     expect(state.getAuthorizedApps()).toEqual([]);
+    expect(localStorage.getItem(AUTHORIZED_ACCOUNTS_KEY)).toEqual('{}');
+  });
+});
+
+describe('saveAuthorizedApp', () => {
+  it('should save app info', () => {
+    setupAuthorizedApps(state);
+
+    const appUrl = 'https://random-app.com';
+    const appInfo = state.getAuthorizedApp(appUrl);
+
+    appInfo.authorizedAccounts = [...appInfo.authorizedAccounts, 'Account 02', 'Account 03'];
+
+    state.saveAuthorizedApp(appInfo);
+
+    const newAppInfo = state.getAuthorizedApp(appUrl);
+
+    expect(newAppInfo.authorizedAccounts).toContain('Account 02');
+    expect(newAppInfo.authorizedAccounts).toContain('Account 03');
+
+    expect(localStorage.getItem(AUTHORIZED_ACCOUNTS_KEY)).toMatch(/"authorizedAccounts":\["Account 02","Account 03"\]/);
+  });
+});
+
+describe('removeAuthorizedApp', () => {
+  it('should remove an app', () => {
+    setupAuthorizedApps(state);
+
+    const appUrl = 'https://random-app.com';
+    expect(state.getAuthorizedApp(appUrl)).toBeTruthy();
+
+    state.removeAuthorizedApp(state.extractAppId(appUrl));
+
+    expect(() => state.getAuthorizedApp(appUrl)).toThrowError(
+      new StandardCoongError(`The app at ${appUrl} has not been authorized yet!`),
+    );
     expect(localStorage.getItem(AUTHORIZED_ACCOUNTS_KEY)).toEqual('{}');
   });
 });
@@ -235,6 +271,7 @@ describe('sign extrinsic', () => {
 
   beforeEach(async () => {
     account01 = await state.keyring.createNewAccount('Account 01', PASSWORD);
+    setupAuthorizedApps(state, [account01.address], window.location.origin);
   });
 
   const newSignExtrinsicRequest = (address: string) => {
@@ -301,6 +338,8 @@ describe('sign extrinsic', () => {
     });
 
     it('should throw error is keypair is not existed', async () => {
+      vi.spyOn(state, 'ensureAccountAuthorized').mockImplementation(() => true);
+
       await expect(handleSignExtrinsicApproval('0xNotExistedAddress', PASSWORD)).rejects.toThrowError(
         new CoongError(ErrorCode.KeypairNotFound),
       );

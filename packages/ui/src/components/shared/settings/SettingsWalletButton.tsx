@@ -6,6 +6,8 @@ import { Dialog, IconButton } from '@mui/material';
 import BackupSecretPhraseDialog from 'components/shared/settings/BackupSecretPhraseDialog';
 import ChangeWalletPasswordDialog from 'components/shared/settings/ChangeWalletPasswordDialog';
 import ManageDappAccessDialog from 'components/shared/settings/ManageDappAccessDialog';
+import DappAccessDetailsDialog from 'components/shared/settings/ManageDappAccessDialog/DappAccessDetailsDialog';
+import RemoveDappAccessDialog from 'components/shared/settings/ManageDappAccessDialog/RemoveDappAccessDialog';
 import SettingsWalletDialog from 'components/shared/settings/SettingsWalletDialog';
 import { settingsDialogActions } from 'redux/slices/settings-dialog';
 import { RootState } from 'redux/store';
@@ -24,7 +26,13 @@ const SettingsDialogContent: FC<SettingsDialogContent> = ({ onClose }) => {
     case SettingsDialogScreen.ChangeWalletPassword:
       return <ChangeWalletPasswordDialog onClose={onClose} />;
     case SettingsDialogScreen.ManageDappAccess:
-      return <ManageDappAccessDialog onClose={onClose} />;
+      return (
+        <>
+          <ManageDappAccessDialog onClose={onClose} />
+          <DappAccessDetailsDialog />
+          <RemoveDappAccessDialog />
+        </>
+      );
     default:
       return <SettingsWalletDialog onClose={onClose} />;
   }

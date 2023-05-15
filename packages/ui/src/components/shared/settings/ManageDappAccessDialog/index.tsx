@@ -59,7 +59,7 @@ export default function ManageDappAccessDialog({ onClose }: ManageDappAccessProp
           </Typography>
         </Breadcrumbs>
       </DialogTitle>
-      <DialogContent className='pb-6'>
+      <DialogContent>
         {authorizedApps.length > 0 && (
           <div className='mb-2'>
             <SearchBox className='w-full sm:w-auto' label='Search by name or URL' onChange={setQuery} size='xxs' />
