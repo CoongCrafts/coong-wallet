@@ -498,13 +498,13 @@ describe('exportAccount', () => {
 
   it('should verify password', async () => {
     const verifyingPasswordSpy = vi.spyOn(Keyring.prototype, 'verifyPassword');
-    await keyring.exportAccount(PASSWORD, testAccount.address);
+    await keyring.exportAccount(testAccount.address, PASSWORD);
 
     expect(verifyingPasswordSpy).toBeCalled();
   });
 
   it('should return an account backup', async () => {
-    const accountBackup = await keyring.exportAccount(PASSWORD, testAccount.address);
+    const accountBackup = await keyring.exportAccount(testAccount.address, PASSWORD);
 
     expect(accountBackup.address).toBeTypeOf('string');
     expect(accountBackup.encoded).toBeTypeOf('string');
