@@ -197,8 +197,10 @@ export default class WalletState {
 
     const currentMessage = this.getCurrentRequestMessage('tab/signExtrinsic');
 
-    const { id, request, resolve } = currentMessage;
+    const { id, request, resolve, origin: fromUrl } = currentMessage;
     const payloadJSON = request.body as SignerPayloadJSON;
+
+    this.ensureAccountAuthorized(fromUrl, payloadJSON.address);
 
     const pair = this.#keyring.getSigningPair(payloadJSON.address);
     pair.unlock(password);
@@ -226,8 +228,10 @@ export default class WalletState {
 
     const currentMessage = this.getCurrentRequestMessage('tab/signRaw');
 
-    const { id, request, resolve } = currentMessage;
+    const { id, request, resolve, origin: fromUrl } = currentMessage;
     const payloadJSON = request.body as SignerPayloadRaw;
+
+    this.ensureAccountAuthorized(fromUrl, payloadJSON.address);
 
     const pair = this.#keyring.getSigningPair(payloadJSON.address);
     pair.unlock(password);
