@@ -35,4 +35,12 @@ export default class TabInstance extends WalletInstance {
       this.ready = false;
     }
   }
+
+  destroy() {
+    super.destroy();
+
+    if (this.walletWindow) {
+      this.walletWindow.close();
+    }
+  }
 }
