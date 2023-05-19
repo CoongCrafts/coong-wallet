@@ -1,6 +1,17 @@
-import { MessageType, WalletRequestMessage } from '@coong/base/types';
+import { InjectedWindow } from '@polkadot/extension-inject/types';
+import { isWalletResponse, newMessageId, newWalletRequest } from '@coong/base';
+import {
+  MessageId,
+  MessageType,
+  RequestName,
+  WalletRequest,
+  WalletRequestMessage,
+  WalletResponse,
+  WalletResponseMessage,
+} from '@coong/base/types';
 import { assert, assertFalse, CoongError, ErrorCode } from '@coong/utils';
-import { injectWalletAPI, setupWalletMessageHandler } from './message';
+import { injectWalletAPI } from './injection';
+import { Handlers } from './types';
 import EmbedInstance from './wallet/EmbedInstance';
 import TabInstance from './wallet/TabInstance';
 
@@ -34,10 +45,12 @@ export default class CoongSdk {
   #embedInstance?: EmbedInstance;
   #walletUrl: string;
   #initialized: boolean;
+  #handlers: Handlers;
 
   private constructor() {
     this.#initialized = false;
     this.#walletUrl = DEFAULT_WALLET_URL;
+    this.#handlers = {};
   }
 
   static instance() {
@@ -65,7 +78,7 @@ export default class CoongSdk {
     this.#embedInstance = new EmbedInstance(this.#walletUrl);
     await this.#embedInstance!.initialize();
 
-    setupWalletMessageHandler(this.#walletUrl);
+    this.#subscribeWalletMessage();
 
     injectWalletAPI(this.#embedInstance);
 
@@ -75,7 +88,25 @@ export default class CoongSdk {
   }
 
   destroy() {
-    // TODO clean up
+    if (!this.#initialized) {
+      return;
+    }
+
+    this.#unsubscribeWalletMessage();
+
+    if (this.#embedInstance) {
+      const { walletInfo } = this.#embedInstance;
+
+      const injectedWindow = window as Window & InjectedWindow;
+      if (injectedWindow.injectedWeb3 && walletInfo?.name) {
+        delete injectedWindow.injectedWeb3[walletInfo.name];
+      }
+
+      this.#embedInstance.destroy();
+      this.#embedInstance = undefined;
+    }
+
+    this.#initialized = false;
   }
 
   async openWalletWindow(path = ''): Promise<Window> {
@@ -125,7 +156,84 @@ export default class CoongSdk {
     assert(this.#initialized, 'CoongSdk has not been initialized!');
   }
 
+  #walletMessageHandler(event: MessageEvent<WalletResponseMessage>) {
+    const { origin, data } = event;
+    if (origin !== this.walletUrl) {
+      return;
+    }
+
+    if (!isWalletResponse(data)) {
+      return;
+    }
+
+    const { id, error, response } = data;
+
+    const handler = this.#handlers[id];
+
+    if (!handler) {
+      console.error('Unknown response ', data);
+      return;
+    }
+
+    const { resolve, reject } = handler;
+
+    if (!handler.subscriber) {
+      delete this.#handlers[id];
+    }
+
+    // TODO handle subscriptions
+
+    if (error) {
+      reject(new Error(error));
+    } else {
+      resolve(response);
+    }
+  }
+
+  #subscribeWalletMessage() {
+    window.addEventListener('message', this.#walletMessageHandler.bind(this));
+  }
+
+  #unsubscribeWalletMessage() {
+    window.removeEventListener('message', this.#walletMessageHandler.bind(this));
+
+    Object.keys(this.#handlers).forEach((key) => {
+      delete this.#handlers[key as MessageId];
+    });
+  }
+
+  sendMessage<TRequestName extends RequestName>(
+    request: WalletRequest<TRequestName>,
+  ): Promise<WalletResponse<TRequestName>> {
+    return new Promise<WalletResponse<TRequestName>>((resolve, reject) => {
+      assert(this.initialized, 'CoongSdk has not been initialized!');
+
+      const id = newMessageId();
+      this.#handlers[id] = {
+        resolve,
+        reject,
+      };
+
+      const messageBody = newWalletRequest(request, id);
+
+      this.sendMessageToWallet(messageBody).catch((error) => {
+        console.error(error);
+        delete this.#handlers[id];
+
+        reject();
+      });
+    });
+  }
+
   get initialized() {
     return this.#initialized;
+  }
+
+  isInitializedWithUrl(walletUrl: string) {
+    return this.initialized && walletUrl === this.walletUrl;
+  }
+
+  get walletUrl() {
+    return this.#walletUrl;
   }
 }
