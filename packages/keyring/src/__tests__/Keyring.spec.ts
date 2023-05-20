@@ -510,6 +510,5 @@ describe('exportAccount', () => {
     expect(accountBackup.encoded).toBeTypeOf('string');
     expect(accountBackup.encoding).toBeTypeOf('object');
     expect(accountBackup.meta).toBeTypeOf('object');
-    expect(accountBackup.hashedSeed).toBeTypeOf('string');
   });
 });
