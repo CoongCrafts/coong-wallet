@@ -14,6 +14,7 @@ export enum ErrorCode {
   AccountNameRequired = 'AccountNameRequired',
   AccountNameUsed = 'AccountNameUsed',
   InvalidMnemonic = 'InvalidMnemonic',
+  AccountExists = 'AccountExists',
 }
 
 export const ErrorCodes = Object.values(ErrorCode) as string[];

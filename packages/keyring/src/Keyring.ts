@@ -247,6 +247,18 @@ export default class Keyring {
     }
   }
 
+  async existsAccount(address: string) {
+    try {
+      return !!(await this.getAccount(address));
+    } catch (e: any) {
+      if (isCoongError(e) && e.code === ErrorCode.AccountNotFound) {
+        return false;
+      }
+
+      throw e;
+    }
+  }
+
   async getAccountByName(name: string) {
     return this.#getAccount((one) => one.name === name);
   }
@@ -285,28 +297,42 @@ export default class Keyring {
     return { ...accountBackup, meta: { ...accountBackup.meta, originalHash } };
   }
 
-  isExternal(hashSeed: string) {
-    return !(hashSeed === this.#getHashedMnemonic());
+  isExternal(originalHash: string) {
+    return !(originalHash === this.#getOriginalHash());
   }
 
-  async importAccount(password: string, backup: AccountBackup) {
-    const { address, hashedSeed } = backup;
+  async importAccount(backup: AccountBackup, password: string, name?: string) {
+    await this.verifyPassword(password);
 
-    const isExternal = !hashedSeed || this.isExternal(hashedSeed);
+    const { address, meta } = backup;
+
+    if (await this.existsAccount(address)) {
+      throw new CoongError(ErrorCode.AccountExists);
+    }
+
+    if (!name && !meta.name) {
+      throw new CoongError(ErrorCode.AccountNameRequired);
+    } else if (name && (await this.existsName(name))) {
+      throw new CoongError(ErrorCode.AccountNameUsed);
+    } else if (!name && meta.name && (await this.existsName(meta.name as string))) {
+      throw new CoongError(ErrorCode.AccountNameUsed);
+    }
+
+    const { originalHash } = meta as AccountInfo;
+
+    const isExternal = !originalHash || this.isExternal(originalHash);
 
     if (isExternal) {
-      if (backup.meta.hasOwnProperty('derivationPath')) {
-        delete backup.meta.derivationPath;
-      }
+      Object.assign(meta, { isExternal });
+    } else if (originalHash) {
+      // if is internal account just delete the original hash from account meta
+      delete meta.originalHash;
     }
 
-    if (backup.meta.hasOwnProperty('hashSeed')) {
-      delete backup.meta.hashSeed;
-    }
+    Object.assign(meta, { name: name || meta.name });
+    Object.assign(meta, { whenCreated: Date.now() });
 
-    Object.assign(backup.meta, { isExternal });
-
-    this.#keyring.restoreAccount(backup, password);
+    this.#keyring.restoreAccount({ ...backup, meta }, password);
 
     return await this.getAccount(address);
   }
