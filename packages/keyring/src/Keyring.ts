@@ -8,7 +8,7 @@ import CryptoJS from 'crypto-js';
 import { AccountBackup, AccountInfo, WalletBackup, WalletQrBackup } from './types';
 
 export const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
-export const HASHED_MNEMONIC = 'HASHED_MNEMONIC';
+export const ORIGINAL_HASH = 'ORIGINAL_HASH';
 export const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
 export const DEFAULT_KEY_TYPE = 'sr25519';
 
@@ -44,7 +44,7 @@ export default class Keyring {
 
   async initialize(mnemonic: string, password: string) {
     const encryptedSeed = CryptoJS.AES.encrypt(mnemonic, password).toString();
-    localStorage.setItem(HASHED_MNEMONIC, sha256AsHex(mnemonic));
+    localStorage.setItem(ORIGINAL_HASH, sha256AsHex(mnemonic));
     localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedSeed);
   }
 
@@ -73,7 +73,7 @@ export default class Keyring {
       this.#keyring.forgetAccount(account.address);
     });
     localStorage.removeItem(ENCRYPTED_MNEMONIC);
-    localStorage.removeItem(HASHED_MNEMONIC);
+    localStorage.removeItem(ORIGINAL_HASH);
     localStorage.removeItem(ACCOUNTS_INDEX);
   }
 
@@ -109,8 +109,8 @@ export default class Keyring {
     await this.#decryptMnemonic(password);
   }
 
-  #getHashedMnemonic(): string | null {
-    return localStorage.getItem(HASHED_MNEMONIC);
+  #getOriginalHash(): string | null {
+    return localStorage.getItem(ORIGINAL_HASH);
   }
 
   #getEncryptedMnemonic(): string | null {
@@ -269,15 +269,20 @@ export default class Keyring {
     const account = this.getSigningPair(address);
     const accountBackup = this.#keyring.backupAccount(account, password);
 
-    let hashedSeed = this.#getHashedMnemonic() ?? '';
-
-    if (!hashedSeed) {
-      const rawMnemonic = await this.#decryptMnemonic(password);
-      hashedSeed = sha256AsHex(rawMnemonic);
-      localStorage.setItem(HASHED_MNEMONIC, hashedSeed);
+    if (accountBackup.meta.isExternal === true) {
+      delete accountBackup.meta.isExternal;
+      return accountBackup;
     }
 
-    return { ...accountBackup, hashedSeed };
+    let originalHash = this.#getOriginalHash() ?? '';
+
+    if (!originalHash) {
+      const rawMnemonic = await this.#decryptMnemonic(password);
+      originalHash = sha256AsHex(rawMnemonic);
+      localStorage.setItem(ORIGINAL_HASH, originalHash);
+    }
+
+    return { ...accountBackup, meta: { ...accountBackup.meta, originalHash } };
   }
 
   isExternal(hashSeed: string) {

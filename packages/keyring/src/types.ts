@@ -15,6 +15,7 @@ export interface AccountInfo extends KeyringPair$Meta {
   type?: KeypairType;
   whenCreated?: number;
   derivationPath?: DerivationPath;
+  originalHash?: string;
 }
 
 export type CompactAccountInfo = [DerivationPath, AccountName];
@@ -28,9 +29,7 @@ export interface WalletBackup$Json {
 
 export interface WalletBackup extends KeyringPairs$Json, WalletBackup$Json {}
 
-export interface AccountBackup extends KeyringPair$Json {
-  hashedSeed?: string;
-}
+export interface AccountBackup extends KeyringPair$Json {}
 
 export interface AccountQrBackup extends AccountBackup, QrBackup {}
 
