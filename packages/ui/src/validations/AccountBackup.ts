@@ -4,5 +4,5 @@ export const AccountBackupScheme = object({
   encoded: string().required(),
   address: string().required(),
   encoding: object().required(),
-  meta: object(),
+  meta: object().required(),
 });

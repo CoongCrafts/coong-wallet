@@ -7,6 +7,25 @@ import ShowAddressQrCodeButton from 'components/pages/Accounts/ShowAddressQrCode
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 import { AccountInfoExt, Props } from 'types';
 
+interface ImportedLabelProps extends Props {
+  isExternal: boolean | undefined;
+}
+
+const ImportedLabel: FC<ImportedLabelProps> = ({ isExternal, className = '' }) => {
+  return isExternal ? (
+    <Chip
+      label='IMPORTED'
+      size='small'
+      className={`${className} font-bold text-[10px] border border-black/10 dark:border-white/15`}
+      sx={{
+        border: '1px solid',
+      }}
+    />
+  ) : (
+    <></>
+  );
+};
+
 interface AccountCardProps extends Props {
   account: AccountInfoExt;
   showAccountControls?: boolean;
@@ -22,15 +41,16 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account, showAccoun
       <div className='flex items-center gap-2'>
         <div className='account-card--icon'>
           <CopyAddressTooltip address={networkAddress} name={name}>
-            <Identicon value={networkAddress} size={36} theme='polkadot' />
+            <Identicon value={networkAddress} size={32} theme='polkadot' />
           </CopyAddressTooltip>
         </div>
         <div>
           <div className='account-card__name'>
             {name}
-            {isExternal && <Chip label='Imported Account' className='text-xs p-0.5' size='small' />}
+            <ImportedLabel isExternal={isExternal} className='hidden sm:inline-block pt-1' />
           </div>
           <AccountAddress address={networkAddress} name={name} className='text-xs' />
+          <ImportedLabel isExternal={isExternal} className='sm:hidden my-2' />
         </div>
       </div>
       {showAccountControls && (
@@ -59,8 +79,7 @@ export default styled(AccountCard)`
     font-weight: 600;
     font-size: 1.1rem;
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    justify-content: space-between;
   }
 
   .account-card__address {

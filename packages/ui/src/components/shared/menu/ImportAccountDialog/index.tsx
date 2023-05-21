@@ -52,6 +52,7 @@ function ImportAccountDialog(): JSX.Element {
     try {
       const decoded = isBase64(data) ? u8aToString(base64Decode(data)) : data;
       const parsedBackup = JSON.parse(decoded) as AccountBackup;
+      Object.assign(parsedBackup, { meta: parsedBackup.meta || {} });
       await AccountBackupScheme.validate(parsedBackup);
 
       setBackup(parsedBackup);

@@ -314,7 +314,7 @@ export default class Keyring {
       throw new CoongError(ErrorCode.AccountNameRequired);
     } else if (name && (await this.existsName(name))) {
       throw new CoongError(ErrorCode.AccountNameUsed);
-    } else if (!name && meta.name && (await this.existsName(meta.name as string))) {
+    } else if (!name && (await this.existsName(meta.name as string))) {
       throw new CoongError(ErrorCode.AccountNameUsed);
     }
 
