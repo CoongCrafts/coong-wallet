@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-toastify';
-import { Props } from '../../../types';
-import { isTouchDevice } from '../../../utils/device';
+import { Props } from 'types';
+import { isTouchDevice } from 'utils/device';
 
 interface GettingJsonFileProps extends Props {
   onResult: (data: string) => void;
@@ -10,7 +10,7 @@ interface GettingJsonFileProps extends Props {
 
 const touchDevice = isTouchDevice();
 
-function GettingJsonFile({ onResult }: GettingJsonFileProps): JSX.Element {
+function JsonFileReader({ onResult }: GettingJsonFileProps): JSX.Element {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader();
@@ -19,7 +19,7 @@ function GettingJsonFile({ onResult }: GettingJsonFileProps): JSX.Element {
       reader.onabort = () => toast.error('File reading was failed!');
       reader.onload = () => {
         const data = reader.result;
-        data && onResult(data);
+        data && onResult(data as string);
       };
 
       reader.readAsText(file);
@@ -46,4 +46,4 @@ function GettingJsonFile({ onResult }: GettingJsonFileProps): JSX.Element {
     </div>
   );
 }
-export default GettingJsonFile;
+export default JsonFileReader;

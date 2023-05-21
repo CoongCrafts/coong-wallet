@@ -9,9 +9,10 @@ import { Props } from 'types';
 interface QrCodeReaderProps extends Props {
   onResult: (data: string) => void;
   showBackButton?: boolean;
+  showTitle?: boolean;
 }
 
-function QrCodeReader({ onResult, showBackButton }: QrCodeReaderProps) {
+function QrCodeReader({ onResult, showBackButton, showTitle }: QrCodeReaderProps) {
   const { t } = useTranslation();
   const cameraPermission = usePermission({ name: 'camera' });
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ function QrCodeReader({ onResult, showBackButton }: QrCodeReaderProps) {
 
   return (
     <>
-      {/*<h3>{t<string>('Scan QR Code')}</h3>*/}
+      {showTitle && <h3>{t<string>('Scan QR Code')}</h3>}
       <p className='mt-4'>
         {t<string>(
           'Export your Coong Wallet on a different device and scan the QR code on the screen to transfer your wallet.',
