@@ -575,6 +575,6 @@ describe('importAccount', () => {
 
     await keyring.importAccount(backup, PASSWORD);
 
-    expect(await keyring.existsAccount('test-account')).toEqual(true);
+    expect(await keyring.existsAccount(address)).toEqual(true);
   });
 });
