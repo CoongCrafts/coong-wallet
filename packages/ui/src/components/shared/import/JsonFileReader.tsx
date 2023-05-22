@@ -1,22 +1,25 @@
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Props } from 'types';
 import { isTouchDevice } from 'utils/device';
 
-interface GettingJsonFileProps extends Props {
+const touchDevice = isTouchDevice();
+
+interface JsonFileReaderProps extends Props {
   onResult: (data: string) => void;
 }
 
-const touchDevice = isTouchDevice();
+function JsonFileReader({ onResult }: JsonFileReaderProps): JSX.Element {
+  const { t } = useTranslation();
 
-function JsonFileReader({ onResult }: GettingJsonFileProps): JSX.Element {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader();
 
-      reader.onerror = () => toast.error('File reading was aborted!');
-      reader.onabort = () => toast.error('File reading was failed!');
+      reader.onerror = () => toast.error(t<string>('File reading was failed!'));
+      reader.onabort = () => toast.error(t<string>('File reading was aborted!'));
       reader.onload = () => {
         const data = reader.result;
         data && onResult(data as string);
@@ -26,7 +29,7 @@ function JsonFileReader({ onResult }: GettingJsonFileProps): JSX.Element {
     });
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, multiple: false });
 
   return (
     <div
@@ -36,12 +39,12 @@ function JsonFileReader({ onResult }: GettingJsonFileProps): JSX.Element {
       <input {...getInputProps({ accept: 'application/json' })} />
       {!touchDevice ? (
         isDragActive ? (
-          <em>Drop the file here...</em>
+          <em>{t<string>('Drop the file here...')}</em>
         ) : (
-          <em>Click to select or drag and drop the file here</em>
+          <em>{t<string>('Click to select or drag and drop the file here')}</em>
         )
       ) : (
-        <em>Click to select file</em>
+        <em>{t<string>('Click to select file')}</em>
       )}
     </div>
   );

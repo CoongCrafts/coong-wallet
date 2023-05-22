@@ -6,6 +6,7 @@ import { AccountBackup } from '@coong/keyring/types';
 import { Alert, Button, CircularProgress, InputAdornment, TextField } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
 import EmptySpace from 'components/shared/misc/EmptySpace';
+import useHighlightNewAccount from 'hooks/accounts/useHighlightNewAccount';
 import useAccountNameValidation from 'hooks/useAccountNameValidation';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { AccountInfoExt, Props } from 'types';
@@ -14,12 +15,6 @@ export enum Conflict {
   AccountExisted = 'Account is already exists in your wallet. Importing account can not be implemented.',
   AccountNameExisted = 'Account name has already been taken. Please choose another name to continue importing.',
   AccountNameNotFound = 'Account name is required. Please choose one to continue importing.',
-}
-
-const UNKNOWN_NAME = '<unknown>';
-
-function isNeedToRename(conflict: Conflict | undefined) {
-  return conflict === Conflict.AccountNameNotFound || conflict === Conflict.AccountNameExisted;
 }
 
 interface ConflictAlertProps extends Props {
@@ -31,13 +26,27 @@ function ConflictAlert({ conflict }: ConflictAlertProps): JSX.Element {
 
   switch (conflict) {
     case Conflict.AccountExisted:
-      return <Alert severity='error'>{t<string>(conflict)}</Alert>;
+      return (
+        <Alert severity='error' className='mb-4'>
+          {t<string>(conflict)}
+        </Alert>
+      );
     case Conflict.AccountNameExisted:
     case Conflict.AccountNameNotFound:
-      return <Alert severity='info'>{t<string>(conflict)}</Alert>;
+      return (
+        <Alert severity='info' className='mb-4'>
+          {t<string>(conflict)}
+        </Alert>
+      );
     default:
       return <></>;
   }
+}
+
+const UNKNOWN_NAME = '<UNKNOWN>';
+
+function isNeedToRename(conflict: Conflict | undefined) {
+  return conflict === Conflict.AccountNameNotFound || conflict === Conflict.AccountNameExisted;
 }
 
 interface TransferAccountBackupProps extends Props {
@@ -55,9 +64,10 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
   const [accountName, setAccountName] = useState<string>('');
   const { validation, loading } = useAccountNameValidation(accountName);
   const [password, setPassword] = useState<string>('');
+  const { setNewAccount } = useHighlightNewAccount();
 
   const account: AccountInfoExt = {
-    name: (meta.name as string) || UNKNOWN_NAME,
+    name: (meta.name as string) || t<string>(UNKNOWN_NAME),
     address: backup.address,
     networkAddress: backup.address,
     isExternal: !meta.originalHash || keyring.isExternal(meta.originalHash as string),
@@ -78,9 +88,10 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
     setOnImporting(true);
     setTimeout(async () => {
       try {
-        await keyring.importAccount(backup, password, accountName);
+        const account = await keyring.importAccount(backup, password, accountName);
         onClose();
         toast.success(t<string>('Import account successfully'));
+        setNewAccount(account);
       } catch (e: any) {
         setOnImporting(false);
         toast.error(t<string>(e.message));
@@ -102,13 +113,12 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
             autoFocus
             error={!!validation}
             helperText={validation || <EmptySpace />}
-            className='mt-4'
             InputProps={{
               endAdornment: <InputAdornment position='end'>{loading && <CircularProgress size={20} />}</InputAdornment>,
             }}
           />
         )}
-        <p className='mt-2 mb-2'>Enter your password to continue</p>
+        <p className='mb-2'>{t<string>('Enter the password to import account')}</p>
         <TextField
           type='password'
           value={password}
@@ -125,7 +135,7 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
             type='submit'
             disabled={!password || !!validation || (!!conflict && !accountName) || onImporting}
             fullWidth>
-            {t<string>('Continue')}
+            {t<string>('Import Account')}
           </Button>
         </div>
       </form>

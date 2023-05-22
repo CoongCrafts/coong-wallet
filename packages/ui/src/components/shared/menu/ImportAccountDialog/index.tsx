@@ -58,7 +58,7 @@ function ImportAccountDialog(): JSX.Element {
       setBackup(parsedBackup);
     } catch (e: any) {
       toast.dismiss();
-      toast.error(`Unknown/Invalid ${method}`);
+      toast.error(t<string>(`Unknown/Invalid {{object}}`, { object: method }));
     }
   };
 

@@ -1,5 +1,6 @@
 import { Identicon } from '@polkadot/react-identicon';
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Chip, styled } from '@mui/material';
 import AccountAddress from 'components/pages/Accounts/AccountAddress';
 import AccountControls from 'components/pages/Accounts/AccountControls';
@@ -12,9 +13,11 @@ interface ImportedLabelProps extends Props {
 }
 
 const ImportedLabel: FC<ImportedLabelProps> = ({ isExternal, className = '' }) => {
+  const { t } = useTranslation();
+
   return isExternal ? (
     <Chip
-      label='IMPORTED'
+      label={t<string>('IMPORTED')}
       size='small'
       className={`${className} font-bold text-[10px] border border-black/10 dark:border-white/15`}
       sx={{
