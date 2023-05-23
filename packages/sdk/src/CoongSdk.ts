@@ -1,18 +1,19 @@
-import { InjectedWindow } from '@polkadot/extension-inject/types';
+import { injectExtension } from '@polkadot/extension-inject';
 import { isWalletResponse, newMessageId, newWalletRequest } from '@coong/base';
 import {
   MessageId,
   MessageType,
   RequestName,
+  WalletInfo,
   WalletRequest,
   WalletRequestMessage,
   WalletResponse,
   WalletResponseMessage,
 } from '@coong/base/types';
 import { assert, assertFalse, CoongError, ErrorCode } from '@coong/utils';
-import { injectWalletAPI } from './injection';
-import { Handlers } from './types';
-import EmbedInstance from './wallet/EmbedInstance';
+import ConnectedAccounts from './ConnectedAccounts';
+import SubstrateInjected from './injection/Injected';
+import { CoongSdkOptions, Handlers, InjectedWindow, UpdatableInjected } from './types';
 import TabInstance from './wallet/TabInstance';
 
 const DEFAULT_WALLET_URL = 'https://app.coongwallet.io';
@@ -41,24 +42,19 @@ const DEFAULT_WALLET_URL = 'https://app.coongwallet.io';
  * ```
  */
 export default class CoongSdk {
-  static #instance: CoongSdk;
-  #embedInstance?: EmbedInstance;
   #walletUrl: string;
   #initialized: boolean;
   #handlers: Handlers;
+  #walletInfo?: WalletInfo;
+  #connectedAccounts?: ConnectedAccounts;
 
-  private constructor() {
+  constructor(options: CoongSdkOptions) {
     this.#initialized = false;
-    this.#walletUrl = DEFAULT_WALLET_URL;
     this.#handlers = {};
-  }
 
-  static instance() {
-    if (!this.#instance) {
-      this.#instance = new CoongSdk();
-    }
-
-    return this.#instance;
+    // TODO validate url format
+    const walletUrl = options?.walletUrl || DEFAULT_WALLET_URL;
+    this.#walletUrl = this.trimTrailingSlash(walletUrl);
   }
 
   /**
@@ -66,26 +62,26 @@ export default class CoongSdk {
    *
    * @param walletUrl customize wallet url, by default the SDK will connect to the official url defined at `DEFAULT_WALLET_URL`
    */
-  async initialize(walletUrl?: string) {
+  async initialize() {
     assert(typeof window !== 'undefined', 'Coong SDK only works in browser environment!');
     assertFalse(this.#initialized, 'Coong Sdk is already initialized!');
 
-    // TODO validate url format
-    if (walletUrl) {
-      this.#walletUrl = walletUrl;
-    }
+    this.#connectedAccounts = new ConnectedAccounts(this.#walletUrl);
 
-    this.#embedInstance = new EmbedInstance(this.#walletUrl);
-    await this.#embedInstance!.initialize();
+    await this.#loadWalletInfo();
 
     this.#subscribeWalletMessage();
 
-    injectWalletAPI(this.#embedInstance);
+    this.#injectWalletAPI();
 
     this.#initialized = true;
 
     console.log('Coong SDK initialized!');
   }
+
+  trimTrailingSlash = (input: string): string => {
+    return input.endsWith('/') ? this.trimTrailingSlash(input.slice(0, -1)) : input;
+  };
 
   destroy() {
     if (!this.#initialized) {
@@ -94,29 +90,16 @@ export default class CoongSdk {
 
     this.#unsubscribeWalletMessage();
 
-    if (this.#embedInstance) {
-      const { walletInfo } = this.#embedInstance;
-
-      const injectedWindow = window as Window & InjectedWindow;
-      if (injectedWindow.injectedWeb3 && walletInfo?.name) {
-        delete injectedWindow.injectedWeb3[walletInfo.name];
-      }
-
-      this.#embedInstance.destroy();
-      this.#embedInstance = undefined;
+    const injectedWindow = window as Window & InjectedWindow;
+    if (injectedWindow.injectedWeb3 && this.#walletInfo?.name) {
+      delete injectedWindow.injectedWeb3[this.#walletInfo?.name];
     }
 
     this.#initialized = false;
   }
 
-  async openWalletWindow(path = ''): Promise<Window> {
+  async openWalletWindow(path = ''): Promise<void> {
     return new TabInstance(this.#walletUrl).openWalletWindow(path);
-  }
-
-  async sendMessageToEmbedInstance(message: WalletRequestMessage) {
-    this.ensureSdkInitialized();
-
-    this.#embedInstance!.walletWindow!.postMessage(message, this.#walletUrl || '*');
   }
 
   async sendMessageToTabInstance(message: WalletRequestMessage) {
@@ -142,8 +125,6 @@ export default class CoongSdk {
 
     if (name.startsWith('tab/')) {
       await this.sendMessageToTabInstance(message);
-    } else if (name.startsWith('embed/')) {
-      await this.sendMessageToEmbedInstance(message);
     } else {
       throw new CoongError(ErrorCode.InvalidMessageFormat);
     }
@@ -190,6 +171,14 @@ export default class CoongSdk {
     }
   }
 
+  async #loadWalletInfo() {
+    const response = await fetch(`${this.walletUrl}/wallet-info.json`);
+    this.#walletInfo = await response.json();
+
+    assert(this.#walletInfo?.name, 'Wallet information is missing');
+    assert(this.#walletInfo?.version, 'Wallet information is missing');
+  }
+
   #subscribeWalletMessage() {
     window.addEventListener('message', this.#walletMessageHandler.bind(this));
   }
@@ -206,7 +195,7 @@ export default class CoongSdk {
     request: WalletRequest<TRequestName>,
   ): Promise<WalletResponse<TRequestName>> {
     return new Promise<WalletResponse<TRequestName>>((resolve, reject) => {
-      assert(this.initialized, 'CoongSdk has not been initialized!');
+      this.ensureSdkInitialized();
 
       const id = newMessageId();
       this.#handlers[id] = {
@@ -235,5 +224,43 @@ export default class CoongSdk {
 
   get walletUrl() {
     return this.#walletUrl;
+  }
+
+  get connectedAccounts(): ConnectedAccounts {
+    this.ensureSdkInitialized();
+
+    return this.#connectedAccounts!;
+  }
+
+  async enable(appName: string): Promise<UpdatableInjected> {
+    const sendMessage = this.sendMessage.bind(this);
+
+    if (!this.connectedAccounts.connected) {
+      const { authorizedAccounts } = await sendMessage({ name: 'tab/requestAccess', body: { appName } });
+
+      assert(authorizedAccounts.length > 0, 'No authorized accounts found!');
+
+      this.connectedAccounts.save(authorizedAccounts);
+    }
+
+    return new SubstrateInjected(sendMessage, this);
+  }
+
+  #injectWalletAPI() {
+    const { name, version } = this.#walletInfo!;
+
+    const enable = this.enable.bind(this);
+
+    injectExtension(enable, {
+      name,
+      version,
+    });
+
+    const injectedWindow = window as Window & InjectedWindow;
+    if (injectedWindow.injectedWeb3 && injectedWindow.injectedWeb3[name]) {
+      injectedWindow.injectedWeb3[name].disable = () => {
+        this.connectedAccounts.clear();
+      };
+    }
   }
 }
