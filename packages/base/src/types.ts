@@ -28,12 +28,13 @@ export interface ResponseSigning {
 
 export interface ResponseAppRequestAccess {
   result: AccessStatus;
-  authorizedAccounts: string[];
+  authorizedAccounts: InjectedAccount[];
 }
 
 // RequestName: [RequestBody, ResponseBody]
 export interface RequestSignatures {
   'tab/requestAccess': [RequestAppRequestAccess, ResponseAppRequestAccess];
+  'tab/updateAccess': [undefined, ResponseAppRequestAccess];
   'tab/signRaw': [SignerPayloadRaw, ResponseSigning];
   'tab/signExtrinsic': [SignerPayloadJSON, ResponseSigning];
 
@@ -45,7 +46,7 @@ export type RequestName = keyof RequestSignatures;
 
 export interface WalletRequest<TRequestName extends RequestName = RequestName> {
   name: TRequestName;
-  body: RequestSignatures[TRequestName][0];
+  body?: RequestSignatures[TRequestName][0];
 }
 
 export type WalletResponse<TRequestName extends RequestName = RequestName> = RequestSignatures[TRequestName][1];

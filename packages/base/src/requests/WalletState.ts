@@ -24,6 +24,7 @@ export interface AppInfo {
   url: string;
   authorizedAccounts: string[];
   createdAt: number;
+  updatedAt?: number;
 }
 export type AuthorizedApps = Record<AppId, AppInfo>;
 
@@ -111,6 +112,13 @@ export default class WalletState {
       .map(({ address, genesisHash, name, type }) => ({ address, genesisHash, name, type }));
   }
 
+  async getAuthorizedInjectedAccounts(appUrl: string): Promise<InjectedAccount[]> {
+    const { authorizedAccounts: authorizedAddresses } = this.getAuthorizedApp(appUrl);
+    const accounts = await this.getInjectedAccounts();
+
+    return accounts.filter((account) => authorizedAddresses.includes(account.address));
+  }
+
   extractAppId(url: string) {
     assert(url && URL_PROTOCOLS.some((protocol) => url.startsWith(protocol)), `Invalid url: ${url}`);
 
@@ -137,6 +145,7 @@ export default class WalletState {
     const app = this.getAuthorizedApp(url);
     const substrateAddress = encodeAddress(accountAddress, defaultNetwork.prefix);
 
+    // TODO improve message clarity here
     assert(
       app.authorizedAccounts.includes(substrateAddress),
       `The app at ${url} is not authorized to access account with address ${accountAddress}!`,
@@ -156,18 +165,13 @@ export default class WalletState {
     return currentRequestMessage;
   };
 
-  approveRequestAccess(authorizedAccounts: string[]) {
+  async approveRequestAccess(authorizedAccounts: string[]) {
     const { origin: url, request, resolve } = this.getCurrentRequestMessage('tab/requestAccess');
 
     const requestBody = request.body as RequestAppRequestAccess;
 
     const appId = this.extractAppId(url);
     const authorizedApps = this.authorizedApps;
-    const existingApp = authorizedApps[appId];
-    if (existingApp) {
-      const newAccounts = authorizedAccounts.filter((one) => !existingApp.authorizedAccounts.includes(one));
-      authorizedAccounts = newAccounts.concat(existingApp.authorizedAccounts);
-    }
 
     assert(authorizedAccounts && authorizedAccounts.length, 'Please choose at least one account to connect');
 
@@ -183,12 +187,39 @@ export default class WalletState {
 
     resolve({
       result: AccessStatus.APPROVED,
-      authorizedAccounts,
+      authorizedAccounts: await this.getAuthorizedInjectedAccounts(url),
     });
   }
 
   rejectRequestAccess = () => {
     const { reject } = this.getCurrentRequestMessage('tab/requestAccess');
+    reject(new StandardCoongError(AccessStatus.DENIED));
+  };
+
+  async approveUpdateAccess(authorizedAccounts: string[]) {
+    const { origin: url, resolve } = this.getCurrentRequestMessage('tab/updateAccess');
+
+    const appInfo = this.getAuthorizedApp(url);
+
+    assert(authorizedAccounts && authorizedAccounts.length, 'Please choose at least one account to connect');
+
+    const appId = this.extractAppId(url);
+    this.authorizedApps[appId] = {
+      ...appInfo,
+      authorizedAccounts,
+      updatedAt: Date.now(),
+    };
+
+    this.#authorizedAppsSubject.next(this.authorizedApps);
+
+    resolve({
+      result: AccessStatus.APPROVED,
+      authorizedAccounts: await this.getAuthorizedInjectedAccounts(url),
+    });
+  }
+
+  rejectUpdateAccess = () => {
+    const { reject } = this.getCurrentRequestMessage('tab/updateAccess');
     reject(new StandardCoongError(AccessStatus.DENIED));
   };
 
