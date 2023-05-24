@@ -1,15 +1,18 @@
 import { InjectedAccount } from '@polkadot/extension-inject/types';
 import { assert } from '@coong/utils';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import CoongSdk from './CoongSdk';
 
-const CONNECTED_ACCOUNTS_KEY_PREFIX = 'COONGWALLET_CONNECTED_ACCOUNTS';
+const CONNECTED_ACCOUNTS_KEY = 'CONNECTED_ACCOUNTS';
 
 export default class ConnectedAccounts {
-  #walletUrl: string;
+  #sdk: CoongSdk;
   #accounts: BehaviorSubject<InjectedAccount[]>;
 
-  constructor(walletUrl: string) {
-    this.#walletUrl = walletUrl;
+  constructor(sdk: CoongSdk) {
+    assert(sdk, 'Coong SDK is required');
+    this.#sdk = sdk;
+
     this.#accounts = new BehaviorSubject<InjectedAccount[]>(this.#loadFromStorage());
 
     // save to storage on accounts change
@@ -57,7 +60,10 @@ export default class ConnectedAccounts {
   }
 
   get storageKey() {
-    return `${CONNECTED_ACCOUNTS_KEY_PREFIX}:${this.#walletUrl}`;
+    const walletId = this.#sdk.walletInfo?.name;
+    const walletUrl = this.#sdk.walletUrl.replace(/https?:\/\//, '');
+
+    return `${walletId}:${walletUrl}:${CONNECTED_ACCOUNTS_KEY}`;
   }
 
   #loadFromStorage() {

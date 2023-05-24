@@ -66,13 +66,13 @@ export default class CoongSdk {
     assert(typeof window !== 'undefined', 'Coong SDK only works in browser environment!');
     assertFalse(this.#initialized, 'Coong Sdk is already initialized!');
 
-    this.#connectedAccounts = new ConnectedAccounts(this.#walletUrl);
-
     await this.#loadWalletInfo();
 
     this.#subscribeWalletMessage();
 
     this.#injectWalletAPI();
+
+    this.#connectedAccounts = new ConnectedAccounts(this);
 
     this.#initialized = true;
 
@@ -224,6 +224,10 @@ export default class CoongSdk {
 
   get walletUrl() {
     return this.#walletUrl;
+  }
+
+  get walletInfo() {
+    return this.#walletInfo;
   }
 
   get connectedAccounts(): ConnectedAccounts {
