@@ -1,6 +1,6 @@
 {
   "name": "@coong/keyring",
-  "version": "0.0.20",
+  "version": "0.0.21-alpha.0",
   "description": "Keyring for Coong wallet",
   "author": "Thang X. Vu <thang@coongwallet.io>",
   "homepage": "https://github.com/CoongCrafts/coong-wallet/tree/main/packages/keyring#readme",
@@ -16,7 +16,7 @@
   },
   "main": "src/index.ts",
   "dependencies": {
-    "@coong/utils": "^0.0.20",
+    "@coong/utils": "^0.0.21-alpha.0",
     "@polkadot/ui-keyring": "^2.11.2",
     "crypto-js": "^4.1.1"
   },
