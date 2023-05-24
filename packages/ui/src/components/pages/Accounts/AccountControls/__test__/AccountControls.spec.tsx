@@ -55,17 +55,6 @@ describe('AccountControls', () => {
       expect(await screen.findByRole('button', { name: /Rename/ })).toBeDisabled();
     });
 
-    it('should disable `Rename` button and show error when `AccountNameField` more than 16 characters or empty', async () => {
-      const accountNameField = await screen.findByLabelText(/Account name/);
-
-      await user.clear(accountNameField);
-      expect(await screen.findByRole('button', { name: /Rename/ })).toBeDisabled();
-
-      await user.type(accountNameField, 'Account-name-more-than-16-chars');
-      expect(await screen.findByRole('button', { name: /Rename/ })).toBeDisabled();
-      expect(await screen.findByText(/Account name should not exceed 16 characters/)).toBeInTheDocument();
-    });
-
     it('should close `RenameAccountDialog` when clicking on `Cancel` button', async () => {
       const cancelButton = await screen.findByRole('button', { name: /Cancel/ });
       await user.click(cancelButton);
@@ -76,17 +65,22 @@ describe('AccountControls', () => {
       });
     });
 
-    it('should show error if account name already exists', async () => {
-      await keyring.createNewAccount('test-account-2', PASSWORD);
-
+    it('should show error if account name invalid', async () => {
       const accountNameField = await screen.findByLabelText(/Account name/);
-      await user.clear(accountNameField);
 
+      await user.clear(accountNameField);
+      expect(await screen.findByRole('button', { name: /Rename/ })).toBeDisabled();
+
+      await user.type(accountNameField, 'Account-name-more-than-16-chars');
+      expect(await screen.findByText(/Account name should not exceed 16 characters/)).toBeInTheDocument();
+      expect(await screen.findByRole('button', { name: /Rename/ })).toBeDisabled();
+
+      await keyring.createNewAccount('test-account-2', PASSWORD);
+      await user.clear(accountNameField);
       await user.type(accountNameField, 'test-account-2');
 
-      const renameButton = await screen.findByRole('button', { name: /Rename/ });
-      await user.click(renameButton);
       expect(await screen.findByText(/Account name is already picked/)).toBeInTheDocument();
+      expect(await screen.findByRole('button', { name: /Rename/ })).toBeDisabled();
     });
   });
   describe('ShowAddressQrCodeDialog', () => {

@@ -2,9 +2,11 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useEffectOnce } from 'react-use';
-import { Button, Dialog, DialogContent, DialogContentText, TextField } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogContentText } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
+import LoadingTextField from 'components/shared/LoadingTextField';
 import EmptySpace from 'components/shared/misc/EmptySpace';
+import useAccountNameValidation from 'hooks/useAccountNameValidation';
 import useDialog from 'hooks/useDialog';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { AccountInfoExt } from 'types';
@@ -16,8 +18,7 @@ export default function RenameAccountDialog(): JSX.Element {
   const { open, doOpen, doClose } = useDialog();
   const [name, setName] = useState<string>('');
   const [account, setAccount] = useState<AccountInfoExt>();
-
-  const isInvalidName = name.length > 16;
+  const { validation, loading } = useAccountNameValidation(name);
 
   const onOpen = (account: AccountInfoExt) => {
     setAccount(account);
@@ -53,26 +54,29 @@ export default function RenameAccountDialog(): JSX.Element {
 
   if (!account) return <></>;
 
+  const hasChanged = name !== account.name;
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle onClose={onClose}>{t<string>('Rename account')}</DialogTitle>
       <DialogContent>
         <DialogContentText className='mb-4'>{t<string>('Choose a new name for your account')}</DialogContentText>
         <form onSubmit={doRename} noValidate>
-          <TextField
+          <LoadingTextField
             value={name}
             onChange={handleChange}
             label={t<string>('Account name')}
+            loading={loading}
             autoFocus
             fullWidth
-            error={isInvalidName}
-            helperText={isInvalidName ? t<string>('Account name should not exceed 16 characters') : <EmptySpace />}
+            error={!!validation && hasChanged}
+            helperText={(hasChanged && validation) || <EmptySpace />}
           />
           <div className='flex gap-4 mt-2'>
             <Button onClick={onClose} variant='text'>
               {t<string>('Cancel')}
             </Button>
-            <Button type='submit' disabled={!name || isInvalidName || name === account.name} fullWidth>
+            <Button type='submit' disabled={!name || !!validation || !hasChanged} fullWidth>
               {t<string>('Rename')}
             </Button>
           </div>
