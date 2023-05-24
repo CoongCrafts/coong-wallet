@@ -9,20 +9,18 @@ import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 import { AccountInfoExt, Props } from 'types';
 
 interface ImportedLabelProps extends Props {
-  isExternal: boolean | undefined;
+  show: boolean | undefined;
 }
 
-const ImportedLabel: FC<ImportedLabelProps> = ({ isExternal, className = '' }) => {
+const ImportedLabel: FC<ImportedLabelProps> = ({ show, className = '' }) => {
   const { t } = useTranslation();
 
-  return isExternal ? (
+  return show ? (
     <Chip
       label={t<string>('IMPORTED')}
       size='small'
-      className={`${className} font-bold text-[10px] border border-black/10 dark:border-white/15`}
-      sx={{
-        border: '1px solid',
-      }}
+      variant='outlined'
+      className={`${className} font-bold text-[10px] dark:bg-white/15 bg-black/10 border border-black/10 dark:border-white/15 h-[22px]`}
     />
   ) : (
     <></>
@@ -44,16 +42,16 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account, showAccoun
       <div className='flex items-center gap-2'>
         <div className='account-card--icon'>
           <CopyAddressTooltip address={networkAddress} name={name}>
-            <Identicon value={networkAddress} size={32} theme='polkadot' />
+            <Identicon value={networkAddress} size={36} theme='polkadot' />
           </CopyAddressTooltip>
         </div>
-        <div>
+        <div className='flex flex-col gap-1'>
           <div className='account-card__name'>
             {name}
-            <ImportedLabel isExternal={isExternal} className='hidden sm:inline-block pt-1' />
+            <ImportedLabel show={isExternal} className='hidden sm:inline-flex' />
           </div>
           <AccountAddress address={networkAddress} name={name} className='text-xs' />
-          <ImportedLabel isExternal={isExternal} className='sm:hidden my-2' />
+          <ImportedLabel show={isExternal} className='sm:hidden' />
         </div>
       </div>
       {showAccountControls && (
@@ -82,7 +80,8 @@ export default styled(AccountCard)`
     font-weight: 600;
     font-size: 1.1rem;
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   .account-card__address {
