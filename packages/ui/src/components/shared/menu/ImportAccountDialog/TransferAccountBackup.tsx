@@ -24,23 +24,13 @@ interface ConflictAlertProps extends Props {
 function ConflictAlert({ conflict }: ConflictAlertProps): JSX.Element {
   const { t } = useTranslation();
 
-  switch (conflict) {
-    case Conflict.AccountExisted:
-      return (
-        <Alert severity='error' className='mb-4'>
-          {t<string>(conflict)}
-        </Alert>
-      );
-    case Conflict.AccountNameExisted:
-    case Conflict.AccountNameNotFound:
-      return (
-        <Alert severity='info' className='mb-4'>
-          {t<string>(conflict)}
-        </Alert>
-      );
-    default:
-      return <></>;
-  }
+  if (!conflict) return <></>;
+
+  return (
+    <Alert severity={isNeedToRename(conflict) ? 'info' : 'error'} className='mt-4'>
+      {t<string>(conflict)}
+    </Alert>
+  );
 }
 
 const UNKNOWN_NAME = '<UNKNOWN>';
@@ -91,7 +81,7 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
         const account = await keyring.importAccount(backup, password, accountName);
         onClose();
         toast.success(t<string>('Import account successfully'));
-        setNewAccount(account);
+        // setNewAccount(account);
       } catch (e: any) {
         setOnImporting(false);
         toast.error(t<string>(e.message));
