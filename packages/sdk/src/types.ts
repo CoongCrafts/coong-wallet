@@ -9,7 +9,6 @@ import { MessageId, RequestName, WalletRequest, WalletResponse } from '@coong/ba
 export interface Handler {
   resolve: (data: any) => void;
   reject: (error: Error) => void;
-  subscriber?: (data: any) => void;
 }
 
 export type Handlers = Record<MessageId, Handler>;

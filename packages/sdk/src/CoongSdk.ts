@@ -158,11 +158,7 @@ export default class CoongSdk {
 
     const { resolve, reject } = handler;
 
-    if (!handler.subscriber) {
-      delete this.#handlers[id];
-    }
-
-    // TODO handle subscriptions
+    delete this.#handlers[id];
 
     if (error) {
       reject(new Error(error));
