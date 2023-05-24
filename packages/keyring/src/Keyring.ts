@@ -340,7 +340,7 @@ export default class Keyring {
   async exportWallet(password: string): Promise<WalletBackup> {
     await this.verifyPassword(password);
 
-    const addresses = (await this.getAccounts()).map((one) => one.address);
+    const addresses = (await this.getAccounts()).filter((one) => !one.isExternal).map((one) => one.address);
     const accountsBackup = await this.#keyring.backupAccounts(addresses, password);
 
     const walletBackup: WalletBackup = {
