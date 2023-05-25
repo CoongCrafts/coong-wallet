@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useEffectOnce } from 'react-use';
 import { CompactAccountInfo, DerivationPath, WalletBackup, WalletQrBackup } from '@coong/keyring/types';
 import { Dialog, DialogContent, DialogContentText } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
 import QrCode from 'components/shared/export/QrCode';
 import VerifyingPasswordForm from 'components/shared/forms/VerifyingPasswordForm';
 import useDialog from 'hooks/useDialog';
+import useRegisterEvent from 'hooks/useRegisterEvent';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { ExportObject } from 'types';
-import { EventName, EventRegistry } from 'utils/eventemitter';
+import { EventName } from 'utils/eventemitter';
 
 const toWalletQrBackup = (backup: WalletBackup): WalletQrBackup => {
   const { accounts, accountsIndex, encryptedMnemonic } = backup;
@@ -37,13 +37,7 @@ export default function ExportWalletDialog(): JSX.Element {
     }
   };
 
-  useEffectOnce(() => {
-    EventRegistry.on(EventName.OpenExportWalletDialog, doOpen);
-
-    return () => {
-      EventRegistry.off(EventName.OpenExportWalletDialog, doOpen);
-    };
-  });
+  useRegisterEvent(EventName.OpenExportWalletDialog, doOpen);
 
   const onClose = () => {
     doClose(() => setBackup(undefined));

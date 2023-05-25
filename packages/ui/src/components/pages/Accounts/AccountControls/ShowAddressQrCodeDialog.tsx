@@ -1,7 +1,6 @@
 import { QRCodeCanvas } from 'qrcode.react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useEffectOnce } from 'react-use';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { Dialog, DialogContent } from '@mui/material';
 import AccountAddress from 'components/pages/Accounts/AccountAddress';
@@ -9,8 +8,9 @@ import DialogTitle from 'components/shared/DialogTitle';
 import NetworksSelection from 'components/shared/NetworksSelection';
 import useDialog from 'hooks/useDialog';
 import useQrCodeSize from 'hooks/useQrCodeSize';
+import useRegisterEvent from 'hooks/useRegisterEvent';
 import { AccountInfoExt } from 'types';
-import { EventName, EventRegistry } from 'utils/eventemitter';
+import { EventName } from 'utils/eventemitter';
 
 export default function ShowAddressQrCodeDialog(): JSX.Element {
   const { t } = useTranslation();
@@ -29,12 +29,7 @@ export default function ShowAddressQrCodeDialog(): JSX.Element {
     doOpen();
   };
 
-  useEffectOnce(() => {
-    EventRegistry.on(EventName.OpenShowAddressQrCodeDialog, onOpen);
-    return () => {
-      EventRegistry.off(EventName.OpenShowAddressQrCodeDialog, onOpen);
-    };
-  });
+  useRegisterEvent(EventName.OpenShowAddressQrCodeDialog, onOpen);
 
   const onClose = () => {
     doClose(() => {

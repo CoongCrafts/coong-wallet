@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useEffectOnce } from 'react-use';
 import { AccountQrBackup } from '@coong/keyring/types';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Dialog, DialogContent, Tab } from '@mui/material';
@@ -10,16 +9,17 @@ import Json from 'components/shared/export/Json';
 import QrCode from 'components/shared/export/QrCode';
 import VerifyingPasswordForm from 'components/shared/forms/VerifyingPasswordForm';
 import useDialog from 'hooks/useDialog';
+import useRegisterEvent from 'hooks/useRegisterEvent';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { AccountInfoExt, ExportObject } from 'types';
-import { EventName, EventRegistry } from 'utils/eventemitter';
+import { EventName } from 'utils/eventemitter';
 
 enum ExportAccountMethod {
   QRCode = 'QR Code',
   JSON = 'JSON',
 }
 
-function ExportAccountDialog(): JSX.Element {
+export default function ExportAccountDialog(): JSX.Element {
   const { t } = useTranslation();
   const { keyring } = useWalletState();
   const { open, doOpen, doClose } = useDialog();
@@ -32,12 +32,7 @@ function ExportAccountDialog(): JSX.Element {
     doOpen();
   };
 
-  useEffectOnce(() => {
-    EventRegistry.on(EventName.OpenExportAccountDialog, onOpen);
-    return () => {
-      EventRegistry.off(EventName.OpenExportAccountDialog, onOpen);
-    };
-  });
+  useRegisterEvent(EventName.OpenExportAccountDialog, onOpen);
 
   const switchMethod = (_: any, method: ExportAccountMethod) => {
     setMethod(method);
@@ -73,10 +68,10 @@ function ExportAccountDialog(): JSX.Element {
               <Tab label={t<string>(ExportAccountMethod.JSON)} value={ExportAccountMethod.JSON} />
             </TabList>
             <TabPanel value={ExportAccountMethod.QRCode} className='p-0'>
-              <QrCode value={backup} object={ExportObject.Account} />
+              <QrCode value={backup} object={ExportObject.Account} detail={account.name} />
             </TabPanel>
             <TabPanel value={ExportAccountMethod.JSON} className='p-0'>
-              <Json value={backup} object={ExportObject.Account} />
+              <Json value={backup} object={ExportObject.Account} detail={account.name} />
             </TabPanel>
           </TabContext>
         ) : (
@@ -86,5 +81,3 @@ function ExportAccountDialog(): JSX.Element {
     </Dialog>
   );
 }
-
-export default ExportAccountDialog;

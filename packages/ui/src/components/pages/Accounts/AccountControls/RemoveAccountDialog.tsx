@@ -1,19 +1,26 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useEffectOnce } from 'react-use';
 import { Button, Dialog, DialogContent, DialogContentText } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
 import useDialog from 'hooks/useDialog';
+import useRegisterEvent from 'hooks/useRegisterEvent';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { AccountInfoExt } from 'types';
-import { EventName, EventRegistry } from 'utils/eventemitter';
+import { EventName } from 'utils/eventemitter';
 
 export default function RemoveAccountDialog(): JSX.Element {
   const { open, doOpen, doClose } = useDialog();
   const { t } = useTranslation();
   const { keyring } = useWalletState();
   const [account, setAccount] = useState<AccountInfoExt>();
+
+  const onOpen = (account: AccountInfoExt) => {
+    setAccount(account);
+    doOpen();
+  };
+
+  useRegisterEvent(EventName.OpenRemoveAccountDialog, onOpen);
 
   const onClose = () => {
     doClose(() => setAccount(undefined));
@@ -28,19 +35,6 @@ export default function RemoveAccountDialog(): JSX.Element {
       toast.error(t<string>(e.message));
     }
   };
-
-  const onOpen = (account: AccountInfoExt) => {
-    setAccount(account);
-    doOpen();
-  };
-
-  useEffectOnce(() => {
-    EventRegistry.on(EventName.OpenRemoveAccountDialog, onOpen);
-
-    return () => {
-      EventRegistry.off(EventName.OpenRemoveAccountDialog, onOpen);
-    };
-  });
 
   if (!account) return <></>;
 
