@@ -302,9 +302,9 @@ export default class Keyring {
   }
 
   async importAccount(backup: AccountBackup, password: string, name?: string) {
-    await this.verifyPassword(password);
+    const { address, meta: backupMeta } = backup;
 
-    const { address, meta } = backup;
+    const meta = { ...backupMeta };
 
     if (await this.existsAccount(address)) {
       throw new CoongError(ErrorCode.AccountExists);
@@ -332,9 +332,16 @@ export default class Keyring {
     Object.assign(meta, { name: name || meta.name });
     Object.assign(meta, { whenCreated: Date.now() });
 
-    this.#keyring.restoreAccount({ ...backup, meta }, password);
+    try {
+      this.#keyring.restoreAccount({ ...backup, meta }, password);
+      return await this.getAccount(address);
+    } catch (e: any) {
+      if (e.message === 'Unable to decode using the supplied passphrase') {
+        throw new CoongError(ErrorCode.PasswordIncorrect);
+      }
 
-    return await this.getAccount(address);
+      throw e;
+    }
   }
 
   async exportWallet(password: string): Promise<WalletBackup> {
