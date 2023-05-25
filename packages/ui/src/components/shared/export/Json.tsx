@@ -9,14 +9,18 @@ import { ExportObject, Props } from 'types';
 interface JsonProps extends Props {
   value: AccountBackup;
   object: ExportObject;
+  detail?: string;
 }
 
-export default function Json({ value, object }: JsonProps): JSX.Element {
+export default function Json({ value, object, detail = '' }: JsonProps): JSX.Element {
   const { t } = useTranslation();
 
   const downloadJsonFile = () => {
     const blob = new Blob([JSON.stringify(value, null, 2)], { type: 'text/plain;charset=utf-8' });
-    FileSaver.saveAs(blob, `coongwallet_${object.toLowerCase()}_backup_json_${Date.now()}.json`);
+    FileSaver.saveAs(
+      blob,
+      `coongwallet_${object.toLowerCase()}_backup_${detail?.toLowerCase().replace(/\s/g, '')}_${Date.now()}.json`,
+    );
   };
 
   return (

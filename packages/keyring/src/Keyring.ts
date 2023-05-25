@@ -269,12 +269,12 @@ export default class Keyring {
     const account = this.getSigningPair(address);
     const accountBackup = this.#keyring.backupAccount(account, password);
 
-    if (accountBackup.meta.isExternal === true) {
+    if (accountBackup.meta.isExternal) {
       delete accountBackup.meta.isExternal;
       return accountBackup;
     }
 
-    let originalHash = this.#getOriginalHash() ?? '';
+    let originalHash = this.#getOriginalHash();
 
     if (!originalHash) {
       const rawMnemonic = await this.#decryptMnemonic(password);
@@ -282,7 +282,9 @@ export default class Keyring {
       localStorage.setItem(ORIGINAL_HASH, originalHash);
     }
 
-    return { ...accountBackup, meta: { ...accountBackup.meta, originalHash } };
+    Object.assign(accountBackup.meta, { originalHash });
+
+    return accountBackup;
   }
 
   async exportWallet(password: string): Promise<WalletBackup> {
@@ -314,6 +316,8 @@ export default class Keyring {
       if (!validateMnemonic(rawMnemonic)) {
         throw new CoongError(ErrorCode.InvalidMnemonic);
       }
+
+      localStorage.setItem(ORIGINAL_HASH, sha256AsHex(rawMnemonic));
 
       for (let account of accounts) {
         const [path, name] = account;

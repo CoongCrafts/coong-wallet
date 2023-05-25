@@ -13,9 +13,10 @@ import { ExportObject, Props } from 'types';
 interface QrCodeProps extends Props {
   value: QrBackup;
   object: ExportObject;
+  detail?: string;
 }
 
-export default function QrCode({ value, object }: QrCodeProps) {
+export default function QrCode({ value, object, detail = '' }: QrCodeProps) {
   const { t } = useTranslation();
   const { containerRef, size } = useQrCodeSize();
   const qrCodeWrapperRef = useRef<HTMLDivElement>(null);
@@ -30,7 +31,10 @@ export default function QrCode({ value, object }: QrCodeProps) {
         return;
       }
 
-      FileSaver.saveAs(blob, `coongwallet_${object.toLowerCase()}_backup_qrcode_${Date.now()}`);
+      FileSaver.saveAs(
+        blob,
+        `coongwallet_${object.toLowerCase()}_backup_qrcode_${detail?.toLowerCase().replace(/\s/g, '')}_${Date.now()}`,
+      );
     }, 'image/png');
   };
 
