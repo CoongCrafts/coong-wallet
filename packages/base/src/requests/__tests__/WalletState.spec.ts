@@ -1,12 +1,14 @@
+import { encodeAddress } from '@polkadot/util-crypto';
 import { newWalletRequest } from '@coong/base';
 import { AccessStatus, WalletRequestMessage, WalletResponse } from '@coong/base/types';
 import { AccountInfo } from '@coong/keyring/types';
 import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import WalletState, { AppInfo, AUTHORIZED_ACCOUNTS_KEY } from '../WalletState';
-import { newWalletState, PASSWORD, setupAuthorizedApps } from './setup';
+import { newWalletState, PASSWORD, pick, RANDOM_APP_URL, setupAuthorizedApps } from './setup';
 
-let state: WalletState;
+const INJECTED_ACCOUNT_PROPS = ['address', 'genesisHash', 'name', 'type'];
+let state: WalletState, account01: AccountInfo;
 
 beforeEach(async () => {
   if (state) {
@@ -21,6 +23,8 @@ beforeEach(async () => {
   localStorage.clear();
 
   await initWalletState();
+
+  account01 = await state.keyring.createNewAccount('Account 01', PASSWORD);
 });
 
 const initWalletState = async () => {
@@ -42,14 +46,13 @@ describe('extractAppId', () => {
 
 describe('getAuthorizedApp', () => {
   it('should throw error if app has not been authorized', async () => {
-    const randomAppUrl = 'https://random-app.com';
-    expect(() => state.getAuthorizedApp(randomAppUrl)).toThrowError(
-      new StandardCoongError(`The app at ${randomAppUrl} has not been authorized yet!`),
+    expect(() => state.getAuthorizedApp(RANDOM_APP_URL)).toThrowError(
+      new StandardCoongError(`The app at ${RANDOM_APP_URL} has not been authorized yet!`),
     );
   });
 
   it('should return app info is the app is authorized', async () => {
-    const { randomAppInfo, randomAppUrl } = setupAuthorizedApps(state);
+    const { randomAppInfo, randomAppUrl } = setupAuthorizedApps(state, [account01.address]);
 
     expect(state.getAuthorizedApp(randomAppUrl)).toEqual(randomAppInfo);
   });
@@ -79,14 +82,13 @@ describe('saveAuthorizedApp', () => {
   it('should save app info', () => {
     setupAuthorizedApps(state);
 
-    const appUrl = 'https://random-app.com';
-    const appInfo = state.getAuthorizedApp(appUrl);
+    const appInfo = state.getAuthorizedApp(RANDOM_APP_URL);
 
     appInfo.authorizedAccounts = [...appInfo.authorizedAccounts, 'Account 02', 'Account 03'];
 
     state.saveAuthorizedApp(appInfo);
 
-    const newAppInfo = state.getAuthorizedApp(appUrl);
+    const newAppInfo = state.getAuthorizedApp(RANDOM_APP_URL);
 
     expect(newAppInfo.authorizedAccounts).toContain('Account 02');
     expect(newAppInfo.authorizedAccounts).toContain('Account 03');
@@ -99,45 +101,64 @@ describe('removeAuthorizedApp', () => {
   it('should remove an app', () => {
     setupAuthorizedApps(state);
 
-    const appUrl = 'https://random-app.com';
-    expect(state.getAuthorizedApp(appUrl)).toBeTruthy();
+    expect(state.getAuthorizedApp(RANDOM_APP_URL)).toBeTruthy();
 
-    state.removeAuthorizedApp(state.extractAppId(appUrl));
+    state.removeAuthorizedApp(state.extractAppId(RANDOM_APP_URL));
 
-    expect(() => state.getAuthorizedApp(appUrl)).toThrowError(
-      new StandardCoongError(`The app at ${appUrl} has not been authorized yet!`),
+    expect(() => state.getAuthorizedApp(RANDOM_APP_URL)).toThrowError(
+      new StandardCoongError(`The app at ${RANDOM_APP_URL} has not been authorized yet!`),
     );
     expect(localStorage.getItem(AUTHORIZED_ACCOUNTS_KEY)).toEqual('{}');
   });
 });
 
-describe('ensureAccountAuthorized', () => {
-  let account: AccountInfo;
+describe('injectedAccounts', () => {
+  let account02: AccountInfo;
   beforeEach(async () => {
-    account = await state.keyring.createNewAccount('Account 01', PASSWORD);
+    account02 = await state.keyring.createNewAccount('Account 02', PASSWORD);
   });
 
+  describe('getInjectedAccounts', () => {
+    it('should return all injected accounts', async () => {
+      const accounts = await state.getInjectedAccounts();
+      expect(accounts.length).toEqual(2);
+      expect(accounts).toEqual([pick(account01, INJECTED_ACCOUNT_PROPS), pick(account02, INJECTED_ACCOUNT_PROPS)]);
+    });
+  });
+
+  describe('getAuthorizedInjectedAccounts', () => {
+    it('should return authorized accounts', async () => {
+      setupAuthorizedApps(state, [account01.address]);
+
+      const accounts = await state.getAuthorizedInjectedAccounts(RANDOM_APP_URL);
+
+      expect(accounts.length).toEqual(1);
+      expect(accounts).toEqual([pick(account01, INJECTED_ACCOUNT_PROPS)]);
+    });
+  });
+});
+
+describe('ensureAccountAuthorized', () => {
   it('should throw error if application is not authorized', async () => {
-    const randomAppUrl = 'https://random-app.com';
-    expect(() => state.ensureAccountAuthorized(randomAppUrl, account.address)).toThrowError(
-      new StandardCoongError(`The app at ${randomAppUrl} has not been authorized yet!`),
+    expect(() => state.ensureAccountAuthorized(RANDOM_APP_URL, account01.address)).toThrowError(
+      new StandardCoongError(`The app at ${RANDOM_APP_URL} has not been authorized yet!`),
     );
   });
 
   it('should throw error if address is not authorized for the app', async () => {
     const { randomAppUrl } = setupAuthorizedApps(state);
 
-    expect(() => state.ensureAccountAuthorized(randomAppUrl, account.address)).toThrowError(
+    expect(() => state.ensureAccountAuthorized(randomAppUrl, account01.address)).toThrowError(
       new StandardCoongError(
-        `The app at ${randomAppUrl} is not authorized to access account with address ${account.address}!`,
+        `The app at ${randomAppUrl} is not authorized to access account with address ${account01.address}!`,
       ),
     );
   });
 
   it('should not throw anything if address is authorized for the app', async () => {
-    const { randomAppUrl } = setupAuthorizedApps(state, [account.address]);
+    const { randomAppUrl } = setupAuthorizedApps(state, [account01.address]);
 
-    expect(state.ensureAccountAuthorized(randomAppUrl, account.address)).toBeUndefined();
+    expect(state.ensureAccountAuthorized(randomAppUrl, account01.address)).toBeUndefined();
   });
 });
 
@@ -179,13 +200,12 @@ describe('approveRequestAccess', () => {
       },
     });
     state.newRequestMessage(currentMessage);
-    expect(() => state.approveRequestAccess([])).toThrow('Please choose at least one account to connect');
+    expect(state.approveRequestAccess([])).rejects.toThrowError('Please choose at least one account to connect');
   });
 
   describe('with current message', () => {
-    let account01: AccountInfo, currentWindowUrl: string, currentMessage: WalletRequestMessage;
+    let currentWindowUrl: string, currentMessage: WalletRequestMessage;
     beforeEach(async () => {
-      account01 = await state.keyring.createNewAccount('Account 01', PASSWORD);
       currentWindowUrl = window.location.origin;
 
       currentMessage = newWalletRequest({
@@ -221,26 +241,17 @@ describe('approveRequestAccess', () => {
       const response = await handleRequestAccessApproval([account01.address]);
 
       expect(response.result).toEqual(AccessStatus.APPROVED);
-      expect(response.authorizedAccounts.sort()).toEqual([account01.address].sort());
+      expect(response.authorizedAccounts.sort()).toEqual([pick(account01, INJECTED_ACCOUNT_PROPS)].sort());
     });
 
-    it('should merge new authorized accounts with existing authorized accounts', async () => {
+    it('should override existing authorized accounts', async () => {
       setupAuthorizedApps(state, [account01.address], currentWindowUrl);
 
       const account02 = await state.keyring.createNewAccount('Account 02', PASSWORD);
       const response = await handleRequestAccessApproval([account02.address]);
 
       expect(response.result).toEqual(AccessStatus.APPROVED);
-      expect(response.authorizedAccounts.sort()).toEqual([account01.address, account02.address].sort());
-    });
-
-    it('should not merge duplicated authorized accounts to existing authorized accounts', async () => {
-      setupAuthorizedApps(state, [account01.address], currentWindowUrl);
-
-      const response = await handleRequestAccessApproval([account01.address]);
-
-      expect(response.result).toEqual(AccessStatus.APPROVED);
-      expect(response.authorizedAccounts.sort()).toEqual([account01.address].sort());
+      expect(response.authorizedAccounts.sort()).toEqual([pick(account02, INJECTED_ACCOUNT_PROPS)].sort());
     });
   });
 });
@@ -266,11 +277,96 @@ describe('rejectRequestAccess', () => {
   });
 });
 
-describe('sign extrinsic', () => {
-  let account01: AccountInfo;
-
+describe('approveUpdateAccess', () => {
+  let currentWindowUrl: string, currentMessage: WalletRequestMessage, account02: AccountInfo;
   beforeEach(async () => {
-    account01 = await state.keyring.createNewAccount('Account 01', PASSWORD);
+    currentWindowUrl = window.location.origin;
+
+    currentMessage = newWalletRequest({
+      name: 'tab/updateAccess',
+    });
+
+    account02 = await state.keyring.createNewAccount('Account 02', PASSWORD);
+  });
+
+  describe('app is not authorized', () => {
+    it('should throw error', () => {
+      state.newRequestMessage(currentMessage);
+      expect(state.approveUpdateAccess([])).rejects.toThrowError(
+        `The app at ${currentWindowUrl} has not been authorized yet!`,
+      );
+    });
+  });
+
+  describe('app is authorized', () => {
+    beforeEach(() => {
+      setupAuthorizedApps(state, [account01.address], currentWindowUrl);
+    });
+
+    it('should throw error if no accounts are authorized', () => {
+      state.newRequestMessage(currentMessage);
+      expect(state.approveUpdateAccess([])).rejects.toThrowError('Please choose at least one account to connect');
+    });
+
+    describe('with current message', () => {
+      const handleUpdateAccessApproval = async (authorizedAccounts: string[] = []) => {
+        const [response, _] = await Promise.all([
+          state.newRequestMessage(currentMessage),
+          new Promise<void>((resolve) => {
+            state.approveUpdateAccess(authorizedAccounts);
+            resolve();
+          }),
+        ]);
+
+        return response as WalletResponse<'tab/updateAccess'>;
+      };
+
+      it('should persist new authorized app to storage', async () => {
+        await handleUpdateAccessApproval([account02.address]);
+
+        const authorizedApps = JSON.parse(localStorage.getItem(AUTHORIZED_ACCOUNTS_KEY) || '{}');
+        const appInfo = authorizedApps[currentWindowUrl.split('//')[1]] as AppInfo;
+        expect(state.getAuthorizedApp(currentWindowUrl)).toEqual(appInfo);
+        expect(appInfo.url).toEqual(currentWindowUrl);
+      });
+
+      it('should resolve current request message', async () => {
+        const response = await handleUpdateAccessApproval([account01.address]);
+
+        expect(response.result).toEqual(AccessStatus.APPROVED);
+        expect(response.authorizedAccounts.sort()).toEqual([pick(account01, INJECTED_ACCOUNT_PROPS)].sort());
+      });
+
+      it('should override existing authorized accounts', async () => {
+        const response = await handleUpdateAccessApproval([account02.address]);
+
+        expect(response.result).toEqual(AccessStatus.APPROVED);
+        expect(response.authorizedAccounts.sort()).toEqual([pick(account02, INJECTED_ACCOUNT_PROPS)].sort());
+      });
+    });
+  });
+});
+
+describe('rejectUpdateAccess', () => {
+  it('should reject current request message', async () => {
+    const currentMessage = newWalletRequest({
+      name: 'tab/updateAccess',
+    });
+
+    await expect(
+      Promise.all([
+        state.newRequestMessage(currentMessage),
+        new Promise<void>((resolve) => {
+          state.rejectUpdateAccess();
+          resolve();
+        }),
+      ]),
+    ).rejects.toThrowError(new StandardCoongError(AccessStatus.DENIED));
+  });
+});
+
+describe('sign extrinsic', () => {
+  beforeEach(async () => {
     setupAuthorizedApps(state, [account01.address], window.location.origin);
   });
 
