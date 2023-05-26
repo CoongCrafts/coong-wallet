@@ -1,4 +1,3 @@
-import { encodeAddress } from '@polkadot/util-crypto';
 import { newWalletRequest } from '@coong/base';
 import { AccessStatus, WalletRequestMessage, WalletResponse } from '@coong/base/types';
 import { AccountInfo } from '@coong/keyring/types';

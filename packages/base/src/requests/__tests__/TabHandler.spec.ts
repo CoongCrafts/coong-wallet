@@ -1,5 +1,5 @@
 import { newWalletRequest } from '@coong/base';
-import { RequestName, WalletRequest } from '@coong/base/types';
+import { RequestName } from '@coong/base/types';
 import { AccountInfo } from '@coong/keyring/types';
 import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
 import { beforeEach, describe, expect, it } from 'vitest';

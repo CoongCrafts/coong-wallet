@@ -1,7 +1,5 @@
-import { paramsNotation } from '@polkadot/types';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import Keyring from '@coong/keyring';
-import { p } from 'vitest/dist/types-7cd96283';
 import WalletState, { AUTHORIZED_ACCOUNTS_KEY, AuthorizedApps } from '../WalletState';
 
 export const PASSWORD = 'supersecretpassword';
