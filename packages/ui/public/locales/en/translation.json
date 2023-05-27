@@ -97,6 +97,7 @@
   "Open Coong Wallet on another device and scan this QR Code to transfer your {{object}}.": "",
   "Open account controls": "",
   "Open settings": "",
+  "OriginalHashNotFound": "Cannot check wallet origin, please lock and unlock the wallet again",
   "Password changed successfully!": "",
   "Password does not match": "",
   "Password's too short": "",

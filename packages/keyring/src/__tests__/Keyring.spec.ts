@@ -5,7 +5,7 @@ import { AccountInfo, WalletQrBackup } from '@coong/keyring/types';
 import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
 import CryptoJS from 'crypto-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import Keyring, { ACCOUNTS_INDEX, ENCRYPTED_MNEMONIC } from '../Keyring';
+import Keyring, { ACCOUNTS_INDEX, ENCRYPTED_MNEMONIC, ORIGINAL_HASH } from '../Keyring';
 
 let keyring: Keyring;
 
@@ -510,5 +510,16 @@ describe('exportAccount', () => {
     expect(accountBackup.encoded).toBeTypeOf('string');
     expect(accountBackup.encoding).toBeTypeOf('object');
     expect(accountBackup.meta).toBeTypeOf('object');
+  });
+});
+
+describe('ensureOriginalHashPresence', () => {
+  it('should generate originalHash if not found one', async () => {
+    const keyring = await initializeNewKeyring();
+    const originalHash = localStorage.getItem(ORIGINAL_HASH);
+    localStorage.removeItem(ORIGINAL_HASH);
+
+    await keyring.ensureOriginalHashPresence(PASSWORD);
+    expect(localStorage.getItem(ORIGINAL_HASH)).toEqual(originalHash);
   });
 });
