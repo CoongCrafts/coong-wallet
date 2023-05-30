@@ -514,31 +514,21 @@ describe('exportAccount', () => {
 });
 
 describe('importAccount', () => {
-  let keyring: Keyring, backup: AccountBackup;
+  let keyring: Keyring, backup: AccountBackup, address: string;
   beforeEach(async () => {
     keyring = await initializeNewKeyring();
-  });
-  it('should verify password', async () => {
-    const { address } = await keyring.createNewAccount('test-account', PASSWORD);
+
+    const account = await keyring.createNewAccount('test-account', PASSWORD);
+    address = account.address;
+
     backup = await keyring.exportAccount(address, PASSWORD);
     await keyring.removeAccount(address);
-
-    const verifyingPasswordSpy = vi.spyOn(Keyring.prototype, 'verifyPassword');
-    await keyring.importAccount(backup, PASSWORD);
-
-    expect(verifyingPasswordSpy).toBeCalled();
   });
   it('should throw error if account exists', async () => {
-    const { address } = await keyring.createNewAccount('test-account', PASSWORD);
-    backup = await keyring.exportAccount(address, PASSWORD);
-
+    await keyring.importAccount(backup, PASSWORD);
     await expect(keyring.importAccount(backup, PASSWORD)).rejects.toThrowError(new CoongError(ErrorCode.AccountExists));
   });
   it('should throw error if account name exists', async () => {
-    const { address } = await keyring.createNewAccount('test-account', PASSWORD);
-    backup = await keyring.exportAccount(address, PASSWORD);
-    await keyring.removeAccount(address);
-
     await keyring.createNewAccount('test-account', PASSWORD);
 
     await expect(keyring.importAccount(backup, PASSWORD, 'test-account')).rejects.toThrowError(
@@ -549,19 +539,11 @@ describe('importAccount', () => {
     );
   });
   it('should throw error if account name not found', async () => {
-    const { address } = await keyring.createNewAccount('test-account', PASSWORD);
-    backup = await keyring.exportAccount(address, PASSWORD);
-    await keyring.removeAccount(address);
-
     await expect(
       keyring.importAccount({ ...backup, meta: { ...backup.meta, name: '' } }, PASSWORD),
     ).rejects.toThrowError(new CoongError(ErrorCode.AccountNameRequired));
   });
   it('should restore account', async () => {
-    const { address } = await keyring.createNewAccount('test-account', PASSWORD);
-    backup = await keyring.exportAccount(address, PASSWORD);
-    await keyring.removeAccount(address);
-
     const restoreAccountSpy = vi.spyOn(InnerKeyring.prototype, 'restoreAccount');
 
     await keyring.importAccount(backup, PASSWORD);
@@ -569,12 +551,13 @@ describe('importAccount', () => {
     expect(restoreAccountSpy).toBeCalled();
   });
   it('should found account after restoring account', async () => {
-    const { address } = await keyring.createNewAccount('test-account', PASSWORD);
-    backup = await keyring.exportAccount(address, PASSWORD);
-    await keyring.removeAccount(address);
-
     await keyring.importAccount(backup, PASSWORD);
 
     expect(await keyring.existsAccount(address)).toEqual(true);
+  });
+  it('should throw error if password incorrect', async () => {
+    await expect(keyring.importAccount(backup, 'incorrect-password')).rejects.toThrowError(
+      new CoongError(ErrorCode.PasswordIncorrect),
+    );
   });
 });
