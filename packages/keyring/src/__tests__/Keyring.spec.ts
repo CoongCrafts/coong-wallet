@@ -509,7 +509,8 @@ describe('exportAccount', () => {
     expect(accountBackup.address).toBeTypeOf('string');
     expect(accountBackup.encoded).toBeTypeOf('string');
     expect(accountBackup.encoding).toBeTypeOf('object');
-    expect(accountBackup.meta).toBeTypeOf('object');
+    expect(accountBackup.meta).toHaveProperty('originalHash');
+    expect(accountBackup.meta).toHaveProperty('name');
   });
 });
 

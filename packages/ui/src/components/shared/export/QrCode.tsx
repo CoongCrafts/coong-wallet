@@ -3,7 +3,7 @@ import React, { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { base64Encode } from '@polkadot/util-crypto';
-import { QrBackup } from '@coong/keyring/types';
+import { AccountBackup, QrBackup } from '@coong/keyring/types';
 import { Download } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import FileSaver from 'file-saver';
@@ -13,15 +13,23 @@ import { ExportObject, Props } from 'types';
 interface QrCodeProps extends Props {
   value: QrBackup;
   object: ExportObject;
-  detail?: string;
 }
 
-export default function QrCode({ value, object, detail = '' }: QrCodeProps) {
+export default function QrCode({ value, object }: QrCodeProps) {
   const { t } = useTranslation();
   const { containerRef, size } = useQrCodeSize();
   const qrCodeWrapperRef = useRef<HTMLDivElement>(null);
 
   const rawQrValue = useMemo(() => base64Encode(JSON.stringify(value)), [value]);
+
+  const getFileName = () => {
+    if (object === ExportObject.Wallet) {
+      return `coongwallet_wallet_backup_qrcode_${Date.now()}`;
+    } else if (object === ExportObject.Account) {
+      const accountName = (((value as AccountBackup)?.meta?.name as string) || '').toLowerCase().replace(/\s/g, '_');
+      return `coongwallet_account_backup_qrcode_${accountName}_${Date.now()}`;
+    }
+  };
 
   const downloadQrCode = () => {
     const canvas = qrCodeWrapperRef.current?.querySelector<HTMLCanvasElement>('canvas')!;
@@ -31,10 +39,7 @@ export default function QrCode({ value, object, detail = '' }: QrCodeProps) {
         return;
       }
 
-      FileSaver.saveAs(
-        blob,
-        `coongwallet_${object.toLowerCase()}_backup_qrcode_${detail?.toLowerCase().replace(/\s/g, '')}_${Date.now()}`,
-      );
+      FileSaver.saveAs(blob, getFileName());
     }, 'image/png');
   };
 
@@ -42,7 +47,7 @@ export default function QrCode({ value, object, detail = '' }: QrCodeProps) {
     <div ref={containerRef} className='text-center'>
       <p className='my-4 sm:px-20'>
         {t<string>('Open Coong Wallet on another device and scan this QR Code to transfer your {{object}}', {
-          object: object.toLowerCase(),
+          object: t<string>(object.toLowerCase()),
         })}
       </p>
       <div ref={qrCodeWrapperRef}>
@@ -50,7 +55,7 @@ export default function QrCode({ value, object, detail = '' }: QrCodeProps) {
           size={size}
           value={rawQrValue}
           includeMargin
-          title={t<string>('{{object}} Export QR Code', { object })}
+          title={t<string>('{{object}} Export QR Code', { object: t<string>(object) })}
         />
       </div>
       <div className='mt-4'>
