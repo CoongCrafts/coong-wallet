@@ -2,6 +2,8 @@ import { compareWalletInfo } from '@coong/base';
 import { WalletSignal, WalletSignalMessage } from '@coong/base/types';
 import WalletInstance from './WalletInstance';
 
+const FRAME_ID = 'coong-wallet-embed';
+
 /**
  * @name EmbedInstance
  * @description Represent an embed instance of the wallet loaded inside an iframe,
@@ -19,7 +21,7 @@ export default class EmbedInstance extends WalletInstance {
 
     const iframe = document.createElement('iframe');
     iframe.src = `${this.walletUrl}/embed`;
-    iframe.id = 'coong-wallet-embed';
+    iframe.id = FRAME_ID;
     iframe.style.display = 'none';
 
     document.body.append(iframe);
@@ -36,5 +38,11 @@ export default class EmbedInstance extends WalletInstance {
     } else if (signal === WalletSignal.WALLET_EMBED_UNLOADED && compareWalletInfo(this.walletInfo, walletInfo)) {
       this.ready = false;
     }
+  }
+
+  destroy() {
+    super.destroy();
+
+    document.querySelectorAll(`#${FRAME_ID}`).forEach((one) => one.remove());
   }
 }

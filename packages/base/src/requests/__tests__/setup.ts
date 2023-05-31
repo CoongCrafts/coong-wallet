@@ -16,8 +16,10 @@ export const newWalletState = async () => {
   return new WalletState(keyring);
 };
 
+export const RANDOM_APP_URL = 'https://random-app.com';
+
 export const setupAuthorizedApps = (state: WalletState, authorizedAccounts: string[] = [], appUrl?: string) => {
-  const randomAppUrl = appUrl || 'https://random-app.com';
+  const randomAppUrl = appUrl || RANDOM_APP_URL;
   const randomAppId = randomAppUrl.split('//')[1];
 
   const randomAppInfo = {
@@ -39,4 +41,18 @@ export const setupAuthorizedApps = (state: WalletState, authorizedAccounts: stri
   }
 
   return { randomAppUrl, randomAppInfo, authorizedApps };
+};
+
+export const pick = (obj: any, props: string[] = []) => {
+  if (!obj) {
+    return {};
+  }
+
+  return props.reduce((o, prop) => {
+    if (obj.hasOwnProperty(prop)) {
+      o[prop] = obj[prop];
+    }
+
+    return o;
+  }, {} as any);
 };

@@ -24,25 +24,28 @@ export default abstract class WalletInstance {
     });
   }
 
+  #onMessage(event: MessageEvent<WalletSignalMessage>) {
+    const { origin, data } = event;
+    if (origin !== this.walletUrl) {
+      return;
+    }
+
+    if (!isWalletSignal(data)) {
+      return;
+    }
+
+    this.onSignal(data);
+  }
+
   protected registerEvent() {
-    const onMessage = (event: MessageEvent<WalletSignalMessage>) => {
-      const { origin, data } = event;
-      if (origin !== this.walletUrl) {
-        return;
-      }
-
-      if (!isWalletSignal(data)) {
-        return;
-      }
-
-      this.onSignal(data);
-    };
-
-    // TODO clean up message event on closing the wallet
-    window.addEventListener('message', onMessage);
+    window.addEventListener('message', this.#onMessage.bind(this));
   }
 
   protected onSignal(message: WalletSignalMessage) {
     throw new StandardCoongError('Implement this method');
+  }
+
+  destroy() {
+    window.removeEventListener('message', this.#onMessage.bind(this));
   }
 }

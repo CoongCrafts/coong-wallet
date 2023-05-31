@@ -9,22 +9,23 @@ import WalletInstance from './WalletInstance';
  * we can interact with the instance after calling `openWalletWindow` via the `walletWindow` object
  */
 export default class TabInstance extends WalletInstance {
-  async openWalletWindow(path = ''): Promise<Window> {
+  async openWalletWindow(path = ''): Promise<void> {
     this.registerEvent();
 
     const tabWalletWindow = window.open(`${this.walletUrl}${path}`, '_blank');
 
     if (!tabWalletWindow) {
+      const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
       // TODO show a popup asking users to allow popup
       //      with instructions to enable that
-      throw new StandardCoongError('Error open wallet tab');
+      if (isFirefox) {
+        console.log('// TODO: Show dialog to instruct users to allow popup!');
+      } else {
+        throw new StandardCoongError('Error open wallet tab');
+      }
     }
 
     await this.waitUntilWalletReady();
-
-    this.walletWindow = tabWalletWindow;
-
-    return tabWalletWindow;
   }
 
   protected onSignal({ signal, walletInfo }: WalletSignalMessage) {
