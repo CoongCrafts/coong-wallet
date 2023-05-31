@@ -56,8 +56,7 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
   const [password, setPassword] = useState<string>('');
   const { validation, loading } = useAccountNameValidation(newName);
   const { setNewAccount } = useHighlightNewAccount();
-
-  const account: AccountInfoExt = {
+  const accountInfo: AccountInfoExt = {
     name: (meta.name as string) || t<string>(UNKNOWN_NAME),
     address: backup.address,
     networkAddress: backup.address,
@@ -65,13 +64,24 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
   };
 
   useAsync(async () => {
-    if (await keyring.existsAccount(backup.address)) {
+    const accountExists = await keyring.existsAccount(accountInfo.address);
+
+    if (accountExists) {
       setConflict(Conflict.AccountExisted);
-    } else if (await keyring.existsName(meta.name as string)) {
+      return;
+    }
+    if (meta.name) {
       setConflict(Conflict.AccountNameExisted);
-    } else if (!meta.name) {
-      setConflict(Conflict.AccountNameNotFound);
-    } else setConflict(undefined);
+      return;
+    }
+
+    const nameExists = await keyring.existsName(accountInfo.name!);
+
+    if (nameExists) {
+      setConflict(Conflict.AccountNameExisted);
+    } else {
+      setConflict(undefined);
+    }
   }, [backup]);
 
   const doImportAccount = (event: FormEvent) => {
@@ -93,7 +103,7 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
 
   return (
     <div>
-      <AccountCard account={account} />
+      <AccountCard account={accountInfo} />
       <ConflictAlert conflict={conflict} />
       <form onSubmit={doImportAccount}>
         {isResolvable(conflict) && (
