@@ -44,8 +44,8 @@ export default class Keyring {
 
   async initialize(mnemonic: string, password: string) {
     const encryptedSeed = CryptoJS.AES.encrypt(mnemonic, password).toString();
-    localStorage.setItem(ORIGINAL_HASH, sha256AsHex(mnemonic));
     localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedSeed);
+    this.#generateOriginalHash(mnemonic);
   }
 
   async initialized(): Promise<boolean> {
@@ -111,6 +111,28 @@ export default class Keyring {
 
   #getOriginalHash(): string | null {
     return localStorage.getItem(ORIGINAL_HASH);
+  }
+
+  #ensureOriginalHash(): string {
+    const originalHash = this.#getOriginalHash();
+
+    assert(originalHash, ErrorCode.OriginalHashNotFound);
+
+    return originalHash!;
+  }
+
+  #generateOriginalHash(rawMnemonic: string): string {
+    const originalHash = sha256AsHex(rawMnemonic);
+    localStorage.setItem(ORIGINAL_HASH, originalHash);
+
+    return originalHash;
+  }
+
+  async ensureOriginalHashPresence(password: string) {
+    if (!this.#getOriginalHash()) {
+      const rawMnemonic = await this.getRawMnemonic(password);
+      this.#generateOriginalHash(rawMnemonic);
+    }
   }
 
   #getEncryptedMnemonic(): string | null {
@@ -281,20 +303,15 @@ export default class Keyring {
     const account = this.getSigningPair(address);
     const accountBackup = this.#keyring.backupAccount(account, password);
 
-    if (accountBackup.meta.isExternal === true) {
+    if (accountBackup.meta.isExternal) {
       delete accountBackup.meta.isExternal;
       return accountBackup;
     }
 
-    let originalHash = this.#getOriginalHash() ?? '';
+    const originalHash = this.#ensureOriginalHash();
+    Object.assign(accountBackup.meta, { originalHash });
 
-    if (!originalHash) {
-      const rawMnemonic = await this.#decryptMnemonic(password);
-      originalHash = sha256AsHex(rawMnemonic);
-      localStorage.setItem(ORIGINAL_HASH, originalHash);
-    }
-
-    return { ...accountBackup, meta: { ...accountBackup.meta, originalHash } };
+    return accountBackup;
   }
 
   isExternal(originalHash: string) {
@@ -373,6 +390,8 @@ export default class Keyring {
       if (!validateMnemonic(rawMnemonic)) {
         throw new CoongError(ErrorCode.InvalidMnemonic);
       }
+
+      this.#generateOriginalHash(rawMnemonic);
 
       for (let account of accounts) {
         const [path, name] = account;

@@ -1,3 +1,3 @@
 // THIS FILE IS AUTO-GENERATED, DO NOT EDIT!
 
-export const packageInfo = { name: '@coong/base', version: '0.0.20' };
+export const packageInfo = { name: '@coong/base', version: '0.0.21-alpha.0' };

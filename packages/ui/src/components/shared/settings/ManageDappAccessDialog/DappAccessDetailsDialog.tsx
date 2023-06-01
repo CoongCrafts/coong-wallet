@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useEffectOnce } from 'react-use';
 import { AppInfo } from '@coong/base/requests/WalletState';
 import { Button, Dialog, DialogContent } from '@mui/material';
 import AccountsSelection from 'components/pages/Request/RequestAccess/AccountsSelection';
 import DialogTitle from 'components/shared/DialogTitle';
 import RemoveDappAccessButton from 'components/shared/settings/ManageDappAccessDialog/RemoveDappAccessButton';
 import useDialog from 'hooks/useDialog';
+import useRegisterEvent from 'hooks/useRegisterEvent';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { RootState } from 'redux/store';
-import { EventName, EventRegistry } from 'utils/eventemitter';
+import { EventName } from 'utils/eventemitter';
 
 export default function DappAccessDetailsDialog() {
   const { t } = useTranslation();
@@ -26,13 +26,7 @@ export default function DappAccessDetailsDialog() {
     doOpen();
   };
 
-  useEffectOnce(() => {
-    EventRegistry.on(EventName.OpenDappAccessDetailsDialog, onOpen);
-
-    return () => {
-      EventRegistry.off(EventName.OpenDappAccessDetailsDialog, onOpen);
-    };
-  });
+  useRegisterEvent(EventName.OpenDappAccessDetailsDialog, onOpen);
 
   useEffect(() => {
     if (!appInfo || !open) {

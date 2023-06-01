@@ -1,14 +1,16 @@
-import { Injected } from '@polkadot/extension-inject/types';
-import { SendMessage } from '../types';
+import CoongSdk from '../CoongSdk';
+import { UpdatableInjected } from '../types';
 import Accounts from './Accounts';
 import CoongSigner from './CoongSigner';
 
-export default class SubstrateInjected implements Injected {
+export default class SubstrateInjected implements UpdatableInjected {
   public readonly accounts: Accounts;
   public readonly signer: CoongSigner;
 
-  constructor(sendMessage: SendMessage) {
-    this.accounts = new Accounts(sendMessage);
-    this.signer = new CoongSigner(sendMessage);
+  constructor(sdk: CoongSdk) {
+    sdk.ensureSdkInitialized();
+
+    this.accounts = new Accounts(sdk);
+    this.signer = new CoongSigner(sdk);
   }
 }

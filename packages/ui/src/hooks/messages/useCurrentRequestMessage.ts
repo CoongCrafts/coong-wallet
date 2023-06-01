@@ -11,7 +11,7 @@ export default function useCurrentRequestMessage(): [boolean, WalletRequestWithR
   useEffectOnce(() => {
     const unsub = walletState.subscribeToNewRequestMessage((message) => {
       setCurrentMessage(message);
-      toggleReady();
+      toggleReady(true);
     });
 
     return () => unsub();

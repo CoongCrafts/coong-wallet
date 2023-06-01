@@ -22,6 +22,8 @@ export type CompactAccountInfo = [DerivationPath, AccountName];
 
 export interface QrBackup {}
 
+export interface JsonBackup {}
+
 export interface WalletBackup$Json {
   accountsIndex: number;
   encryptedMnemonic: string;
@@ -29,9 +31,7 @@ export interface WalletBackup$Json {
 
 export interface WalletBackup extends KeyringPairs$Json, WalletBackup$Json {}
 
-export interface AccountBackup extends KeyringPair$Json {}
-
-export interface AccountQrBackup extends AccountBackup, QrBackup {}
+export interface AccountBackup extends KeyringPair$Json, JsonBackup, QrBackup {}
 
 export interface WalletQrBackup extends WalletBackup$Json, QrBackup {
   accounts: CompactAccountInfo[];

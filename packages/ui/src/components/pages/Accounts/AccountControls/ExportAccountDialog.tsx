@@ -1,30 +1,30 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useEffectOnce } from 'react-use';
-import { AccountQrBackup } from '@coong/keyring/types';
+import { AccountBackup } from '@coong/keyring/types';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Dialog, DialogContent, Tab } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
-import Json from 'components/shared/export/Json';
 import QrCode from 'components/shared/export/QrCode';
 import VerifyingPasswordForm from 'components/shared/forms/VerifyingPasswordForm';
 import useDialog from 'hooks/useDialog';
+import useRegisterEvent from 'hooks/useRegisterEvent';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { AccountInfoExt, ExportObject } from 'types';
-import { EventName, EventRegistry } from 'utils/eventemitter';
+import { EventName } from 'utils/eventemitter';
+import JsonFile from 'components/shared/export/JsonFile';
 
 enum ExportAccountMethod {
   QRCode = 'QR Code',
   JSON = 'JSON',
 }
 
-function ExportAccountDialog(): JSX.Element {
+export default function ExportAccountDialog(): JSX.Element {
   const { t } = useTranslation();
   const { keyring } = useWalletState();
   const { open, doOpen, doClose } = useDialog();
   const [account, setAccount] = useState<AccountInfoExt>();
-  const [backup, setBackup] = useState<AccountQrBackup>();
+  const [backup, setBackup] = useState<AccountBackup>();
   const [method, setMethod] = useState<ExportAccountMethod>(ExportAccountMethod.QRCode);
 
   const onOpen = (account: AccountInfoExt) => {
@@ -32,12 +32,7 @@ function ExportAccountDialog(): JSX.Element {
     doOpen();
   };
 
-  useEffectOnce(() => {
-    EventRegistry.on(EventName.OpenExportAccountDialog, onOpen);
-    return () => {
-      EventRegistry.off(EventName.OpenExportAccountDialog, onOpen);
-    };
-  });
+  useRegisterEvent(EventName.OpenExportAccountDialog, onOpen);
 
   const switchMethod = (_: any, method: ExportAccountMethod) => {
     setMethod(method);
@@ -76,7 +71,7 @@ function ExportAccountDialog(): JSX.Element {
               <QrCode value={backup} object={ExportObject.Account} />
             </TabPanel>
             <TabPanel value={ExportAccountMethod.JSON} className='p-0'>
-              <Json value={backup} object={ExportObject.Account} />
+              <JsonFile value={backup} object={ExportObject.Account} />
             </TabPanel>
           </TabContext>
         ) : (
@@ -86,5 +81,3 @@ function ExportAccountDialog(): JSX.Element {
     </Dialog>
   );
 }
-
-export default ExportAccountDialog;

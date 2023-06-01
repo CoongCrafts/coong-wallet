@@ -1,16 +1,16 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useEffectOnce } from 'react-use';
 import { Button, Dialog, DialogContent, DialogContentText } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
 import LoadingTextField from 'components/shared/LoadingTextField';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import useAccountNameValidation from 'hooks/useAccountNameValidation';
 import useDialog from 'hooks/useDialog';
+import useRegisterEvent from 'hooks/useRegisterEvent';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { AccountInfoExt } from 'types';
-import { EventName, EventRegistry } from 'utils/eventemitter';
+import { EventName } from 'utils/eventemitter';
 
 export default function RenameAccountDialog(): JSX.Element {
   const { keyring } = useWalletState();
@@ -26,12 +26,7 @@ export default function RenameAccountDialog(): JSX.Element {
     doOpen();
   };
 
-  useEffectOnce(() => {
-    EventRegistry.on(EventName.OpenRenameAccountDialog, onOpen);
-    return () => {
-      EventRegistry.off(EventName.OpenRemoveAccountDialog, onOpen);
-    };
-  });
+  useRegisterEvent(EventName.OpenRenameAccountDialog, onOpen);
 
   const onClose = () => {
     doClose(() => setAccount(undefined));
@@ -53,8 +48,6 @@ export default function RenameAccountDialog(): JSX.Element {
   };
 
   if (!account) return <></>;
-
-  const hasChanged = name !== account.name;
 
   return (
     <Dialog open={open} onClose={onClose}>

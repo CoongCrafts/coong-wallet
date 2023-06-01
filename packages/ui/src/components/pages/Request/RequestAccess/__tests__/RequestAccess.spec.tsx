@@ -117,7 +117,13 @@ describe('RequestAccess', () => {
         const expectedResponse = newWalletResponse(
           {
             result: AccessStatus.APPROVED,
-            authorizedAccounts: [account01.address],
+            authorizedAccounts: [
+              {
+                address: account01.address,
+                name: account01.name,
+                type: account01.type,
+              },
+            ],
           },
           requestAccessMessage.id,
         );

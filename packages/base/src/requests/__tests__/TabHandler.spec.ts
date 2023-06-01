@@ -1,11 +1,12 @@
 import { newWalletRequest } from '@coong/base';
 import { RequestName } from '@coong/base/types';
+import { AccountInfo } from '@coong/keyring/types';
 import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
 import { beforeEach, describe, expect, it } from 'vitest';
 import TabHandler from '../TabHandler';
 import { newWalletState, PASSWORD, setupAuthorizedApps } from './setup';
 
-let tabHandler: TabHandler, currentWindowOrigin: string;
+let tabHandler: TabHandler, currentWindowOrigin: string, account01: AccountInfo;
 
 const initTabHandler = async () => {
   const state = await newWalletState();
@@ -20,12 +21,12 @@ beforeEach(async () => {
   localStorage.clear();
 
   await initTabHandler();
+  account01 = await tabHandler.state.keyring.createNewAccount('Account 01', PASSWORD);
   currentWindowOrigin = window.location.origin;
 });
 
 describe('handle', () => {
   it('should throw error if request is not supported', async () => {
-    const account01 = await tabHandler.state.keyring.createNewAccount('Account 01', PASSWORD);
     setupAuthorizedApps(tabHandler.state, [account01.address], currentWindowOrigin);
 
     await expect(
@@ -39,7 +40,7 @@ describe('handle', () => {
     ).rejects.toThrowError(new CoongError(ErrorCode.UnknownRequest));
   });
 
-  it.each(['tab/signRaw', 'tab/signExtrinsic'])(
+  it.each(['tab/signRaw', 'tab/signExtrinsic', 'tab/updateAccess'])(
     'should check for app authorization if request is `%s`',
     async (requestName) => {
       await expect(
@@ -54,32 +55,38 @@ describe('handle', () => {
     },
   );
 
-  it.each(['tab/signRaw', 'tab/signExtrinsic'])(
-    'should throw error if the app is not authorized to access any accounts',
-    async (requestName) => {
-      const account01 = await tabHandler.state.keyring.createNewAccount('Account 01', PASSWORD);
-
-      setupAuthorizedApps(tabHandler.state, [], currentWindowOrigin);
-
-      await expect(
-        tabHandler.handle({
-          ...newWalletRequest({
-            name: requestName as RequestName,
-            // @ts-ignore
-            body: {
-              address: account01.address,
-            },
-          }),
-          origin: currentWindowOrigin,
-        }),
-      ).rejects.toThrowError(
-        new StandardCoongError(`The app at ${currentWindowOrigin} has not been authorized to access any accounts!`),
-      );
+  it.each([
+    {
+      requestName: 'tab/signRaw',
+      body: (account: AccountInfo) => ({
+        address: account.address,
+      }),
     },
-  );
+    {
+      requestName: 'tab/signExtrinsic',
+      body: (account: AccountInfo) => ({
+        address: account.address,
+      }),
+    },
+    { requestName: 'tab/updateAccess', body: () => undefined },
+  ])('should throw error if the app is not authorized to access any accounts', async ({ requestName, body }) => {
+    setupAuthorizedApps(tabHandler.state, [], currentWindowOrigin);
+
+    await expect(
+      tabHandler.handle({
+        ...newWalletRequest({
+          name: requestName as RequestName,
+          // @ts-ignore
+          body: body(account01),
+        }),
+        origin: currentWindowOrigin,
+      }),
+    ).rejects.toThrowError(
+      new StandardCoongError(`The app at ${currentWindowOrigin} has not been authorized to access any accounts!`),
+    );
+  });
 
   it('should not check for app authorization if request is tab/requestAccess', async () => {
-    const account01 = await tabHandler.state.keyring.createNewAccount('Account 01', PASSWORD);
     await expect(
       Promise.all([
         tabHandler.handle({
@@ -102,7 +109,6 @@ describe('handle', () => {
   it.each(['tab/signRaw', 'tab/signExtrinsic'])(
     'should throw error if the target address is not authorized to access by the app when perform signing',
     async (requestName) => {
-      const account01 = await tabHandler.state.keyring.createNewAccount('Account 01', PASSWORD);
       const account02 = await tabHandler.state.keyring.createNewAccount('Account 02', PASSWORD);
 
       setupAuthorizedApps(tabHandler.state, [account01.address], currentWindowOrigin);
@@ -126,17 +132,42 @@ describe('handle', () => {
     },
   );
 
-  it('should register the message to wallet state', () => {
+  it.each([
+    {
+      name: 'tab/requestAccess',
+      body: () => ({
+        appName: 'Random name',
+      }),
+    },
+    {
+      name: 'tab/signRaw',
+      body: (account: AccountInfo) => ({
+        address: account.address,
+      }),
+    },
+    {
+      name: 'tab/signExtrinsic',
+      body: (account: AccountInfo) => ({
+        address: account.address,
+      }),
+    },
+    {
+      name: 'tab/updateAccess',
+      body: () => undefined,
+    },
+  ])('should register the message to wallet state for request $name', ({ name, body }) => {
+    if (name !== 'tab/requestAccess') {
+      setupAuthorizedApps(tabHandler.state, [account01.address], currentWindowOrigin);
+    }
+
     tabHandler.handle({
       ...newWalletRequest({
-        name: 'tab/requestAccess',
-        body: {
-          appName: 'Random name',
-        },
+        name: name as RequestName,
+        body: body(account01) as any,
       }),
       origin: currentWindowOrigin,
     });
 
-    expect(tabHandler.state.getCurrentRequestMessage('tab/requestAccess')).toBeTruthy();
+    expect(tabHandler.state.getCurrentRequestMessage(name as RequestName)).toBeTruthy();
   });
 });

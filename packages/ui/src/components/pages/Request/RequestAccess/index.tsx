@@ -6,6 +6,7 @@ import { RequestAppRequestAccess } from '@coong/base/types';
 import { Button } from '@mui/material';
 import AccountsSelection from 'components/pages/Request/RequestAccess/AccountsSelection';
 import SetupWalletButton from 'components/pages/Request/RequestAccess/SetupWalletButton';
+import useSetSelectedAccounts from 'components/pages/Request/RequestAccess/useSetSelectedAccounts';
 import { RequestProps } from 'components/pages/Request/types';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { RootState } from 'redux/store';
@@ -17,9 +18,14 @@ const RequestAccess: FC<RequestProps> = ({ className = '', message }) => {
     app: { seedReady },
     accounts: { selectedAccounts },
   } = useSelector((state: RootState) => state);
+
+  const { origin, request } = message;
+
+  useSetSelectedAccounts(origin);
+
   const acceptAccess = async () => {
     try {
-      walletState.approveRequestAccess(selectedAccounts.map((one) => one.address));
+      await walletState.approveRequestAccess(selectedAccounts.map((one) => one.address));
     } catch (e: any) {
       toast.error(t<string>(e.message));
     }
@@ -29,11 +35,8 @@ const RequestAccess: FC<RequestProps> = ({ className = '', message }) => {
     walletState.rejectRequestAccess();
   };
 
-  const { origin, request } = message;
-
   const requestBody = request.body as RequestAppRequestAccess;
 
-  // TODO: Optimize create new account behavior
   return (
     <div className={className}>
       <h2 className='text-center'>{t<string>('Wallet Access Request')}</h2>
