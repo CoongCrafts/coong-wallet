@@ -233,17 +233,15 @@ export default class CoongSdk {
   }
 
   async enable(appName: string): Promise<UpdatableInjected> {
-    const sendMessage = this.sendMessage.bind(this);
-
     if (!this.connectedAccounts.connected) {
-      const { authorizedAccounts } = await sendMessage({ name: 'tab/requestAccess', body: { appName } });
+      const { authorizedAccounts } = await this.sendMessage({ name: 'tab/requestAccess', body: { appName } });
 
       assert(authorizedAccounts.length > 0, 'No authorized accounts found!');
 
       this.connectedAccounts.save(authorizedAccounts);
     }
 
-    return new SubstrateInjected(sendMessage, this);
+    return new SubstrateInjected(this);
   }
 
   #injectWalletAPI() {
