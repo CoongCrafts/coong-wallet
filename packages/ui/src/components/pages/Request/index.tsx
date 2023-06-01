@@ -21,6 +21,52 @@ const Request: FC<Props> = ({ className = '' }) => {
     throw new CoongError(ErrorCode.UnknownRequestOrigin);
   }
 
+  const handleRequest = (message: WalletRequestMessage, eventOrigin?: string) => {
+    const { origin, id } = message;
+
+    const originUrl = eventOrigin || origin;
+
+    handleWalletRequest(message)
+      .then((response: WalletResponse) => {
+        openerWindow().postMessage(newWalletResponse(response, id), originUrl);
+      })
+      .catch((error: any) => {
+        const message = error instanceof Error ? error.message : String(error);
+        openerWindow().postMessage(newWalletErrorResponse(message, id), originUrl);
+      })
+      .finally(() => {
+        window.close();
+      });
+  };
+
+  useEffectOnce(() => {
+    const message = JSON.parse(searchParams.get('message')!) as WalletRequestMessage;
+
+    if (!isWalletRequest(message)) {
+      return;
+    }
+
+    handleRequest(message);
+  });
+
+  useEffectOnce(() => {
+    const onMessage = (event: MessageEvent<WalletRequestMessage>) => {
+      const { origin, data: message } = event;
+      if (origin === window.location.origin || !isWalletRequest(message)) {
+        return;
+      }
+
+      const params = new URLSearchParams({ message: JSON.stringify(message) });
+
+      window.history.pushState({}, '', `/request?${params.toString()}`);
+
+      handleRequest(message, origin);
+    };
+
+    window.addEventListener('message', onMessage);
+    return () => window.removeEventListener('message', onMessage);
+  });
+
   useEffectOnce(() => {
     openerWindow().postMessage(newWalletSignal(WalletSignal.WALLET_TAB_INITIALIZED, walletInfo), '*');
 
@@ -30,28 +76,6 @@ const Request: FC<Props> = ({ className = '' }) => {
 
     window.addEventListener('unload', onUnload);
     return () => window.removeEventListener('unload', onUnload);
-  });
-
-  useEffectOnce(() => {
-    const message = JSON.parse(searchParams.get('message')!) as WalletRequestMessage;
-
-    if (!isWalletRequest(message)) {
-      throw new CoongError(ErrorCode.InvalidMessageFormat);
-    }
-
-    const { origin, id } = message;
-
-    handleWalletRequest(message)
-      .then((response: WalletResponse) => {
-        openerWindow().postMessage(newWalletResponse(response, id), origin);
-      })
-      .catch((error: any) => {
-        const message = error instanceof Error ? error.message : String(error);
-        openerWindow().postMessage(newWalletErrorResponse(message, id), origin);
-      })
-      .finally(() => {
-        window.close();
-      });
   });
 
   return (
