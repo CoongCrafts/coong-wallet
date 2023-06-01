@@ -13,10 +13,6 @@ export interface Handler {
 
 export type Handlers = Record<MessageId, Handler>;
 
-export interface SendMessage {
-  <TRequestName extends RequestName>(request: WalletRequest<TRequestName>): Promise<WalletResponse<TRequestName>>;
-}
-
 export interface CoongSdkOptions {
   walletUrl: string;
 }

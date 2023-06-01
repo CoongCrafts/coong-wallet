@@ -47,6 +47,7 @@ export default class CoongSdk {
   #handlers: Handlers;
   #walletInfo?: WalletInfo;
   #connectedAccounts?: ConnectedAccounts;
+  #walletInstancesQueue: Window[];
 
   constructor(options: CoongSdkOptions) {
     this.#initialized = false;
@@ -55,6 +56,7 @@ export default class CoongSdk {
     // TODO validate url format
     const walletUrl = options?.walletUrl || DEFAULT_WALLET_URL;
     this.#walletUrl = this.trimTrailingSlash(walletUrl);
+    this.#walletInstancesQueue = [];
   }
 
   /**
@@ -98,18 +100,27 @@ export default class CoongSdk {
     this.#initialized = false;
   }
 
-  async openWalletWindow(path = ''): Promise<void> {
+  async openWalletWindow(path = ''): Promise<Window> {
     return new TabInstance(this.#walletUrl).openWalletWindow(path);
   }
 
   async sendMessageToTabInstance(message: WalletRequestMessage) {
     this.ensureSdkInitialized();
 
-    const params = new URLSearchParams({
-      message: JSON.stringify(message),
-    });
+    const params = new URLSearchParams({ message: JSON.stringify(message) });
 
     await this.openWalletWindow(`/request?${params.toString()}`);
+  }
+
+  getAvailableWalletInstance() {
+    return this.#walletInstancesQueue.shift();
+  }
+
+  async launchNewWalletInstance(path = ''): Promise<Window> {
+    const instance = await this.openWalletWindow(path);
+    this.#walletInstancesQueue.push(instance);
+
+    return instance;
   }
 
   /**
@@ -123,7 +134,11 @@ export default class CoongSdk {
 
     const { name } = request;
 
-    if (name.startsWith('tab/')) {
+    const availableInstance = this.getAvailableWalletInstance();
+
+    if (availableInstance) {
+      availableInstance.postMessage(message, this.walletUrl);
+    } else if (name.startsWith('tab/')) {
       await this.sendMessageToTabInstance(message);
     } else {
       throw new CoongError(ErrorCode.InvalidMessageFormat);
