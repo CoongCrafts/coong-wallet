@@ -121,4 +121,53 @@ describe('AccountControls', () => {
       });
     });
   });
+  describe('ExportAccountDialog', () => {
+    beforeEach(async () => {
+      await user.click(await screen.findByRole('menuitem', { name: /Export/ }));
+    });
+
+    it('should ask for password', async () => {
+      expect(await screen.findByRole('dialog', { name: /Export account/ }));
+      expect(await screen.findByLabelText(/Wallet password/));
+      expect(await screen.findByRole('button', { name: /Continue/ }));
+      expect(await screen.findByRole('button', { name: /Cancel/ }));
+    });
+
+    describe('password incorrect', () => {
+      it('should show error when password incorrect', async () => {
+        const passwordField = await screen.findByLabelText(/Wallet password/);
+        await user.type(passwordField, 'incorrect-password');
+        await user.click(await screen.findByRole('button', { name: /Continue/ }));
+
+        expect(await screen.findByText(/Password incorrect/)).toBeInTheDocument();
+      });
+    });
+
+    describe('password correct', () => {
+      beforeEach(async () => {
+        const passwordField = await screen.findByLabelText(/Wallet password/);
+        await user.type(passwordField, PASSWORD);
+        await user.click(await screen.findByRole('button', { name: /Continue/ }));
+      });
+
+      it('should export account when password correct', async () => {
+        expect(
+          await screen.findByText(/Open Coong Wallet on another device and scan this QR Code to transfer your account/),
+        ).toBeInTheDocument();
+        expect(await screen.findByTitle(/Account Export QR Code/)).toBeInTheDocument();
+        expect(await screen.findByRole('button', { name: /Download QR Code Image/ })).toBeInTheDocument();
+      });
+
+      it('should show export account to json tab content', async () => {
+        await user.click(await screen.findByRole('tab', { name: /JSON/ }));
+
+        expect(
+          await screen.findByText(
+            /Export this account to a JSON file and import it back to Coong Wallet on this or other devices later/,
+          ),
+        ).toBeInTheDocument();
+        expect(await screen.findByRole('button', { name: /Download JSON File/ })).toBeInTheDocument();
+      });
+    });
+  });
 });

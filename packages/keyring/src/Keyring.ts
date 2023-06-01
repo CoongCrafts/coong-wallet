@@ -1,15 +1,22 @@
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
+import { u8aToHex } from '@polkadot/util';
+import { sha256AsU8a } from '@polkadot/util-crypto';
 import { validateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { assert, CoongError, ErrorCode, isCoongError, StandardCoongError } from '@coong/utils';
 import CryptoJS from 'crypto-js';
-import { AccountInfo, WalletBackup, WalletQrBackup } from './types';
+import { AccountBackup, AccountInfo, WalletBackup, WalletQrBackup } from './types';
 
 export const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
+export const ORIGINAL_HASH = 'ORIGINAL_HASH';
 export const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
 export const DEFAULT_KEY_TYPE = 'sr25519';
 
 const DERIVATION_PATH_PREFIX = '//';
+
+const sha256AsHex = (data: string): string => {
+  return u8aToHex(sha256AsU8a(data));
+};
 
 export default class Keyring {
   #keyring!: InnerKeyring;
@@ -38,6 +45,7 @@ export default class Keyring {
   async initialize(mnemonic: string, password: string) {
     const encryptedSeed = CryptoJS.AES.encrypt(mnemonic, password).toString();
     localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedSeed);
+    this.#generateOriginalHash(mnemonic);
   }
 
   async initialized(): Promise<boolean> {
@@ -65,6 +73,7 @@ export default class Keyring {
       this.#keyring.forgetAccount(account.address);
     });
     localStorage.removeItem(ENCRYPTED_MNEMONIC);
+    localStorage.removeItem(ORIGINAL_HASH);
     localStorage.removeItem(ACCOUNTS_INDEX);
   }
 
@@ -98,6 +107,32 @@ export default class Keyring {
 
   async verifyPassword(password: string) {
     await this.#decryptMnemonic(password);
+  }
+
+  #getOriginalHash(): string | null {
+    return localStorage.getItem(ORIGINAL_HASH);
+  }
+
+  #ensureOriginalHash(): string {
+    const originalHash = this.#getOriginalHash();
+
+    assert(originalHash, ErrorCode.OriginalHashNotFound);
+
+    return originalHash!;
+  }
+
+  #generateOriginalHash(rawMnemonic: string): string {
+    const originalHash = sha256AsHex(rawMnemonic);
+    localStorage.setItem(ORIGINAL_HASH, originalHash);
+
+    return originalHash;
+  }
+
+  async ensureOriginalHashPresence(password: string) {
+    if (!this.#getOriginalHash()) {
+      const rawMnemonic = await this.getRawMnemonic(password);
+      this.#generateOriginalHash(rawMnemonic);
+    }
   }
 
   #getEncryptedMnemonic(): string | null {
@@ -250,6 +285,23 @@ export default class Keyring {
     }
   }
 
+  async exportAccount(address: string, password: string): Promise<AccountBackup> {
+    await this.verifyPassword(password);
+
+    const account = this.getSigningPair(address);
+    const accountBackup = this.#keyring.backupAccount(account, password);
+
+    if (accountBackup.meta.isExternal) {
+      delete accountBackup.meta.isExternal;
+      return accountBackup;
+    }
+
+    const originalHash = this.#ensureOriginalHash();
+    Object.assign(accountBackup.meta, { originalHash });
+
+    return accountBackup;
+  }
+
   async exportWallet(password: string): Promise<WalletBackup> {
     await this.verifyPassword(password);
 
@@ -279,6 +331,8 @@ export default class Keyring {
       if (!validateMnemonic(rawMnemonic)) {
         throw new CoongError(ErrorCode.InvalidMnemonic);
       }
+
+      this.#generateOriginalHash(rawMnemonic);
 
       for (let account of accounts) {
         const [path, name] = account;
