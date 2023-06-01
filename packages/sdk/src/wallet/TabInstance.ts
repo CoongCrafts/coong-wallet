@@ -3,6 +3,8 @@ import { WalletSignal, WalletSignalMessage } from '@coong/base/types';
 import { StandardCoongError } from '@coong/utils';
 import WalletInstance from './WalletInstance';
 
+const POPUP_WINDOW_FEATURES = `resizable=no,status=no,location=no,toolbar=no,menubar=no,width=620,height=700,left=150,top=150`;
+
 /**
  * @name TabInstance
  * @description Represent a tab instance of the wallet loaded inside a browser tab or popup,
@@ -12,7 +14,7 @@ export default class TabInstance extends WalletInstance {
   async openWalletWindow(path = ''): Promise<void> {
     this.registerEvent();
 
-    const tabWalletWindow = window.open(`${this.walletUrl}${path}`, '_blank');
+    const tabWalletWindow = window.open(`${this.walletUrl}${path}`, '_blank', POPUP_WINDOW_FEATURES);
 
     if (!tabWalletWindow) {
       const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
