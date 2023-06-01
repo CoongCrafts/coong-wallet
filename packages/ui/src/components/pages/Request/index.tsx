@@ -40,10 +40,15 @@ const Request: FC<Props> = ({ className = '' }) => {
   };
 
   useEffectOnce(() => {
-    const message = JSON.parse(searchParams.get('message')!) as WalletRequestMessage;
+    const rawMessage = searchParams.get('message');
+    if (!rawMessage) {
+      return;
+    }
+
+    const message = JSON.parse(rawMessage) as WalletRequestMessage;
 
     if (!isWalletRequest(message)) {
-      return;
+      throw new CoongError(ErrorCode.InvalidMessageFormat);
     }
 
     handleRequest(message);
