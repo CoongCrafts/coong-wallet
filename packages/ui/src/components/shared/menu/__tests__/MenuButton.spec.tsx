@@ -212,9 +212,10 @@ describe('MenuButton', () => {
 
           it('should show alert if account name not found', async () => {
             const backup = await getBackup(true);
+            Object.assign(backup, { name: '' });
 
             await renderView();
-            onScanResult(base64Encode(JSON.stringify({ ...backup, meta: { ...backup.meta, name: '' } })));
+            onScanResult(base64Encode(JSON.stringify(backup)));
 
             expect(await screen.findByRole('alert')).toHaveTextContent(
               /Account name is required. Please choose one to continue importing./,

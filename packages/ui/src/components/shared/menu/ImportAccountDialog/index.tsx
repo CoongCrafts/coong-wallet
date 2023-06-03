@@ -22,7 +22,7 @@ enum ImportAccountMethod {
   JSON = 'JSON File',
 }
 
-function ImportAccountDialog(): JSX.Element {
+export default function ImportAccountDialog(): JSX.Element {
   const { keyring } = useWalletState();
   const { open, doOpen, doClose } = useDialog();
   const { t } = useTranslation();
@@ -49,6 +49,7 @@ function ImportAccountDialog(): JSX.Element {
   const onReadBackupCompleted = async (data: string) => {
     try {
       keyring.ensureOriginalHash();
+
       const decoded = isBase64(data) ? u8aToString(base64Decode(data)) : data;
       const parsedBackup = JSON.parse(decoded) as AccountBackup;
       Object.assign(parsedBackup, { meta: parsedBackup.meta || {} });
@@ -91,5 +92,3 @@ function ImportAccountDialog(): JSX.Element {
     </>
   );
 }
-
-export default ImportAccountDialog;

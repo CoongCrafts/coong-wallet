@@ -336,11 +336,12 @@ export default class Keyring {
     }
 
     const { originalHash } = meta as AccountInfo;
+
     const isExternal = !originalHash || this.isExternal(originalHash);
 
     if (isExternal) {
       Object.assign(meta, { isExternal });
-    } else if (originalHash) {
+    } else {
       // if is internal account just delete the original hash from account meta
       delete meta.originalHash;
     }

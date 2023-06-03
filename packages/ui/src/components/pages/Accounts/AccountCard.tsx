@@ -19,7 +19,7 @@ const ImportedLabel: FC<ImportedLabelProps> = ({ show, className = '' }) => {
 
   return show ? (
     <div
-      className={`${className} text-[10px] leading-[20px] font-bold border rounded-xl px-2 border border-black/10 dark:border-white/15 bg-black/10 dark:bg-white/15`}>
+      className={`${className} text-[10px] text-center leading-[20px] font-bold rounded-xl px-2 border border-black/10 dark:border-white/15 bg-black/10 dark:bg-white/15`}>
       {t<string>('IMPORTED')}
     </div>
   ) : (
@@ -38,7 +38,7 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account, showAccoun
   return (
     <div
       id={networkAddress}
-      className={`${className} account-card transition-colors duration-200 border border-black/10 dark:border-white/15 text-center`}>
+      className={`${className} account-card transition-colors duration-200 border border-black/10 dark:border-white/15`}>
       <div className='flex items-center gap-2'>
         <div className='account-card--icon'>
           <CopyAddressTooltip address={networkAddress} name={name}>

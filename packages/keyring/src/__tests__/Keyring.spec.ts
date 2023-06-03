@@ -538,6 +538,7 @@ describe('importAccount', () => {
   });
   it('should throw error if account exists', async () => {
     await keyring.importAccount(backup, PASSWORD);
+
     await expect(keyring.importAccount(backup, PASSWORD)).rejects.toThrowError(new CoongError(ErrorCode.AccountExists));
   });
   it('should throw error if account name exists', async () => {

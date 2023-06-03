@@ -12,30 +12,14 @@ import useAccountNameValidation from 'hooks/useAccountNameValidation';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { AccountInfoExt, Props } from 'types';
 
-function isResolvable(conflict: Conflict | undefined) {
-  return conflict === Conflict.AccountNameNotFound || conflict === Conflict.AccountNameExisted;
-}
-
 export enum Conflict {
   AccountExisted = 'Account is already exists in your wallet. Importing account can not be implemented.',
   AccountNameExisted = 'Account name has already been taken. Please choose another name to continue importing.',
   AccountNameNotFound = 'Account name is required. Please choose one to continue importing.',
 }
 
-interface ConflictAlertProps extends Props {
-  conflict: Conflict | undefined;
-}
-
-function ConflictAlert({ conflict }: ConflictAlertProps): JSX.Element {
-  const { t } = useTranslation();
-
-  if (!conflict) return <></>;
-
-  return (
-    <Alert severity={isResolvable(conflict) ? 'info' : 'error'} className='my-4'>
-      {t<string>(conflict)}
-    </Alert>
-  );
+function isResolvable(conflict: Conflict | undefined) {
+  return conflict === Conflict.AccountNameNotFound || conflict === Conflict.AccountNameExisted;
 }
 
 interface TransferAccountBackupProps extends Props {
@@ -106,7 +90,11 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
   return (
     <div>
       <AccountCard account={accountInfo} />
-      <ConflictAlert conflict={conflict} />
+      {conflict && (
+        <Alert severity={isResolvable(conflict) ? 'info' : 'error'} className='my-4'>
+          {t<string>(conflict)}
+        </Alert>
+      )}
       <form onSubmit={doImportAccount}>
         {isResolvable(conflict) && (
           <LoadingTextField
