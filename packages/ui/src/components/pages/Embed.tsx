@@ -61,7 +61,7 @@ const Embed: FC<Props> = ({ className = '' }: Props) => {
   return (
     <div className={className}>
       <CoongTextLogo />
-      <h2>{t<string>('Welcome to Coong Wallet!')}</h2>
+      <h2>{t<string>('Welcome to Coong Wallet')}</h2>
       <h3>{t<string>('This page should be loaded inside an iframe!')}</h3>
       <p>{t<string>("If you open this page by accident, it's safe to close it now.")}</p>
     </div>

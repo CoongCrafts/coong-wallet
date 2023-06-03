@@ -23,7 +23,7 @@ describe('Embed', () => {
   it('should render the page correctly', async () => {
     renderView();
 
-    expect(await screen.findByText('Welcome to Coong Wallet!')).toBeInTheDocument();
+    expect(await screen.findByText('Welcome to Coong Wallet')).toBeInTheDocument();
     expect(await screen.findByText('This page should be loaded inside an iframe!')).toBeInTheDocument();
   });
 
