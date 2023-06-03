@@ -131,7 +131,7 @@ describe('MenuButton', () => {
       expect(await screen.findByRole('dialog', { name: /Import Account/ })).toBeInTheDocument();
       expect(await screen.findByRole('tab', { name: /QR Code/ })).toBeInTheDocument();
       expect(await screen.findByRole('tab', { name: /JSON File/ })).toBeInTheDocument();
-      expect(await screen.findByText(/scan the QR code on the screen to transfer your wallet/)).toBeInTheDocument();
+      expect(await screen.findByText(/scan the QR code on the screen to transfer your account/)).toBeInTheDocument();
       expect(await screen.findByText(/Mocked QR Scanner/)).toBeInTheDocument();
     });
 
@@ -268,7 +268,7 @@ describe('MenuButton', () => {
 
         await user.click(await screen.findByRole('button', { name: /Back/ }));
 
-        expect(await screen.findByText(/scan the QR code on the screen to transfer your wallet/)).toBeInTheDocument();
+        expect(await screen.findByText(/scan the QR code on the screen to transfer your account/)).toBeInTheDocument();
         expect(await screen.findByText(/Mocked QR Scanner/)).toBeInTheDocument();
       });
     });

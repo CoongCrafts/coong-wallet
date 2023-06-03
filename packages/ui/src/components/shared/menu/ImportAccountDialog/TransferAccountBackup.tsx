@@ -120,7 +120,7 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
           label={t<string>('Wallet password of the account backup')}
           autoFocus
           className='mt-4'
-          disabled={!isResolvable(conflict)}
+          disabled={conflict && !isResolvable(conflict)}
         />
         <div className='mt-6 flex gap-2'>
           <Button onClick={resetBackup} variant='text'>
