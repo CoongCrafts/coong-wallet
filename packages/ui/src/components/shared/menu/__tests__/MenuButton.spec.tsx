@@ -212,7 +212,7 @@ describe('MenuButton', () => {
 
           it('should show alert if account name not found', async () => {
             const backup = await getBackup(true);
-            Object.assign(backup, { name: '' });
+            Object.assign(backup.meta, { name: '' });
 
             await renderView();
             onScanResult(base64Encode(JSON.stringify(backup)));
