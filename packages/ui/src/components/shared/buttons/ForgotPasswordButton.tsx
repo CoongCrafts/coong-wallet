@@ -16,7 +16,7 @@ export default function ForgotPasswordButton() {
   const { open, doOpen, doClose } = useDialog();
   const [confirmation, setConfirmation] = useState<string>('');
   const [loading, setLoading] = useBoolean(false);
-  const { keyring } = useWalletState();
+  const { keyring, walletState } = useWalletState();
   const dispatch = useDispatch();
 
   const handleClose = () => doClose();
@@ -30,6 +30,7 @@ export default function ForgotPasswordButton() {
       setLoading(true);
       setTimeout(async () => {
         await keyring.reset();
+        walletState.reset();
         dispatch(appActions.seedReady(false));
       }, 200);
     } catch (e: any) {
