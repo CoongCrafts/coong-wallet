@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useWalletState } from 'providers/WalletStateProvider';
 
-export default function useAccountNameValidation(name: string) {
+export default function useAccountNameValidation(name: string, oldName?: string) {
   const { keyring } = useWalletState();
   const [validation, setValidation] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -12,7 +12,7 @@ export default function useAccountNameValidation(name: string) {
 
     if (name.length > 16) {
       setValidation('Account name should not exceed 16 characters');
-    } else {
+    } else if (name !== oldName) {
       checkingTimeoutId = setTimeout(async () => {
         try {
           setLoading(true);

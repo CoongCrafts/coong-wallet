@@ -4,15 +4,16 @@ import { useDispatch } from 'react-redux';
 import { usePermission } from 'react-use';
 import { Alert, AlertTitle, Button } from '@mui/material';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
-import { Props } from 'types';
+import { Props, ImportObject } from 'types';
 
 interface QrCodeReaderProps extends Props {
   onResult: (data: string) => void;
+  object: ImportObject;
   showBackButton?: boolean;
   showTitle?: boolean;
 }
 
-function QrCodeReader({ onResult, showBackButton, showTitle }: QrCodeReaderProps) {
+function QrCodeReader({ onResult, object, showBackButton, showTitle }: QrCodeReaderProps) {
   const { t } = useTranslation();
   const cameraPermission = usePermission({ name: 'camera' });
   const dispatch = useDispatch();
@@ -26,7 +27,8 @@ function QrCodeReader({ onResult, showBackButton, showTitle }: QrCodeReaderProps
       {showTitle && <h3>{t<string>('Scan QR Code')}</h3>}
       <p className='mt-4'>
         {t<string>(
-          'Export your Coong Wallet on a different device and scan the QR code on the screen to transfer your wallet.',
+          'Export your {{object}} on a different device and scan the QR code on the screen to transfer your {{object}}.',
+          { object: t<string>(object.toLowerCase()) },
         )}
       </p>
       {cameraPermission === 'denied' ? (

@@ -6,6 +6,7 @@ import { base64Decode } from '@polkadot/util-crypto';
 import { WalletQrBackup } from '@coong/keyring/types';
 import TransferWalletBackup from 'components/pages/SetupWallet/RestoreWallet/ScanQrCode/TransferWalletBackup';
 import QrCodeReader from 'components/shared/import/QrCodeReader';
+import { ImportObject } from 'types';
 import { WalletQrBackupScheme } from 'validations/WalletBackup';
 
 export default function ScanQrCode(): JSX.Element {
@@ -33,6 +34,6 @@ export default function ScanQrCode(): JSX.Element {
   return backup ? (
     <TransferWalletBackup backup={backup} resetBackup={resetBackup} />
   ) : (
-    <QrCodeReader onResult={onQrScanComplete} showBackButton showTitle />
+    <QrCodeReader onResult={onQrScanComplete} object={ImportObject.Wallet} showBackButton showTitle />
   );
 }

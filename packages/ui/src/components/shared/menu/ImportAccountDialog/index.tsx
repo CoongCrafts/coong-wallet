@@ -14,6 +14,7 @@ import TransferAccountBackup from 'components/shared/menu/ImportAccountDialog/Tr
 import useDialog from 'hooks/useDialog';
 import useRegisterEvent from 'hooks/useRegisterEvent';
 import { useWalletState } from 'providers/WalletStateProvider';
+import { ImportObject } from 'types';
 import { EventName } from 'utils/eventemitter';
 import { AccountBackupScheme } from 'validations/AccountBackup';
 
@@ -80,7 +81,7 @@ export default function ImportAccountDialog(): JSX.Element {
                 <Tab label={t<string>(ImportAccountMethod.JSON)} value={ImportAccountMethod.JSON} />
               </TabList>
               <TabPanel value={ImportAccountMethod.QRCode} className='p-0'>
-                <QrCodeReader onResult={onReadBackupCompleted} />
+                <QrCodeReader onResult={onReadBackupCompleted} object={ImportObject.Account} />
               </TabPanel>
               <TabPanel value={ImportAccountMethod.JSON} className='p-0'>
                 <JsonFileReader onResult={onReadBackupCompleted} />

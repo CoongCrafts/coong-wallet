@@ -18,7 +18,7 @@ export default function RenameAccountDialog(): JSX.Element {
   const { open, doOpen, doClose } = useDialog();
   const [name, setName] = useState<string>('');
   const [account, setAccount] = useState<AccountInfoExt>();
-  const { validation, loading } = useAccountNameValidation(name);
+  const { validation, loading } = useAccountNameValidation(name, account?.name);
 
   const onOpen = (account: AccountInfoExt) => {
     setAccount(account);
