@@ -49,7 +49,7 @@ export default class CoongSdk {
   #connectedAccounts?: ConnectedAccounts;
   #walletInstancesQueue: Window[];
 
-  constructor(options: CoongSdkOptions) {
+  constructor(options?: CoongSdkOptions) {
     this.#initialized = false;
     this.#handlers = {};
 
