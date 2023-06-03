@@ -1,4 +1,4 @@
-import { KeyringPair } from '@polkadot/keyring/types';
+import { KeyringPair, KeyringPair$Meta } from '@polkadot/keyring/types';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
 import { u8aToHex } from '@polkadot/util';
 import { sha256AsU8a } from '@polkadot/util-crypto';
@@ -113,7 +113,7 @@ export default class Keyring {
     return localStorage.getItem(ORIGINAL_HASH);
   }
 
-  #ensureOriginalHash(): string {
+  ensureOriginalHash(): string {
     const originalHash = this.#getOriginalHash();
 
     assert(originalHash, ErrorCode.OriginalHashNotFound);
@@ -308,20 +308,20 @@ export default class Keyring {
       return accountBackup;
     }
 
-    const originalHash = this.#ensureOriginalHash();
+    const originalHash = this.ensureOriginalHash();
     Object.assign(accountBackup.meta, { originalHash });
 
     return accountBackup;
   }
 
   isExternal(originalHash: string) {
-    return !(originalHash === this.#getOriginalHash());
+    return !(originalHash === this.ensureOriginalHash());
   }
 
   async importAccount(backup: AccountBackup, password: string, name?: string) {
     const { address, meta: backupMeta } = backup;
 
-    const meta = { ...backupMeta };
+    const meta: KeyringPair$Meta = { ...backupMeta };
 
     if (await this.existsAccount(address)) {
       throw new CoongError(ErrorCode.AccountExists);
@@ -336,7 +336,6 @@ export default class Keyring {
     }
 
     const { originalHash } = meta as AccountInfo;
-
     const isExternal = !originalHash || this.isExternal(originalHash);
 
     if (isExternal) {

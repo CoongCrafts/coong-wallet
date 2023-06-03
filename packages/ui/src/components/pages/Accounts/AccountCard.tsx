@@ -1,12 +1,14 @@
 import { Identicon } from '@polkadot/react-identicon';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Chip, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import AccountAddress from 'components/pages/Accounts/AccountAddress';
 import AccountControls from 'components/pages/Accounts/AccountControls';
 import ShowAddressQrCodeButton from 'components/pages/Accounts/ShowAddressQrCodeButton';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 import { AccountInfoExt, Props } from 'types';
+
+const UNKNOWN_NAME = '<unknown>';
 
 interface ImportedLabelProps extends Props {
   show: boolean | undefined;
@@ -16,12 +18,10 @@ const ImportedLabel: FC<ImportedLabelProps> = ({ show, className = '' }) => {
   const { t } = useTranslation();
 
   return show ? (
-    <Chip
-      label={t<string>('IMPORTED')}
-      size='small'
-      variant='outlined'
-      className={`${className} font-bold text-[10px] dark:bg-white/15 bg-black/10 border border-black/10 dark:border-white/15 h-[22px]`}
-    />
+    <div
+      className={`${className} text-[10px] leading-[20px] font-bold border rounded-xl px-2 border border-black/10 dark:border-white/15 bg-black/10 dark:bg-white/15`}>
+      {t<string>('IMPORTED')}
+    </div>
   ) : (
     <></>
   );
@@ -33,12 +33,12 @@ interface AccountCardProps extends Props {
 }
 
 const AccountCard: FC<AccountCardProps> = ({ className = '', account, showAccountControls }) => {
-  const { networkAddress, name, isExternal } = account;
+  const { networkAddress, name = UNKNOWN_NAME, isExternal } = account;
 
   return (
     <div
       id={networkAddress}
-      className={`${className} account-card transition-colors duration-200 border border-black/10 dark:border-white/15`}>
+      className={`${className} account-card transition-colors duration-200 border border-black/10 dark:border-white/15 text-center`}>
       <div className='flex items-center gap-2'>
         <div className='account-card--icon'>
           <CopyAddressTooltip address={networkAddress} name={name}>
@@ -50,8 +50,8 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account, showAccoun
             {name}
             <ImportedLabel show={isExternal} className='hidden sm:inline-flex' />
           </div>
-          <AccountAddress address={networkAddress} name={name} className='text-xs' />
-          <ImportedLabel show={isExternal} className='sm:hidden' />
+          <AccountAddress address={networkAddress} name={name} className='text-xs mb-1' />
+          <ImportedLabel show={isExternal} className='sm:hidden mb-1.5' />
         </div>
       </div>
       {showAccountControls && (

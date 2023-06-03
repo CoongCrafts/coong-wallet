@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useAsync, useToggle } from 'react-use';
@@ -11,8 +11,6 @@ import useHighlightNewAccount from 'hooks/accounts/useHighlightNewAccount';
 import useAccountNameValidation from 'hooks/useAccountNameValidation';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { AccountInfoExt, Props } from 'types';
-
-const UNKNOWN_NAME = '<unknown>';
 
 function isResolvable(conflict: Conflict | undefined) {
   return conflict === Conflict.AccountNameNotFound || conflict === Conflict.AccountNameExisted;
@@ -56,12 +54,16 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
   const [password, setPassword] = useState<string>('');
   const { validation, loading } = useAccountNameValidation(newName);
   const { setNewAccount } = useHighlightNewAccount();
-  const accountInfo: AccountInfoExt = {
-    name: (meta.name as string) || t<string>(UNKNOWN_NAME),
-    address: backup.address,
-    networkAddress: backup.address,
-    isExternal: !meta.originalHash || keyring.isExternal(meta.originalHash as string),
-  };
+
+  const accountInfo = useMemo(
+    (): AccountInfoExt => ({
+      name: meta.name as string,
+      address: backup.address,
+      networkAddress: backup.address,
+      isExternal: !meta.originalHash || keyring.isExternal(meta.originalHash as string),
+    }),
+    [],
+  );
 
   useAsync(async () => {
     const accountExists = await keyring.existsAccount(accountInfo.address);
@@ -70,8 +72,8 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
       setConflict(Conflict.AccountExisted);
       return;
     }
-    if (meta.name) {
-      setConflict(Conflict.AccountNameExisted);
+    if (!accountInfo.name) {
+      setConflict(Conflict.AccountNameNotFound);
       return;
     }
 

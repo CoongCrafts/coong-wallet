@@ -49,6 +49,8 @@ export default function RenameAccountDialog(): JSX.Element {
 
   if (!account) return <></>;
 
+  const hasChanged = account.name !== name;
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle onClose={onClose}>{t<string>('Rename account')}</DialogTitle>

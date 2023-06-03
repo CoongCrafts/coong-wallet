@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useEffectOnce } from 'react-use';
 import { u8aToString } from '@polkadot/util';
 import { base64Decode, isBase64 } from '@polkadot/util-crypto';
 import { AccountBackup } from '@coong/keyring/types';
+import { ErrorCode } from '@coong/utils';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Dialog, DialogContent, Tab } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
@@ -12,7 +12,9 @@ import JsonFileReader from 'components/shared/import/JsonFileReader';
 import QrCodeReader from 'components/shared/import/QrCodeReader';
 import TransferAccountBackup from 'components/shared/menu/ImportAccountDialog/TransferAccountBackup';
 import useDialog from 'hooks/useDialog';
-import { EventName, EventRegistry } from 'utils/eventemitter';
+import useRegisterEvent from 'hooks/useRegisterEvent';
+import { useWalletState } from 'providers/WalletStateProvider';
+import { EventName } from 'utils/eventemitter';
 import { AccountBackupScheme } from 'validations/AccountBackup';
 
 enum ImportAccountMethod {
@@ -21,17 +23,13 @@ enum ImportAccountMethod {
 }
 
 function ImportAccountDialog(): JSX.Element {
+  const { keyring } = useWalletState();
   const { open, doOpen, doClose } = useDialog();
   const { t } = useTranslation();
   const [backup, setBackup] = useState<AccountBackup>();
   const [method, setMethod] = useState<ImportAccountMethod>(ImportAccountMethod.QRCode);
 
-  useEffectOnce(() => {
-    EventRegistry.on(EventName.OpenImportAccountDialog, doOpen);
-    return () => {
-      EventRegistry.off(EventName.OpenImportAccountDialog, doOpen);
-    };
-  });
+  useRegisterEvent(EventName.OpenImportAccountDialog, doOpen);
 
   const onClose = () => {
     doClose(() => {
@@ -50,6 +48,7 @@ function ImportAccountDialog(): JSX.Element {
 
   const onReadBackupCompleted = async (data: string) => {
     try {
+      keyring.ensureOriginalHash();
       const decoded = isBase64(data) ? u8aToString(base64Decode(data)) : data;
       const parsedBackup = JSON.parse(decoded) as AccountBackup;
       Object.assign(parsedBackup, { meta: parsedBackup.meta || {} });
@@ -58,7 +57,11 @@ function ImportAccountDialog(): JSX.Element {
       setBackup(parsedBackup);
     } catch (e: any) {
       toast.dismiss();
-      toast.error(t<string>(`Unknown/Invalid {{object}}`, { object: method }));
+      if (e.code === ErrorCode.OriginalHashNotFound) {
+        toast.error(t<string>(e.message));
+      } else {
+        toast.error(t<string>(`Unknown/Invalid {{object}}`, { object: method }));
+      }
     }
   };
 
