@@ -1,6 +1,5 @@
 import { createContext, FC, useContext } from 'react';
-import { isMessageId } from '@coong/base';
-import { EmbedHandler, TabHandler, WalletState } from '@coong/base';
+import { isMessageId, TabHandler, WalletState } from '@coong/base';
 import { RequestName, WalletRequestMessage, WalletResponse } from '@coong/base/types';
 import Keyring from '@coong/keyring';
 import { CoongError, ErrorCode } from '@coong/utils';
@@ -34,12 +33,8 @@ export const WalletStateProvider: FC<Props> = ({ children }) => {
       request: { name },
     } = message;
 
-    if (isMessageId(id)) {
-      if (name.startsWith('tab/')) {
-        return new TabHandler(walletState).handle(message);
-      } else if (name.startsWith('embed/')) {
-        return new EmbedHandler(walletState).handle(message);
-      }
+    if (isMessageId(id) && name.startsWith('tab/')) {
+      return new TabHandler(walletState).handle(message);
     }
 
     throw new CoongError(ErrorCode.UnknownRequest);
