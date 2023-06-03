@@ -52,7 +52,7 @@ npm install --save @coong/sdk
 ```typescript
 import CoongSdk from '@coong/sdk';
 
-const initCoongWallet = async () => {
+const initializeCoongWallet = async () => {
   // Inject Coong Wallet API
   const sdk = new CoongSdk()
   await sdk.initialize();
@@ -64,12 +64,12 @@ const initCoongWallet = async () => {
   return { sdk, injected, approvedAccounts }
 }
   
-await initCoongWallet();
+await initializeCoongWallet();
 ```
 
 Notes:
 - By default, the SDK will connect to Coong Wallet at the offical URL `https://app.coongwallet.io`.
-- You can also connect to a different URL of the wallet by passing the URL to the `initialize` method.
+- You can also connect to a different URL of the wallet by customizing SDK options:
 ```typescript
   const sdk = new CoongSdk({ walletUrl: 'https://beta.coongwallet.io' });
   await sdk.initialize();  
