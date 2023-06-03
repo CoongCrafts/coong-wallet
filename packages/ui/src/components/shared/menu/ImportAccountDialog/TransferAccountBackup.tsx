@@ -16,10 +16,15 @@ export enum Conflict {
   AccountExisted = 'Account is already exists in your wallet. Importing account can not be implemented.',
   AccountNameExisted = 'Account name has already been taken. Please choose another name to continue importing.',
   AccountNameNotFound = 'Account name is required. Please choose one to continue importing.',
+  AccountNameLong = 'Account name is too long. Please choose another name not exceed 16 characters to continue.',
 }
 
 function isResolvable(conflict: Conflict | undefined) {
-  return conflict === Conflict.AccountNameNotFound || conflict === Conflict.AccountNameExisted;
+  return (
+    conflict === Conflict.AccountNameNotFound ||
+    conflict === Conflict.AccountNameExisted ||
+    conflict === Conflict.AccountNameLong
+  );
 }
 
 interface TransferAccountBackupProps extends Props {
@@ -54,19 +59,18 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
 
     if (accountExists) {
       setConflict(Conflict.AccountExisted);
-      return;
-    }
-    if (!accountInfo.name) {
+    } else if (!accountInfo.name) {
       setConflict(Conflict.AccountNameNotFound);
-      return;
-    }
-
-    const nameExists = await keyring.existsName(accountInfo.name!);
-
-    if (nameExists) {
-      setConflict(Conflict.AccountNameExisted);
+    } else if (accountInfo.name.length > 16) {
+      setConflict(Conflict.AccountNameLong);
     } else {
-      setConflict(undefined);
+      const nameExists = await keyring.existsName(accountInfo.name!);
+
+      if (nameExists) {
+        setConflict(Conflict.AccountNameExisted);
+      } else {
+        setConflict(undefined);
+      }
     }
   }, [backup]);
 
@@ -116,6 +120,7 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
           label={t<string>('Wallet password of the account backup')}
           autoFocus
           className='mt-4'
+          disabled={!isResolvable(conflict)}
         />
         <div className='mt-6 flex gap-2'>
           <Button onClick={resetBackup} variant='text'>
