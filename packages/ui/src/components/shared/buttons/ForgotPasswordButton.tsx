@@ -51,13 +51,15 @@ export default function ForgotPasswordButton() {
         <DialogContent>
           <DialogContentText className='mb-4'>
             {t<string>(
-              `Coong Wallet cannot recover wallet password for you. If you have trouble unlocking your wallet, you will need to reset the wallet. Make sure you have your secret recovery phrase before proceed further.`,
+              'Coong Wallet cannot recover wallet password for you. If you have trouble unlocking your wallet, you will need to reset the wallet. Make sure you have your secret recovery phrase before proceed further.',
             )}
           </DialogContentText>
-          <DialogContentText className='mb-4'>{t<string>(`Type "Reset wallet" to continue.`)}</DialogContentText>
-          <Box className='flex flex-col gap-4' component='form' autoComplete='off' onSubmit={doResetWallet}>
+          <DialogContentText className='mb-4'>
+            {t<string>(`Type "{{confirmationWords}}" to continue`, { confirmationWords: CONFIRMATION_WORDS })}
+          </DialogContentText>
+          <Box className='flex flex-col gap-2' component='form' autoComplete='off' onSubmit={doResetWallet}>
             <TextField
-              label={t<string>('Reset wallet')}
+              label={CONFIRMATION_WORDS}
               type='text'
               fullWidth
               onChange={(e) => setConfirmation(e.target.value)}
