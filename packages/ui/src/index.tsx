@@ -12,24 +12,7 @@ import { WalletStateProvider } from 'providers/WalletStateProvider';
 import { persistor, store } from 'redux/store';
 import { globalStyles } from 'styles';
 import { ALERT_TIMEOUT } from 'utils/constants';
-
-function fadeOut(el: HTMLElement | null) {
-  if (!el) {
-    return;
-  }
-
-  // @ts-ignore
-  el.style.opacity = 1;
-
-  (function fade() {
-    // @ts-ignore
-    if ((el.style.opacity -= 0.03) < 0) {
-      el.style.display = 'none';
-    } else {
-      requestAnimationFrame(fade);
-    }
-  })();
-}
+import { fadeOut } from 'utils/misc';
 
 fadeOut(document.getElementById('loading-overlay'));
 
