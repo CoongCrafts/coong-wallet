@@ -13,6 +13,26 @@ import { persistor, store } from 'redux/store';
 import { globalStyles } from 'styles';
 import { ALERT_TIMEOUT } from 'utils/constants';
 
+function fadeOut(el: HTMLElement | null) {
+  if (!el) {
+    return;
+  }
+
+  // @ts-ignore
+  el.style.opacity = 1;
+
+  (function fade() {
+    // @ts-ignore
+    if ((el.style.opacity -= 0.03) < 0) {
+      el.style.display = 'none';
+    } else {
+      requestAnimationFrame(fade);
+    }
+  })();
+}
+
+fadeOut(document.getElementById('loading-overlay'));
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
