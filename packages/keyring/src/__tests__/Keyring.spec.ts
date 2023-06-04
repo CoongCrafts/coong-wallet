@@ -5,7 +5,7 @@ import { AccountInfo, WalletQrBackup } from '@coong/keyring/types';
 import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
 import CryptoJS from 'crypto-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import Keyring, { ACCOUNTS_INDEX, ENCRYPTED_MNEMONIC } from '../Keyring';
+import Keyring, { ACCOUNTS_INDEX, ENCRYPTED_MNEMONIC, ORIGINAL_HASH } from '../Keyring';
 
 let keyring: Keyring;
 
@@ -486,5 +486,41 @@ describe('importQrBackup', () => {
       await expect(keyring.importQrBackup(qrBackup, PASSWORD)).rejects.toThrowError();
       expect(resetFn).toHaveBeenCalled();
     });
+  });
+});
+
+describe('exportAccount', () => {
+  let keyring: Keyring, testAccount: AccountInfo;
+  beforeEach(async () => {
+    keyring = await initializeNewKeyring();
+    testAccount = await keyring.createNewAccount('test-account', PASSWORD);
+  });
+
+  it('should verify password', async () => {
+    const verifyingPasswordSpy = vi.spyOn(Keyring.prototype, 'verifyPassword');
+    await keyring.exportAccount(testAccount.address, PASSWORD);
+
+    expect(verifyingPasswordSpy).toBeCalled();
+  });
+
+  it('should return an account backup', async () => {
+    const accountBackup = await keyring.exportAccount(testAccount.address, PASSWORD);
+
+    expect(accountBackup.address).toBeTypeOf('string');
+    expect(accountBackup.encoded).toBeTypeOf('string');
+    expect(accountBackup.encoding).toBeTypeOf('object');
+    expect(accountBackup.meta).toHaveProperty('originalHash');
+    expect(accountBackup.meta).toHaveProperty('name');
+  });
+});
+
+describe('ensureOriginalHashPresence', () => {
+  it('should generate originalHash if not found one', async () => {
+    const keyring = await initializeNewKeyring();
+    const originalHash = localStorage.getItem(ORIGINAL_HASH);
+    localStorage.removeItem(ORIGINAL_HASH);
+
+    await keyring.ensureOriginalHashPresence(PASSWORD);
+    expect(localStorage.getItem(ORIGINAL_HASH)).toEqual(originalHash);
   });
 });

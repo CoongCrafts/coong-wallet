@@ -1,4 +1,4 @@
-import { KeyringPair$Meta } from '@polkadot/keyring/types';
+import { KeyringPair$Json, KeyringPair$Meta } from '@polkadot/keyring/types';
 import { KeyringPairs$Json } from '@polkadot/ui-keyring/types';
 import { KeypairType } from '@polkadot/util-crypto/types';
 
@@ -15,9 +15,14 @@ export interface AccountInfo extends KeyringPair$Meta {
   type?: KeypairType;
   whenCreated?: number;
   derivationPath?: DerivationPath;
+  originalHash?: string;
 }
 
 export type CompactAccountInfo = [DerivationPath, AccountName];
+
+export interface QrBackup {}
+
+export interface JsonBackup {}
 
 export interface WalletBackup$Json {
   accountsIndex: number;
@@ -26,6 +31,8 @@ export interface WalletBackup$Json {
 
 export interface WalletBackup extends KeyringPairs$Json, WalletBackup$Json {}
 
-export interface WalletQrBackup extends WalletBackup$Json {
+export interface AccountBackup extends KeyringPair$Json, JsonBackup, QrBackup {}
+
+export interface WalletQrBackup extends WalletBackup$Json, QrBackup {
   accounts: CompactAccountInfo[];
 }

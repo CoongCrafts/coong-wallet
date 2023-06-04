@@ -12,6 +12,11 @@ export interface AccountInfoExt extends AccountInfo {
   networkAddress: string; // Network address changing following the `addressPrefix`
 }
 
+export enum ExportObject {
+  Wallet = 'Wallet',
+  Account = 'Account',
+}
+
 export enum ThemeMode {
   Dark = 'dark',
   Light = 'light',

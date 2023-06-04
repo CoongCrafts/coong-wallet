@@ -21,24 +21,26 @@ const DEFAULT_WALLET_URL = 'https://app.coongwallet.io';
 /**
  * @name CoongSdk
  * @description A helper to initialize/inject Coong Wallet API
- * and interact with wallet instances (tab/embed)
+ * and interact with wallet instances
  *
  * ## Initialize & interact with Coong Wallet
  *
- * ```javascript
+ * ```typescript
  * import CoongSdk from '@coong/sdk';
- *
  *
  * const initializeCoongWallet = async () => {
  *   // Inject Coong Wallet API
- *   await CoongSdk.instance().initialize();
+ *   const sdk = new CoongSdk()
+ *   await sdk.initialize();
  *
  *   // We can now interact with the wallet using the similar Polkadot{.js} extension API
- *   const coongInjected = await window['injectedWeb3']['coongwallet'].enable('Awesome Dapp');
- *   const approvedAccounts = await coongInjected.accounts.get();
+ *   const injected = await window['injectedWeb3']['coongwallet'].enable('Awesome Dapp');
+ *   const approvedAccounts = await injected.accounts.get();
+ *
+ *   return { sdk, injected, approvedAccounts }
  * }
  *
- * initializeCoongWallet();
+ * await initializeCoongWallet();
  * ```
  */
 export default class CoongSdk {
@@ -49,7 +51,7 @@ export default class CoongSdk {
   #connectedAccounts?: ConnectedAccounts;
   #walletInstancesQueue: Window[];
 
-  constructor(options: CoongSdkOptions) {
+  constructor(options?: CoongSdkOptions) {
     this.#initialized = false;
     this.#handlers = {};
 
@@ -61,8 +63,6 @@ export default class CoongSdk {
 
   /**
    * Initialize & inject wallet API
-   *
-   * @param walletUrl customize wallet url, by default the SDK will connect to the official url defined at `DEFAULT_WALLET_URL`
    */
   async initialize() {
     assert(typeof window !== 'undefined', 'Coong SDK only works in browser environment!');
@@ -85,6 +85,9 @@ export default class CoongSdk {
     return input.endsWith('/') ? this.trimTrailingSlash(input.slice(0, -1)) : input;
   };
 
+  /**
+   * Destroy Coong Wallet initialization
+   */
   destroy() {
     if (!this.#initialized) {
       return;
@@ -124,7 +127,7 @@ export default class CoongSdk {
   }
 
   /**
-   * Send a message to wallet instance (embed or tab) based on the request name
+   * Send a message to wallet instance based on the request name
    *
    * @param message
    */

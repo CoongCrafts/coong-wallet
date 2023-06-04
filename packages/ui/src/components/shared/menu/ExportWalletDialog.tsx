@@ -1,38 +1,43 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useEffectOnce } from 'react-use';
-import { WalletBackup } from '@coong/keyring/types';
+import { CompactAccountInfo, DerivationPath, WalletBackup, WalletQrBackup } from '@coong/keyring/types';
 import { Dialog, DialogContent, DialogContentText } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
+import QrCode from 'components/shared/export/QrCode';
 import VerifyingPasswordForm from 'components/shared/forms/VerifyingPasswordForm';
-import QrCode from 'components/shared/menu/ExportWalletDialog/QrCode';
 import useDialog from 'hooks/useDialog';
+import useRegisterEvent from 'hooks/useRegisterEvent';
 import { useWalletState } from 'providers/WalletStateProvider';
-import { EventName, EventRegistry } from 'utils/eventemitter';
+import { ExportObject } from 'types';
+import { EventName } from 'utils/eventemitter';
+
+const toWalletQrBackup = (backup: WalletBackup): WalletQrBackup => {
+  const { accounts, accountsIndex, encryptedMnemonic } = backup;
+
+  return {
+    accountsIndex,
+    encryptedMnemonic,
+    accounts: accounts.map(({ meta }) => [meta.derivationPath as DerivationPath, meta.name!] as CompactAccountInfo),
+  };
+};
 
 export default function ExportWalletDialog(): JSX.Element {
   const { t } = useTranslation();
   const { open, doOpen, doClose } = useDialog();
   const { keyring } = useWalletState();
-  const [backup, setBackup] = useState<WalletBackup>();
+  const [backup, setBackup] = useState<WalletQrBackup>();
 
   const onPasswordVerified = async (password: string) => {
     try {
-      const backup = await keyring.exportWallet(password);
+      const backup = toWalletQrBackup(await keyring.exportWallet(password));
       setBackup(backup);
     } catch (e: any) {
       toast.error(t<string>(e.message));
     }
   };
 
-  useEffectOnce(() => {
-    EventRegistry.on(EventName.OpenExportWalletDialog, doOpen);
-
-    return () => {
-      EventRegistry.off(EventName.OpenExportWalletDialog, doOpen);
-    };
-  });
+  useRegisterEvent(EventName.OpenExportWalletDialog, doOpen);
 
   const onClose = () => {
     doClose(() => setBackup(undefined));
@@ -44,7 +49,7 @@ export default function ExportWalletDialog(): JSX.Element {
       <DialogContent>
         {backup ? (
           <div className='my-4'>
-            <QrCode walletBackup={backup} />
+            <QrCode value={backup} object={ExportObject.Wallet} />
           </div>
         ) : (
           <>
