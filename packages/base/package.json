@@ -1,7 +1,7 @@
 {
   "name": "@coong/base",
   "version": "0.0.21",
-  "description": "Shared functions, logics for Coong wallet",
+  "description": "Shared functions, logics for Coong Wallet",
   "author": "Thang X. Vu <thang@coongwallet.io>",
   "homepage": "https://github.com/CoongCrafts/coong-wallet/tree/main/packages/base#readme",
   "repository": {

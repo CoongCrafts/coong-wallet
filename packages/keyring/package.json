@@ -1,7 +1,7 @@
 {
   "name": "@coong/keyring",
   "version": "0.0.21",
-  "description": "Keyring for Coong wallet",
+  "description": "Keyring for Coong Wallet",
   "author": "Thang X. Vu <thang@coongwallet.io>",
   "homepage": "https://github.com/CoongCrafts/coong-wallet/tree/main/packages/keyring#readme",
   "repository": {
