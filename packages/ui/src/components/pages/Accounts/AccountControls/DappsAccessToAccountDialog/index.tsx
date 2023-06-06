@@ -51,7 +51,7 @@ export default function DappsAccessToAccountDialog() {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle onClose={onClose}>{`${t<string>('Dapps Access To')}: ${name}`}</DialogTitle>
       <DialogContent>
-        <div>
+        <div className='flex-col flex gap-2 max-h-[350px] overflow-y-auto'>
           {authorizedApps.length === 0 && (
             <div className='text-center my-4 text-gray-500 dark:text-gray-300'>
               {t<string>('No dapps have access to this account')}
