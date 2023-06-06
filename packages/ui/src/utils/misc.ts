@@ -1,3 +1,5 @@
+import { trimOffUrlProtocol } from 'utils/string';
+
 // Ref: https://gist.github.com/alirezas/c4f9f43e9fe1abba9a4824dd6fc60a55
 export function fadeOut(el: HTMLElement | null) {
   if (!el) {
@@ -15,4 +17,8 @@ export function fadeOut(el: HTMLElement | null) {
       requestAnimationFrame(fade);
     }
   })();
+}
+
+export function appFaviconUrl(appUrl: string): string {
+  return `https://icon.horse/icon/${trimOffUrlProtocol(appUrl)}`;
 }

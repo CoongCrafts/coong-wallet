@@ -14,3 +14,7 @@ export const shortenAddress = (address: string): string => {
 export const randomWalletInstanceId = (): string => {
   return `coong/instance-${Math.floor(Math.random() * 1_0000_000)}`;
 };
+
+export const trimOffUrlProtocol = (url: string): string => {
+  return url.replace(/https?:\/\//, '');
+};
