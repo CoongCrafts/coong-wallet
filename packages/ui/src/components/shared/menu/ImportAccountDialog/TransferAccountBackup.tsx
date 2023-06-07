@@ -24,7 +24,7 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
   const [onImporting, setOnImporting] = useToggle(false);
   const [newName, setNewName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const { validation, waiting } = useAccountNameValidation(newName);
+  const { validation } = useAccountNameValidation(newName);
   const { setNewAccount } = useHighlightNewAccount();
   const { conflict, resolvable, accountInfo } = useAccountBackupValidation(backup);
 
@@ -65,7 +65,9 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
     return (
       <div>
         <AccountCard account={accountInfo} />
-        <Alert severity='error'>{t<string>(conflict, { name: originalAccountBackupName })}</Alert>
+        <Alert severity='error' className='mt-4'>
+          {t<string>(conflict, { name: originalAccountBackupName })}
+        </Alert>
         <Button onClick={resetBackup} className='mt-4' fullWidth>
           {t<string>('Back')}
         </Button>
@@ -75,7 +77,11 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
   return (
     <div>
       <AccountCard account={accountInfo} />
-      {conflict && <Alert severity='info'>{t<string>(conflict, { name: originalAccountBackupName })}</Alert>}
+      {conflict && (
+        <Alert severity='info' className='mt-4'>
+          {t<string>(conflict, { name: originalAccountBackupName })}
+        </Alert>
+      )}
       <form onSubmit={doImportAccount} className='mt-4'>
         {resolvable && (
           <TextField
@@ -103,7 +109,7 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
           </Button>
           <Button
             type='submit'
-            disabled={!password || !!validation || (!!conflict && !newName) || onImporting || waiting}
+            disabled={!password || !!validation || (!!conflict && !newName) || onImporting}
             fullWidth>
             {t<string>('Import Account')}
           </Button>

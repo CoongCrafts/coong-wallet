@@ -6,7 +6,6 @@ import { AccountInfo } from '@coong/keyring/types';
 import { Add } from '@mui/icons-material';
 import { Box, Button, Dialog, DialogContent, DialogContentText, IconButton, TextField } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
-import LoadingTextField from 'components/shared/LoadingTextField';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import useAccountNameValidation from 'hooks/useAccountNameValidation';
 import useDialog from 'hooks/useDialog';
@@ -23,7 +22,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const { t } = useTranslation();
-  const { validation, loading } = useAccountNameValidation(name);
+  const { validation } = useAccountNameValidation(name);
 
   useUpdateEffect(() => {
     if (open) {
@@ -75,13 +74,12 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
             {t<string>('Choose a name and enter your password to create a new account')}
           </DialogContentText>
           <Box className='flex flex-col gap-4' component='form' autoComplete='off' onSubmit={doCreateNewAccount}>
-            <LoadingTextField
+            <TextField
               label={t<string>('New account name')}
               type='text'
               required
               fullWidth
               onChange={(e) => setName(e.target.value)}
-              loading={loading}
               value={name}
               error={!!validation}
               helperText={validation || <EmptySpace />}
