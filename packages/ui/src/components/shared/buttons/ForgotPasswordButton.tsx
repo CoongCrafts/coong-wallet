@@ -42,7 +42,7 @@ export default function ForgotPasswordButton() {
   return (
     <>
       <Button variant='text' color='gray' onClick={doOpen}>
-        Forgot your password?
+        t<string>('Forgot your password?')
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle onClose={handleClose} disabled={loading}>
