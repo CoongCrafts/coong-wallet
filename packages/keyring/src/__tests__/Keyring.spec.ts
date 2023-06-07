@@ -539,14 +539,13 @@ describe('importAccount', () => {
   it('should throw error if account exists', async () => {
     await keyring.importAccount(backup, PASSWORD);
 
-    await expect(keyring.importAccount(backup, PASSWORD)).rejects.toThrowError(new CoongError(ErrorCode.AccountExists));
+    await expect(keyring.importAccount(backup, PASSWORD)).rejects.toThrowError(
+      new CoongError(ErrorCode.AccountExisted),
+    );
   });
   it('should throw error if account name exists', async () => {
     await keyring.createNewAccount('test-account', PASSWORD);
 
-    await expect(keyring.importAccount(backup, PASSWORD, 'test-account')).rejects.toThrowError(
-      new CoongError(ErrorCode.AccountNameUsed),
-    );
     await expect(keyring.importAccount(backup, PASSWORD)).rejects.toThrowError(
       new CoongError(ErrorCode.AccountNameUsed),
     );

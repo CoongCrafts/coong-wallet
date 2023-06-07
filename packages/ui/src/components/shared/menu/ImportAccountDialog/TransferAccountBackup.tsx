@@ -1,31 +1,16 @@
-import { FormEvent, useMemo, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useAsync, useToggle } from 'react-use';
+import { useToggle } from 'react-use';
 import { AccountBackup } from '@coong/keyring/types';
 import { Alert, Button, TextField } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
-import LoadingTextField from 'components/shared/LoadingTextField';
+import useAccountBackupValidation from 'components/shared/menu/ImportAccountDialog/useAccountBackupValidation';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import useHighlightNewAccount from 'hooks/accounts/useHighlightNewAccount';
 import useAccountNameValidation from 'hooks/useAccountNameValidation';
 import { useWalletState } from 'providers/WalletStateProvider';
-import { AccountInfoExt, Props } from 'types';
-
-export enum Conflict {
-  AccountExisted = 'Account is already exists in your wallet. Importing account can not be implemented.',
-  AccountNameExisted = 'Account name has already been taken. Please choose another name to continue importing.',
-  AccountNameNotFound = 'Account name is required. Please choose one to continue importing.',
-  AccountNameLong = 'Account name is too long. Please choose another name not exceed 16 characters to continue.',
-}
-
-function isResolvable(conflict: Conflict | undefined) {
-  return (
-    conflict === Conflict.AccountNameNotFound ||
-    conflict === Conflict.AccountNameExisted ||
-    conflict === Conflict.AccountNameLong
-  );
-}
+import { Props } from 'types';
 
 interface TransferAccountBackupProps extends Props {
   backup: AccountBackup;
@@ -35,44 +20,15 @@ interface TransferAccountBackupProps extends Props {
 
 function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccountBackupProps): JSX.Element {
   const { keyring } = useWalletState();
-  const { meta } = backup;
   const { t } = useTranslation();
   const [onImporting, setOnImporting] = useToggle(false);
-  const [conflict, setConflict] = useState<Conflict>();
   const [newName, setNewName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const { validation, loading } = useAccountNameValidation(newName);
+  const { validation, waiting } = useAccountNameValidation(newName);
   const { setNewAccount } = useHighlightNewAccount();
+  const { conflict, resolvable, accountInfo } = useAccountBackupValidation(backup);
 
-  const accountInfo = useMemo(
-    (): AccountInfoExt => ({
-      name: meta.name as string,
-      address: backup.address,
-      networkAddress: backup.address,
-      isExternal: !meta.originalHash || keyring.isExternal(meta.originalHash as string),
-    }),
-    [],
-  );
-
-  useAsync(async () => {
-    const accountExists = await keyring.existsAccount(accountInfo.address);
-
-    if (accountExists) {
-      setConflict(Conflict.AccountExisted);
-    } else if (!accountInfo.name) {
-      setConflict(Conflict.AccountNameNotFound);
-    } else if (accountInfo.name.length > 16) {
-      setConflict(Conflict.AccountNameLong);
-    } else {
-      const nameExists = await keyring.existsName(accountInfo.name!);
-
-      if (nameExists) {
-        setConflict(Conflict.AccountNameExisted);
-      } else {
-        setConflict(undefined);
-      }
-    }
-  }, [backup]);
+  const originalAccountBackupName = backup.meta.name as string;
 
   const doImportAccount = (event: FormEvent) => {
     event.preventDefault();
@@ -80,7 +36,11 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
     setOnImporting(true);
     setTimeout(async () => {
       try {
-        const account = await keyring.importAccount(backup, password, newName);
+        // to avoid change the content of original backup
+        const cloneBackup: AccountBackup = { ...backup, meta: { ...backup.meta } };
+        cloneBackup.meta.name = newName || originalAccountBackupName;
+
+        const account = await keyring.importAccount(cloneBackup, password);
         onClose();
         toast.success(t<string>('Import account successfully'));
         setNewAccount(account);
@@ -91,20 +51,36 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
     }, 200);
   };
 
+  const handleNewNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newName = e.currentTarget.value;
+    setNewName(newName);
+
+    // change account info name just to show the preview with new name
+    // it doesn't make original backup change
+    if (!newName) accountInfo.name = originalAccountBackupName;
+    else accountInfo.name = newName;
+  };
+
+  if (conflict && !resolvable)
+    return (
+      <div>
+        <AccountCard account={accountInfo} />
+        <Alert severity='error'>{t<string>(conflict, { name: originalAccountBackupName })}</Alert>
+        <Button onClick={resetBackup} className='mt-4' fullWidth>
+          {t<string>('Back')}
+        </Button>
+      </div>
+    );
+
   return (
     <div>
       <AccountCard account={accountInfo} />
-      {conflict && (
-        <Alert severity={isResolvable(conflict) ? 'info' : 'error'} className='my-4'>
-          {t<string>(conflict)}
-        </Alert>
-      )}
-      <form onSubmit={doImportAccount}>
-        {isResolvable(conflict) && (
-          <LoadingTextField
+      {conflict && <Alert severity='info'>{t<string>(conflict, { name: originalAccountBackupName })}</Alert>}
+      <form onSubmit={doImportAccount} className='mt-4'>
+        {resolvable && (
+          <TextField
             value={newName}
-            onChange={(e) => setNewName(e.currentTarget.value)}
-            loading={loading}
+            onChange={handleNewNameChange}
             fullWidth
             label={t<string>('New account name')}
             autoFocus
@@ -120,7 +96,6 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
           label={t<string>('Wallet password of the account backup')}
           autoFocus
           className='mt-4'
-          disabled={conflict && !isResolvable(conflict)}
         />
         <div className='mt-6 flex gap-2'>
           <Button onClick={resetBackup} variant='text'>
@@ -128,7 +103,7 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
           </Button>
           <Button
             type='submit'
-            disabled={!password || !!validation || (!!conflict && !newName) || onImporting}
+            disabled={!password || !!validation || (!!conflict && !newName) || onImporting || waiting}
             fullWidth>
             {t<string>('Import Account')}
           </Button>

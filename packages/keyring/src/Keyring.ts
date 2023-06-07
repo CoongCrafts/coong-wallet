@@ -113,7 +113,7 @@ export default class Keyring {
     return localStorage.getItem(ORIGINAL_HASH);
   }
 
-  ensureOriginalHash(): string {
+  #ensureOriginalHash(): string {
     const originalHash = this.#getOriginalHash();
 
     assert(originalHash, ErrorCode.OriginalHashNotFound);
@@ -308,49 +308,42 @@ export default class Keyring {
       return accountBackup;
     }
 
-    const originalHash = this.ensureOriginalHash();
+    const originalHash = this.#ensureOriginalHash();
     Object.assign(accountBackup.meta, { originalHash });
 
     return accountBackup;
   }
 
-  isExternal(originalHash: string) {
-    return !(originalHash === this.ensureOriginalHash());
+  isExternalAccount(accountOriginalHash: string | undefined) {
+    return accountOriginalHash !== this.#ensureOriginalHash();
   }
 
-  async importAccount(backup: AccountBackup, password: string, name?: string) {
-    const { address, meta: backupMeta } = backup;
-
-    const meta: KeyringPair$Meta = { ...backupMeta };
+  async importAccount(backup: AccountBackup, password: string) {
+    const { address, meta } = backup;
 
     if (await this.existsAccount(address)) {
-      throw new CoongError(ErrorCode.AccountExists);
+      throw new CoongError(ErrorCode.AccountExisted);
     }
 
-    if (!name && !meta.name) {
+    if (!meta.name) {
       throw new CoongError(ErrorCode.AccountNameRequired);
-    } else if (name && (await this.existsName(name))) {
-      throw new CoongError(ErrorCode.AccountNameUsed);
-    } else if (!name && (await this.existsName(meta.name as string))) {
+    } else if (await this.existsName(meta.name as string)) {
       throw new CoongError(ErrorCode.AccountNameUsed);
     }
 
-    const { originalHash } = meta as AccountInfo;
+    const isExternalAccount = this.isExternalAccount(meta.originalHash as string);
 
-    const isExternal = !originalHash || this.isExternal(originalHash);
-
-    if (isExternal) {
-      Object.assign(meta, { isExternal });
+    if (isExternalAccount) {
+      meta.isExternal = isExternalAccount;
     } else {
       // if is internal account just delete the original hash from account meta
       delete meta.originalHash;
     }
 
-    Object.assign(meta, { name: name || meta.name });
-    Object.assign(meta, { whenCreated: Date.now() });
+    meta.whenCreated = Date.now();
 
     try {
-      this.#keyring.restoreAccount({ ...backup, meta }, password);
+      this.#keyring.restoreAccount(backup, password);
       return await this.getAccount(address);
     } catch (e: any) {
       if (e.message === 'Unable to decode using the supplied passphrase') {
@@ -364,7 +357,7 @@ export default class Keyring {
   async exportWallet(password: string): Promise<WalletBackup> {
     await this.verifyPassword(password);
 
-    const addresses = (await this.getAccounts()).filter((one) => !one.isExternal).map((one) => one.address);
+    const addresses = (await this.getAccounts()).map((one) => one.address);
     const accountsBackup = await this.#keyring.backupAccounts(addresses, password);
 
     const walletBackup: WalletBackup = {

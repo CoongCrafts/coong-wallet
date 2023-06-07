@@ -14,7 +14,7 @@ export enum ErrorCode {
   AccountNameRequired = 'AccountNameRequired',
   AccountNameUsed = 'AccountNameUsed',
   InvalidMnemonic = 'InvalidMnemonic',
-  AccountExists = 'AccountExists',
+  AccountExisted = 'AccountExisted',
   OriginalHashNotFound = 'OriginalHashNotFound',
 }
 
