@@ -17,13 +17,15 @@ interface ImportedLabelProps extends Props {
 const ImportedLabel: FC<ImportedLabelProps> = ({ show, className = '' }) => {
   const { t } = useTranslation();
 
-  return show ? (
+  if (!show) {
+    return null;
+  }
+
+  return (
     <div
       className={`${className} text-[10px] text-center leading-[20px] font-bold rounded-xl px-2 border border-black/10 dark:border-white/15 bg-black/10 dark:bg-white/15`}>
       {t<string>('IMPORTED')}
     </div>
-  ) : (
-    <></>
   );
 };
 
@@ -51,7 +53,7 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account, showAccoun
             <ImportedLabel show={isExternal} className='hidden sm:inline-flex' />
           </div>
           <AccountAddress address={networkAddress} name={name} className='text-xs mb-1' />
-          <ImportedLabel show={isExternal} className='sm:hidden mb-1.5' />
+          <ImportedLabel show={isExternal} className='sm:hidden mb-1.5 self-start' />
         </div>
       </div>
       {showAccountControls && (

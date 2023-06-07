@@ -31,21 +31,19 @@ function JsonFileReader({ onResult }: JsonFileReaderProps): JSX.Element {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, multiple: false });
 
+  const getMessage = () => {
+    if (touchDevice) return 'Click to select file';
+    if (isDragActive) return 'Drop the file here...';
+    return 'Click to select or drag and drop the file here';
+  };
+
   return (
     <div
       {...getRootProps({
         className: 'mt-6 w-full py-6 bg-black/10 dark:bg-white/15 cursor-pointer flex items-center justify-center',
       })}>
       <input {...getInputProps({ accept: 'application/json' })} />
-      {!touchDevice ? (
-        isDragActive ? (
-          <em>{t<string>('Drop the file here...')}</em>
-        ) : (
-          <em>{t<string>('Click to select or drag and drop the file here')}</em>
-        )
-      ) : (
-        <em>{t<string>('Click to select file')}</em>
-      )}
+      <em>{t<string>(getMessage())}</em>
     </div>
   );
 }

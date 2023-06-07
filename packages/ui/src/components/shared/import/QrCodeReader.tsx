@@ -4,11 +4,11 @@ import { useDispatch } from 'react-redux';
 import { usePermission } from 'react-use';
 import { Alert, AlertTitle, Button } from '@mui/material';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
-import { Props, ImportObject } from 'types';
+import { Props, TransferableObject } from 'types';
 
 interface QrCodeReaderProps extends Props {
   onResult: (data: string) => void;
-  object: ImportObject;
+  object: TransferableObject;
   showBackButton?: boolean;
   showTitle?: boolean;
 }
