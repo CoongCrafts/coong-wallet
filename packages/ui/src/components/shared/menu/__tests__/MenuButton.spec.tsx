@@ -205,7 +205,20 @@ describe('MenuButton', () => {
             onScanResult(base64Encode(JSON.stringify(backup)));
 
             expect(await screen.findByRole('alert')).toHaveTextContent(
-              /Account name has already been taken. Please choose another name to continue importing./,
+              /Account name test-account has already been taken. Please choose another name to continue importing./,
+            );
+            expect(await screen.findByLabelText(/New account name/)).toBeInTheDocument();
+          });
+
+          it('should show alert if account name is too long', async () => {
+            const backup = await getBackup(true);
+            backup.meta.name = 'very-long-account-name';
+
+            await renderView();
+            onScanResult(base64Encode(JSON.stringify(backup)));
+
+            expect(await screen.findByRole('alert')).toHaveTextContent(
+              /Account name very-long-account-name is too long. Please choose another name not exceed 16 characters to continue./,
             );
             expect(await screen.findByLabelText(/New account name/)).toBeInTheDocument();
           });
@@ -225,6 +238,8 @@ describe('MenuButton', () => {
 
           it('should show error when account name is not valid', async () => {
             const backup = await getBackup(true);
+            backup.meta.name = '';
+
             await keyring.createNewAccount('test-account', PASSWORD);
 
             await renderView();
