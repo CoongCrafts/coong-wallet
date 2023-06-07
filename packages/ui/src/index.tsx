@@ -12,6 +12,9 @@ import { WalletStateProvider } from 'providers/WalletStateProvider';
 import { persistor, store } from 'redux/store';
 import { globalStyles } from 'styles';
 import { ALERT_TIMEOUT } from 'utils/constants';
+import { fadeOut } from 'utils/misc';
+
+fadeOut(document.getElementById('loading-overlay'));
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(

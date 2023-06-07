@@ -12,7 +12,7 @@ A website-based multi-chain crypto wallet for <a href="https://polkadot.network/
 <p>
 
 <p align="center">
-<a href="https://coongwallet.io">Coong Wallet Website</a> | <a href="https://app.coongwallet.io">Coong Wallet App</a> | <a href="https://dapp.coongwallet.io">Example Playground Dapp</a>
+<a href="https://coongwallet.io">Coong Wallet Website</a> • <a href="https://app.coongwallet.io">Coong Wallet App</a> • <a href="https://dapp.coongwallet.io">Example Playground Dapp</a>
 <p>
 
 <p align="center">
