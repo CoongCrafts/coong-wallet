@@ -34,9 +34,10 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
     event.preventDefault();
 
     setOnImporting(true);
+
     setTimeout(async () => {
       try {
-        // to avoid change the content of original backup
+        // To avoid change the content of original backup
         const cloneBackup: AccountBackup = { ...backup, meta: { ...backup.meta } };
         cloneBackup.meta.name = newName || originalAccountBackupName;
 
@@ -55,8 +56,8 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
     const newName = e.currentTarget.value;
     setNewName(newName);
 
-    // change account info name just to show the preview with new name
-    // it doesn't make original backup change
+    // To display the preview with the new name
+    // without altering the original backup name
     if (!newName) accountInfo.name = originalAccountBackupName;
     else accountInfo.name = newName;
   };

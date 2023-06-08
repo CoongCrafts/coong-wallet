@@ -19,7 +19,7 @@ const toWalletQrBackup = (backup: WalletBackup): WalletQrBackup => {
     accountsIndex,
     encryptedMnemonic,
     accounts: accounts
-      // due to the limited space capacity of the QR code content,
+      // Due to the limited space capacity of the QR code content,
       // temporarily exporting external account is not possible
       .filter(({ meta }) => !meta.isExternal as boolean)
       .map(({ meta }) => [meta.derivationPath as DerivationPath, meta.name!] as CompactAccountInfo),
