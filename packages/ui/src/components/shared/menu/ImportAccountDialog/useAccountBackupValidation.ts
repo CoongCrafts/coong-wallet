@@ -4,10 +4,10 @@ import { AccountBackup } from '@coong/keyring/types';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { AccountInfoExt } from 'types';
 
-export enum Conflict {
+enum Conflict {
   AccountExisted = 'Account is already exists in your wallet. Importing account can not be implemented.',
   AccountNameExisted = 'Account name {{name}} has already been taken. Please choose another name to continue importing.',
-  AccountNameNotFound = 'Account name {{name}} is required. Please choose one to continue importing.',
+  AccountNameNotFound = 'Account name is required. Please choose one to continue importing.',
   AccountNameLong = 'Account name {{name}} is too long. Please choose another name not exceed 16 characters to continue.',
 }
 

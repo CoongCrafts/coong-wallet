@@ -30,6 +30,19 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
 
   const originalAccountBackupName = backup.meta.name as string;
 
+  if (conflict && !resolvable)
+    return (
+      <div>
+        <AccountCard account={accountInfo} />
+        <Alert severity='error' className='mt-4'>
+          {t<string>(conflict, { name: originalAccountBackupName })}
+        </Alert>
+        <Button onClick={resetBackup} className='mt-4' fullWidth>
+          {t<string>('Back')}
+        </Button>
+      </div>
+    );
+
   const doImportAccount = (event: FormEvent) => {
     event.preventDefault();
 
@@ -61,19 +74,6 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
     if (!newName) accountInfo.name = originalAccountBackupName;
     else accountInfo.name = newName;
   };
-
-  if (conflict && !resolvable)
-    return (
-      <div>
-        <AccountCard account={accountInfo} />
-        <Alert severity='error' className='mt-4'>
-          {t<string>(conflict, { name: originalAccountBackupName })}
-        </Alert>
-        <Button onClick={resetBackup} className='mt-4' fullWidth>
-          {t<string>('Back')}
-        </Button>
-      </div>
-    );
 
   return (
     <div>

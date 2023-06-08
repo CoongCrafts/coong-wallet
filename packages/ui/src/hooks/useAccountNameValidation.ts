@@ -8,7 +8,9 @@ export default function useAccountNameValidation(name: string, oldName?: string)
   const [validation, setValidation] = useState<string>('');
 
   useAsync(async () => {
-    if (!name) return;
+    if (!name) {
+      return;
+    }
     if (name.length > 16) {
       setValidation('Account name should not exceed 16 characters');
     } else if (name !== oldName) {
@@ -19,6 +21,7 @@ export default function useAccountNameValidation(name: string, oldName?: string)
         toast.error(e.message);
       }
     }
+
     return () => {
       setValidation('');
     };

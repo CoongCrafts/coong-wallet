@@ -336,7 +336,7 @@ export default class Keyring {
     if (isExternalAccount) {
       meta.isExternal = isExternalAccount;
     } else {
-      // No need to store it because when exporting this account
+      // No need to keep it because when exporting internal account
       // `originalHash` will be automatically included in it meta
       delete meta.originalHash;
     }
