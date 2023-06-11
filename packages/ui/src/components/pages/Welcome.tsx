@@ -24,7 +24,7 @@ const Welcome: React.FC<WelcomeProps> = ({ className = '', onCreateNewWallet, on
   return (
     <div className={`${className} mt-8 mb-16 mx-auto text-center`}>
       <div className='welcome'>
-        <h1>{t<string>('Welcome to Coong')}</h1>
+        <h1>{t<string>('Welcome to Coong Wallet')}</h1>
         <p className='text-2xl'>
           <Trans>A multichain crypto wallet for Polkadot & Kusama ecosystem</Trans>
         </p>

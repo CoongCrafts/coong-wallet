@@ -1,4 +1,5 @@
 import { defaultNetwork } from '@coong/base';
+import { PreloadedState } from '@reduxjs/toolkit';
 import { initializeKeyring, newUser, PASSWORD, render, RouterWrapper, screen } from '__tests__/testUtils';
 import { AutoLockTimerOptions } from 'components/shared/settings/SettingsWalletDialog/AutoLockSelection';
 import GuardScreen from '../GuardScreen';
@@ -23,32 +24,44 @@ describe('GuardScreen', () => {
           <GuardScreen />
         </RouterWrapper>,
       );
-      expect(screen.queryByText('Welcome to Coong')).toBeInTheDocument();
+      expect(screen.queryByText('Welcome to Coong Wallet')).toBeInTheDocument();
     });
   });
 
   describe('keyring is initialized', () => {
-    it('should render UnlockWallet page if wallet is locked', async () => {
+    const renderView = (preloadedState: PreloadedState<any>) => {
       render(
         <RouterWrapper path='/'>
           <GuardScreen />
         </RouterWrapper>,
-        { preloadedState: { app: { seedReady: true, locked: true } } },
+        { preloadedState },
       );
+    };
+
+    it('should render UnlockWallet page if wallet is locked', async () => {
+      renderView({ app: { seedReady: true, locked: true } });
       expect(await screen.findByText('Unlock your wallet')).toBeInTheDocument();
+    });
+
+    it('should render Welcome page after reset wallet', async () => {
+      renderView({ app: { seedReady: true, locked: true } });
+
+      const user = newUser();
+      await user.click(await screen.findByRole('button', { name: /Forgot your password/ }));
+      expect(await screen.findByRole('dialog', { name: /Forgot your password/ })).toBeInTheDocument();
+      await user.type(await screen.findByLabelText(/Reset wallet/), 'Reset wallet');
+      const resetWalletButton = await screen.findByRole('button', { name: /Reset Wallet/ });
+      expect(resetWalletButton).toBeEnabled();
+      await user.click(resetWalletButton);
+
+      expect(await screen.findByText(/Welcome to Coong Wallet/)).toBeInTheDocument();
+      expect(await screen.findByText(/Set up your Coong Wallet now/)).toBeInTheDocument();
     });
 
     it('should go to Outlet content after unlocking the wallet', async () => {
       await initializeKeyring();
 
-      render(
-        <RouterWrapper path='/'>
-          <GuardScreen />
-        </RouterWrapper>,
-        {
-          preloadedState: { app: { seedReady: true, locked: true, addressPrefix: defaultNetwork.prefix } },
-        },
-      );
+      renderView({ app: { seedReady: true, locked: true, addressPrefix: defaultNetwork.prefix } });
 
       expect(await screen.findByText('Unlock your wallet')).toBeInTheDocument();
       const passwordField = await screen.findByLabelText('Wallet password');
@@ -62,14 +75,7 @@ describe('GuardScreen', () => {
     });
 
     it('should render Outlet content if wallet is unlocked', async () => {
-      render(
-        <RouterWrapper path='/'>
-          <GuardScreen />
-        </RouterWrapper>,
-        {
-          preloadedState: { app: { seedReady: true, locked: false, addressPrefix: defaultNetwork.prefix } },
-        },
-      );
+      renderView({ app: { seedReady: true, locked: false, addressPrefix: defaultNetwork.prefix } });
 
       expect(await screen.findByText(/Outlet Render/)).toBeInTheDocument();
     });
@@ -79,17 +85,10 @@ describe('GuardScreen', () => {
       async ({ interval }) => {
         vi.useFakeTimers();
 
-        render(
-          <RouterWrapper path='/'>
-            <GuardScreen />
-          </RouterWrapper>,
-          {
-            preloadedState: {
-              app: { seedReady: true, locked: false, addressPrefix: defaultNetwork.prefix },
-              settings: { autoLockInterval: interval },
-            },
-          },
-        );
+        renderView({
+          app: { seedReady: true, locked: false, addressPrefix: defaultNetwork.prefix },
+          settings: { autoLockInterval: interval },
+        });
 
         vi.advanceTimersByTime(interval + 1e3);
         vi.useRealTimers();

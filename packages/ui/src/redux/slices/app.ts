@@ -24,8 +24,8 @@ const appSlice = createSlice({
     appReady: (state: Draft<AppState>) => {
       state.ready = true;
     },
-    seedReady: (state: Draft<AppState>) => {
-      state.seedReady = true;
+    seedReady: (state: Draft<AppState>, action: PayloadAction<boolean | undefined>) => {
+      state.seedReady = action.payload ?? true;
     },
     lock: (state: Draft<AppState>) => {
       state.locked = true;

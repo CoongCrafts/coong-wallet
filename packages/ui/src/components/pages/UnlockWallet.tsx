@@ -2,6 +2,7 @@ import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, TextField } from '@mui/material';
+import ForgotPasswordButton from 'components/shared/buttons/ForgotPasswordButton';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { appActions } from 'redux/slices/app';
@@ -55,6 +56,7 @@ const UnlockWallet: FC<Props> = ({ className = '' }) => {
         <Button type='submit' fullWidth disabled={!password} size='large'>
           {t<string>('Unlock')}
         </Button>
+        <ForgotPasswordButton />
       </form>
     </div>
   );

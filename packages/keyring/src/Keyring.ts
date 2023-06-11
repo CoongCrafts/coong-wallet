@@ -67,14 +67,15 @@ export default class Keyring {
   }
 
   async reset() {
+    localStorage.removeItem(ENCRYPTED_MNEMONIC);
+    localStorage.removeItem(ORIGINAL_HASH);
+    localStorage.removeItem(ACCOUNTS_INDEX);
+
     const accounts = await this.getAccounts();
     // TODO improve this process to clear all at once!
     accounts.forEach((account) => {
       this.#keyring.forgetAccount(account.address);
     });
-    localStorage.removeItem(ENCRYPTED_MNEMONIC);
-    localStorage.removeItem(ORIGINAL_HASH);
-    localStorage.removeItem(ACCOUNTS_INDEX);
   }
 
   async unlock(password: string): Promise<void> {
