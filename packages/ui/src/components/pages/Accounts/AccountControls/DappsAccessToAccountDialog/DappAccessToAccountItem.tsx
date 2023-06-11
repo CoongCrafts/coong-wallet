@@ -29,7 +29,8 @@ export default function DappAccessToAccountItem({ appInfo, account }: DappAccess
       className={clsx([
         'border border-black/10 dark:border-white/15 p-2 pl-4 rounded flex items-center gap-2 sm:gap-4',
         'bg-zinc-50 dark:bg-black/15',
-      ])}>
+      ])}
+      data-testid='DappAccessItem'>
       <div className='flex-grow'>
         <div className='flex items-center gap-2 sm:gap-4'>
           <img src={appFaviconUrl(appId)} alt={`${name} icon`} width='18' />
