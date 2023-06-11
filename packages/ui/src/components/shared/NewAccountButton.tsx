@@ -73,7 +73,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
           <DialogContentText className='mb-4'>
             {t<string>('Choose a name and enter your password to create a new account')}
           </DialogContentText>
-          <Box className='flex flex-col gap-4' component='form' autoComplete='off' onSubmit={doCreateNewAccount}>
+          <Box className='flex flex-col gap-2' component='form' autoComplete='off' onSubmit={doCreateNewAccount}>
             <TextField
               label={t<string>('New account name')}
               type='text'
