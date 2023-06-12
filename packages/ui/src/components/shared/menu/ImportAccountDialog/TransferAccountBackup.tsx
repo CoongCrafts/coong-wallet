@@ -26,7 +26,7 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
   const [password, setPassword] = useState<string>('');
   const { validation } = useAccountNameValidation(newName);
   const { setNewAccount } = useHighlightNewAccount();
-  const { conflict, resolvable } = useAccountBackupValidation(backup);
+  const { validation: backupValidation, resolvable } = useAccountBackupValidation(backup);
 
   const originalAccountBackupName = backup.meta.name as string;
   const accountInfo = useMemo(
@@ -39,12 +39,12 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
     [backup, newName],
   );
 
-  if (conflict && !resolvable)
+  if (backupValidation && !resolvable)
     return (
       <div>
         <AccountCard account={accountInfo} />
         <Alert severity='error' className='mt-4'>
-          {t<string>(conflict, { name: originalAccountBackupName })}
+          {backupValidation}
         </Alert>
         <Button onClick={resetBackup} className='mt-4' fullWidth variant='outlined'>
           {t<string>('Back')}
@@ -82,11 +82,12 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
   return (
     <div>
       <AccountCard account={accountInfo} />
-      {conflict && (
+      {backupValidation && (
         <Alert severity='warning' className='mt-4'>
-          {t<string>(conflict, { name: originalAccountBackupName })}
+          {backupValidation}
         </Alert>
       )}
+
       <form onSubmit={doImportAccount} className='mt-4'>
         {resolvable && (
           <>
@@ -120,7 +121,7 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
           </Button>
           <Button
             type='submit'
-            disabled={!password || !!validation || (!!conflict && !newName) || onImporting}
+            disabled={!password || !!validation || (!!backupValidation && !newName) || onImporting}
             fullWidth>
             {t<string>('Import Account')}
           </Button>
