@@ -1,4 +1,4 @@
-import { createContext, FC, useContext } from 'react';
+import { createContext, FC, useContext, useMemo } from 'react';
 import { isMessageId, TabHandler, WalletState } from '@coong/base';
 import { RequestName, WalletRequestMessage, WalletResponse } from '@coong/base/types';
 import Keyring from '@coong/keyring';
@@ -27,8 +27,8 @@ interface WalletStateProviderProps extends Props {
 }
 
 export const WalletStateProvider: FC<WalletStateProviderProps> = ({ children, initialKeyring, initialWalletState }) => {
-  const keyring = initialKeyring || new Keyring();
-  const walletState = initialWalletState || new WalletState(keyring);
+  const keyring = useMemo(() => initialKeyring || new Keyring(), [initialKeyring]);
+  const walletState = useMemo(() => initialWalletState || new WalletState(keyring), [initialWalletState, keyring]);
 
   async function handleWalletRequest<TRequestName extends RequestName>(
     message: WalletRequestMessage<TRequestName>,
