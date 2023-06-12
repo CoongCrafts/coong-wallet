@@ -11,7 +11,7 @@ import { AccountInfoExt, Props } from 'types';
 const UNKNOWN_NAME = '<unknown>';
 
 interface ImportedLabelProps extends Props {
-  show: boolean | undefined;
+  show?: boolean;
 }
 
 const ImportedLabel: FC<ImportedLabelProps> = ({ show, className = '' }) => {

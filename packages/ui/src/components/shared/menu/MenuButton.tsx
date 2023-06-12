@@ -5,10 +5,10 @@ import InputIcon from '@mui/icons-material/Input';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import { Button, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import ExportWalletDialog from 'components/shared/menu/ExportWalletDialog';
+import ImportAccountDialog from 'components/shared/menu/ImportAccountDialog';
 import useMenuDropdown from 'hooks/useMenuDropdown';
 import { Props } from 'types';
 import { EventName, triggerEvent } from 'utils/eventemitter';
-import ImportAccountDialog from './ImportAccountDialog';
 
 enum MenuAction {
   ExportWallet = 'Export Wallet',

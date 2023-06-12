@@ -70,7 +70,7 @@ export default function ImportAccountDialog(): JSX.Element {
                 <Tab label={t<string>(ImportAccountMethod.QRCode)} value={ImportAccountMethod.QRCode} />
                 <Tab label={t<string>(ImportAccountMethod.JSON)} value={ImportAccountMethod.JSON} />
               </TabList>
-              <TabPanel value={ImportAccountMethod.QRCode} className='p-0'>
+              <TabPanel value={ImportAccountMethod.QRCode} className='p-0 max-w-[450px] mx-auto mb-4'>
                 <QrCodeReader onResult={onReadBackupCompleted} object={TransferableObject.Account} />
               </TabPanel>
               <TabPanel value={ImportAccountMethod.JSON} className='p-0'>
