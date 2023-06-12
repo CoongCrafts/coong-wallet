@@ -86,6 +86,10 @@ export default class WalletState {
     return Object.values(this.authorizedApps).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
   }
 
+  getAuthorizedAppsToAccount(address: string) {
+    return this.getAuthorizedApps().filter((one) => one.authorizedAccounts.includes(this.toGenericAddress(address)));
+  }
+
   removeAllAuthorizedApps() {
     this.#authorizedAppsSubject.next({});
   }
@@ -102,6 +106,44 @@ export default class WalletState {
 
   removeAuthorizedApp(id: AppId) {
     delete this.authorizedApps[id];
+    this.#authorizedAppsSubject.next(this.authorizedApps);
+  }
+
+  toGenericAddress(address: string) {
+    return encodeAddress(address, defaultNetwork.prefix);
+  }
+  removeAppAccessToAccount(id: AppId, address: string) {
+    const appInfo = this.getAuthorizedApp(id);
+
+    const substrateAddress = this.toGenericAddress(address);
+    if (!appInfo.authorizedAccounts.includes(substrateAddress)) {
+      return;
+    }
+
+    const newAuthorizedAccounts = appInfo.authorizedAccounts.filter((one) => one !== substrateAddress);
+    this.authorizedApps[id] = {
+      ...appInfo,
+      authorizedAccounts: newAuthorizedAccounts,
+    };
+
+    this.#authorizedAppsSubject.next(this.authorizedApps);
+  }
+
+  removeAllAccessToAccount(address: string) {
+    const substrateAddress = this.toGenericAddress(address);
+
+    for (const appInfo of Object.values(this.authorizedApps)) {
+      if (!appInfo.authorizedAccounts.includes(substrateAddress)) {
+        continue;
+      }
+
+      const newAuthorizedAccounts = appInfo.authorizedAccounts.filter((one) => one !== substrateAddress);
+      this.authorizedApps[appInfo.id] = {
+        ...appInfo,
+        authorizedAccounts: newAuthorizedAccounts,
+      };
+    }
+
     this.#authorizedAppsSubject.next(this.authorizedApps);
   }
 
@@ -126,7 +168,7 @@ export default class WalletState {
   }
 
   getAuthorizedApp(url: string): AppInfo {
-    const appInfo = this.authorizedApps[this.extractAppId(url)];
+    const appInfo = this.authorizedApps[url] || this.authorizedApps[this.extractAppId(url)];
 
     assert(appInfo, `The app at ${url} has not been authorized yet!`);
 

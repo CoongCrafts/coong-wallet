@@ -21,9 +21,14 @@ export const WalletStateContext = createContext<WalletStateContextProps>({} as W
 
 export const useWalletState = () => useContext(WalletStateContext);
 
-export const WalletStateProvider: FC<Props> = ({ children }) => {
-  const keyring = new Keyring();
-  const walletState = new WalletState(keyring);
+interface WalletStateProviderProps extends Props {
+  initialKeyring?: Keyring;
+  initialWalletState?: WalletState;
+}
+
+export const WalletStateProvider: FC<WalletStateProviderProps> = ({ children, initialKeyring, initialWalletState }) => {
+  const keyring = initialKeyring || new Keyring();
+  const walletState = initialWalletState || new WalletState(keyring);
 
   async function handleWalletRequest<TRequestName extends RequestName>(
     message: WalletRequestMessage<TRequestName>,

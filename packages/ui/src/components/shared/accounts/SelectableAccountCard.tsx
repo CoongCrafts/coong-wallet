@@ -1,13 +1,13 @@
 import { Identicon } from '@polkadot/react-identicon';
 import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { shortenAddress } from '@coong/utils/string';
 import { Check } from '@mui/icons-material';
 import { alpha, styled } from '@mui/material';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 import { accountsActions } from 'redux/slices/accounts';
 import { RootState } from 'redux/store';
 import { AccountInfoExt, Props } from 'types';
-import { shortenAddress } from 'utils/string';
 
 interface SelectableAccountCardProps extends Props {
   account: AccountInfoExt;

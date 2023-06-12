@@ -2,8 +2,9 @@ import { newWalletRequest } from '@coong/base';
 import { AccessStatus, WalletRequestMessage, WalletResponse } from '@coong/base/types';
 import { AccountInfo } from '@coong/keyring/types';
 import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
+import { trimOffUrlProtocol } from '@coong/utils/string';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import WalletState, { AppInfo, AUTHORIZED_ACCOUNTS_KEY } from '../WalletState';
+import WalletState, { AppInfo, AUTHORIZED_ACCOUNTS_KEY, AuthorizedApps } from '../WalletState';
 import { newWalletState, PASSWORD, pick, RANDOM_APP_URL, setupAuthorizedApps } from './setup';
 
 const INJECTED_ACCOUNT_PROPS = ['address', 'genesisHash', 'name', 'type'];
@@ -50,10 +51,18 @@ describe('getAuthorizedApp', () => {
     );
   });
 
-  it('should return app info is the app is authorized', async () => {
-    const { randomAppInfo, randomAppUrl } = setupAuthorizedApps(state, [account01.address]);
+  describe('when the app is authorized', () => {
+    it('should return app info if input is app url', async () => {
+      const { randomAppInfo } = setupAuthorizedApps(state, [account01.address]);
 
-    expect(state.getAuthorizedApp(randomAppUrl)).toEqual(randomAppInfo);
+      expect(state.getAuthorizedApp(RANDOM_APP_URL)).toEqual(randomAppInfo);
+    });
+
+    it('should return app info if input is app id', async () => {
+      const { randomAppInfo } = setupAuthorizedApps(state, [account01.address]);
+
+      expect(state.getAuthorizedApp(trimOffUrlProtocol(RANDOM_APP_URL))).toEqual(randomAppInfo);
+    });
   });
 });
 
@@ -62,9 +71,24 @@ describe('getAuthorizedApps', () => {
     expect(state.getAuthorizedApps()).toEqual([]);
   });
 
-  it('should return list of authorized dapps', () => {
-    setupAuthorizedApps(state);
-    expect(state.getAuthorizedApps().length).toEqual(1);
+  describe('having authorized dapps', () => {
+    let expectedApp: Partial<AppInfo>;
+    beforeEach(() => {
+      setupAuthorizedApps(state, [account01.address]);
+      expectedApp = {
+        name: 'Random App',
+        authorizedAccounts: [account01.address],
+        url: RANDOM_APP_URL,
+      };
+    });
+
+    it('should return list of authorized dapps', () => {
+      expect(state.getAuthorizedApps()).toMatchObject([expectedApp]);
+    });
+
+    it('should return list of authorized dapps to ', () => {
+      expect(state.getAuthorizedAppsToAccount(account01.address)).toMatchObject([expectedApp]);
+    });
   });
 });
 
@@ -108,6 +132,51 @@ describe('removeAuthorizedApp', () => {
       new StandardCoongError(`The app at ${RANDOM_APP_URL} has not been authorized yet!`),
     );
     expect(localStorage.getItem(AUTHORIZED_ACCOUNTS_KEY)).toEqual('{}');
+  });
+});
+
+describe('remove access to account', () => {
+  let app1Id: string, app2Id: string;
+  beforeEach(async () => {
+    const account02 = await state.keyring.createNewAccount('Account 02', PASSWORD);
+
+    const app1Url = 'https://app1.com';
+    const app2Url = 'https://app2.com';
+    app1Id = trimOffUrlProtocol(app1Url);
+    app2Id = trimOffUrlProtocol(app2Url);
+
+    const authorizedApps: AuthorizedApps = {
+      [app1Id]: {
+        id: app1Id,
+        url: app1Url,
+        authorizedAccounts: [account01.address, account02.address],
+        name: 'App 1',
+        createdAt: Date.now(),
+      },
+      [app2Id]: {
+        id: app2Id,
+        url: app2Url,
+        authorizedAccounts: [account01.address, account02.address],
+        name: 'App 2',
+        createdAt: Date.now(),
+      },
+    };
+
+    localStorage.setItem(AUTHORIZED_ACCOUNTS_KEY, JSON.stringify(authorizedApps));
+    state.reloadState();
+  });
+
+  it('removeAllAccessToAccount', async () => {
+    state.removeAllAccessToAccount(account01.address);
+
+    expect(state.getAuthorizedApp(app1Id).authorizedAccounts).not.toContain(account01.address);
+    expect(state.getAuthorizedApp(app1Id).authorizedAccounts).not.toContain(account01.address);
+  });
+
+  it('removeAppAccessToAccount', () => {
+    state.removeAppAccessToAccount(app1Id, account01.address);
+
+    expect(state.getAuthorizedApp(app1Id).authorizedAccounts).not.toContain(account01.address);
   });
 });
 

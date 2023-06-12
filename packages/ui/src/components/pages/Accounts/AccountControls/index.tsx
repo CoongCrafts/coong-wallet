@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import LoginIcon from '@mui/icons-material/Login';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import OutputIcon from '@mui/icons-material/Output';
 import QrCodeIcon from '@mui/icons-material/QrCode';
@@ -15,6 +16,7 @@ enum AccountControlsAction {
   RemoveAccount = 'Remove',
   ShowAddressQrCode = 'Show Address QR Code',
   ExportAccount = 'Export',
+  ViewDappsAccess = 'View Dapps Access',
 }
 
 const AccountControlsOptions = [
@@ -33,6 +35,11 @@ const AccountControlsOptions = [
     action: AccountControlsAction.ExportAccount,
     event: EventName.OpenExportAccountDialog,
     icon: <OutputIcon />,
+  },
+  {
+    action: AccountControlsAction.ViewDappsAccess,
+    event: EventName.OpenDappsAccessToAccountDialog,
+    icon: <LoginIcon />,
   },
   {
     action: AccountControlsAction.RemoveAccount,
