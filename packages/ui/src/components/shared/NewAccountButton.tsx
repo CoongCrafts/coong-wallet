@@ -7,6 +7,7 @@ import { Add } from '@mui/icons-material';
 import { Box, Button, Dialog, DialogContent, DialogContentText, IconButton, TextField } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
 import EmptySpace from 'components/shared/misc/EmptySpace';
+import useAccountNameValidation from 'hooks/useAccountNameValidation';
 import useDialog from 'hooks/useDialog';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { Props } from 'types';
@@ -21,8 +22,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const { t } = useTranslation();
-
-  const isInvalidName = name.length > 16;
+  const { validation } = useAccountNameValidation(name);
 
   useUpdateEffect(() => {
     if (open) {
@@ -81,8 +81,8 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
               fullWidth
               onChange={(e) => setName(e.target.value)}
               value={name}
-              error={isInvalidName}
-              helperText={isInvalidName ? t<string>('Account name should not exceed 16 characters') : <EmptySpace />}
+              error={!!validation}
+              helperText={validation || <EmptySpace />}
             />
             <TextField
               autoFocus
@@ -97,7 +97,7 @@ const NewAccountButton: FC<NewAccountButtonProps> = ({ onCreated }) => {
               <Button variant='text' onClick={handleClose}>
                 {t<string>('Cancel')}
               </Button>
-              <Button type='submit' fullWidth disabled={!name || !password || isInvalidName}>
+              <Button type='submit' fullWidth disabled={!name || !password || !!validation}>
                 {t<string>('Create')}
               </Button>
             </div>

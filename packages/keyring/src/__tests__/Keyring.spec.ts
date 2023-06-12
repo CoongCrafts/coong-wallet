@@ -1,7 +1,7 @@
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
-import { AccountInfo, WalletQrBackup } from '@coong/keyring/types';
+import { AccountBackup, AccountInfo, WalletQrBackup } from '@coong/keyring/types';
 import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
 import CryptoJS from 'crypto-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -522,5 +522,59 @@ describe('ensureOriginalHashPresence', () => {
 
     await keyring.ensureOriginalHashPresence(PASSWORD);
     expect(localStorage.getItem(ORIGINAL_HASH)).toEqual(originalHash);
+  });
+});
+
+describe('importAccount', () => {
+  let keyring: Keyring, backup: AccountBackup, address: string;
+  beforeEach(async () => {
+    keyring = await initializeNewKeyring();
+
+    const account = await keyring.createNewAccount('test-account', PASSWORD);
+    address = account.address;
+
+    backup = await keyring.exportAccount(address, PASSWORD);
+    await keyring.removeAccount(address);
+  });
+  it('should throw error if account exists', async () => {
+    await keyring.importAccount(backup, PASSWORD);
+
+    await expect(keyring.importAccount(backup, PASSWORD)).rejects.toThrowError(
+      new CoongError(ErrorCode.AccountExisted),
+    );
+  });
+
+  it('should throw error if account name exists', async () => {
+    await keyring.createNewAccount('test-account', PASSWORD);
+
+    await expect(keyring.importAccount(backup, PASSWORD)).rejects.toThrowError(
+      new CoongError(ErrorCode.AccountNameUsed),
+    );
+  });
+
+  it('should throw error if account name not found', async () => {
+    await expect(
+      keyring.importAccount({ ...backup, meta: { ...backup.meta, name: '' } }, PASSWORD),
+    ).rejects.toThrowError(new CoongError(ErrorCode.AccountNameRequired));
+  });
+
+  it('should call restoreAccount', async () => {
+    const restoreAccountSpy = vi.spyOn(InnerKeyring.prototype, 'restoreAccount');
+
+    await keyring.importAccount(backup, PASSWORD);
+
+    expect(restoreAccountSpy).toBeCalled();
+  });
+
+  it('should found account after restoring account', async () => {
+    await keyring.importAccount(backup, PASSWORD);
+
+    expect(await keyring.existsAccount(address)).toEqual(true);
+  });
+
+  it('should throw error if password incorrect', async () => {
+    await expect(keyring.importAccount(backup, 'incorrect-password')).rejects.toThrowError(
+      new CoongError(ErrorCode.PasswordIncorrect),
+    );
   });
 });

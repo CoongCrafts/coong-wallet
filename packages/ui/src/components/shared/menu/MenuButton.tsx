@@ -1,20 +1,32 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Menu as MenuIcon } from '@mui/icons-material';
+import InputIcon from '@mui/icons-material/Input';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import { Button, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import ExportWalletDialog from 'components/shared/menu/ExportWalletDialog';
+import ImportAccountDialog from 'components/shared/menu/ImportAccountDialog';
 import useMenuDropdown from 'hooks/useMenuDropdown';
 import { Props } from 'types';
 import { EventName, triggerEvent } from 'utils/eventemitter';
+
+enum MenuAction {
+  ExportWallet = 'Export Wallet',
+  ImportAccount = 'Import Account',
+}
+
+const MenuOptions = [
+  { action: MenuAction.ExportWallet, event: EventName.OpenExportWalletDialog, icon: <IosShareIcon /> },
+  { action: MenuAction.ImportAccount, event: EventName.OpenImportAccountDialog, icon: <InputIcon /> },
+];
 
 export default function MenuButton({ className = '' }: Props): JSX.Element {
   const { t } = useTranslation();
   const { open, anchorEl, doOpen, doClose } = useMenuDropdown();
 
-  const onClickExportWallet = () => {
+  const openDialogOnAction = (event: EventName) => {
+    triggerEvent(event);
     doClose();
-    triggerEvent(EventName.OpenExportWalletDialog);
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => doOpen(e.currentTarget);
@@ -34,14 +46,15 @@ export default function MenuButton({ className = '' }: Props): JSX.Element {
         <MenuIcon />
       </IconButton>
       <Menu open={open} anchorEl={anchorEl} onClose={doClose}>
-        <MenuItem onClick={onClickExportWallet}>
-          <ListItemIcon>
-            <IosShareIcon />
-          </ListItemIcon>
-          <ListItemText>{t<string>('Export Wallet')}</ListItemText>
-        </MenuItem>
+        {MenuOptions.map(({ action, event, icon }) => (
+          <MenuItem key={action} onClick={() => openDialogOnAction(event)}>
+            <ListItemIcon>{icon}</ListItemIcon>
+            <ListItemText>{t<string>(action)}</ListItemText>
+          </MenuItem>
+        ))}
       </Menu>
       <ExportWalletDialog />
+      <ImportAccountDialog />
     </>
   );
 }

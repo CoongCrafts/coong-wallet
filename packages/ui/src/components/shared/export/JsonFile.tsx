@@ -4,20 +4,20 @@ import { AccountBackup, JsonBackup } from '@coong/keyring/types';
 import { Download } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import FileSaver from 'file-saver';
-import { ExportObject, Props } from 'types';
+import { TransferableObject, Props } from 'types';
 
 interface JsonFileProps extends Props {
   value: JsonBackup;
-  object: ExportObject;
+  object: TransferableObject;
 }
 
 export default function JsonFile({ value, object }: JsonFileProps): JSX.Element {
   const { t } = useTranslation();
 
   const getFileName = () => {
-    if (object === ExportObject.Wallet) {
+    if (object === TransferableObject.Wallet) {
       return `coongwallet_wallet_backup_${Date.now()}.json`;
-    } else if (object === ExportObject.Account) {
+    } else if (object === TransferableObject.Account) {
       const accountName = (((value as AccountBackup)?.meta?.name as string) || '').toLowerCase().replace(/\s/g, '_');
       return `coongwallet_account_backup_${accountName}_${Date.now()}.json`;
     }

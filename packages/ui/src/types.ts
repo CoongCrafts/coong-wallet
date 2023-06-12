@@ -12,7 +12,7 @@ export interface AccountInfoExt extends AccountInfo {
   networkAddress: string; // Network address changing following the `addressPrefix`
 }
 
-export enum ExportObject {
+export enum TransferableObject {
   Wallet = 'Wallet',
   Account = 'Account',
 }

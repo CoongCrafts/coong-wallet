@@ -8,11 +8,11 @@ import { Download } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import FileSaver from 'file-saver';
 import useQrCodeSize from 'hooks/useQrCodeSize';
-import { ExportObject, Props } from 'types';
+import { TransferableObject, Props } from 'types';
 
 interface QrCodeProps extends Props {
   value: QrBackup;
-  object: ExportObject;
+  object: TransferableObject;
 }
 
 export default function QrCode({ value, object }: QrCodeProps) {
@@ -23,9 +23,9 @@ export default function QrCode({ value, object }: QrCodeProps) {
   const rawQrValue = useMemo(() => base64Encode(JSON.stringify(value)), [value]);
 
   const getFileName = () => {
-    if (object === ExportObject.Wallet) {
+    if (object === TransferableObject.Wallet) {
       return `coongwallet_wallet_backup_qrcode_${Date.now()}`;
-    } else if (object === ExportObject.Account) {
+    } else if (object === TransferableObject.Account) {
       const accountName = (((value as AccountBackup)?.meta?.name as string) || '').toLowerCase().replace(/\s/g, '_');
       return `coongwallet_account_backup_qrcode_${accountName}_${Date.now()}`;
     }

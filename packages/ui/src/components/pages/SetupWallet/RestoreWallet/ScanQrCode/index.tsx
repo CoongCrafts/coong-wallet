@@ -4,8 +4,9 @@ import { toast } from 'react-toastify';
 import { u8aToString } from '@polkadot/util';
 import { base64Decode } from '@polkadot/util-crypto';
 import { WalletQrBackup } from '@coong/keyring/types';
-import QrCodeReader from 'components/pages/SetupWallet/RestoreWallet/ScanQrCode/QrCodeReader';
 import TransferWalletBackup from 'components/pages/SetupWallet/RestoreWallet/ScanQrCode/TransferWalletBackup';
+import QrCodeReader from 'components/shared/import/QrCodeReader';
+import { TransferableObject } from 'types';
 import { WalletQrBackupScheme } from 'validations/WalletBackup';
 
 export default function ScanQrCode(): JSX.Element {
@@ -33,6 +34,6 @@ export default function ScanQrCode(): JSX.Element {
   return backup ? (
     <TransferWalletBackup backup={backup} resetBackup={resetBackup} />
   ) : (
-    <QrCodeReader onResult={onQrScanComplete} />
+    <QrCodeReader onResult={onQrScanComplete} object={TransferableObject.Wallet} showBackButton showTitle />
   );
 }

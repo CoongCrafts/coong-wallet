@@ -64,7 +64,7 @@ describe('NewAccountButton', () => {
       expect(await screen.findByText('Password incorrect')).toBeInTheDocument();
     });
 
-    it('should disable `Create` button and show error when nameField more than 16 characters or empty', async () => {
+    it('should show validation error when account name invalid', async () => {
       const nameField = await screen.findByLabelText(/New account name/);
 
       const passwordField = await screen.findByLabelText(/Wallet password/);
@@ -76,24 +76,13 @@ describe('NewAccountButton', () => {
 
       await user.type(nameField, 'Account-name-more-than-16-chars');
       expect(await screen.findByRole('button', { name: /Create/ })).toBeDisabled();
-      expect(await screen.findByText(/Account name should not exceed 16 characters/)).toBeInTheDocument();
-    });
 
-    it('should show validation error if account name is used', async () => {
       await keyring.createNewAccount('Account 01', PASSWORD);
-
-      const passwordField = await screen.findByLabelText(/Wallet password/);
-      await user.clear(passwordField);
-      await user.type(passwordField, PASSWORD);
-
-      const nameField = await screen.findByLabelText(/New account name/);
       await user.clear(nameField);
       await user.type(nameField, 'Account 01');
 
-      const createButton = await screen.findByRole('button', { name: /Create/ });
-      await user.click(createButton);
-
       expect(await screen.findByText('Account name is already picked')).toBeInTheDocument();
+      expect(await screen.findByRole('button', { name: /Create/ })).toBeDisabled();
     });
 
     it('should hide the dialog & call onCreated after creation', async () => {

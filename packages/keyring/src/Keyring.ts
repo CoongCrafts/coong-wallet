@@ -1,4 +1,4 @@
-import { KeyringPair } from '@polkadot/keyring/types';
+import { KeyringPair, KeyringPair$Meta } from '@polkadot/keyring/types';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
 import { u8aToHex } from '@polkadot/util';
 import { sha256AsU8a } from '@polkadot/util-crypto';
@@ -366,6 +366,18 @@ export default class Keyring {
     }
   }
 
+  async existsAccount(address: string) {
+    try {
+      return !!(await this.getAccount(address));
+    } catch (e: any) {
+      if (isCoongError(e) && e.code === ErrorCode.AccountNotFound) {
+        return false;
+      }
+
+      throw e;
+    }
+  }
+
   /**
    * Get an account by name
    *
@@ -413,6 +425,56 @@ export default class Keyring {
     Object.assign(accountBackup.meta, { originalHash });
 
     return accountBackup;
+  }
+
+  /**
+   * Check if an account is external by verify original hash
+   *
+   * @param accountOriginalHash
+   */
+  isExternalAccount(accountOriginalHash: string | undefined) {
+    return accountOriginalHash !== this.#ensureOriginalHash();
+  }
+
+  /**
+   * Import an account from a backup and a password for that backup
+   *
+   * @param backup
+   * @param password
+   */
+  async importAccount(backup: AccountBackup, password: string) {
+    const { address, meta } = backup;
+
+    if (await this.existsAccount(address)) {
+      throw new CoongError(ErrorCode.AccountExisted);
+    }
+
+    if (!meta.name) {
+      throw new CoongError(ErrorCode.AccountNameRequired);
+    } else if (await this.existsName(meta.name as string)) {
+      throw new CoongError(ErrorCode.AccountNameUsed);
+    }
+
+    if (this.isExternalAccount(meta.originalHash as string)) {
+      meta.isExternal = true;
+    } else {
+      // No need to keep it because when exporting internal account
+      // `originalHash` will be automatically generated from mnemonic
+      delete meta.originalHash;
+    }
+
+    meta.whenCreated = Date.now();
+
+    try {
+      this.#keyring.restoreAccount(backup, password);
+      return await this.getAccount(address);
+    } catch (e: any) {
+      if (e.message === 'Unable to decode using the supplied passphrase') {
+        throw new CoongError(ErrorCode.PasswordIncorrect);
+      }
+
+      throw e;
+    }
   }
 
   /**
