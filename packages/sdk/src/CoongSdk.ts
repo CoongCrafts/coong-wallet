@@ -10,7 +10,7 @@ import {
   WalletResponse,
   WalletResponseMessage,
 } from '@coong/base/types';
-import { assert, assertFalse, CoongError, ErrorCode } from '@coong/utils';
+import { assert, assertFalse, CoongError, ErrorCode, trimTrailingSlash } from '@coong/utils';
 import ConnectedAccounts from './ConnectedAccounts';
 import SubstrateInjected from './injection/Injected';
 import { CoongSdkOptions, Handlers, InjectedWindow, UpdatableInjected } from './types';
@@ -57,7 +57,7 @@ export default class CoongSdk {
 
     // TODO validate url format
     const walletUrl = options?.walletUrl || DEFAULT_WALLET_URL;
-    this.#walletUrl = this.trimTrailingSlash(walletUrl);
+    this.#walletUrl = trimTrailingSlash(walletUrl);
     this.#walletInstancesQueue = [];
   }
 
@@ -80,10 +80,6 @@ export default class CoongSdk {
 
     console.log('Coong SDK initialized!');
   }
-
-  trimTrailingSlash = (input: string): string => {
-    return input.endsWith('/') ? this.trimTrailingSlash(input.slice(0, -1)) : input;
-  };
 
   /**
    * Destroy Coong Wallet initialization

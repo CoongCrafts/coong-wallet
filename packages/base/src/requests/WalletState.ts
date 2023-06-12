@@ -5,7 +5,7 @@ import { u8aToHex, u8aWrapBytes } from '@polkadot/util';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { KeypairType } from '@polkadot/util-crypto/types';
 import Keyring from '@coong/keyring';
-import { assert, StandardCoongError } from '@coong/utils';
+import { assert, StandardCoongError, trimOffUrlProtocol } from '@coong/utils';
 import { BehaviorSubject } from 'rxjs';
 import { defaultNetwork } from '../networks';
 import {

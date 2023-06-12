@@ -14,3 +14,7 @@ export const shortenAddress = (address: string): string => {
 export const trimOffUrlProtocol = (url: string): string => {
   return url.replace(/https?:\/\//, '');
 };
+
+export const trimTrailingSlash = (input: string): string => {
+  return input.endsWith('/') ? trimTrailingSlash(input.slice(0, -1)) : input;
+};

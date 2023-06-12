@@ -1,8 +1,7 @@
 import { newWalletRequest } from '@coong/base';
 import { AccessStatus, WalletRequestMessage, WalletResponse } from '@coong/base/types';
 import { AccountInfo } from '@coong/keyring/types';
-import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
-import { trimOffUrlProtocol } from '@coong/utils/string';
+import { CoongError, ErrorCode, StandardCoongError, trimOffUrlProtocol } from '@coong/utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import WalletState, { AppInfo, AUTHORIZED_ACCOUNTS_KEY, AuthorizedApps } from '../WalletState';
 import { newWalletState, PASSWORD, pick, RANDOM_APP_URL, setupAuthorizedApps } from './setup';
