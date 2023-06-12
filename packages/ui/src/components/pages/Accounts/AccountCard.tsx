@@ -49,11 +49,11 @@ const AccountCard: FC<AccountCardProps> = ({ className = '', account, showAccoun
         </div>
         <div className='flex flex-col gap-1'>
           <div className='account-card__name'>
-            {name}
+            <span>{name}</span>
             <ImportedLabel show={isExternal} className='hidden sm:inline-flex' />
           </div>
-          <AccountAddress address={networkAddress} name={name} className='text-xs mb-1' />
-          <ImportedLabel show={isExternal} className='sm:hidden mb-1.5 self-start' />
+          <AccountAddress address={networkAddress} name={name} className='text-xs' />
+          <ImportedLabel show={isExternal} className='sm:hidden my-1 self-start' />
         </div>
       </div>
       {showAccountControls && (

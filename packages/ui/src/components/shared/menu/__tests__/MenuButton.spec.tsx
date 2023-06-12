@@ -177,7 +177,7 @@ describe('MenuButton', () => {
       onScanResult(base64Encode(JSON.stringify(backup)));
 
       expect(await screen.findByText(/test-account/)).toBeInTheDocument();
-      expect(await screen.findByLabelText(/Wallet password of the account backup/)).toBeInTheDocument();
+      expect(await screen.findByLabelText(/Backup wallet password/)).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /Import Account/ })).toBeDisabled();
       expect(await screen.findByRole('button', { name: /Back/ })).toBeInTheDocument();
     });
@@ -191,9 +191,7 @@ describe('MenuButton', () => {
             await renderView();
             onScanResult(base64Encode(JSON.stringify(backup)));
 
-            expect(await screen.findByRole('alert')).toHaveTextContent(
-              /Account is already exists in your wallet. Importing account can not be implemented./,
-            );
+            expect(await screen.findByRole('alert')).toHaveTextContent(/Account has already existed./);
           });
         });
         describe('can resolve', () => {
@@ -205,7 +203,7 @@ describe('MenuButton', () => {
             onScanResult(base64Encode(JSON.stringify(backup)));
 
             expect(await screen.findByRole('alert')).toHaveTextContent(
-              /Account name test-account has already been taken. Please choose another name to continue importing./,
+              /Account name \(test-account\) has already been taken. Please choose another name to continue./,
             );
             expect(await screen.findByLabelText(/New account name/)).toBeInTheDocument();
           });
@@ -218,7 +216,7 @@ describe('MenuButton', () => {
             onScanResult(base64Encode(JSON.stringify(backup)));
 
             expect(await screen.findByRole('alert')).toHaveTextContent(
-              /Account name very-long-account-name is too long. Please choose another name not exceed 16 characters to continue./,
+              'Account name (very-long-account-name) is too long. Please choose another name to continue (max 16 characters).',
             );
             expect(await screen.findByLabelText(/New account name/)).toBeInTheDocument();
           });
@@ -231,7 +229,7 @@ describe('MenuButton', () => {
             onScanResult(base64Encode(JSON.stringify(backup)));
 
             expect(await screen.findByRole('alert')).toHaveTextContent(
-              /Account name is required. Please choose one to continue importing./,
+              /Account name is required. Please choose a name to continue./,
             );
             expect(await screen.findByLabelText(/New account name/)).toBeInTheDocument();
           });
@@ -266,12 +264,12 @@ describe('MenuButton', () => {
         await renderView();
         onScanResult(base64Encode(JSON.stringify(backup)));
 
-        await user.type(await screen.findByLabelText(/Wallet password of the account backup/), PASSWORD);
+        await user.type(await screen.findByLabelText(/Backup wallet password/), PASSWORD);
         await user.click(await screen.findByRole('button', { name: /Import Account/ }));
 
         await waitFor(() => {
           expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-          expect(screen.queryByText(/Import account successfully/)).toBeInTheDocument();
+          expect(screen.queryByText(/Account imported successfully/)).toBeInTheDocument();
         });
       });
 
