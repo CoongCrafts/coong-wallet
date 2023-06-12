@@ -1,7 +1,6 @@
 import { base64Encode } from '@polkadot/util-crypto';
 import { WalletQrBackup } from '@coong/keyring/types';
-import { UserEvent } from '@testing-library/user-event/setup/setup';
-import { MNEMONIC, newUser, PASSWORD, render, screen } from '__tests__/testUtils';
+import { UserEvent, MNEMONIC, newUser, PASSWORD, render, screen } from '__tests__/testUtils';
 import CryptoJS from 'crypto-js';
 import { vi } from 'vitest';
 import ScanQrCode from '../index';

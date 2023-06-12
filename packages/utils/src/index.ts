@@ -1,2 +1,3 @@
 export * from './errors';
 export * from './assert';
+export * from './string';

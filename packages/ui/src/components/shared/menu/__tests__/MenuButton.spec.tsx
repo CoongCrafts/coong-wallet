@@ -4,6 +4,7 @@ import Keyring from '@coong/keyring';
 import { UserEvent } from '@testing-library/user-event/setup/setup';
 import { initializeKeyring, newUser, PASSWORD, render, screen } from '__tests__/testUtils';
 import { vi } from 'vitest';
+import { UserEvent, initializeKeyring, newUser, PASSWORD, render, screen } from '__tests__/testUtils';
 import MenuButton from '../MenuButton';
 
 let onReadResult: (acceptedFiles: File[]) => void;

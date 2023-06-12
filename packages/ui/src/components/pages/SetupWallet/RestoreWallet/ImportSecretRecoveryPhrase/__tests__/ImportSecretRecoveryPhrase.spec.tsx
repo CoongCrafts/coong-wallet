@@ -1,6 +1,5 @@
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
-import { UserEvent } from '@testing-library/user-event/setup/setup';
-import { newUser, render, screen, waitFor } from '__tests__/testUtils';
+import { UserEvent, newUser, render, screen, waitFor } from '__tests__/testUtils';
 import { RestoreWalletScreenStep } from 'types';
 import ImportSecretRecoveryPhrase from '../index';
 

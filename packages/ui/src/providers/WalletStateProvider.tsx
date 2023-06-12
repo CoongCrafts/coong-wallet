@@ -1,6 +1,5 @@
-import { createContext, FC, useContext } from 'react';
-import { isMessageId } from '@coong/base';
-import { EmbedHandler, TabHandler, WalletState } from '@coong/base';
+import { createContext, FC, useContext, useMemo } from 'react';
+import { isMessageId, TabHandler, WalletState } from '@coong/base';
 import { RequestName, WalletRequestMessage, WalletResponse } from '@coong/base/types';
 import Keyring from '@coong/keyring';
 import { CoongError, ErrorCode } from '@coong/utils';
@@ -22,9 +21,14 @@ export const WalletStateContext = createContext<WalletStateContextProps>({} as W
 
 export const useWalletState = () => useContext(WalletStateContext);
 
-export const WalletStateProvider: FC<Props> = ({ children }) => {
-  const keyring = new Keyring();
-  const walletState = new WalletState(keyring);
+interface WalletStateProviderProps extends Props {
+  initialKeyring?: Keyring;
+  initialWalletState?: WalletState;
+}
+
+export const WalletStateProvider: FC<WalletStateProviderProps> = ({ children, initialKeyring, initialWalletState }) => {
+  const keyring = useMemo(() => initialKeyring || new Keyring(), [initialKeyring]);
+  const walletState = useMemo(() => initialWalletState || new WalletState(keyring), [initialWalletState, keyring]);
 
   async function handleWalletRequest<TRequestName extends RequestName>(
     message: WalletRequestMessage<TRequestName>,
@@ -34,12 +38,8 @@ export const WalletStateProvider: FC<Props> = ({ children }) => {
       request: { name },
     } = message;
 
-    if (isMessageId(id)) {
-      if (name.startsWith('tab/')) {
-        return new TabHandler(walletState).handle(message);
-      } else if (name.startsWith('embed/')) {
-        return new EmbedHandler(walletState).handle(message);
-      }
+    if (isMessageId(id) && name.startsWith('tab/')) {
+      return new TabHandler(walletState).handle(message);
     }
 
     throw new CoongError(ErrorCode.UnknownRequest);

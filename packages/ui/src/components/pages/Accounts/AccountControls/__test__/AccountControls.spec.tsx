@@ -1,23 +1,36 @@
 import { encodeAddress } from '@polkadot/util-crypto';
-import { defaultNetwork, networks } from '@coong/base';
+import { defaultNetwork, networks, WalletState } from '@coong/base';
 import Keyring from '@coong/keyring';
 import { AccountInfo } from '@coong/keyring/types';
-import { UserEvent } from '@testing-library/user-event/setup/setup';
-import { initializeKeyring, newUser, PASSWORD, render, screen, waitFor } from '__tests__/testUtils';
+import { trimOffUrlProtocol } from '@coong/utils';
+import {
+  UserEvent,
+  initializeKeyring,
+  newUser,
+  PASSWORD,
+  RANDOM_APP_URL,
+  render,
+  screen,
+  setupAuthorizedApps,
+  waitFor,
+} from '__tests__/testUtils';
+import { beforeEach } from 'vitest';
 import Accounts from '../../index';
 
 const preloadedState = { app: { addressPrefix: defaultNetwork.prefix } };
 
 describe('AccountControls', () => {
-  let user: UserEvent, testAccount: AccountInfo, keyring: Keyring;
+  let user: UserEvent, testAccount: AccountInfo, keyring: Keyring, walletState: WalletState;
   beforeEach(async () => {
     user = newUser();
 
     keyring = await initializeKeyring();
-
     testAccount = await keyring.createNewAccount('test-account', PASSWORD);
 
-    render(<Accounts />, { preloadedState });
+    setupAuthorizedApps([testAccount.address]);
+    walletState = new WalletState(keyring);
+
+    render(<Accounts />, { preloadedState, keyring, walletState });
 
     await user.click(await screen.findByTitle(/Open account controls/));
   });
@@ -162,6 +175,60 @@ describe('AccountControls', () => {
         ).toBeInTheDocument();
         expect(await screen.findByRole('button', { name: /Download JSON File/ })).toBeInTheDocument();
       });
+    });
+  });
+  describe('DappsAccessToAccountDialog', () => {
+    beforeEach(async () => {
+      await user.click(await screen.findByRole('menuitem', { name: /View Dapps Access/ }));
+    });
+
+    it('should show no dapps access massage', async () => {
+      walletState.reset();
+      walletState.reloadState();
+
+      expect(await screen.getByRole('dialog', { name: /Dapps Access To/ })).toBeInTheDocument();
+      expect(await screen.getByText('No dapps have access to this account')).toBeInTheDocument();
+    });
+
+    it('should show dapp access list', async () => {
+      expect(await screen.getByRole('dialog', { name: /Dapps Access To/ })).toBeInTheDocument();
+      expect(await screen.findByText(/Random App/)).toBeInTheDocument();
+      expect(await screen.findByText(trimOffUrlProtocol(RANDOM_APP_URL))).toBeInTheDocument();
+    });
+
+    it('should remove one access', async () => {
+      expect(await screen.getByRole('dialog', { name: /Dapps Access To/ })).toBeInTheDocument();
+      const removeAccessBtn = await screen.findByRole('button', { name: /Remove Access/ });
+      expect(removeAccessBtn).toBeEnabled();
+      await user.click(removeAccessBtn);
+
+      await waitFor(() => {
+        expect(screen.queryByText(/Random App/)).not.toBeInTheDocument();
+      });
+
+      expect(await screen.getByText('No dapps have access to this account')).toBeInTheDocument();
+    });
+
+    it('should remove all access', async () => {
+      expect(await screen.getByRole('dialog', { name: /Dapps Access To/ })).toBeInTheDocument();
+      const removeAllAccessBtn = await screen.findByRole('button', { name: /Remove All/ });
+      await user.click(removeAllAccessBtn);
+
+      expect(
+        await screen.findByRole('dialog', { name: `Remove All Dapps Access To: ${testAccount.name}` }),
+      ).toBeInTheDocument();
+      expect(await screen.findByText(`Are you sure to remove all dapps access to account: ${testAccount.name}?`));
+      expect(await screen.findByRole('button', { name: /Cancel/ })).toBeEnabled();
+      const confirmBtn = await screen.findByRole('button', { name: /Remove All Access/ });
+      expect(confirmBtn).toBeEnabled();
+
+      await user.click(confirmBtn);
+
+      await waitFor(() => {
+        expect(screen.queryByText(/Random App/)).not.toBeInTheDocument();
+      });
+
+      expect(await screen.getByText('No dapps have access to this account')).toBeInTheDocument();
     });
   });
 });

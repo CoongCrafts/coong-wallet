@@ -34,7 +34,6 @@ describe('handle', () => {
         newWalletRequest({
           // @ts-ignore
           name: 'tab/unsupportedRequest',
-          body: {},
         }),
       ),
     ).rejects.toThrowError(new CoongError(ErrorCode.UnknownRequest));
@@ -47,6 +46,7 @@ describe('handle', () => {
         tabHandler.handle({
           ...newWalletRequest({
             name: requestName as RequestName,
+            // @ts-ignore
             body: {},
           }),
           origin: currentWindowOrigin,

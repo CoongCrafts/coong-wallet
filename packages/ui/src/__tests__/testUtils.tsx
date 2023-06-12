@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
-import { AUTHORIZED_ACCOUNTS_KEY, AuthorizedApps } from '@coong/base/requests/WalletState';
+import WalletState, { AUTHORIZED_ACCOUNTS_KEY, AuthorizedApps } from '@coong/base/requests/WalletState';
 import Keyring from '@coong/keyring';
 import { PreloadedState } from '@reduxjs/toolkit';
 import userEvent from '@testing-library/user-event';
@@ -20,6 +20,8 @@ import { ALERT_TIMEOUT } from 'utils/constants';
 
 interface WrapperProps extends Props {
   preloadedState?: PreloadedState<any>;
+  keyring?: Keyring;
+  walletState?: WalletState;
 }
 
 const i18nInstance = i18next.createInstance();
@@ -46,14 +48,14 @@ i18nInstance.use(Backend).init({
   },
 });
 
-const Wrapper: FC<WrapperProps> = ({ children, preloadedState }) => {
+const Wrapper: FC<WrapperProps> = ({ children, preloadedState, keyring, walletState }) => {
   const store = newStore(preloadedState);
 
   return (
     <Provider store={store}>
       <LanguageProvider i18nInstance={i18nInstance}>
         <ThemeProvider>
-          <WalletStateProvider>
+          <WalletStateProvider initialKeyring={keyring} initialWalletState={walletState}>
             {children}
             <ToastContainer
               position='top-center'
@@ -73,11 +75,19 @@ const Wrapper: FC<WrapperProps> = ({ children, preloadedState }) => {
 
 interface CustomRenderOptions extends RenderOptions {
   preloadedState?: PreloadedState<any>;
+  keyring?: Keyring;
+  walletState?: WalletState;
 }
 
 const customRender = (ui: React.ReactElement, options?: CustomRenderOptions) => {
+  const { preloadedState, keyring, walletState } = options || {};
+
   return render(ui, {
-    wrapper: ({ children }) => <Wrapper preloadedState={options?.preloadedState}>{children}</Wrapper>,
+    wrapper: ({ children }) => (
+      <Wrapper preloadedState={preloadedState} keyring={keyring} walletState={walletState}>
+        {children}
+      </Wrapper>
+    ),
     ...options,
   });
 };
@@ -124,8 +134,10 @@ export const RouterWrapper: FC<RouterWrapperProps> = ({ children, path, currentU
   return <RouterProvider router={router} />;
 };
 
+export const RANDOM_APP_URL = 'https://random-app.com';
+
 export const setupAuthorizedApps = (authorizedAccounts: string[] = [], appUrl?: string) => {
-  const randomAppUrl = appUrl || 'https://random-app.com';
+  const randomAppUrl = appUrl || RANDOM_APP_URL;
   const randomAppId = randomAppUrl.split('//')[1];
 
   const randomAppInfo = {

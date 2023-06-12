@@ -11,6 +11,10 @@ export const shortenAddress = (address: string): string => {
   return `${address.substring(0, 6)}...${address.substring(length - 6, length)}`;
 };
 
-export const randomWalletInstanceId = (): string => {
-  return `coong/instance-${Math.floor(Math.random() * 1_0000_000)}`;
+export const trimOffUrlProtocol = (url: string): string => {
+  return url.replace(/https?:\/\//, '');
+};
+
+export const trimTrailingSlash = (input: string): string => {
+  return input.endsWith('/') ? trimTrailingSlash(input.slice(0, -1)) : input;
 };

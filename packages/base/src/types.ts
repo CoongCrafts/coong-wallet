@@ -4,16 +4,8 @@ import type { HexString } from '@polkadot/util/types';
 
 export type MessageId = `coong/${string}`;
 
-export interface RequestAccessAuthorized {
-  appName: string;
-}
-
 export interface RequestAppRequestAccess {
   appName: string;
-}
-
-export interface RequestAuthorizedAccounts {
-  anyType?: boolean;
 }
 
 export enum AccessStatus {
@@ -37,9 +29,6 @@ export interface RequestSignatures {
   'tab/updateAccess': [undefined, ResponseAppRequestAccess];
   'tab/signRaw': [SignerPayloadRaw, ResponseSigning];
   'tab/signExtrinsic': [SignerPayloadJSON, ResponseSigning];
-
-  'embed/accessAuthorized': [RequestAccessAuthorized, boolean];
-  'embed/authorizedAccounts': [RequestAuthorizedAccounts, InjectedAccount[]];
 }
 
 export type RequestName = keyof RequestSignatures;
@@ -58,8 +47,6 @@ export enum MessageType {
 }
 
 export enum WalletSignal {
-  WALLET_EMBED_INITIALIZED = 'WALLET_EMBED_INITIALIZED',
-  WALLET_EMBED_UNLOADED = 'WALLET_EMBED_UNLOADED',
   WALLET_TAB_INITIALIZED = 'WALLET_TAB_INITIALIZED',
   WALLET_TAB_UNLOADED = 'WALLET_TAB_UNLOADED',
 }

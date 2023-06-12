@@ -10,7 +10,7 @@ import {
   WalletResponse,
   WalletResponseMessage,
 } from '@coong/base/types';
-import { assert, assertFalse, CoongError, ErrorCode } from '@coong/utils';
+import { assert, assertFalse, CoongError, ErrorCode, trimTrailingSlash } from '@coong/utils';
 import ConnectedAccounts from './ConnectedAccounts';
 import SubstrateInjected from './injection/Injected';
 import { CoongSdkOptions, Handlers, InjectedWindow, UpdatableInjected } from './types';
@@ -21,24 +21,26 @@ const DEFAULT_WALLET_URL = 'https://app.coongwallet.io';
 /**
  * @name CoongSdk
  * @description A helper to initialize/inject Coong Wallet API
- * and interact with wallet instances (tab/embed)
+ * and interact with wallet instances
  *
  * ## Initialize & interact with Coong Wallet
  *
- * ```javascript
+ * ```typescript
  * import CoongSdk from '@coong/sdk';
- *
  *
  * const initializeCoongWallet = async () => {
  *   // Inject Coong Wallet API
- *   await CoongSdk.instance().initialize();
+ *   const sdk = new CoongSdk()
+ *   await sdk.initialize();
  *
  *   // We can now interact with the wallet using the similar Polkadot{.js} extension API
- *   const coongInjected = await window['injectedWeb3']['coongwallet'].enable('Awesome Dapp');
- *   const approvedAccounts = await coongInjected.accounts.get();
+ *   const injected = await window['injectedWeb3']['coongwallet'].enable('Awesome Dapp');
+ *   const approvedAccounts = await injected.accounts.get();
+ *
+ *   return { sdk, injected, approvedAccounts }
  * }
  *
- * initializeCoongWallet();
+ * await initializeCoongWallet();
  * ```
  */
 export default class CoongSdk {
@@ -49,20 +51,18 @@ export default class CoongSdk {
   #connectedAccounts?: ConnectedAccounts;
   #walletInstancesQueue: Window[];
 
-  constructor(options: CoongSdkOptions) {
+  constructor(options?: CoongSdkOptions) {
     this.#initialized = false;
     this.#handlers = {};
 
     // TODO validate url format
     const walletUrl = options?.walletUrl || DEFAULT_WALLET_URL;
-    this.#walletUrl = this.trimTrailingSlash(walletUrl);
+    this.#walletUrl = trimTrailingSlash(walletUrl);
     this.#walletInstancesQueue = [];
   }
 
   /**
    * Initialize & inject wallet API
-   *
-   * @param walletUrl customize wallet url, by default the SDK will connect to the official url defined at `DEFAULT_WALLET_URL`
    */
   async initialize() {
     assert(typeof window !== 'undefined', 'Coong SDK only works in browser environment!');
@@ -81,10 +81,9 @@ export default class CoongSdk {
     console.log('Coong SDK initialized!');
   }
 
-  trimTrailingSlash = (input: string): string => {
-    return input.endsWith('/') ? this.trimTrailingSlash(input.slice(0, -1)) : input;
-  };
-
+  /**
+   * Destroy Coong Wallet initialization
+   */
   destroy() {
     if (!this.#initialized) {
       return;
@@ -100,11 +99,16 @@ export default class CoongSdk {
     this.#initialized = false;
   }
 
+  /**
+   * Open a new wallet window/popup
+   *
+   * @param path
+   */
   async openWalletWindow(path = ''): Promise<Window> {
     return new TabInstance(this.#walletUrl).openWalletWindow(path);
   }
 
-  async sendMessageToTabInstance(message: WalletRequestMessage) {
+  async #sendMessageToTabInstance(message: WalletRequestMessage) {
     this.ensureSdkInitialized();
 
     const params = new URLSearchParams({ message: JSON.stringify(message) });
@@ -112,10 +116,16 @@ export default class CoongSdk {
     await this.openWalletWindow(`/request?${params.toString()}`);
   }
 
-  getAvailableWalletInstance() {
+  #getAvailableWalletInstance() {
     return this.#walletInstancesQueue.shift();
   }
 
+  /**
+   * Launch a new wallet instance and push it in a queue
+   * to use later for sending messages to wallet via **sendMessageToWallet**
+   *
+   * @param path
+   */
   async launchNewWalletInstance(path = ''): Promise<Window> {
     const instance = await this.openWalletWindow(path);
     this.#walletInstancesQueue.push(instance);
@@ -124,22 +134,24 @@ export default class CoongSdk {
   }
 
   /**
-   * Send a message to wallet instance (embed or tab) based on the request name
+   * Send a message to wallet instance based on the request name
+   * to an available wallet instance in queue or launch a new wallet instance
+   * if the queue is empty
    *
    * @param message
    */
-  async sendMessageToWallet(message: WalletRequestMessage) {
+  async #sendMessageToWallet(message: WalletRequestMessage) {
     const { type, request } = message;
     assert(type === MessageType.REQUEST && request, 'Invalid message format');
 
     const { name } = request;
 
-    const availableInstance = this.getAvailableWalletInstance();
+    const availableInstance = this.#getAvailableWalletInstance();
 
     if (availableInstance) {
       availableInstance.postMessage(message, this.walletUrl);
     } else if (name.startsWith('tab/')) {
-      await this.sendMessageToTabInstance(message);
+      await this.#sendMessageToTabInstance(message);
     } else {
       throw new CoongError(ErrorCode.InvalidMessageFormat);
     }
@@ -202,6 +214,11 @@ export default class CoongSdk {
     });
   }
 
+  /**
+   * Send a request message to wallet and handle response from wallet.
+   *
+   * @param request
+   */
   sendMessage<TRequestName extends RequestName>(
     request: WalletRequest<TRequestName>,
   ): Promise<WalletResponse<TRequestName>> {
@@ -216,7 +233,7 @@ export default class CoongSdk {
 
       const messageBody = newWalletRequest(request, id);
 
-      this.sendMessageToWallet(messageBody).catch((error) => {
+      this.#sendMessageToWallet(messageBody).catch((error) => {
         console.error(error);
         delete this.#handlers[id];
 

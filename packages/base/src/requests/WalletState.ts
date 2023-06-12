@@ -5,7 +5,7 @@ import { u8aToHex, u8aWrapBytes } from '@polkadot/util';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { KeypairType } from '@polkadot/util-crypto/types';
 import Keyring from '@coong/keyring';
-import { assert, StandardCoongError } from '@coong/utils';
+import { assert, StandardCoongError, trimOffUrlProtocol } from '@coong/utils';
 import { BehaviorSubject } from 'rxjs';
 import { defaultNetwork } from '../networks';
 import {
@@ -74,6 +74,9 @@ export default class WalletState {
     localStorage.setItem(AUTHORIZED_ACCOUNTS_KEY, JSON.stringify(this.authorizedApps));
   }
 
+  /**
+   * Get all authorized apps
+   */
   get authorizedApps() {
     return this.#authorizedAppsSubject.value;
   }
@@ -82,29 +85,110 @@ export default class WalletState {
     return this.#authorizedAppsSubject;
   }
 
+  /**
+   * Get all authorized apps as an array sorted oldest first
+   */
   getAuthorizedApps() {
     return Object.values(this.authorizedApps).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
   }
 
+  getAuthorizedAppsToAccount(address: string) {
+    return this.getAuthorizedApps().filter((one) => one.authorizedAccounts.includes(this.toGenericAddress(address)));
+  }
+
+  /**
+   * Remove all authorized apps
+   */
   removeAllAuthorizedApps() {
     this.#authorizedAppsSubject.next({});
   }
 
+  /**
+   * Update an authorized app info
+   *
+   * @param appInfo
+   */
   saveAuthorizedApp(appInfo: AppInfo) {
-    const { id } = appInfo;
+    const { id, url } = appInfo;
     if (!id) {
       return;
     }
 
+    this.ensureAppAuthorized(url);
     this.authorizedApps[id] = appInfo;
     this.#authorizedAppsSubject.next(this.authorizedApps);
   }
 
+  /**
+   * Remove an authorized app
+   *
+   * @param id
+   */
   removeAuthorizedApp(id: AppId) {
     delete this.authorizedApps[id];
     this.#authorizedAppsSubject.next(this.authorizedApps);
   }
 
+  /**
+   * Convert an address to substrate generic address (prefix: 42)
+   *
+   * @param address
+   */
+  toGenericAddress(address: string) {
+    return encodeAddress(address, defaultNetwork.prefix);
+  }
+
+  /**
+   * Remove app access to an account
+   *
+   * @param id
+   * @param address
+   */
+  removeAppAccessToAccount(id: AppId, address: string) {
+    const appInfo = this.getAuthorizedApp(id);
+
+    const substrateAddress = this.toGenericAddress(address);
+    if (!appInfo.authorizedAccounts.includes(substrateAddress)) {
+      return;
+    }
+
+    const newAuthorizedAccounts = appInfo.authorizedAccounts.filter((one) => one !== substrateAddress);
+    this.authorizedApps[id] = {
+      ...appInfo,
+      authorizedAccounts: newAuthorizedAccounts,
+    };
+
+    this.#authorizedAppsSubject.next(this.authorizedApps);
+  }
+
+  /**
+   * Remove all apps access to an account
+   *
+   * @param address
+   */
+  removeAllAccessToAccount(address: string) {
+    const substrateAddress = this.toGenericAddress(address);
+
+    for (const appInfo of Object.values(this.authorizedApps)) {
+      if (!appInfo.authorizedAccounts.includes(substrateAddress)) {
+        continue;
+      }
+
+      const newAuthorizedAccounts = appInfo.authorizedAccounts.filter((one) => one !== substrateAddress);
+      this.authorizedApps[appInfo.id] = {
+        ...appInfo,
+        authorizedAccounts: newAuthorizedAccounts,
+      };
+    }
+
+    this.#authorizedAppsSubject.next(this.authorizedApps);
+  }
+
+  /**
+   * Get all injected accounts from keyring
+   *
+   * @param anyType
+   */
   async getInjectedAccounts(anyType = false): Promise<InjectedAccount[]> {
     const accounts = await this.#keyring.getAccounts();
     return accounts
@@ -112,6 +196,11 @@ export default class WalletState {
       .map(({ address, genesisHash, name, type }) => ({ address, genesisHash, name, type }));
   }
 
+  /**
+   * Get only authorized injected accounts for an app
+   *
+   * @param appUrl
+   */
   async getAuthorizedInjectedAccounts(appUrl: string): Promise<InjectedAccount[]> {
     const { authorizedAccounts: authorizedAddresses } = this.getAuthorizedApp(appUrl);
     const accounts = await this.getInjectedAccounts();
@@ -119,20 +208,36 @@ export default class WalletState {
     return accounts.filter((account) => authorizedAddresses.includes(account.address));
   }
 
+  /**
+   * Extract app id from an url
+   *
+   * @param url
+   */
   extractAppId(url: string) {
     assert(url && URL_PROTOCOLS.some((protocol) => url.startsWith(protocol)), `Invalid url: ${url}`);
 
-    return url.split('//')[1];
+    return trimOffUrlProtocol(url);
   }
 
+  /**
+   * Get app information by an url
+   *
+   * @throws {CoongError} if the app information is not found / has not been authorized yet
+   * @param url
+   */
   getAuthorizedApp(url: string): AppInfo {
-    const appInfo = this.authorizedApps[this.extractAppId(url)];
+    const appInfo = this.authorizedApps[url] || this.authorizedApps[this.extractAppId(url)];
 
     assert(appInfo, `The app at ${url} has not been authorized yet!`);
 
     return appInfo;
   }
 
+  /**
+   * Make sure an app (url) is authorized
+   *
+   * @param url
+   */
   ensureAppAuthorized(url: string): boolean {
     const app = this.getAuthorizedApp(url);
 
@@ -141,6 +246,12 @@ export default class WalletState {
     return true;
   }
 
+  /**
+   * Make sure an account is authorized for an app
+   *
+   * @param url
+   * @param accountAddress
+   */
   ensureAccountAuthorized(url: string, accountAddress: string): void {
     const app = this.getAuthorizedApp(url);
     const substrateAddress = encodeAddress(accountAddress, defaultNetwork.prefix);
@@ -152,6 +263,11 @@ export default class WalletState {
     );
   }
 
+  /**
+   * Get current request message sending from an app
+   *
+   * @param requestName
+   */
   getCurrentRequestMessage = (requestName?: RequestName) => {
     const currentRequestMessage = this.#requestMessageSubject.value;
     if (!currentRequestMessage) {
@@ -281,6 +397,11 @@ export default class WalletState {
     currentMessage.reject(new StandardCoongError('Cancelled'));
   }
 
+  /**
+   * Add new request message to be handling
+   *
+   * @param message
+   */
   async newRequestMessage<TRequestName extends RequestName>(
     message: WalletRequestMessage<TRequestName>,
   ): Promise<WalletResponse<TRequestName>> {
@@ -293,6 +414,11 @@ export default class WalletState {
     });
   }
 
+  /**
+   * Subscribe to new request message change
+   *
+   * @param onNewRequest
+   */
   subscribeToNewRequestMessage = (onNewRequest: (request: WalletRequestWithResolver) => void): (() => void) => {
     const subscription = this.#requestMessageSubject.subscribe((nextRequest) => {
       nextRequest && onNewRequest(nextRequest);
@@ -301,8 +427,12 @@ export default class WalletState {
     return subscription.unsubscribe.bind(subscription);
   };
 
+  /**
+   * Clear all persistent state & reset values
+   */
   reset() {
     localStorage.removeItem(AUTHORIZED_ACCOUNTS_KEY);
+    this.reloadState();
   }
 
   reloadState() {
