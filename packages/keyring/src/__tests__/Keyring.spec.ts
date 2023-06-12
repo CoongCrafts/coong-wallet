@@ -543,6 +543,7 @@ describe('importAccount', () => {
       new CoongError(ErrorCode.AccountExisted),
     );
   });
+
   it('should throw error if account name exists', async () => {
     await keyring.createNewAccount('test-account', PASSWORD);
 
@@ -550,23 +551,27 @@ describe('importAccount', () => {
       new CoongError(ErrorCode.AccountNameUsed),
     );
   });
+
   it('should throw error if account name not found', async () => {
     await expect(
       keyring.importAccount({ ...backup, meta: { ...backup.meta, name: '' } }, PASSWORD),
     ).rejects.toThrowError(new CoongError(ErrorCode.AccountNameRequired));
   });
-  it('should restore account', async () => {
+
+  it('should call restoreAccount', async () => {
     const restoreAccountSpy = vi.spyOn(InnerKeyring.prototype, 'restoreAccount');
 
     await keyring.importAccount(backup, PASSWORD);
 
     expect(restoreAccountSpy).toBeCalled();
   });
+
   it('should found account after restoring account', async () => {
     await keyring.importAccount(backup, PASSWORD);
 
     expect(await keyring.existsAccount(address)).toEqual(true);
   });
+
   it('should throw error if password incorrect', async () => {
     await expect(keyring.importAccount(backup, 'incorrect-password')).rejects.toThrowError(
       new CoongError(ErrorCode.PasswordIncorrect),

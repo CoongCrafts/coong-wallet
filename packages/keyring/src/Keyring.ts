@@ -427,10 +427,21 @@ export default class Keyring {
     return accountBackup;
   }
 
+  /**
+   * Check if an account is external by verify original hash
+   *
+   * @param accountOriginalHash
+   */
   isExternalAccount(accountOriginalHash: string | undefined) {
     return accountOriginalHash !== this.#ensureOriginalHash();
   }
 
+  /**
+   * Import an account from a backup and a password for that backup
+   *
+   * @param backup
+   * @param password
+   */
   async importAccount(backup: AccountBackup, password: string) {
     const { address, meta } = backup;
 
@@ -444,13 +455,11 @@ export default class Keyring {
       throw new CoongError(ErrorCode.AccountNameUsed);
     }
 
-    const isExternalAccount = this.isExternalAccount(meta.originalHash as string);
-
-    if (isExternalAccount) {
-      meta.isExternal = isExternalAccount;
+    if (this.isExternalAccount(meta.originalHash as string)) {
+      meta.isExternal = true;
     } else {
       // No need to keep it because when exporting internal account
-      // `originalHash` will be automatically included in it meta
+      // `originalHash` will be automatically generated from mnemonic
       delete meta.originalHash;
     }
 
