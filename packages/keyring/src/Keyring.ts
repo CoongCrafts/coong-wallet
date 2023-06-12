@@ -18,6 +18,20 @@ const sha256AsHex = (data: string): string => {
   return u8aToHex(sha256AsU8a(data));
 };
 
+/**
+ * @name Keyring
+ * @description Keyring management for user accounts
+ *
+ * Coong Wallet is a hierarchical deterministic (HD) wallet following the idea of BIP-32,
+ * which only requires users to back up only one seed phrase upon setting up the wallet.
+ *
+ * New accounts will be created by deriving from a mnemonic and an accountsIndex number
+ * as the derivation path (//{index}), index number will be started from 0
+ * and increased one by one as new accounts are created.
+ *
+ * The first account will be created without derivation path,
+ * this is to be compatible with the Polkadot{.js} wallet.
+ */
 export default class Keyring {
   #keyring!: InnerKeyring;
   #mnemonic: string | null;
@@ -28,6 +42,9 @@ export default class Keyring {
     this.reload();
   }
 
+  /**
+   * Reload accounts from storage
+   */
   reload() {
     try {
       this.#keyring = new InnerKeyring();
@@ -42,12 +59,22 @@ export default class Keyring {
     }
   }
 
+  /**
+   * Initialize the keyring with a mnemonic and wallet password
+   * Private keys & mnemonic will be encrypted using wallet password
+   *
+   * @param mnemonic
+   * @param password
+   */
   async initialize(mnemonic: string, password: string) {
     const encryptedSeed = CryptoJS.AES.encrypt(mnemonic, password).toString();
     localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedSeed);
     this.#generateOriginalHash(mnemonic);
   }
 
+  /**
+   * Check if the keyring is initialized
+   */
   async initialized(): Promise<boolean> {
     return !!this.#getEncryptedMnemonic();
   }
@@ -58,14 +85,23 @@ export default class Keyring {
     }
   }
 
+  /**
+   * Check if the keyring is locked or not
+   */
   locked() {
     return !this.#mnemonic;
   }
 
+  /**
+   * Lock the keyring
+   */
   lock() {
     this.#mnemonic = null;
   }
 
+  /**
+   * Reset the keyring, clear all persistent data, remove all user accounts
+   */
   async reset() {
     localStorage.removeItem(ENCRYPTED_MNEMONIC);
     localStorage.removeItem(ORIGINAL_HASH);
@@ -78,6 +114,11 @@ export default class Keyring {
     });
   }
 
+  /**
+   * Unlock the keyring with wallet password
+   *
+   * @param password
+   */
   async unlock(password: string): Promise<void> {
     await this.ensureWalletInitialized();
 
@@ -102,10 +143,19 @@ export default class Keyring {
     }
   }
 
+  /**
+   * Decrypt & return the mnemonic with wallet password
+   *
+   * @param password
+   */
   async getRawMnemonic(password: string): Promise<string> {
     return await this.#decryptMnemonic(password);
   }
 
+  /**
+   * Verify if wallet password is correct
+   * @param password
+   */
   async verifyPassword(password: string) {
     await this.#decryptMnemonic(password);
   }
@@ -129,6 +179,12 @@ export default class Keyring {
     return originalHash;
   }
 
+  /**
+   * Check the make sure originalHash presence,
+   * if not generate a new one with wallet password
+   *
+   * @param password
+   */
   async ensureOriginalHashPresence(password: string) {
     if (!this.#getOriginalHash()) {
       const rawMnemonic = await this.getRawMnemonic(password);
@@ -140,6 +196,9 @@ export default class Keyring {
     return localStorage.getItem(ENCRYPTED_MNEMONIC);
   }
 
+  /**
+   * Get current accounts index
+   */
   getAccountsIndex(): number {
     return parseInt(localStorage.getItem(ACCOUNTS_INDEX)!) || 0;
   }
@@ -159,6 +218,9 @@ export default class Keyring {
     return `//${currentIndex - 1}`;
   }
 
+  /**
+   * Get list of accounts in keyring
+   */
   async getAccounts(): Promise<AccountInfo[]> {
     return Object.values(this.accountsStore.subject.getValue())
       .map(({ json: { address, meta }, type }) => ({
@@ -169,6 +231,13 @@ export default class Keyring {
       .sort((a, b) => (a.whenCreated || 0) - (b.whenCreated || 0));
   }
 
+  /**
+   * Create new account
+   *
+   * @param name
+   * @param password
+   * @param path
+   */
   async createNewAccount(name: string, password: string, path?: string): Promise<AccountInfo> {
     if (password) {
       await this.unlock(password);
@@ -208,6 +277,11 @@ export default class Keyring {
     return this.#keyring.accounts;
   }
 
+  /**
+   * Get signing pair for a specific address
+   *
+   * @param address
+   */
   getSigningPair(address: string): KeyringPair {
     try {
       return this.#keyring.getPair(address);
@@ -216,6 +290,12 @@ export default class Keyring {
     }
   }
 
+  /**
+   * Change wallet password
+   *
+   * @param currentPassword
+   * @param newPassword
+   */
   async changePassword(currentPassword: string, newPassword: string) {
     const rawMnemonic = await this.getRawMnemonic(currentPassword);
 
@@ -232,10 +312,21 @@ export default class Keyring {
     });
   }
 
+  /**
+   * Remove an account
+   *
+   * @param address
+   */
   async removeAccount(address: string) {
     await this.#keyring.forgetAccount(address);
   }
 
+  /**
+   * Rename an account
+   *
+   * @param address
+   * @param newName
+   */
   async renameAccount(address: string, newName: string) {
     if (await this.existsName(newName)) {
       throw new CoongError(ErrorCode.AccountNameUsed);
@@ -256,6 +347,11 @@ export default class Keyring {
     return targetAccount;
   }
 
+  /**
+   * Get an account
+   *
+   * @param address
+   */
   async getAccount(address: string) {
     try {
       const pair = this.getSigningPair(address);
@@ -270,10 +366,20 @@ export default class Keyring {
     }
   }
 
+  /**
+   * Get an account by name
+   *
+   * @param name
+   */
   async getAccountByName(name: string) {
     return this.#getAccount((one) => one.name === name);
   }
 
+  /**
+   * Check if an account is existed by name
+   *
+   * @param name
+   */
   async existsName(name: string): Promise<boolean> {
     try {
       return !!(await this.getAccountByName(name));
@@ -286,6 +392,12 @@ export default class Keyring {
     }
   }
 
+  /**
+   * Export an account
+   *
+   * @param address
+   * @param password
+   */
   async exportAccount(address: string, password: string): Promise<AccountBackup> {
     await this.verifyPassword(password);
 
@@ -303,6 +415,11 @@ export default class Keyring {
     return accountBackup;
   }
 
+  /**
+   * Export wallet with all created accounts & other information (accounts index, encrypted mnemonic)
+   *
+   * @param password
+   */
   async exportWallet(password: string): Promise<WalletBackup> {
     await this.verifyPassword(password);
 
@@ -318,6 +435,12 @@ export default class Keyring {
     return walletBackup;
   }
 
+  /**
+   * Import a Qr backup & initializing keyring
+   *
+   * @param backup
+   * @param password
+   */
   async importQrBackup(backup: WalletQrBackup, password: string) {
     if (await this.initialized()) {
       throw new StandardCoongError('Wallet is already initialized');

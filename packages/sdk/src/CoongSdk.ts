@@ -103,11 +103,16 @@ export default class CoongSdk {
     this.#initialized = false;
   }
 
+  /**
+   * Open a new wallet window/popup
+   *
+   * @param path
+   */
   async openWalletWindow(path = ''): Promise<Window> {
     return new TabInstance(this.#walletUrl).openWalletWindow(path);
   }
 
-  async sendMessageToTabInstance(message: WalletRequestMessage) {
+  async #sendMessageToTabInstance(message: WalletRequestMessage) {
     this.ensureSdkInitialized();
 
     const params = new URLSearchParams({ message: JSON.stringify(message) });
@@ -115,10 +120,16 @@ export default class CoongSdk {
     await this.openWalletWindow(`/request?${params.toString()}`);
   }
 
-  getAvailableWalletInstance() {
+  #getAvailableWalletInstance() {
     return this.#walletInstancesQueue.shift();
   }
 
+  /**
+   * Launch a new wallet instance and push it in a queue
+   * to use later for sending messages to wallet via **sendMessageToWallet**
+   *
+   * @param path
+   */
   async launchNewWalletInstance(path = ''): Promise<Window> {
     const instance = await this.openWalletWindow(path);
     this.#walletInstancesQueue.push(instance);
@@ -128,21 +139,23 @@ export default class CoongSdk {
 
   /**
    * Send a message to wallet instance based on the request name
+   * to an available wallet instance in queue or launch a new wallet instance
+   * if the queue is empty
    *
    * @param message
    */
-  async sendMessageToWallet(message: WalletRequestMessage) {
+  async #sendMessageToWallet(message: WalletRequestMessage) {
     const { type, request } = message;
     assert(type === MessageType.REQUEST && request, 'Invalid message format');
 
     const { name } = request;
 
-    const availableInstance = this.getAvailableWalletInstance();
+    const availableInstance = this.#getAvailableWalletInstance();
 
     if (availableInstance) {
       availableInstance.postMessage(message, this.walletUrl);
     } else if (name.startsWith('tab/')) {
-      await this.sendMessageToTabInstance(message);
+      await this.#sendMessageToTabInstance(message);
     } else {
       throw new CoongError(ErrorCode.InvalidMessageFormat);
     }
@@ -205,6 +218,11 @@ export default class CoongSdk {
     });
   }
 
+  /**
+   * Send a request message to wallet and handle response from wallet.
+   *
+   * @param request
+   */
   sendMessage<TRequestName extends RequestName>(
     request: WalletRequest<TRequestName>,
   ): Promise<WalletResponse<TRequestName>> {
@@ -219,7 +237,7 @@ export default class CoongSdk {
 
       const messageBody = newWalletRequest(request, id);
 
-      this.sendMessageToWallet(messageBody).catch((error) => {
+      this.#sendMessageToWallet(messageBody).catch((error) => {
         console.error(error);
         delete this.#handlers[id];
 

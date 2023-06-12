@@ -5,6 +5,10 @@ import CoongSdk from './CoongSdk';
 
 const CONNECTED_ACCOUNTS_KEY = 'CONNECTED_ACCOUNTS';
 
+/**
+ * @name ConnectedAccounts
+ * @description Store & manage authorized accounts from wallet for dapps
+ */
 export default class ConnectedAccounts {
   #sdk: CoongSdk;
   #accounts: BehaviorSubject<InjectedAccount[]>;

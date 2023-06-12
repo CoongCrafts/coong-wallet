@@ -6,7 +6,6 @@ import Handler from './Handler';
 /**
  * @name TabHandler
  * @description Handler for wallet requests from a tab wallet instance
- * @see packages/sdk/src/wallet/TabInstance.ts
  */
 export default class TabHandler extends Handler {
   async handle<TRequestName extends RequestName>(
