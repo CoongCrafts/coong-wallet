@@ -1,10 +1,10 @@
 import { FC, useState } from 'react';
 import { useUpdateEffect } from 'react-use';
+import { shortenAddress } from '@coong/utils/string';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { styled, Theme, useMediaQuery } from '@mui/material';
 import CopyAddressTooltip from 'components/shared/CopyAddressTooltip';
 import { Props } from 'types';
-import { shortenAddress } from 'utils/string';
 
 interface AccountAddressProps extends Props {
   address: string;

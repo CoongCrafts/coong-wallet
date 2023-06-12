@@ -4,6 +4,7 @@ import { useBoolean } from 'react-use';
 import { Search, SearchOff } from '@mui/icons-material';
 import { IconButton, Theme, useMediaQuery } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
+import DappsAccessToAccountDialog from 'components/pages/Accounts/AccountControls/DappsAccessToAccountDialog';
 import ExportAccountDialog from 'components/pages/Accounts/AccountControls/ExportAccountDialog';
 import RemoveAccountDialog from 'components/pages/Accounts/AccountControls/RemoveAccountDialog';
 import RenameAccountDialog from 'components/pages/Accounts/AccountControls/RenameAccountDialog';
@@ -67,6 +68,7 @@ const Accounts: FC<Props> = ({ className = '' }) => {
       <RenameAccountDialog />
       <ShowAddressQrCodeDialog />
       <ExportAccountDialog />
+      <DappsAccessToAccountDialog />
     </div>
   );
 };

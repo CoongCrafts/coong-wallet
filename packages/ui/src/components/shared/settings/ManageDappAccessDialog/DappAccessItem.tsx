@@ -7,10 +7,12 @@ import useAccounts from 'hooks/accounts/useAccounts';
 import { useWalletState } from 'providers/WalletStateProvider';
 import { accountsActions } from 'redux/slices/accounts';
 import { EventName, triggerEvent } from 'utils/eventemitter';
+import { appFaviconUrl } from 'utils/misc';
 
 interface DappAccessItemProps {
   appInfo: AppInfo;
 }
+
 export default function DappAccessItem({ appInfo }: DappAccessItemProps): JSX.Element {
   const { t } = useTranslation();
   const accounts = useAccounts();
@@ -38,7 +40,7 @@ export default function DappAccessItem({ appInfo }: DappAccessItemProps): JSX.El
       aria-label={t<string>('View Dapp Details')}>
       <div className='flex-grow'>
         <div className='flex items-center gap-2 sm:gap-4'>
-          <img src={`https://icon.horse/icon/${appId}`} alt={`${name} icon`} width='18' />
+          <img src={appFaviconUrl(appId)} alt={`${name} icon`} width='18' />
           <div className='flex flex-col'>
             <div className='font-semibold'>{name}</div>
             <div className='text-gray-500 dark:text-gray-300 text-sm'>{appId}</div>
