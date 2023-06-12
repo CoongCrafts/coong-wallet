@@ -36,9 +36,7 @@ export default function RemoveAllDappsAccessToAccountButton({
     onClose();
   };
 
-  const onClose = () => {
-    doClose(() => {});
-  };
+  const onClose = () => doClose();
 
   return (
     <>
