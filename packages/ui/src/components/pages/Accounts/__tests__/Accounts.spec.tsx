@@ -1,8 +1,7 @@
 import { encodeAddress } from '@polkadot/util-crypto';
 import { defaultNetwork, networks } from '@coong/base';
 import { AccountInfo } from '@coong/keyring/types';
-import { UserEvent } from '@testing-library/user-event/setup/setup';
-import { initializeKeyring, newUser, PASSWORD, render, screen, waitFor } from '__tests__/testUtils';
+import { UserEvent, initializeKeyring, newUser, PASSWORD, render, screen, waitFor } from '__tests__/testUtils';
 import Accounts from '../index';
 
 const preloadedState = { app: { addressPrefix: defaultNetwork.prefix } };

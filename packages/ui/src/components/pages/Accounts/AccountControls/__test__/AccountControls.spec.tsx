@@ -3,8 +3,8 @@ import { defaultNetwork, networks, WalletState } from '@coong/base';
 import Keyring from '@coong/keyring';
 import { AccountInfo } from '@coong/keyring/types';
 import { trimOffUrlProtocol } from '@coong/utils';
-import { UserEvent } from '@testing-library/user-event/setup/setup';
 import {
+  UserEvent,
   initializeKeyring,
   newUser,
   PASSWORD,

@@ -1,5 +1,4 @@
-import { UserEvent } from '@testing-library/user-event/setup/setup';
-import { initializeKeyring, newUser, render, screen, waitFor } from '__tests__/testUtils';
+import { UserEvent, initializeKeyring, newUser, render, screen, waitFor } from '__tests__/testUtils';
 import { NewWalletScreenStep } from 'types';
 import NewWallet from '../index';
 

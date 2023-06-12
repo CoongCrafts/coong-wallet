@@ -1,7 +1,14 @@
 import { waitFor } from '@testing-library/react';
 import { WalletState } from '@coong/base';
-import { UserEvent } from '@testing-library/user-event/setup/setup';
-import { initializeKeyring, newUser, PASSWORD, render, screen, setupAuthorizedApps } from '__tests__/testUtils';
+import {
+  UserEvent,
+  initializeKeyring,
+  newUser,
+  PASSWORD,
+  render,
+  screen,
+  setupAuthorizedApps,
+} from '__tests__/testUtils';
 import RemoveDappAccessDialog from '../RemoveDappAccessDialog';
 import ManageDappAccessDialog from '../index';
 

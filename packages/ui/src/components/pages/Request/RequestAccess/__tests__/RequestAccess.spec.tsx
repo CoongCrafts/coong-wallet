@@ -3,9 +3,8 @@ import { AccessStatus, WalletRequestMessage } from '@coong/base/types';
 import Keyring from '@coong/keyring';
 import { AccountInfo } from '@coong/keyring/types';
 import { PreloadedState } from '@reduxjs/toolkit';
-import { UserEvent } from '@testing-library/user-event/setup/setup';
 import { SpyInstance } from '@vitest/spy';
-import { initializeKeyring, newUser, PASSWORD, render, RouterWrapper, screen } from '__tests__/testUtils';
+import { UserEvent, initializeKeyring, newUser, PASSWORD, render, RouterWrapper, screen } from '__tests__/testUtils';
 import { Mock, vi } from 'vitest';
 import Request from '../../index';
 
