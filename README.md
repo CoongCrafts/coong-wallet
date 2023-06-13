@@ -52,7 +52,7 @@ yarn add @coong/sdk
 # via npm
 npm install --save @coong/sdk
 ```  
-2. Inject Coong API & interact with Coong Wallet using the [Polakdot{.js} extension API](https://github.com/polkadot-js/extension#injection-information)
+2. Inject API & interact with Coong Wallet using the [Polakdot{.js} extension API](https://github.com/polkadot-js/extension#injection-information)
 ```typescript
 import CoongSdk from '@coong/sdk';
 
@@ -63,12 +63,31 @@ const initializeCoongWallet = async () => {
   
   // We can now interact with the wallet using the similar Polkadot{.js} extension API
   const injected = await window['injectedWeb3']['coongwallet'].enable('Awesome Dapp');
-  const approvedAccounts = await injected.accounts.get();
+  const connectedAccounts = await injected.accounts.get();
   
-  return { sdk, injected, approvedAccounts }
+  return { sdk, injected, connectedAccounts }
 }
   
 await initializeCoongWallet();
+```
+
+3. Add/remove connected accounts
+```ts
+// Initilize wallet
+const { injected } = await initializeCoongWallet();
+
+// This will open a Coong Wallet window allowing users
+// to add/remove accounts connecting to dapp
+const updatedAccounts = await injected.accounts.update();
+```
+
+4. Sign out & clear up connected accounts
+```ts
+const signOut = () => {
+  window['injectedWeb3']['coongwallet'].disable();
+}
+
+signOut();
 ```
 
 Notes:
@@ -78,6 +97,76 @@ Notes:
   const sdk = new CoongSdk({ walletUrl: 'https://beta.coongwallet.io' });
   await sdk.initialize();  
 ```
+
+## Injection Information
+After running initialization (via `initialize()`), the SDK will inject `injectedWeb3` into the `window` global object exposing the following:
+
+```ts
+window.injectedWeb3 = {
+  // this is the name of this wallet, there could be multiples injected,
+  // each with their own keys, here `coongwallet` is for this wallet
+  'coongwallet': {
+    // semver of the wallet
+    version: '0.1.0',
+
+    // call this to enable the injection, and returns an injected
+    // object containing the accounts, signer (or it will reject if not authorized)
+    enable (originName: string): Promise<Injected>,
+    
+    // call this to sign out and clear up all connected accounts
+    disable (): void
+  }
+}
+```
+
+## Injected API
+The `Injected` API, as returned after calling `enable(originName)`, contains the following information:
+
+```ts
+interface Injected {
+  // the interface for Accounts, as detailed below
+  readonly accounts: Accounts;
+  // the standard Signer interface for the API, as detailed below
+  readonly signer: CoongSigner;
+}
+
+// exposes accounts
+interface Accounts {
+  // retrieves the list of connected accounts
+  get: () => Promise<InjectedAccount[]>;
+  // subscribe to all accounts, updating as they change
+  subscribe: (cb: (accounts: Account[]) => any) => () => void
+  // [NEW] asking for updating connected accounts
+  update: () => Promise<InjectedAccount[]>
+}
+
+// a signer that communicates with the extension via sendMessage
+interface CoongSigner extends SignerInterface {
+  // signs an extrinsic payload from a serialized form
+  signPayload?: (payload: SignerPayloadJSON) => Promise<SignerResult>;
+  // signs a raw payload, only the bytes data as supplied
+  signRaw?: (raw: SignerPayloadRaw) => Promise<SignerResult>;
+}
+
+interface InjectedAccount {
+  // ss-58 encoded address
+  readonly address: string;
+  // the genesisHash for this account (empty if applicable to all)
+  readonly genesisHash?: string;
+  // (optional) name for display
+  readonly name?: string;
+  // Keypair type: 'ed25519' | 'sr25519' | 'ecdsa' | 'ethereum'
+  readonly type?: string;
+};
+```
+
+## Prevent Blocking Popups
+
+Coong SDK uses `window.open` to fire up Coong Wallet windows/popups allowing users to interact with the wallet (e.g: Request to access wallet accounts, request to sign a transaction...), browsers might block this open popup API depending on various reasons. Below is a few practices to help prevent this blocking popups issue from happening.
+
+1. Only call APIs from a user interaction (clicks/touches)
+2. For actions that might take time (asynchronously) to complete (transfer balance ...), launch a waiting wallet instance (`CoongSdk.newWaitingWalletInstance()`) first thing on user interaction.  
+
 
 ## How to run tests
 1. [Set up the development environment](#set-up-development-environment).
