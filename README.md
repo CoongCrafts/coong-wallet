@@ -56,25 +56,31 @@ npm install --save @coong/sdk
 ```typescript
 import CoongSdk from '@coong/sdk';
 
-const initializeCoongWallet = async () => {
-  // Inject Coong Wallet API
+// Inject Coong Wallet API
+const initializeCoongWallet = async () => {  
   const sdk = new CoongSdk()
   await sdk.initialize();
   
-  // We can now interact with the wallet using the similar Polkadot{.js} extension API
-  const injected = await window['injectedWeb3']['coongwallet'].enable('Awesome Dapp');
-  const connectedAccounts = await injected.accounts.get();
-  
-  return { sdk, injected, connectedAccounts }
+  return sdk;
 }
   
 await initializeCoongWallet();
+
+// We can now interact with the wallet using the similar Polkadot{.js} extension API
+const connectCoongWallet = async () => {
+  const injected = await window['injectedWeb3']['coongwallet'].enable('Awesome Dapp');
+  const connectedAccounts = await injected.accounts.get();
+  
+  return { injected, connectedAccounts }
+} 
+
+await connectCoongWallet();
 ```
 
 3. Add/remove connected accounts
 ```ts
 // Initilize wallet
-const { injected } = await initializeCoongWallet();
+const { injected } = await connectCoongWallet();
 
 // This will open a Coong Wallet window allowing users
 // to add/remove accounts connecting to dapp
@@ -160,13 +166,51 @@ interface InjectedAccount {
 };
 ```
 
-## Prevent Blocking Popups
+## Prevent Blocking Popups Issue
 
 Coong SDK uses `window.open` to fire up Coong Wallet windows/popups allowing users to interact with the wallet (e.g: Request to access wallet accounts, request to sign a transaction...), browsers might block this open popup API depending on various reasons. Below is a few practices to help prevent this blocking popups issue from happening.
 
-1. Only call APIs from a user interaction (clicks/touches)
-2. For actions that might take time (asynchronously) to complete (transfer balance ...), launch a waiting wallet instance (`CoongSdk.newWaitingWalletInstance()`) first thing on user interaction.  
+1. Call APIs that opens a wallet popup from a user interaction (clicks/touches)
+```ts
+// initialize Coong Wallet API
+const sdk = new CoongSdk()
+await sdk.initialize();
 
+// Trigger connect to Coong Wallet when users hit the connect button
+const onClickConnectWallet = async () => {
+  await window['injectedWeb3']['coongwallet'].enable('Awesome Dapp');
+}
+```
+2. For actions that might take time (asynchronously) to complete (transfer balance ...), launch a waiting wallet instance (`CoongSdk.newWaitingWalletInstance()`) first thing on user interaction.  
+```ts
+// Connect to Polkadot Network
+const wsProvider = new WsProvider('wss://rpc.polkadot.io');
+const api = await ApiPromise.create({ provider: wsProvider });
+
+// initialize Coong Wallet API
+const sdk = new CoongSdk()
+await sdk.initialize();
+
+// connect to Coong Wallet
+const injected = await window['injectedWeb3']['coongwallet'].enable('Awesome Dapp');
+
+const onClickTransferBalance = async () => {
+  // Launch a waiting wallet instance first thing when user clicking the Transfer button
+  // The signer will then later a send message to this wallet instance to asking for signing transaction
+  await sdk.newWaitingWalletInstance();
+  
+  const fromAddress = 0x000...;
+  const destinationAddress = 0x000...;
+  
+  const hash = await api.tx.balances
+    .transferKeepAlive(destinationAddress, 1_000_000_000_000)
+    .signAndSend(fromAddress, { signer: injected.signer });
+}
+
+await onClickTransferBalance();
+```
+
+Integration example can be found in the playground dapp source code in [this repository](https://github.com/CoongCrafts/playground-dapp).
 
 ## How to run tests
 1. [Set up the development environment](#set-up-development-environment).
