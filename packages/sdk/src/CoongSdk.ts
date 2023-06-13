@@ -134,6 +134,13 @@ export default class CoongSdk {
   }
 
   /**
+   * Launch a new waiting wallet instance that's ready to send messages to
+   */
+  async newWaitingWalletInstance(): Promise<Window> {
+    return this.launchNewWalletInstance('/request');
+  }
+
+  /**
    * Send a message to wallet instance based on the request name
    * to an available wallet instance in queue or launch a new wallet instance
    * if the queue is empty
