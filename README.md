@@ -32,6 +32,13 @@ A website-based multi-chain crypto wallet for <a href="https://polkadot.network/
 - One seed phrase to recover all created accounts (excluding imported accounts/private keys)
 - Private keys and seed phrase are encrypted with a user chosen wallet password
 
+## Why do we build Coong Wallet?
+The Polkadot and Kusama ecosystems currently offers several wallet solutions with excellent UI/UX, such as SubWallet, NovaWallet, Talisman. However, on desktop, most of these solutions are browser extension-based wallets, requiring users to install an extension to interact with dapps and networks. On mobile, since most browsers do not support extensions, users need to install wallet mobile apps and access dapps through a built-in Dapp Browser within the wallets (SubWallet, Nova). This creates an inconsistent experience between desktop and mobile, which poses a barrier for onboarding new users to the ecosystem, especially those who are new to or less familiar with cryptocurrencies.
+
+As users, we love the website-based wallet experience provided by the [NEAR wallet](https://wallet.near.org/) in the NEAR ecosystem. It allows users to connect to dapps using their preferred browsers and access their wallets smoothly within the same browser on both desktop and mobile platforms.
+
+With that inspiration, we propose building Coong Wallet, a website-based multi-chain wallet, to offer a similar experience in the Polkadot and Kusama ecosystems. We believe that Coong Wallet will bring significant benefits to both users and the ecosystems as a whole.
+
 ## Set up development environment
 1. Install NodeJS
 2. Install dependencies: `yarn install`
