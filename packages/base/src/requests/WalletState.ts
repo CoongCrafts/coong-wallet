@@ -109,12 +109,13 @@ export default class WalletState {
    * @param appInfo
    */
   saveAuthorizedApp(appInfo: AppInfo) {
-    const { id, url } = appInfo;
+    const { id } = appInfo;
     if (!id) {
       return;
     }
 
-    this.ensureAppAuthorized(url);
+    assert(this.authorizedApps[id], 'App not found');
+
     this.authorizedApps[id] = appInfo;
     this.#authorizedAppsSubject.next(this.authorizedApps);
   }
