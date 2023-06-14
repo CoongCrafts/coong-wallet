@@ -115,6 +115,8 @@ Notes:
 After running initialization (via `initialize()`), the SDK will inject `injectedWeb3` into the `window` global object exposing the following:
 
 ```ts
+// Reference: https://github.com/polkadot-js/extension#injection-information
+
 window.injectedWeb3 = {
   // this is the name of this wallet, there could be multiples injected,
   // each with their own keys, here `coongwallet` is for this wallet
@@ -136,6 +138,8 @@ window.injectedWeb3 = {
 The `Injected` API, as returned after calling `enable(originName)`, contains the following information:
 
 ```ts
+// Reference: https://github.com/polkadot-js/extension#api-interface
+
 interface Injected {
   // the interface for Accounts, as detailed below
   readonly accounts: Accounts;
