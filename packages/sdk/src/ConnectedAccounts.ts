@@ -1,5 +1,5 @@
 import { InjectedAccount } from '@polkadot/extension-inject/types';
-import { assert } from '@coong/utils';
+import { assert, trimOffUrlProtocol } from '@coong/utils';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import CoongSdk from './CoongSdk';
 
@@ -7,7 +7,7 @@ const CONNECTED_ACCOUNTS_KEY = 'CONNECTED_ACCOUNTS';
 
 /**
  * @name ConnectedAccounts
- * @description Store & manage authorized accounts from wallet for dapps
+ * @description Store & manage authorized/connected accounts from wallet for dapps
  */
 export default class ConnectedAccounts {
   #sdk: CoongSdk;
@@ -30,42 +30,67 @@ export default class ConnectedAccounts {
     });
   }
 
+  /**
+   * Get the list of connected accounts
+   */
   get value(): InjectedAccount[] {
     return this.#accounts.value;
   }
 
+  /**
+   * Get the list of connected accounts and throw out error if no accounts are connected
+   */
   get ensureValue(): InjectedAccount[] {
     this.ensureConnected();
 
     return this.value;
   }
 
+  /**
+   * Check if there are any accounts connected
+   */
   get connected(): boolean {
     return this.value.length > 0;
   }
 
+  /**
+   * Check if there are any accounts connected, throw out error if no accounts are connected
+   */
   ensureConnected(): boolean {
     assert(this.connected, 'No authorized accounts found!');
 
     return true;
   }
 
+  /**
+   * Save connected accounts into localStorage
+   *
+   * @param accounts
+   */
   save(accounts: InjectedAccount[]) {
     this.#accounts.next(accounts);
   }
 
+  /**
+   * Clear connected accounts
+   */
   clear() {
     this.#accounts.next([]);
     localStorage.removeItem(this.storageKey);
   }
 
+  /**
+   * Trigger the callback function whenever connected accounts change
+   *
+   * @param cb
+   */
   onChange(cb: (accounts: InjectedAccount[]) => void): Subscription {
     return this.#accounts.subscribe(cb);
   }
 
   get storageKey() {
     const walletId = this.#sdk.walletInfo?.name;
-    const walletUrl = this.#sdk.walletUrl.replace(/https?:\/\//, '');
+    const walletUrl = trimOffUrlProtocol(this.#sdk.walletUrl);
 
     return `${walletId}:${walletUrl}:${CONNECTED_ACCOUNTS_KEY}`;
   }

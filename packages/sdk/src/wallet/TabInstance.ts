@@ -11,19 +11,17 @@ const POPUP_WINDOW_FEATURES = `resizable=no,status=no,location=no,toolbar=no,men
  * we can interact with the instance after calling `openWalletWindow` via the `walletWindow` object
  */
 export default class TabInstance extends WalletInstance {
+  /**
+   * Open a new wallet window to a specific path
+   *
+   * @param path
+   */
   async openWalletWindow(path = ''): Promise<Window> {
     this.registerEvent();
 
     const tabWalletWindow = window.open(`${this.walletUrl}${path}`, '_blank', POPUP_WINDOW_FEATURES);
 
     if (!tabWalletWindow) {
-      const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-      // TODO show a popup asking users to allow popup
-      //      with instructions to enable that
-      if (isFirefox) {
-        console.log('// TODO: Show dialog to instruct users to allow popup!');
-      }
-
       throw new StandardCoongError('Error open wallet tab');
     }
 
