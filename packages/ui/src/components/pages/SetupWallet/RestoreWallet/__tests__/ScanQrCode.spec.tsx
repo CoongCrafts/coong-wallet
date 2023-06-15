@@ -1,9 +1,9 @@
 import { base64Encode } from '@polkadot/util-crypto';
 import { WalletQrBackup } from '@coong/keyring/types';
-import { UserEvent, MNEMONIC, newUser, PASSWORD, render, screen } from '__tests__/testUtils';
 import CryptoJS from 'crypto-js';
 import { vi } from 'vitest';
-import ScanQrCode from '../index';
+import { UserEvent, MNEMONIC, newUser, PASSWORD, render, screen } from '../../../../../__tests__/testUtils';
+import ScanQrCode from '../ScanQrCode';
 
 const onWalletSetup = vi.fn(),
   onCancelSetup = vi.fn();
