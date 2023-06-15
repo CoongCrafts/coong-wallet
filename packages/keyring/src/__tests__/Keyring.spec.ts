@@ -1,11 +1,11 @@
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
-import { AccountBackup, AccountInfo, WalletQrBackup } from '@coong/keyring/types';
+import { AccountBackup, AccountInfo, WalletBackup, WalletQrBackup } from '@coong/keyring/types';
 import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
 import CryptoJS from 'crypto-js';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import Keyring, { ACCOUNTS_INDEX, ENCRYPTED_MNEMONIC, ORIGINAL_HASH } from '../Keyring';
+import { beforeEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
+import Keyring, { ACCOUNTS_INDEX, ENCRYPTED_MNEMONIC, ORIGINAL_HASH, sha256AsHex } from '../Keyring';
 
 let keyring: Keyring;
 
@@ -576,5 +576,64 @@ describe('importAccount', () => {
     await expect(keyring.importAccount(backup, 'incorrect-password')).rejects.toThrowError(
       new CoongError(ErrorCode.PasswordIncorrect),
     );
+  });
+});
+
+describe('importJsonBackup', () => {
+  let backup: WalletBackup;
+  beforeEach(async () => {
+    keyring = await initializeNewKeyring();
+    await keyring.createNewAccount('test-account', PASSWORD);
+
+    backup = await keyring.exportWallet(PASSWORD);
+
+    await keyring.reset();
+  });
+
+  it('should throw error if wallet is already initialized', async () => {
+    keyring = await initializeNewKeyring();
+
+    await expect(keyring.importBackup(backup, PASSWORD)).rejects.toThrowError(
+      new StandardCoongError('Wallet is already initialized'),
+    );
+  });
+
+  describe('wallet is not initialized', () => {
+    beforeEach(() => {
+      keyring = new Keyring();
+    });
+
+    it('should store accountIndex & encryptedMnemonic into localStorage and generate originalHash', async () => {
+      await keyring.importBackup(backup, PASSWORD);
+
+      expect(localStorage.getItem(ENCRYPTED_MNEMONIC)).toEqual(backup.encryptedMnemonic);
+      expect(localStorage.getItem(ACCOUNTS_INDEX)).toEqual(backup.accountsIndex.toString());
+
+      const originalHash = sha256AsHex(await keyring.getRawMnemonic(PASSWORD));
+      expect(localStorage.getItem(ORIGINAL_HASH)).toEqual(originalHash);
+    });
+
+    it('should check mnemonic validity', async () => {
+      backup.encryptedMnemonic = CryptoJS.AES.encrypt('a random invalid seed phrase', PASSWORD).toString();
+
+      await expect(keyring.importBackup(backup, PASSWORD)).rejects.toThrowError(
+        new CoongError(ErrorCode.InvalidMnemonic),
+      );
+    });
+
+    it('should import accounts from backup', async () => {
+      await keyring.importBackup(backup, PASSWORD);
+
+      const accounts = await keyring.getAccounts();
+      expect(accounts.length).toEqual(1);
+      expect(accounts[0].name).toEqual('test-account');
+    });
+
+    it('should call reset if this is an error', async () => {
+      const resetFnSpy = vi.spyOn(Keyring.prototype, 'reset');
+
+      await expect(keyring.importBackup(backup, 'wrong-password')).rejects.toThrowError();
+      expect(resetFnSpy).toBeCalled();
+    });
   });
 });

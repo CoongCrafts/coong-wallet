@@ -14,7 +14,7 @@ export const DEFAULT_KEY_TYPE = 'sr25519';
 
 const DERIVATION_PATH_PREFIX = '//';
 
-const sha256AsHex = (data: string): string => {
+export const sha256AsHex = (data: string): string => {
   return u8aToHex(sha256AsU8a(data));
 };
 
@@ -524,6 +524,35 @@ export default class Keyring {
         const [path, name] = account;
         await this.createNewAccount(name, password, path);
       }
+    } catch (e: any) {
+      await this.reset();
+
+      if (e instanceof StandardCoongError) {
+        throw e;
+      } else {
+        throw new StandardCoongError(e.message);
+      }
+    }
+  }
+
+  async importBackup(backup: WalletBackup, password: string) {
+    if (await this.initialized()) {
+      throw new StandardCoongError('Wallet is already initialized');
+    }
+
+    try {
+      const { encryptedMnemonic, accountsIndex } = backup;
+      localStorage.setItem(ACCOUNTS_INDEX, accountsIndex.toString());
+      localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedMnemonic);
+
+      const rawMnemonic = await this.#decryptMnemonic(password);
+      if (!validateMnemonic(rawMnemonic)) {
+        throw new CoongError(ErrorCode.InvalidMnemonic);
+      }
+
+      this.#generateOriginalHash(rawMnemonic);
+
+      this.#keyring.restoreAccounts(backup, password);
     } catch (e: any) {
       await this.reset();
 
