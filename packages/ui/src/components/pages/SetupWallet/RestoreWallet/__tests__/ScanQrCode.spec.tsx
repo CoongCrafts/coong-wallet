@@ -85,7 +85,7 @@ describe('ScanQrCode', () => {
       render(<ScanQrCode />);
       onScanResult('random data');
 
-      expect(await screen.findByText(/Unknown\/invalid QR code/)).toBeInTheDocument();
+      expect(await screen.findByText(/Unknown\/Invalid QR Code/)).toBeInTheDocument();
     });
 
     it('should show TransferWalletBackup screen if the Qr code is valid', async () => {

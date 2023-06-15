@@ -30,7 +30,7 @@ export default function ScanQrCode(): JSX.Element {
     } catch (e: any) {
       console.error(e);
       toast.dismiss();
-      toast.error(t<string>('Unknown/invalid QR code'));
+      toast.error(t<string>('Unknown/Invalid {{object}}', { object: t<string>('QR Code') }));
     }
   };
 

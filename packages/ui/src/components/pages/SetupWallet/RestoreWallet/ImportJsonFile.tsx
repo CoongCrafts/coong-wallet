@@ -25,7 +25,7 @@ export default function ImportJsonFile(): JSX.Element {
       setBackup(parsedBackup);
     } catch (e: any) {
       toast.dismiss();
-      toast.error(t<string>('Unknown/Invalid JSON File'));
+      toast.error(t<string>('Unknown/Invalid {{object}}', { object: t<string>('JSON File') }));
     }
   };
 
