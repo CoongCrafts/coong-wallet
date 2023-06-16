@@ -4,7 +4,7 @@ import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { AccountBackup, AccountInfo, WalletBackup, WalletQrBackup } from '@coong/keyring/types';
 import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
 import CryptoJS from 'crypto-js';
-import { beforeEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import Keyring, { ACCOUNTS_INDEX, ENCRYPTED_MNEMONIC, ORIGINAL_HASH, sha256AsHex } from '../Keyring';
 
 let keyring: Keyring;

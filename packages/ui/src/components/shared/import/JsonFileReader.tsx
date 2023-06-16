@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
+import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { Props } from 'types';
 import { isTouchDevice } from 'utils/device';
-import { setupWalletActions } from '../../../redux/slices/setup-wallet';
 
 const touchDevice = isTouchDevice();
 

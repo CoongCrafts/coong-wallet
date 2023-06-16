@@ -1,5 +1,5 @@
+import { AccountsBackupSchema } from 'validations/AccountBackup';
 import { array, number, object, string, tuple } from 'yup';
-import { AccountsBackupSchema } from './AccountBackup';
 
 const DerivationPathRegex = /^\/\/(\d)+$/;
 

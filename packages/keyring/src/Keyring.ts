@@ -497,6 +497,26 @@ export default class Keyring {
     return walletBackup;
   }
 
+  async #ensureWalletNotInitialized() {
+    if (await this.initialized()) {
+      throw new StandardCoongError('Wallet is already initialized');
+    }
+  }
+
+  async #saveCompactWalletInfo(encryptedMnemonic: string, accountsIndex: number, password: string) {
+    await this.#ensureWalletNotInitialized();
+
+    localStorage.setItem(ACCOUNTS_INDEX, accountsIndex.toString());
+    localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedMnemonic);
+
+    const rawMnemonic = await this.#decryptMnemonic(password);
+    if (!validateMnemonic(rawMnemonic)) {
+      throw new CoongError(ErrorCode.InvalidMnemonic);
+    }
+
+    this.#generateOriginalHash(rawMnemonic);
+  }
+
   /**
    * Import a Qr backup & initializing keyring
    *
@@ -504,21 +524,12 @@ export default class Keyring {
    * @param password
    */
   async importQrBackup(backup: WalletQrBackup, password: string) {
-    if (await this.initialized()) {
-      throw new StandardCoongError('Wallet is already initialized');
-    }
+    await this.#ensureWalletNotInitialized();
 
     try {
       const { encryptedMnemonic, accountsIndex, accounts } = backup;
-      localStorage.setItem(ACCOUNTS_INDEX, accountsIndex.toString());
-      localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedMnemonic);
 
-      const rawMnemonic = await this.#decryptMnemonic(password);
-      if (!validateMnemonic(rawMnemonic)) {
-        throw new CoongError(ErrorCode.InvalidMnemonic);
-      }
-
-      this.#generateOriginalHash(rawMnemonic);
+      await this.#saveCompactWalletInfo(encryptedMnemonic, accountsIndex, password);
 
       for (let account of accounts) {
         const [path, name] = account;
@@ -536,21 +547,12 @@ export default class Keyring {
   }
 
   async importBackup(backup: WalletBackup, password: string) {
-    if (await this.initialized()) {
-      throw new StandardCoongError('Wallet is already initialized');
-    }
+    await this.#ensureWalletNotInitialized();
 
     try {
       const { encryptedMnemonic, accountsIndex } = backup;
-      localStorage.setItem(ACCOUNTS_INDEX, accountsIndex.toString());
-      localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedMnemonic);
 
-      const rawMnemonic = await this.#decryptMnemonic(password);
-      if (!validateMnemonic(rawMnemonic)) {
-        throw new CoongError(ErrorCode.InvalidMnemonic);
-      }
-
-      this.#generateOriginalHash(rawMnemonic);
+      await this.#saveCompactWalletInfo(encryptedMnemonic, accountsIndex, password);
 
       this.#keyring.restoreAccounts(backup, password);
     } catch (e: any) {

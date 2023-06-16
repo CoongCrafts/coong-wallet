@@ -5,10 +5,12 @@ export const AccountInfoSchema = object({
   meta: object(),
 });
 
-export const AccountBackupSchema = object({
-  encoded: string().required(),
-  encoding: object().required(),
-}).concat(AccountInfoSchema);
+export const AccountBackupSchema = AccountInfoSchema.concat(
+  object({
+    encoded: string().required(),
+    encoding: object().required(),
+  }),
+);
 
 export const AccountsBackupSchema = object({
   encoded: string().required(),
