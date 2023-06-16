@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { WalletBackup } from '@coong/keyring/types';
 import TransferWalletBackup from 'components/pages/SetupWallet/RestoreWallet/TransferWalletBackup';
 import JsonFileReader from 'components/shared/import/JsonFileReader';
 import { useWalletState } from 'providers/WalletStateProvider';
+import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { WalletBackupSchema } from 'validations/WalletBackup';
 
 export default function ImportJsonFile(): JSX.Element {
   const { t } = useTranslation();
   const [backup, setBackup] = useState<WalletBackup>();
+  const dispatch = useDispatch();
   const { keyring } = useWalletState();
 
   const importBackup = async (password: string) => {
@@ -29,6 +32,10 @@ export default function ImportJsonFile(): JSX.Element {
     }
   };
 
+  const goBack = () => {
+    dispatch(setupWalletActions.clearRestoreWalletMethod());
+  };
+
   const resetBackup = () => {
     setBackup(undefined);
   };
@@ -36,6 +43,6 @@ export default function ImportJsonFile(): JSX.Element {
   return backup ? (
     <TransferWalletBackup importBackup={importBackup} resetBackup={resetBackup} />
   ) : (
-    <JsonFileReader onResult={onReadFileComplete} showTitle showBackButton />
+    <JsonFileReader onResult={onReadFileComplete} goBack={goBack} showTitle />
   );
 }

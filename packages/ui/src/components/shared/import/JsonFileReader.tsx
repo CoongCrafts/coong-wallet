@@ -1,10 +1,8 @@
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
-import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { Props } from 'types';
 import { isTouchDevice } from 'utils/device';
 
@@ -13,12 +11,11 @@ const touchDevice = isTouchDevice();
 interface JsonFileReaderProps extends Props {
   onResult: (data: string) => void;
   showTitle?: boolean;
-  showBackButton?: boolean;
+  goBack?: () => void;
 }
 
-function JsonFileReader({ onResult, showTitle, showBackButton }: JsonFileReaderProps): JSX.Element {
+function JsonFileReader({ onResult, showTitle, goBack }: JsonFileReaderProps): JSX.Element {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     acceptedFiles.forEach((file) => {
@@ -43,10 +40,6 @@ function JsonFileReader({ onResult, showTitle, showBackButton }: JsonFileReaderP
     return 'Click to select or drag and drop the file here';
   };
 
-  const goBack = () => {
-    dispatch(setupWalletActions.clearRestoreWalletMethod());
-  };
-
   return (
     <>
       {showTitle && <h3>{t<string>('Import JSON File')}</h3>}
@@ -57,7 +50,7 @@ function JsonFileReader({ onResult, showTitle, showBackButton }: JsonFileReaderP
         <input {...getInputProps({ accept: 'application/json' })} />
         <em>{t<string>(getMessage())}</em>
       </div>
-      {showBackButton && (
+      {goBack && (
         <div className='mt-4'>
           <Button onClick={goBack} color='gray' variant='text'>
             {t<string>('Back')}

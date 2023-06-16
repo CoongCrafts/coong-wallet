@@ -1,26 +1,19 @@
 import { useTranslation } from 'react-i18next';
 import QrReader from 'react-qr-reader';
-import { useDispatch } from 'react-redux';
 import { usePermission } from 'react-use';
 import { Alert, AlertTitle, Button } from '@mui/material';
-import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { Props, TransferableObject } from 'types';
 
 interface QrCodeReaderProps extends Props {
   onResult: (data: string) => void;
   object: TransferableObject;
-  showBackButton?: boolean;
   showTitle?: boolean;
+  goBack?: () => void;
 }
 
-function QrCodeReader({ onResult, object, showBackButton, showTitle }: QrCodeReaderProps) {
+function QrCodeReader({ onResult, object, showTitle, goBack }: QrCodeReaderProps) {
   const { t } = useTranslation();
   const cameraPermission = usePermission({ name: 'camera' });
-  const dispatch = useDispatch();
-
-  const goBack = () => {
-    dispatch(setupWalletActions.clearRestoreWalletMethod());
-  };
 
   return (
     <>
@@ -49,7 +42,7 @@ function QrCodeReader({ onResult, object, showBackButton, showTitle }: QrCodeRea
           className='w-full'
         />
       )}
-      {showBackButton && (
+      {goBack && (
         <div className='mt-4'>
           <Button onClick={goBack} color='gray' variant='text'>
             {t<string>('Back')}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { u8aToString } from '@polkadot/util';
 import { base64Decode } from '@polkadot/util-crypto';
@@ -7,6 +8,7 @@ import { WalletQrBackup } from '@coong/keyring/types';
 import TransferWalletBackup from 'components/pages/SetupWallet/RestoreWallet/TransferWalletBackup';
 import QrCodeReader from 'components/shared/import/QrCodeReader';
 import { useWalletState } from 'providers/WalletStateProvider';
+import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { TransferableObject } from 'types';
 import { WalletQrBackupSchema } from 'validations/WalletBackup';
 
@@ -14,6 +16,7 @@ export default function ScanQrCode(): JSX.Element {
   const { t } = useTranslation();
   const [backup, setBackup] = useState<WalletQrBackup>();
   const { keyring } = useWalletState();
+  const dispatch = useDispatch();
 
   const importBackup = async (password: string) => {
     if (!backup) return;
@@ -34,6 +37,10 @@ export default function ScanQrCode(): JSX.Element {
     }
   };
 
+  const goBack = () => {
+    dispatch(setupWalletActions.clearRestoreWalletMethod());
+  };
+
   const resetBackup = () => {
     setBackup(undefined);
   };
@@ -41,6 +48,6 @@ export default function ScanQrCode(): JSX.Element {
   return backup ? (
     <TransferWalletBackup importBackup={importBackup} resetBackup={resetBackup} />
   ) : (
-    <QrCodeReader onResult={onQrScanComplete} object={TransferableObject.Wallet} showBackButton showTitle />
+    <QrCodeReader onResult={onQrScanComplete} object={TransferableObject.Wallet} goBack={goBack} showTitle />
   );
 }
