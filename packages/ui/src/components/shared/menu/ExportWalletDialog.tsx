@@ -16,7 +16,7 @@ import { EventName } from 'utils/eventemitter';
 
 enum ExportWalletMethod {
   QRCode = 'QR Code',
-  JSON = 'JSON File',
+  JSON = 'JSON',
 }
 
 const toWalletQrBackup = (backup: WalletBackup): WalletQrBackup => {
@@ -56,7 +56,10 @@ export default function ExportWalletDialog(): JSX.Element {
   useRegisterEvent(EventName.OpenExportWalletDialog, doOpen);
 
   const onClose = () => {
-    doClose(() => setBackup(undefined));
+    doClose(() => {
+      setBackup(undefined);
+      setMethod(ExportWalletMethod.QRCode);
+    });
   };
 
   return (
