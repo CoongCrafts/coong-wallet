@@ -111,7 +111,7 @@ describe('MenuButton', () => {
       await user.type(passwordField, PASSWORD);
       await user.click(await screen.findByRole('button', { name: /Continue/ }));
 
-      await user.click(await screen.findByRole('tab', { name: /JSON File/ }));
+      await user.click(await screen.findByRole('tab', { name: /JSON/ }));
 
       expect(await screen.findByText(/Export this wallet to a JSON file/)).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /Download JSON File/ })).toBeInTheDocument();
