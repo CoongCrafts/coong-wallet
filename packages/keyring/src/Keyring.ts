@@ -1,11 +1,11 @@
-import { KeyringPair, KeyringPair$Meta } from '@polkadot/keyring/types';
+import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
 import { u8aToHex } from '@polkadot/util';
 import { sha256AsU8a } from '@polkadot/util-crypto';
 import { validateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
-import { assert, CoongError, ErrorCode, isCoongError, StandardCoongError } from '@coong/utils';
+import { assert, assertFalse, CoongError, ErrorCode, isCoongError, StandardCoongError } from '@coong/utils';
 import CryptoJS from 'crypto-js';
-import { AccountBackup, AccountInfo, WalletBackup, WalletQrBackup } from './types';
+import { AccountBackup, AccountInfo, WalletBackup, WalletBackup$Json, WalletQrBackup } from './types';
 
 export const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
 export const ORIGINAL_HASH = 'ORIGINAL_HASH';
@@ -497,14 +497,10 @@ export default class Keyring {
     return walletBackup;
   }
 
-  async #ensureWalletNotInitialized() {
-    if (await this.initialized()) {
-      throw new StandardCoongError('Wallet is already initialized');
-    }
-  }
+  async #restoreWalletInfo(backup: WalletBackup$Json, password: string) {
+    assertFalse(await this.initialized(), 'Wallet is already initialized');
 
-  async #saveCompactWalletInfo(encryptedMnemonic: string, accountsIndex: number, password: string) {
-    await this.#ensureWalletNotInitialized();
+    const { encryptedMnemonic, accountsIndex } = backup;
 
     localStorage.setItem(ACCOUNTS_INDEX, accountsIndex.toString());
     localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedMnemonic);
@@ -524,14 +520,12 @@ export default class Keyring {
    * @param password
    */
   async importQrBackup(backup: WalletQrBackup, password: string) {
-    await this.#ensureWalletNotInitialized();
+    assertFalse(await this.initialized(), 'Wallet is already initialized');
 
     try {
-      const { encryptedMnemonic, accountsIndex, accounts } = backup;
+      await this.#restoreWalletInfo(backup, password);
 
-      await this.#saveCompactWalletInfo(encryptedMnemonic, accountsIndex, password);
-
-      for (let account of accounts) {
+      for (let account of backup.accounts) {
         const [path, name] = account;
         await this.createNewAccount(name, password, path);
       }
@@ -547,12 +541,10 @@ export default class Keyring {
   }
 
   async importBackup(backup: WalletBackup, password: string) {
-    await this.#ensureWalletNotInitialized();
+    assertFalse(await this.initialized(), 'Wallet is already initialized');
 
     try {
-      const { encryptedMnemonic, accountsIndex } = backup;
-
-      await this.#saveCompactWalletInfo(encryptedMnemonic, accountsIndex, password);
+      await this.#restoreWalletInfo(backup, password);
 
       this.#keyring.restoreAccounts(backup, password);
     } catch (e: any) {

@@ -8,15 +8,15 @@ export const CompactAccountInfoSchema = tuple([
   string().label('AccountName'),
 ]);
 
-export const CompactWalletInfoSchema = object({
+export const WalletInfoSchema = object({
   accountsIndex: number().integer().required(),
   encryptedMnemonic: string().required(),
 });
 
-export const WalletQrBackupSchema = CompactWalletInfoSchema.concat(
+export const WalletQrBackupSchema = WalletInfoSchema.concat(
   object({
     accounts: array().of(CompactAccountInfoSchema),
   }),
 );
 
-export const WalletBackupSchema = CompactWalletInfoSchema.concat(AccountsBackupSchema);
+export const WalletBackupSchema = WalletInfoSchema.concat(AccountsBackupSchema);
