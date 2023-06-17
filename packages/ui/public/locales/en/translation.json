@@ -175,7 +175,7 @@
   "This page should be loaded inside an iframe!": "",
   "This page should not be open directly!": "",
   "Transaction Approval Request": "",
-  "Transfer your wallet to a different device via QR code.": "",
+  "Transfer your wallet to a different device via QR code or JSON file.": "",
   "Type \"{{confirmationWords}}\" to continue": "",
   "Type again your chosen password to ensure you remember it.": "",
   "Unknown/Invalid {{object}}": "",

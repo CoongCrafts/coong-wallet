@@ -90,7 +90,7 @@ describe('MenuButton', () => {
       expect(await screen.findByText('Password incorrect')).toBeInTheDocument();
     });
 
-    it('should show Qr Code after entering correct password', async () => {
+    it('should show QR Code tab after entering correct password', async () => {
       vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(() => null);
 
       const passwordField = await screen.findByLabelText(/Wallet password/);
@@ -103,6 +103,18 @@ describe('MenuButton', () => {
 
       expect(await screen.findByTitle(/Wallet Export QR Code/)).toBeInTheDocument();
       expect(await screen.findByRole('button', { name: /Download QR Code Image/ })).toBeInTheDocument();
+    });
+
+    it('should switch to JSON file tab', async () => {
+      vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(() => null);
+      const passwordField = await screen.findByLabelText(/Wallet password/);
+      await user.type(passwordField, PASSWORD);
+      await user.click(await screen.findByRole('button', { name: /Continue/ }));
+
+      await user.click(await screen.findByRole('tab', { name: /JSON/ }));
+
+      expect(await screen.findByText(/Export this wallet to a JSON file/)).toBeInTheDocument();
+      expect(await screen.findByRole('button', { name: /Download JSON File/ })).toBeInTheDocument();
     });
   });
   describe('ImportAccountDialog', () => {
