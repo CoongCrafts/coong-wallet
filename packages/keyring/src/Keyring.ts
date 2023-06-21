@@ -1,8 +1,10 @@
-import { KeyringPair, KeyringPair$Meta } from '@polkadot/keyring/types';
+import { createPair } from '@polkadot/keyring';
+import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
-import { u8aToHex } from '@polkadot/util';
-import { sha256AsU8a } from '@polkadot/util-crypto';
+import { hexToU8a, isHex, u8aToHex } from '@polkadot/util';
+import { base64Decode, sha256AsU8a } from '@polkadot/util-crypto';
 import { validateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
+import { KeypairType } from '@polkadot/util-crypto/types';
 import { assert, CoongError, ErrorCode, isCoongError, StandardCoongError } from '@coong/utils';
 import CryptoJS from 'crypto-js';
 import { AccountBackup, AccountInfo, WalletBackup, WalletQrBackup } from './types';
@@ -442,7 +444,7 @@ export default class Keyring {
    * @param backup
    * @param password
    */
-  async importAccount(backup: AccountBackup, password: string) {
+  async importAccount(backup: AccountBackup, password: string, walletPassword: string) {
     const { address, meta } = backup;
 
     if (await this.existsAccount(address)) {
@@ -467,6 +469,12 @@ export default class Keyring {
 
     try {
       this.#keyring.restoreAccount(backup, password);
+
+      // Change account password to current wallet password
+      const pair = await this.getSigningPair(address);
+      pair.decodePkcs8(password);
+      this.#keyring.saveAccount(pair, walletPassword);
+
       return await this.getAccount(address);
     } catch (e: any) {
       if (e.message === 'Unable to decode using the supplied passphrase') {
@@ -532,6 +540,35 @@ export default class Keyring {
       } else {
         throw new StandardCoongError(e.message);
       }
+    }
+  }
+
+  async verifyAccountBackupPassword(backup: AccountBackup, password: string) {
+    // Create pair from backup and run decodePkcs8 with password to check whether the password is correct
+    // Just follow step in keyring.restoreAccount function to create pair
+    const cryptoType = Array.isArray(backup.encoding.content) ? backup.encoding.content[1] : 'ed25519';
+    const encType = Array.isArray(backup.encoding.type) ? backup.encoding.type : [backup.encoding.type];
+    const pair = createPair(
+      {
+        toSS58: this.#keyring.encodeAddress,
+        type: cryptoType as KeypairType,
+      },
+      {
+        publicKey: this.#keyring.decodeAddress(backup.address, true),
+      },
+      backup.meta,
+      isHex(backup.encoded) ? hexToU8a(backup.encoded) : base64Decode(backup.encoded),
+      encType,
+    );
+
+    try {
+      pair.decodePkcs8(password);
+    } catch (e: any) {
+      if (e.message === 'Unable to decode using the supplied passphrase') {
+        throw new CoongError(ErrorCode.PasswordIncorrect);
+      }
+
+      throw e;
     }
   }
 }
