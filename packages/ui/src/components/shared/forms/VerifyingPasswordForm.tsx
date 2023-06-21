@@ -1,6 +1,6 @@
-import { ChangeEvent, FC, FormEvent, useRef, useState } from 'react';
+import { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useEffectOnce, useToggle } from 'react-use';
+import { useToggle } from 'react-use';
 import { Button, DialogContentText, TextField } from '@mui/material';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import { useWalletState } from 'providers/WalletStateProvider';
