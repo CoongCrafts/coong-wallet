@@ -189,7 +189,7 @@ describe('MenuButton', () => {
 
       expect(await screen.findByText(/test-account/)).toBeInTheDocument();
       expect(await screen.findByLabelText(/Backup wallet password/)).toBeInTheDocument();
-      expect(await screen.findByRole('button', { name: /Import Account/ })).toBeDisabled();
+      expect(await screen.findByRole('button', { name: /Continue/ })).toBeDisabled();
       expect(await screen.findByRole('button', { name: /Back/ })).toBeInTheDocument();
     });
 
@@ -267,7 +267,7 @@ describe('MenuButton', () => {
         });
       });
       it('should import account', async () => {
-        // just mocking on this function
+        // Just mocking on this function
         window.HTMLElement.prototype.scrollIntoView = () => vi.fn();
 
         const backup = await getBackup(true);
@@ -275,7 +275,12 @@ describe('MenuButton', () => {
         await renderView();
         onScanResult(base64Encode(JSON.stringify(backup)));
 
+        // Account previewing, resolving conflict and asking backup wallet password window
         await user.type(await screen.findByLabelText(/Backup wallet password/), PASSWORD);
+        await user.click(await screen.findByRole('button', { name: /Continue/ }));
+
+        // Asking for wallet password window
+        await user.type(await screen.findByLabelText(/Wallet password/), PASSWORD);
         await user.click(await screen.findByRole('button', { name: /Import Account/ }));
 
         await waitFor(() => {
