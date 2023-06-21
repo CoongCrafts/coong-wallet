@@ -289,6 +289,27 @@ describe('MenuButton', () => {
         });
       });
 
+      it('should go back to asking backup wallet password window', async () => {
+        // Just mocking on this function
+        window.HTMLElement.prototype.scrollIntoView = () => vi.fn();
+
+        const backup = await getBackup(true);
+
+        await renderView();
+        onScanResult(base64Encode(JSON.stringify(backup)));
+
+        // Account previewing, resolving conflict and asking backup wallet password window
+        await user.type(await screen.findByLabelText(/Backup wallet password/), PASSWORD);
+        await user.click(await screen.findByRole('button', { name: /Continue/ }));
+
+        // Asking for wallet password window
+        expect(await screen.findByLabelText(/Wallet password/)).toBeInTheDocument();
+        await user.click(await screen.findByRole('button', { name: /Back/ }));
+
+        expect(await screen.findByLabelText(/Backup wallet password/)).toBeInTheDocument();
+        expect(await screen.findByRole('button', { name: /Continue/ })).toBeInTheDocument();
+      });
+
       it('should show ImportAccountDialog screen when go back', async () => {
         const backup = await getBackup(true);
 
