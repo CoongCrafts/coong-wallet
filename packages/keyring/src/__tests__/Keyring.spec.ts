@@ -560,14 +560,6 @@ describe('importAccount', () => {
     ).rejects.toThrowError(new CoongError(ErrorCode.AccountNameRequired));
   });
 
-  it('should call restoreAccount', async () => {
-    const restoreAccountSpy = vi.spyOn(InnerKeyring.prototype, 'restoreAccount');
-
-    await keyring.importAccount(backup, BACKUP_PASSWORD, PASSWORD);
-
-    expect(restoreAccountSpy).toBeCalled();
-  });
-
   it('should found account after restoring account', async () => {
     await keyring.importAccount(backup, BACKUP_PASSWORD, PASSWORD);
 
