@@ -440,10 +440,10 @@ export default class Keyring {
    * Import an account from a backup and a password for that backup
    *
    * @param backup
-   * @param password
+   * @param backupPassword
    * @param walletPassword
    */
-  async importAccount(backup: AccountBackup, password: string, walletPassword: string) {
+  async importAccount(backup: AccountBackup, backupPassword: string, walletPassword: string) {
     const { address, meta } = backup;
 
     if (await this.existsAccount(address)) {
@@ -466,21 +466,11 @@ export default class Keyring {
 
     meta.whenCreated = Date.now();
 
-    try {
-      const pair = this.#keyring.createFromJson(backup);
+    const pair = await this.verifyAccountBackupPassword(backup, backupPassword);
 
-      // Change account password to current wallet password
-      pair.decodePkcs8(password);
-      this.#keyring.saveAccount(pair, walletPassword);
+    this.#keyring.saveAccount(pair, walletPassword);
 
-      return await this.getAccount(address);
-    } catch (e: any) {
-      if (e.message === 'Unable to decode using the supplied passphrase') {
-        throw new CoongError(ErrorCode.PasswordIncorrect);
-      }
-
-      throw e;
-    }
+    return await this.getAccount(address);
   }
 
   /**
@@ -541,12 +531,14 @@ export default class Keyring {
     }
   }
 
-  async verifyAccountBackupPassword(backup: AccountBackup, password: string) {
+  async verifyAccountBackupPassword(backup: AccountBackup, password: string): Promise<KeyringPair> {
     // Create pair from backup and run decodePkcs8 with password to check whether the password is correct
     const pair = this.#keyring.createFromJson(backup);
 
     try {
       pair.decodePkcs8(password);
+
+      return pair;
     } catch (e: any) {
       if (e.message === 'Unable to decode using the supplied passphrase') {
         throw new CoongError(ErrorCode.PasswordIncorrect);

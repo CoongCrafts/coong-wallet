@@ -64,21 +64,19 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
     }
   };
 
-  const doImportAccount = (walletPassword: string) => {
-    setTimeout(async () => {
-      try {
-        // To avoid changing the content of original backup
-        const cloneBackup: AccountBackup = { ...backup, meta: { ...backup.meta } };
-        cloneBackup.meta.name = newName || originalAccountBackupName;
+  const doImportAccount = async (walletPassword: string) => {
+    try {
+      // To avoid changing the content of original backup
+      const cloneBackup: AccountBackup = { ...backup, meta: { ...backup.meta } };
+      cloneBackup.meta.name = newName || originalAccountBackupName;
 
-        const account = await keyring.importAccount(cloneBackup, password, walletPassword);
-        onClose();
-        setNewAccount(account);
-        toast.success(t<string>('Account imported successfully'));
-      } catch (e: any) {
-        toast.error(t<string>(e.message));
-      }
-    }, 200);
+      const account = await keyring.importAccount(cloneBackup, password, walletPassword);
+      onClose();
+      setNewAccount(account);
+      toast.success(t<string>('Account imported successfully'));
+    } catch (e: any) {
+      toast.error(t<string>(e.message));
+    }
   };
 
   return accountBackupPasswordVerified ? (
