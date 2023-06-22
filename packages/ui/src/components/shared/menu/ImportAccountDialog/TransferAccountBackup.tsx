@@ -1,10 +1,11 @@
-import { ChangeEvent, FormEvent, useMemo, useState } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useToggle } from 'react-use';
 import { AccountBackup } from '@coong/keyring/types';
 import { Alert, Button, DialogContentText, TextField } from '@mui/material';
 import AccountCard from 'components/pages/Accounts/AccountCard';
+import VerifyingPasswordForm from 'components/shared/forms/VerifyingPasswordForm';
 import useAccountBackupValidation from 'components/shared/menu/ImportAccountDialog/useAccountBackupValidation';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import useHighlightNewAccount from 'hooks/accounts/useHighlightNewAccount';
@@ -21,9 +22,9 @@ interface TransferAccountBackupProps extends Props {
 function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccountBackupProps): JSX.Element {
   const { keyring } = useWalletState();
   const { t } = useTranslation();
-  const [onImporting, setOnImporting] = useToggle(false);
   const [newName, setNewName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [accountBackupPasswordVerified, setAccountBackupPasswordVerified] = useToggle(false);
   const { validation } = useAccountNameValidation(newName);
   const { setNewAccount } = useHighlightNewAccount();
   const { validation: backupValidation, resolvable } = useAccountBackupValidation(backup);
@@ -52,34 +53,43 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
       </div>
     );
 
-  const doImportAccount = (event: FormEvent) => {
+  const doVerifyAccountBackupPassword = async (event: FormEvent) => {
     event.preventDefault();
 
-    setOnImporting(true);
-
-    setTimeout(async () => {
-      try {
-        // To avoid changing the content of original backup
-        const cloneBackup: AccountBackup = { ...backup, meta: { ...backup.meta } };
-        cloneBackup.meta.name = newName || originalAccountBackupName;
-
-        const account = await keyring.importAccount(cloneBackup, password);
-        onClose();
-        toast.success(t<string>('Account imported successfully'));
-        setNewAccount(account);
-      } catch (e: any) {
-        setOnImporting(false);
-        toast.error(t<string>(e.message));
-      }
-    }, 200);
+    try {
+      await keyring.verifyAccountBackupPassword(backup, password);
+      setAccountBackupPasswordVerified(true);
+    } catch (e: any) {
+      toast.error(t<string>(e.message));
+    }
   };
 
-  const handleNewNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newName = e.currentTarget.value;
-    setNewName(newName);
+  const doImportAccount = async (walletPassword: string) => {
+    try {
+      // To avoid changing the content of original backup
+      const cloneBackup: AccountBackup = { ...backup, meta: { ...backup.meta } };
+      cloneBackup.meta.name = newName || originalAccountBackupName;
+
+      const account = await keyring.importAccount(cloneBackup, password, walletPassword);
+      onClose();
+      setNewAccount(account);
+      toast.success(t<string>('Account imported successfully'));
+    } catch (e: any) {
+      toast.error(t<string>(e.message));
+    }
   };
 
-  return (
+  return accountBackupPasswordVerified ? (
+    <>
+      <AccountCard account={accountInfo} className='mb-4' />
+      <VerifyingPasswordForm
+        onPasswordVerified={doImportAccount}
+        onBack={() => setAccountBackupPasswordVerified(false)}
+        continueButtonLabel='Import Account'
+        passwordLabel='Finally, enter your wallet password to complete importing the account'
+      />
+    </>
+  ) : (
     <div>
       <AccountCard account={accountInfo} />
       {backupValidation && (
@@ -88,13 +98,13 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
         </Alert>
       )}
 
-      <form onSubmit={doImportAccount} className='mt-4'>
+      <form onSubmit={doVerifyAccountBackupPassword} className='mt-4'>
         {resolvable && (
           <>
             <DialogContentText className='mb-2'>{t<string>('Pick a new account name')}</DialogContentText>
             <TextField
               value={newName}
-              onChange={handleNewNameChange}
+              onChange={(e) => setNewName(e.currentTarget.value)}
               fullWidth
               label={t<string>('New account name')}
               autoFocus
@@ -119,11 +129,8 @@ function TransferAccountBackup({ backup, resetBackup, onClose }: TransferAccount
           <Button onClick={resetBackup} variant='text'>
             {t<string>('Back')}
           </Button>
-          <Button
-            type='submit'
-            disabled={!password || !!validation || (!!backupValidation && !newName) || onImporting}
-            fullWidth>
-            {t<string>('Import Account')}
+          <Button type='submit' disabled={!password || !!validation || (!!backupValidation && !newName)} fullWidth>
+            {t<string>('Continue')}
           </Button>
         </div>
       </form>

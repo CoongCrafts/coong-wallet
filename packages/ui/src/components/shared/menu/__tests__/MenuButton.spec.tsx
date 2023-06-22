@@ -189,7 +189,7 @@ describe('MenuButton', () => {
 
       expect(await screen.findByText(/test-account/)).toBeInTheDocument();
       expect(await screen.findByLabelText(/Backup wallet password/)).toBeInTheDocument();
-      expect(await screen.findByRole('button', { name: /Import Account/ })).toBeDisabled();
+      expect(await screen.findByRole('button', { name: /Continue/ })).toBeDisabled();
       expect(await screen.findByRole('button', { name: /Back/ })).toBeInTheDocument();
     });
 
@@ -267,7 +267,7 @@ describe('MenuButton', () => {
         });
       });
       it('should import account', async () => {
-        // just mocking on this function
+        // Just mocking on this function
         window.HTMLElement.prototype.scrollIntoView = () => vi.fn();
 
         const backup = await getBackup(true);
@@ -275,13 +275,39 @@ describe('MenuButton', () => {
         await renderView();
         onScanResult(base64Encode(JSON.stringify(backup)));
 
+        // Account previewing, resolving conflict and asking backup wallet password window
         await user.type(await screen.findByLabelText(/Backup wallet password/), PASSWORD);
+        await user.click(await screen.findByRole('button', { name: /Continue/ }));
+
+        // Asking for wallet password window
+        await user.type(await screen.findByLabelText(/Wallet password/), PASSWORD);
         await user.click(await screen.findByRole('button', { name: /Import Account/ }));
 
         await waitFor(() => {
           expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
           expect(screen.queryByText(/Account imported successfully/)).toBeInTheDocument();
         });
+      });
+
+      it('should go back to asking backup wallet password window', async () => {
+        // Just mocking on this function
+        window.HTMLElement.prototype.scrollIntoView = () => vi.fn();
+
+        const backup = await getBackup(true);
+
+        await renderView();
+        onScanResult(base64Encode(JSON.stringify(backup)));
+
+        // Account previewing, resolving conflict and asking backup wallet password window
+        await user.type(await screen.findByLabelText(/Backup wallet password/), PASSWORD);
+        await user.click(await screen.findByRole('button', { name: /Continue/ }));
+
+        // Asking for wallet password window
+        expect(await screen.findByLabelText(/Wallet password/)).toBeInTheDocument();
+        await user.click(await screen.findByRole('button', { name: /Back/ }));
+
+        expect(await screen.findByLabelText(/Backup wallet password/)).toBeInTheDocument();
+        expect(await screen.findByRole('button', { name: /Continue/ })).toBeInTheDocument();
       });
 
       it('should show ImportAccountDialog screen when go back', async () => {
