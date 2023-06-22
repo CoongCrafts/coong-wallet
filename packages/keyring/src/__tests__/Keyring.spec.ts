@@ -571,6 +571,14 @@ describe('importAccount', () => {
       new CoongError(ErrorCode.PasswordIncorrect),
     );
   });
+
+  it('could unlock imported account with wallet password', async () => {
+    await keyring.importAccount(backup, BACKUP_PASSWORD, PASSWORD);
+
+    const importedAccount = await keyring.getSigningPair(address);
+
+    expect(await importedAccount.unlock(PASSWORD)).toBeUndefined();
+  });
 });
 
 describe('verifyAccountBackupPassword', () => {
