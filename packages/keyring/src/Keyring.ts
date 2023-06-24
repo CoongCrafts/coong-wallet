@@ -1,4 +1,4 @@
-import { KeyringPair, KeyringPair$Meta } from '@polkadot/keyring/types';
+import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
 import { u8aToHex } from '@polkadot/util';
 import { sha256AsU8a } from '@polkadot/util-crypto';
@@ -440,9 +440,10 @@ export default class Keyring {
    * Import an account from a backup and a password for that backup
    *
    * @param backup
-   * @param password
+   * @param backupPassword
+   * @param walletPassword
    */
-  async importAccount(backup: AccountBackup, password: string) {
+  async importAccount(backup: AccountBackup, backupPassword: string, walletPassword: string) {
     const { address, meta } = backup;
 
     if (await this.existsAccount(address)) {
@@ -465,16 +466,11 @@ export default class Keyring {
 
     meta.whenCreated = Date.now();
 
-    try {
-      this.#keyring.restoreAccount(backup, password);
-      return await this.getAccount(address);
-    } catch (e: any) {
-      if (e.message === 'Unable to decode using the supplied passphrase') {
-        throw new CoongError(ErrorCode.PasswordIncorrect);
-      }
+    const pair = await this.verifyAccountBackupPassword(backup, backupPassword);
 
-      throw e;
-    }
+    this.#keyring.saveAccount(pair, walletPassword);
+
+    return await this.getAccount(address);
   }
 
   /**
@@ -532,6 +528,23 @@ export default class Keyring {
       } else {
         throw new StandardCoongError(e.message);
       }
+    }
+  }
+
+  async verifyAccountBackupPassword(backup: AccountBackup, password: string): Promise<KeyringPair> {
+    // Create pair from backup and run decodePkcs8 with password to check whether the password is correct
+    const pair = this.#keyring.createFromJson(backup);
+
+    try {
+      pair.decodePkcs8(password);
+
+      return pair;
+    } catch (e: any) {
+      if (e.message === 'Unable to decode using the supplied passphrase') {
+        throw new CoongError(ErrorCode.PasswordIncorrect);
+      }
+
+      throw e;
     }
   }
 }
