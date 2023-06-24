@@ -16,6 +16,8 @@ interface QrCodeProps extends Props {
   object: TransferableObject;
 }
 
+const defaultSize = 500;
+
 export default function QrCode({ value, object }: QrCodeProps) {
   const { t } = useTranslation();
   const { containerRef, size } = useQrCodeSize();
@@ -32,21 +34,20 @@ export default function QrCode({ value, object }: QrCodeProps) {
     }
   };
 
-  const downloadQrCode = () => {
-    const qrCodeCanvas = qrCodeWrapperRef.current?.querySelector<HTMLCanvasElement>('canvas')!;
-
+  const generateInfoQRCodeCanvas = (qrCodeCanvas: HTMLCanvasElement) => {
     const canvas = document.createElement('canvas');
-    const canvasContext = canvas.getContext('2d')!;
 
-    const defaultSize = 500;
-    const spaceForInformationToFillIn = object === TransferableObject.Account ? 140 : 80;
+    const isAccountTransfer = object === TransferableObject.Account;
 
-    const startOfQrCodeImage = object === TransferableObject.Account ? 100 : 40;
+    const spaceForInformationToFillIn = isAccountTransfer ? 140 : 80;
+    const startOfQrCodeImage = isAccountTransfer ? 100 : 40;
 
     canvas.width = defaultSize;
     canvas.height = defaultSize + spaceForInformationToFillIn;
 
-    // Fill background to white
+    const canvasContext = canvas.getContext('2d')!;
+
+    // Fill background color to white
     canvasContext.fillStyle = 'white';
     canvasContext.fillRect(0, 0, defaultSize, defaultSize + spaceForInformationToFillIn);
 
@@ -55,10 +56,10 @@ export default function QrCode({ value, object }: QrCodeProps) {
 
     // Fill in information
     canvasContext.fillStyle = 'black';
-    canvasContext.font = `20px monospace`;
+    canvasContext.font = '20px monospace';
     canvasContext.textAlign = 'center';
 
-    canvasContext.fillText(`Scan To Import ${object}`, defaultSize / 2, 40);
+    canvasContext.fillText(t<string>('Scan To Import {{object}}', { object: t<string>(object) }), defaultSize / 2, 40);
 
     canvasContext.fillText(
       'Coong  Wallet - https://coongwallet.io',
@@ -67,25 +68,29 @@ export default function QrCode({ value, object }: QrCodeProps) {
       defaultSize - 80,
     );
 
-    if (object === TransferableObject.Account) {
+    if (isAccountTransfer) {
       const accountName = ((value as AccountBackup)?.meta?.name as string) || '';
 
-      canvasContext.font = `bold 32px monospace`;
+      canvasContext.font = 'bold 32px monospace';
       canvasContext.fillText(accountName, defaultSize / 2, spaceForInformationToFillIn - 50);
     }
 
-    canvas.toBlob(
-      (blob) => {
-        if (!blob) {
-          toast.error(t<string>('Cannot export QR code image'));
-          return;
-        }
+    return canvas;
+  };
 
-        FileSaver.saveAs(blob, getFileName());
-      },
-      'image/png',
-      1,
-    );
+  const downloadQrCode = () => {
+    const qrCodeCanvas = qrCodeWrapperRef.current?.querySelector<HTMLCanvasElement>('canvas')!;
+
+    const canvas = generateInfoQRCodeCanvas(qrCodeCanvas);
+
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        toast.error(t<string>('Cannot export QR code image'));
+        return;
+      }
+
+      FileSaver.saveAs(blob, getFileName());
+    }, 'image/png');
   };
 
   return (
@@ -97,15 +102,19 @@ export default function QrCode({ value, object }: QrCodeProps) {
       </p>
       <div ref={qrCodeWrapperRef}>
         <QRCodeCanvas
-          size={size}
+          size={defaultSize} // defaultSize for better quality when export to download
           value={rawQrValue}
           includeMargin
           title={t<string>('{{object}} Export QR Code', { object: t<string>(object) })}
           imageSettings={{
             src: CoongLogo,
-            height: 32,
-            width: 32,
+            height: 64,
+            width: 64,
             excavate: true,
+          }}
+          style={{
+            width: size,
+            height: size,
           }}
         />
       </div>
