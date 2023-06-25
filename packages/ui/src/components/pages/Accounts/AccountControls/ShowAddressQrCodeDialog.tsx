@@ -43,9 +43,15 @@ export default function ShowAddressQrCodeDialog(): JSX.Element {
   return (
     <Dialog ref={containerRef} open={open} onClose={onClose}>
       <DialogTitle onClose={onClose}>{`${t<string>('Account address')}: ${name}`}</DialogTitle>
-      <DialogContent className='flex dark:gap-8 gap-2 mb-4 flex-col items-center'>
+      <DialogContent className='flex dark:gap-8 gap-2 mb-4 flex-col items-center overflow-hidden'>
         <NetworksSelection onNetworkChange={handleNetworkChange} className='mt-4 xs:w-3/4 w-full' />
-        <QRCodeCanvas value={address} includeMargin size={size} title={t<string>('Account Address QR Code')} />
+        <QRCodeCanvas
+          value={address}
+          includeMargin
+          size={size}
+          title={t<string>('Account Address QR Code')}
+          className='p-4'
+        />
         <AccountAddress address={address} className='text-sm' />
       </DialogContent>
     </Dialog>
