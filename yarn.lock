@@ -365,12 +365,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@coong/base@^0.0.22-alpha.0, @coong/base@workspace:packages/base":
+"@coong/base@*, @coong/base@^0.0.22, @coong/base@workspace:packages/base":
   version: 0.0.0-use.local
   resolution: "@coong/base@workspace:packages/base"
   dependencies:
-    "@coong/keyring": ^0.0.22-alpha.0
-    "@coong/utils": ^0.0.22-alpha.0
+    "@coong/keyring": ^0.0.22
+    "@coong/utils": ^0.0.22
     "@polkadot/extension-inject": ^0.44.7
     "@polkadot/networks": ^10.4.1
     "@polkadot/types": ^9.14.1
@@ -381,26 +381,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@coong/base@npm:*":
-  version: 0.0.21
-  resolution: "@coong/base@npm:0.0.21"
-  dependencies:
-    "@coong/keyring": ^0.0.21
-    "@coong/utils": ^0.0.21
-    "@polkadot/networks": ^10.4.1
-    "@polkadot/types": ^9.14.1
-    "@polkadot/util": ^10.4.1
-    "@polkadot/util-crypto": ^10.4.1
-    rxjs: ^7.8.0
-  checksum: d2b47738da649258bc9f7c9c722787285a2daf41f81e5fffd998ae2c2522cfbba5aa3aede3ca2522c5713636b21618551a46778f65724f2fc5d2a84df7c47747
-  languageName: node
-  linkType: hard
-
-"@coong/keyring@^0.0.22-alpha.0, @coong/keyring@workspace:packages/keyring":
+"@coong/keyring@*, @coong/keyring@^0.0.22, @coong/keyring@workspace:packages/keyring":
   version: 0.0.0-use.local
   resolution: "@coong/keyring@workspace:packages/keyring"
   dependencies:
-    "@coong/utils": ^0.0.22-alpha.0
+    "@coong/utils": ^0.0.22
     "@polkadot/keyring": ^10.4.1
     "@polkadot/ui-keyring": ^2.11.2
     "@polkadot/util-crypto": ^10.4.1
@@ -409,23 +394,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@coong/keyring@npm:*, @coong/keyring@npm:^0.0.21":
-  version: 0.0.21
-  resolution: "@coong/keyring@npm:0.0.21"
-  dependencies:
-    "@coong/utils": ^0.0.21
-    "@polkadot/ui-keyring": ^2.11.2
-    crypto-js: ^4.1.1
-  checksum: 44d831068ee27a0ff7d12e0664a11bccc0de6c2e40577685ff5b9973b5d6c57ead3a080b7187f8bdb9af307fee37bfd7319b7e63fe313e12b1781600026ded52
-  languageName: node
-  linkType: hard
-
 "@coong/sdk@workspace:packages/sdk":
   version: 0.0.0-use.local
   resolution: "@coong/sdk@workspace:packages/sdk"
   dependencies:
-    "@coong/base": ^0.0.22-alpha.0
-    "@coong/utils": ^0.0.22-alpha.0
+    "@coong/base": ^0.0.22
+    "@coong/utils": ^0.0.22
     "@polkadot/api": ^9.10.5
     "@polkadot/extension-inject": ^0.44.7
     rxjs: ^7.8.0
@@ -481,18 +455,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@coong/utils@^0.0.22-alpha.0, @coong/utils@workspace:packages/utils":
+"@coong/utils@*, @coong/utils@^0.0.22, @coong/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@coong/utils@workspace:packages/utils"
   languageName: unknown
   linkType: soft
-
-"@coong/utils@npm:*, @coong/utils@npm:^0.0.21":
-  version: 0.0.21
-  resolution: "@coong/utils@npm:0.0.21"
-  checksum: 4daf81a7ebeea446c7249cf50a631c3321a1dc851b186ca153aa4a48af37802d4ae9f2c16ac12653b1ed0ed5ef608a8b592f03acaa071c5ee169d2f224919a88
-  languageName: node
-  linkType: hard
 
 "@emotion/babel-plugin@npm:^11.10.5":
   version: 11.10.5

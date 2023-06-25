@@ -249,22 +249,38 @@ export default class CoongSdk {
     });
   }
 
+  /**
+   * Check if the SDK is initialized
+   */
   get initialized() {
     return this.#initialized;
   }
 
+  /**
+   * Check if the SDK is initialized with a specific wallet url
+   * @param walletUrl
+   */
   isInitializedWithUrl(walletUrl: string) {
     return this.initialized && walletUrl === this.walletUrl;
   }
 
+  /**
+   * Get wallet url
+   */
   get walletUrl() {
     return this.#walletUrl;
   }
 
+  /**
+   * Get wallet info
+   */
   get walletInfo() {
     return this.#walletInfo;
   }
 
+  /**
+   * Get connected accounts wrapper
+   */
   get connectedAccounts(): ConnectedAccounts {
     this.ensureSdkInitialized();
 

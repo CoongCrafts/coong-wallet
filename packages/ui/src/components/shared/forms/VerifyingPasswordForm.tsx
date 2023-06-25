@@ -1,6 +1,6 @@
-import { ChangeEvent, FC, FormEvent, useRef, useState } from 'react';
+import { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useEffectOnce, useToggle } from 'react-use';
+import { useToggle } from 'react-use';
 import { Button, DialogContentText, TextField } from '@mui/material';
 import EmptySpace from 'components/shared/misc/EmptySpace';
 import { useWalletState } from 'providers/WalletStateProvider';
@@ -18,6 +18,7 @@ const VerifyingPasswordForm: FC<VerifyingPasswordProps> = ({
   onBack,
   backButtonLabel = 'Back',
   continueButtonLabel = 'Continue',
+  passwordLabel = 'Enter your wallet password to continue',
 }) => {
   const { t } = useTranslation();
   const { keyring } = useWalletState();
@@ -51,7 +52,7 @@ const VerifyingPasswordForm: FC<VerifyingPasswordProps> = ({
 
   return (
     <>
-      <DialogContentText className='mb-4'>{t<string>('Enter your wallet password to continue')}</DialogContentText>
+      <DialogContentText className='mb-2'>{t<string>(passwordLabel)}</DialogContentText>
       <form onSubmit={doVerify} noValidate className='flex flex-col gap-2'>
         <TextField
           type='password'
