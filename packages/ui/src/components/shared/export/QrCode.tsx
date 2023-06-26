@@ -16,7 +16,7 @@ interface QrCodeProps extends Props {
   object: TransferableObject;
 }
 
-const defaultSize = 500;
+const DEFAULT_SIZE = 500;
 
 export default function QrCode({ value, object }: QrCodeProps) {
   const { t } = useTranslation();
@@ -42,37 +42,37 @@ export default function QrCode({ value, object }: QrCodeProps) {
     const spaceForInformationToFillIn = isAccountTransfer ? 140 : 80;
     const startOfQrCodeImage = isAccountTransfer ? 100 : 40;
 
-    canvas.width = defaultSize;
-    canvas.height = defaultSize + spaceForInformationToFillIn;
+    canvas.width = DEFAULT_SIZE;
+    canvas.height = DEFAULT_SIZE + spaceForInformationToFillIn;
 
     const canvasContext = canvas.getContext('2d')!;
 
     // Fill background color to white
     canvasContext.fillStyle = 'white';
-    canvasContext.fillRect(0, 0, defaultSize, defaultSize + spaceForInformationToFillIn);
+    canvasContext.fillRect(0, 0, DEFAULT_SIZE, DEFAULT_SIZE + spaceForInformationToFillIn);
 
     // Draw QR Code on the canvas
-    canvasContext.drawImage(qrCodeCanvas, 0, startOfQrCodeImage, defaultSize, defaultSize);
+    canvasContext.drawImage(qrCodeCanvas, 0, startOfQrCodeImage, DEFAULT_SIZE, DEFAULT_SIZE);
 
     // Fill in information
     canvasContext.fillStyle = 'black';
     canvasContext.font = '20px monospace';
     canvasContext.textAlign = 'center';
 
-    canvasContext.fillText(t<string>('Scan To Import {{object}}', { object: t<string>(object) }), defaultSize / 2, 40);
+    canvasContext.fillText(t<string>('Scan To Import {{object}}', { object: t<string>(object) }), DEFAULT_SIZE / 2, 40);
 
     canvasContext.fillText(
       'Coong  Wallet - https://coongwallet.io',
-      defaultSize / 2,
-      defaultSize + startOfQrCodeImage + 20,
-      defaultSize - 80,
+      DEFAULT_SIZE / 2,
+      DEFAULT_SIZE + startOfQrCodeImage + (isAccountTransfer ? 17 : 13),
+      DEFAULT_SIZE - 80,
     );
 
     if (isAccountTransfer) {
       const accountName = ((value as AccountBackup)?.meta?.name as string) || '';
 
       canvasContext.font = 'bold 32px monospace';
-      canvasContext.fillText(accountName, defaultSize / 2, spaceForInformationToFillIn - 50);
+      canvasContext.fillText(accountName, DEFAULT_SIZE / 2, spaceForInformationToFillIn - 50);
     }
 
     return canvas;
@@ -102,7 +102,7 @@ export default function QrCode({ value, object }: QrCodeProps) {
       </p>
       <div ref={qrCodeWrapperRef}>
         <QRCodeCanvas
-          size={defaultSize} // defaultSize for better quality when export to download
+          size={DEFAULT_SIZE} // DEFAULT_SIZE for better quality when export to download
           value={rawQrValue}
           includeMargin
           title={t<string>('{{object}} Export QR Code', { object: t<string>(object) })}
