@@ -6,14 +6,17 @@ import { base64Encode } from '@polkadot/util-crypto';
 import { AccountBackup, QrBackup } from '@coong/keyring/types';
 import { Download } from '@mui/icons-material';
 import { Button } from '@mui/material';
+import CoongLogo from 'assets/images/coong-logo.png';
 import FileSaver from 'file-saver';
 import useQrCodeSize from 'hooks/useQrCodeSize';
-import { TransferableObject, Props } from 'types';
+import { Props, TransferableObject } from 'types';
 
 interface QrCodeProps extends Props {
   value: QrBackup;
   object: TransferableObject;
 }
+
+const DEFAULT_SIZE = 500;
 
 export default function QrCode({ value, object }: QrCodeProps) {
   const { t } = useTranslation();
@@ -31,8 +34,55 @@ export default function QrCode({ value, object }: QrCodeProps) {
     }
   };
 
+  const generateInfoQRCodeCanvas = (qrCodeCanvas: HTMLCanvasElement) => {
+    const canvas = document.createElement('canvas');
+
+    const isAccountTransfer = object === TransferableObject.Account;
+
+    const spaceForInformationToFillIn = isAccountTransfer ? 140 : 80;
+    const startOfQrCodeImage = isAccountTransfer ? 100 : 40;
+
+    canvas.width = DEFAULT_SIZE;
+    canvas.height = DEFAULT_SIZE + spaceForInformationToFillIn;
+
+    const canvasContext = canvas.getContext('2d')!;
+
+    // Fill background color to white
+    canvasContext.fillStyle = 'white';
+    canvasContext.fillRect(0, 0, DEFAULT_SIZE, DEFAULT_SIZE + spaceForInformationToFillIn);
+
+    // Draw QR Code on the canvas
+    canvasContext.drawImage(qrCodeCanvas, 0, startOfQrCodeImage, DEFAULT_SIZE, DEFAULT_SIZE);
+
+    // Fill in information
+    canvasContext.fillStyle = 'black';
+    canvasContext.font = '20px monospace';
+    canvasContext.textAlign = 'center';
+
+    canvasContext.fillText(t<string>('Scan To Import {{object}}', { object: t<string>(object) }), DEFAULT_SIZE / 2, 40);
+
+    canvasContext.fillText(
+      'Coong  Wallet - https://coongwallet.io',
+      DEFAULT_SIZE / 2,
+      DEFAULT_SIZE + startOfQrCodeImage + (isAccountTransfer ? 17 : 13),
+      DEFAULT_SIZE - 80,
+    );
+
+    if (isAccountTransfer) {
+      const accountName = ((value as AccountBackup)?.meta?.name as string) || '';
+
+      canvasContext.font = 'bold 32px monospace';
+      canvasContext.fillText(accountName, DEFAULT_SIZE / 2, spaceForInformationToFillIn - 50);
+    }
+
+    return canvas;
+  };
+
   const downloadQrCode = () => {
-    const canvas = qrCodeWrapperRef.current?.querySelector<HTMLCanvasElement>('canvas')!;
+    const qrCodeCanvas = qrCodeWrapperRef.current?.querySelector<HTMLCanvasElement>('canvas')!;
+
+    const canvas = generateInfoQRCodeCanvas(qrCodeCanvas);
+
     canvas.toBlob((blob) => {
       if (!blob) {
         toast.error(t<string>('Cannot export QR code image'));
@@ -52,10 +102,20 @@ export default function QrCode({ value, object }: QrCodeProps) {
       </p>
       <div ref={qrCodeWrapperRef}>
         <QRCodeCanvas
-          size={size}
+          size={DEFAULT_SIZE} // DEFAULT_SIZE for better quality when export to download
           value={rawQrValue}
           includeMargin
           title={t<string>('{{object}} Export QR Code', { object: t<string>(object) })}
+          imageSettings={{
+            src: CoongLogo,
+            height: 64,
+            width: 64,
+            excavate: true,
+          }}
+          style={{
+            width: size,
+            height: size,
+          }}
         />
       </div>
       <div className='mt-4'>
