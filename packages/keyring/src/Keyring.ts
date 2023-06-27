@@ -496,7 +496,7 @@ export default class Keyring {
   async #restoreWalletInfo(backup: WalletBackup$Json, password: string) {
     assertFalse(await this.initialized(), 'Wallet is already initialized');
 
-    const { encryptedMnemonic, accountsIndex } = backup;
+    const { encryptedMnemonic, accountsIndex = 0 } = backup;
 
     localStorage.setItem(ACCOUNTS_INDEX, accountsIndex.toString());
     localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedMnemonic);
@@ -521,7 +521,7 @@ export default class Keyring {
     try {
       await this.#restoreWalletInfo(backup, password);
 
-      for (let account of backup.accounts) {
+      for (let account of backup.accounts || []) {
         const [path, name] = account;
         await this.createNewAccount(name, password, path);
       }
@@ -542,7 +542,9 @@ export default class Keyring {
     try {
       await this.#restoreWalletInfo(backup, password);
 
-      this.#keyring.restoreAccounts(backup, password);
+      if (backup.accounts) {
+        this.#keyring.restoreAccounts(backup, password);
+      }
     } catch (e: any) {
       await this.reset();
 
