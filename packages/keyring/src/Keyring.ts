@@ -521,9 +521,14 @@ export default class Keyring {
     try {
       await this.#restoreWalletInfo(backup, password);
 
-      for (let account of backup.accounts || []) {
-        const [path, name] = account;
-        await this.createNewAccount(name, password, path);
+      if (backup.accounts) {
+        for (let account of backup.accounts) {
+          const [path, name] = account;
+          await this.createNewAccount(name, password, path);
+        }
+      } else if (!backup.accountsIndex) {
+        // If backup has no accounts and accountsIndex is not defined
+        await this.createNewAccount('My first account', password);
       }
     } catch (e: any) {
       await this.reset();
@@ -544,6 +549,9 @@ export default class Keyring {
 
       if (backup.accounts) {
         this.#keyring.restoreAccounts(backup, password);
+      } else if (!backup.accountsIndex) {
+        // If backup has no accounts and accountsIndex is not defined
+        await this.createNewAccount('My first account', password);
       }
     } catch (e: any) {
       await this.reset();

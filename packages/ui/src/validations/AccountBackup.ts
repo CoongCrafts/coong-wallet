@@ -13,7 +13,9 @@ export const AccountBackupSchema = AccountInfoSchema.concat(
 );
 
 export const AccountsBackupSchema = object({
-  encoded: string().required(),
-  encoding: object().required(),
   accounts: array().of(AccountInfoSchema),
+  // The encoded field is required when restoring accounts,
+  // So if accounts field has been defined then the encoded field is compulsory.
+  encoded: string().when('accounts', { is: (value: any) => !!value, then: (schema) => schema.required() }),
+  encoding: object(),
 });
