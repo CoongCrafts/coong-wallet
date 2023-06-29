@@ -43,12 +43,18 @@ export enum SettingsDialogScreen {
 export enum NewWalletScreenStep {
   ChooseWalletPassword,
   ConfirmWalletPassword,
-  BackupSecretRecoveryPhrase,
+  BackupWallet,
 }
 
 export enum RestoreWalletMethod {
   SecretRecoveryPhrase,
   QrCode,
+}
+
+export enum BackupWalletMethod {
+  SecretRecoveryPhrase,
+  QrCode,
+  Json,
 }
 
 export enum RestoreWalletScreenStep {
