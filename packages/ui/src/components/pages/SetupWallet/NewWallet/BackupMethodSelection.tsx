@@ -60,8 +60,8 @@ export default function BackupMethodSelection(): JSX.Element {
     <BackupWallet method={method} resetMethod={resetMethod} />
   ) : (
     <>
-      <h3>Finally, backup your wallet</h3>
-      <p>Choose a method to backup your wallet</p>
+      <h3>Finally, back up your wallet</h3>
+      <p>Choose a method to back up your wallet</p>
       <List>
         {BackupWalletOptions.map(({ method, icon, primary, secondary }) => (
           <ListItemButton key={method} onClick={() => doSelectMethod(method)}>

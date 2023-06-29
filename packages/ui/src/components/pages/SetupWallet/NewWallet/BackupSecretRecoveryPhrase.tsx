@@ -12,7 +12,6 @@ const BackupSecretRecoveryPhrase: FC<BackupSecretRecoveryPhraseProps> = ({ secre
 
   return (
     <div className={className}>
-      <h3>{t<string>('Finally, back up your secret recovery phrase')}</h3>
       <p className='mb-4'>{t<string>('Write down the below 12 words and keep it in a safe place.')}</p>
       <SecretRecoveryPhrase secretPhrase={secretPhrase} />
     </div>
