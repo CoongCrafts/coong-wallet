@@ -1,6 +1,8 @@
 import { ChangeEvent, FormEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffectOnce } from 'react-use';
+import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
 import { WalletBackup } from '@coong/keyring/types';
 import { LoadingButton } from '@mui/lab';
 import { Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material';
@@ -9,6 +11,7 @@ import JsonFile from 'components/shared/export/JsonFile';
 import QrCode from 'components/shared/export/QrCode';
 import CryptoJS from 'crypto-js';
 import useSetupWallet from 'hooks/wallet/useSetupWallet';
+import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';
 import { Props, TransferableObject, BackupWalletMethod } from 'types';
 
@@ -46,10 +49,16 @@ function Backup({ method }: BackupProps): JSX.Element {
 }
 
 export default function BackupWallet({ method, resetMethod }: BackupWalletProps): JSX.Element {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const { password, secretPhrase } = useSelector((state: RootState) => state.setupWallet);
   const { setup, loading } = useSetupWallet({ secretPhrase, password });
   const [checked, setChecked] = useState<boolean>(false);
+
+  useEffectOnce(() => {
+    if (secretPhrase) return;
+    dispatch(setupWalletActions.setSecretPhrase(generateMnemonic(12)));
+  });
 
   const handleCheckbox = (event: ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);

@@ -1,15 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffectOnce } from 'react-use';
-import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
+import { useDispatch } from 'react-redux';
 import { QrCode } from '@mui/icons-material';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import KeyIcon from '@mui/icons-material/Key';
 import { Button, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import BackupWallet from 'components/pages/SetupWallet/NewWallet/BackupWallet';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
-import { RootState } from 'redux/store';
 import { NewWalletScreenStep, BackupWalletMethod } from 'types';
 
 const BackupWalletOptions = [
@@ -37,12 +34,6 @@ export default function BackupMethodSelection(): JSX.Element {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [method, setMethod] = useState<BackupWalletMethod>();
-  const { secretPhrase } = useSelector((state: RootState) => state.setupWallet);
-
-  useEffectOnce(() => {
-    if (secretPhrase) return;
-    dispatch(setupWalletActions.setSecretPhrase(generateMnemonic(12)));
-  });
 
   const doSelectMethod = (method: BackupWalletMethod) => {
     setMethod(method);
@@ -54,6 +45,7 @@ export default function BackupMethodSelection(): JSX.Element {
 
   const goBack = () => {
     dispatch(setupWalletActions.setNewWalletScreenStep(NewWalletScreenStep.ChooseWalletPassword));
+    dispatch(setupWalletActions.setSecretPhrase(undefined));
   };
 
   return method !== undefined ? (

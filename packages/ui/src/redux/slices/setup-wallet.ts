@@ -34,7 +34,7 @@ const setupWalletSlice = createSlice({
     setRestoreWalletScreenStep: (state, action: PayloadAction<RestoreWalletScreenStep>) => {
       state.restoreWalletScreenStep = action.payload;
     },
-    setSecretPhrase: (state, action: PayloadAction<string>) => {
+    setSecretPhrase: (state, action: PayloadAction<string | undefined>) => {
       state.secretPhrase = action.payload;
     },
     resetState: (state) => {
