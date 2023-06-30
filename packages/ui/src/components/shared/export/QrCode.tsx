@@ -6,7 +6,7 @@ import { base64Encode } from '@polkadot/util-crypto';
 import { AccountBackup, QrBackup } from '@coong/keyring/types';
 import { Download } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import CoongLogo from 'assets/images/coong-logo.png';
+import CoongLogo from 'assets/images/coong-logo-circle.png';
 import FileSaver from 'file-saver';
 import useQrCodeSize from 'hooks/useQrCodeSize';
 import { Props, TransferableObject } from 'types';
@@ -110,7 +110,7 @@ export default function QrCode({ value, object }: QrCodeProps) {
             src: CoongLogo,
             height: 64,
             width: 64,
-            excavate: true,
+            excavate: false,
           }}
           style={{
             width: size,
