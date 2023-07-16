@@ -31,7 +31,7 @@ export default function TransferWalletBackup({ importBackup, resetBackup }: Tran
   return (
     <>
       <h3>{t<string>('Import wallet')}</h3>
-      <p className='mb-4'>{t<string>('Enter wallet password to import your wallet')}</p>
+      <p className='mb-4'>{t<string>('Enter wallet password of the backup to import your wallet')}</p>
       <PasswordPromptForm onSubmit={onSubmit} onBack={resetBackup} />
       <Alert className='mt-4' severity='info'>
         {t<string>(

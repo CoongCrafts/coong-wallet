@@ -25,7 +25,7 @@ const MethodInfo = [
     method: RestoreWalletMethod.JsonFile,
     icon: <InsertDriveFileIcon />,
     primary: 'JSON File',
-    secondary: 'Import JSON backup file',
+    secondary: 'Import JSON backup file exported from Coong Wallet',
   },
 ];
 

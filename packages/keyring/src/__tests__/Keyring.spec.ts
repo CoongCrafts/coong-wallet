@@ -1,9 +1,9 @@
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { generateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
-import Keyring, { ACCOUNTS_INDEX, ENCRYPTED_MNEMONIC, ORIGINAL_HASH, sha256AsHex } from '@coong/keyring//Keyring';
+import Keyring, { ACCOUNTS_INDEX, ENCRYPTED_MNEMONIC, ORIGINAL_HASH } from '@coong/keyring/Keyring';
 import { AccountBackup, AccountInfo, WalletBackup, WalletQrBackup } from '@coong/keyring/types';
-import { CoongError, ErrorCode, StandardCoongError } from '@coong/utils';
+import { CoongError, ErrorCode, StandardCoongError, sha256AsHex } from '@coong/utils';
 import CryptoJS from 'crypto-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -456,6 +456,18 @@ describe('importQrBackup', () => {
       keyring = new Keyring();
     });
 
+    it('should create a default `My first account` if both accountIndexs and accounts field not defined', async () => {
+      qrBackup.accounts = [];
+      qrBackup.accountsIndex = 0;
+
+      await keyring.importQrBackup(qrBackup, PASSWORD);
+
+      const accounts = await keyring.getAccounts();
+
+      expect(accounts.length).toEqual(1);
+      expect(accounts[0].name).toEqual('My first account');
+    });
+
     it('should check mnemonic validity', async () => {
       qrBackup.encryptedMnemonic = CryptoJS.AES.encrypt('a random invalid seed phrase', PASSWORD).toString();
 
@@ -593,7 +605,7 @@ describe('verifyAccountBackupPassword', () => {
   });
 });
 
-describe('importJsonBackup', () => {
+describe('importBackup', () => {
   let backup: WalletBackup;
   beforeEach(async () => {
     keyring = await initializeNewKeyring();
@@ -617,6 +629,18 @@ describe('importJsonBackup', () => {
       keyring = new Keyring();
     });
 
+    it('should create a default `My first account` if both accountIndexs and accounts field not defined', async () => {
+      backup.accounts = [];
+      backup.accountsIndex = 0;
+
+      await keyring.importBackup(backup, PASSWORD);
+
+      const accounts = await keyring.getAccounts();
+
+      expect(accounts.length).toEqual(1);
+      expect(accounts[0].name).toEqual('My first account');
+    });
+
     it('should store accountIndex & encryptedMnemonic into localStorage and generate originalHash', async () => {
       await keyring.importBackup(backup, PASSWORD);
 
@@ -632,6 +656,12 @@ describe('importJsonBackup', () => {
 
       await expect(keyring.importBackup(backup, PASSWORD)).rejects.toThrowError(
         new CoongError(ErrorCode.InvalidMnemonic),
+      );
+    });
+
+    it('should throw error if password incorrect', async () => {
+      await expect(keyring.importBackup(backup, 'wrong-password')).rejects.toThrowError(
+        new CoongError(ErrorCode.PasswordIncorrect),
       );
     });
 

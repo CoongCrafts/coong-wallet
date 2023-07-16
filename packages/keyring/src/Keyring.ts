@@ -1,9 +1,15 @@
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
-import { u8aToHex } from '@polkadot/util';
-import { sha256AsU8a } from '@polkadot/util-crypto';
 import { validateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
-import { assert, assertFalse, CoongError, ErrorCode, isCoongError, StandardCoongError } from '@coong/utils';
+import {
+  assert,
+  assertFalse,
+  CoongError,
+  ErrorCode,
+  isCoongError,
+  StandardCoongError,
+  sha256AsHex,
+} from '@coong/utils';
 import CryptoJS from 'crypto-js';
 import { AccountBackup, AccountInfo, WalletBackup, WalletBackup$Json, WalletQrBackup } from './types';
 
@@ -13,10 +19,6 @@ export const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
 export const DEFAULT_KEY_TYPE = 'sr25519';
 
 const DERIVATION_PATH_PREFIX = '//';
-
-export const sha256AsHex = (data: string): string => {
-  return u8aToHex(sha256AsU8a(data));
-};
 
 /**
  * @name Keyring
@@ -521,7 +523,7 @@ export default class Keyring {
     try {
       await this.#restoreWalletInfo(backup, password);
 
-      if (backup.accounts) {
+      if (backup.accounts && backup.accounts.length) {
         for (let account of backup.accounts) {
           const [path, name] = account;
           await this.createNewAccount(name, password, path);
@@ -547,7 +549,7 @@ export default class Keyring {
     try {
       await this.#restoreWalletInfo(backup, password);
 
-      if (backup.accounts) {
+      if (backup.accounts && backup.accounts.length) {
         this.#keyring.restoreAccounts(backup, password);
       } else if (!backup.accountsIndex) {
         // If backup has no accounts and accountsIndex is not defined
