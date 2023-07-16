@@ -66,7 +66,7 @@ vi.mock('react-dropzone', async () => {
 
 const expectTransferWalletBackup = async (screen: any) => {
   expect(await screen.findByText(/Import wallet/)).toBeInTheDocument();
-  expect(await screen.findByText(/Enter wallet password to import your wallet/)).toBeInTheDocument();
+  expect(await screen.findByText(/Enter wallet password of the backup to import your wallet/)).toBeInTheDocument();
   expect(await screen.findByLabelText(/Wallet password/)).toBeEnabled();
   expect(await screen.findByRole('button', { name: /Continue/ })).toBeDisabled();
   expect(await screen.findByRole('button', { name: /Back/ })).toBeEnabled();
