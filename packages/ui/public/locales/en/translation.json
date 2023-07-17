@@ -219,5 +219,6 @@
   "wallet": "",
   "{{account.name}} removed": "",
   "{{numberOfAccounts}} account(s) selected": "<strong>{{numberOfAccounts}}</strong> account(s) selected",
-  "{{object}} Export QR Code": ""
+  "{{object}} Export QR Code": "",
+  "Upload QR Code": ""
 }
