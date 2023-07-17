@@ -14,7 +14,7 @@ import useDialog from 'hooks/useDialog';
 import useRegisterEvent from 'hooks/useRegisterEvent';
 import { TransferableObject } from 'types';
 import { EventName } from 'utils/eventemitter';
-import { AccountBackupScheme } from 'validations/AccountBackup';
+import { AccountBackupSchema } from 'validations/AccountBackup';
 
 enum ImportAccountMethod {
   QRCode = 'QR Code',
@@ -48,7 +48,7 @@ export default function ImportAccountDialog(): JSX.Element {
     try {
       const decoded = isBase64(data) ? u8aToString(base64Decode(data)) : data;
       const parsedBackup = JSON.parse(decoded) as AccountBackup;
-      await AccountBackupScheme.validate(parsedBackup);
+      await AccountBackupSchema.validate(parsedBackup);
 
       setBackup(parsedBackup);
     } catch (e: any) {

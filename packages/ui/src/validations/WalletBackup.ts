@@ -1,3 +1,4 @@
+import { AccountsBackupSchema } from 'validations/AccountBackup';
 import { array, number, object, string, tuple } from 'yup';
 
 const DerivationPathRegex = /^\/\/(\d)+$/;
@@ -7,8 +8,15 @@ export const CompactAccountInfoSchema = tuple([
   string().label('AccountName'),
 ]);
 
-export const WalletQrBackupScheme = object({
-  accountsIndex: number().integer().required(),
+export const WalletInfoSchema = object({
+  accountsIndex: number().integer(),
   encryptedMnemonic: string().required(),
-  accounts: array().of(CompactAccountInfoSchema),
 });
+
+export const WalletQrBackupSchema = WalletInfoSchema.concat(
+  object({
+    accounts: array().of(CompactAccountInfoSchema),
+  }),
+);
+
+export const WalletBackupSchema = WalletInfoSchema.concat(AccountsBackupSchema);
