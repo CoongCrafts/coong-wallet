@@ -14,19 +14,19 @@ const BackupWalletOptions = [
     method: BackupWalletMethod.SecretRecoveryPhrase,
     icon: <KeyIcon />,
     primary: 'Secret Recovery Phrase',
-    secondary: 'Enter your existing secret recovery phrase',
+    secondary: 'Write down 12 random words and keep them in a safe place!',
   },
   {
     method: BackupWalletMethod.QrCode,
     icon: <QrCode />,
     primary: 'QR Code',
-    secondary: 'Scan QR Code from Coong Wallet on a different device',
+    secondary: 'Downloads an encrypted QR Code and uploads it to the cloud (iCloud, Google Drive, ...)',
   },
   {
     method: BackupWalletMethod.Json,
     icon: <InsertDriveFileIcon />,
     primary: 'JSON File',
-    secondary: 'Import JSON backup file',
+    secondary: 'Downloads an encrypted JSON file and uploads it to the cloud (iCloud, Google Drive, ...)',
   },
 ];
 

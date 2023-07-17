@@ -15,16 +15,12 @@ import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';
 import { Props, TransferableObject, BackupWalletMethod } from 'types';
 
-interface BackupWalletProps extends Props {
-  method: BackupWalletMethod;
-  resetMethod: () => void;
-}
-
 interface BackupProps extends Props {
   method: BackupWalletMethod;
 }
 
 function Backup({ method }: BackupProps): JSX.Element {
+  const { t } = useTranslation();
   const { password, secretPhrase } = useSelector((state: RootState) => state.setupWallet);
 
   // Preventing re-create the wallet backup when the component is re-rendered
@@ -38,14 +34,47 @@ function Backup({ method }: BackupProps): JSX.Element {
 
   switch (method) {
     case BackupWalletMethod.SecretRecoveryPhrase:
-      return <BackupSecretRecoveryPhrase secretPhrase={secretPhrase!} />;
+      return <BackupSecretRecoveryPhrase secretPhrase={secretPhrase!} title='Secret Recovery Phrase' />;
     case BackupWalletMethod.QrCode:
-      return <QrCode value={walletBackup} object={TransferableObject.Wallet} />;
+      return (
+        <QrCode
+          value={walletBackup}
+          object={TransferableObject.Wallet}
+          title='Downloads QR Code'
+          topInstruction={
+            <p>
+              {t<string>(
+                'Downloads the below QR code image and upload it to the cloud (iCloud, Google Drive, ...), you can restore your wallet by scanning or uploading this QR Code to Coong Wallet later at any time with your wallet password.',
+              )}
+            </p>
+          }
+          bottomInstruction={<></>} // Use to hide default bottom instruction
+        />
+      );
     case BackupWalletMethod.Json:
-      return <JsonFile value={walletBackup} object={TransferableObject.Wallet} />;
+      return (
+        <JsonFile
+          value={walletBackup}
+          object={TransferableObject.Wallet}
+          title='Downloads JSON File'
+          topInstruction={
+            <p>
+              {t<string>(
+                'Downloads the below JSON file and upload it to the cloud (iCloud, Google Drive, ...), you can restore your wallet by uploading this JSON file to Coong Wallet later at any time with your wallet password.',
+              )}
+            </p>
+          }
+          bottomInstruction={<></>} // Use to hide default bottom instruction
+        />
+      );
     default:
       return <></>;
   }
+}
+
+interface BackupWalletProps extends Props {
+  method: BackupWalletMethod;
+  resetMethod: () => void;
 }
 
 export default function BackupWallet({ method, resetMethod }: BackupWalletProps): JSX.Element {
