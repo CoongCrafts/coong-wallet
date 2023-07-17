@@ -46,16 +46,10 @@ export enum NewWalletScreenStep {
   BackupWallet,
 }
 
-export enum RestoreWalletMethod {
+export enum WalletRecoveryMethod {
   SecretRecoveryPhrase,
   QrCode,
   JsonFile,
-}
-
-export enum BackupWalletMethod {
-  SecretRecoveryPhrase,
-  QrCode,
-  Json,
 }
 
 export enum RestoreWalletScreenStep {

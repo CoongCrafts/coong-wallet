@@ -7,23 +7,23 @@ import KeyIcon from '@mui/icons-material/Key';
 import { Button, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import BackupWallet from 'components/pages/SetupWallet/NewWallet/BackupWallet';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
-import { NewWalletScreenStep, BackupWalletMethod } from 'types';
+import { NewWalletScreenStep, WalletRecoveryMethod } from 'types';
 
 const BackupWalletOptions = [
   {
-    method: BackupWalletMethod.SecretRecoveryPhrase,
+    method: WalletRecoveryMethod.SecretRecoveryPhrase,
     icon: <KeyIcon />,
     primary: 'Secret Recovery Phrase',
     secondary: 'Write down 12 random words and keep them in a safe place!',
   },
   {
-    method: BackupWalletMethod.QrCode,
+    method: WalletRecoveryMethod.QrCode,
     icon: <QrCode />,
     primary: 'QR Code',
     secondary: 'Downloads an encrypted QR Code and uploads it to the cloud (iCloud, Google Drive, ...)',
   },
   {
-    method: BackupWalletMethod.Json,
+    method: WalletRecoveryMethod.JsonFile,
     icon: <InsertDriveFileIcon />,
     primary: 'JSON File',
     secondary: 'Downloads an encrypted JSON file and uploads it to the cloud (iCloud, Google Drive, ...)',
@@ -33,9 +33,9 @@ const BackupWalletOptions = [
 export default function BackupMethodSelection(): JSX.Element {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const [method, setMethod] = useState<BackupWalletMethod>();
+  const [method, setMethod] = useState<WalletRecoveryMethod>();
 
-  const doSelectMethod = (method: BackupWalletMethod) => {
+  const doSelectMethod = (method: WalletRecoveryMethod) => {
     setMethod(method);
   };
 

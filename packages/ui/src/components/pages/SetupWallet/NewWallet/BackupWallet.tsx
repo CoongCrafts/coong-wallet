@@ -13,10 +13,10 @@ import CryptoJS from 'crypto-js';
 import useSetupWallet from 'hooks/wallet/useSetupWallet';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';
-import { Props, TransferableObject, BackupWalletMethod } from 'types';
+import { Props, TransferableObject, WalletRecoveryMethod } from 'types';
 
 interface BackupProps extends Props {
-  method: BackupWalletMethod;
+  method: WalletRecoveryMethod;
 }
 
 function Backup({ method }: BackupProps): JSX.Element {
@@ -33,9 +33,9 @@ function Backup({ method }: BackupProps): JSX.Element {
   }, [secretPhrase, password]);
 
   switch (method) {
-    case BackupWalletMethod.SecretRecoveryPhrase:
+    case WalletRecoveryMethod.SecretRecoveryPhrase:
       return <BackupSecretRecoveryPhrase secretPhrase={secretPhrase!} title='Secret Recovery Phrase' />;
-    case BackupWalletMethod.QrCode:
+    case WalletRecoveryMethod.QrCode:
       return (
         <QrCode
           value={walletBackup}
@@ -51,7 +51,7 @@ function Backup({ method }: BackupProps): JSX.Element {
           bottomInstruction={<></>} // Use to hide default bottom instruction
         />
       );
-    case BackupWalletMethod.Json:
+    case WalletRecoveryMethod.JsonFile:
       return (
         <JsonFile
           value={walletBackup}
@@ -73,7 +73,7 @@ function Backup({ method }: BackupProps): JSX.Element {
 }
 
 interface BackupWalletProps extends Props {
-  method: BackupWalletMethod;
+  method: WalletRecoveryMethod;
   resetMethod: () => void;
 }
 

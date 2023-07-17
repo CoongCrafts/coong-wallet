@@ -6,23 +6,23 @@ import KeyIcon from '@mui/icons-material/Key';
 import { Button, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { useWalletSetup } from 'providers/WalletSetupProvider';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
-import { RestoreWalletMethod } from 'types';
+import { WalletRecoveryMethod } from 'types';
 
 const MethodInfo = [
   {
-    method: RestoreWalletMethod.SecretRecoveryPhrase,
+    method: WalletRecoveryMethod.SecretRecoveryPhrase,
     icon: <KeyIcon />,
     primary: 'Secret Recovery Phrase',
     secondary: 'Enter your existing secret recovery phrase',
   },
   {
-    method: RestoreWalletMethod.QrCode,
+    method: WalletRecoveryMethod.QrCode,
     icon: <QrCode />,
     primary: 'QR Code',
     secondary: 'Scan QR Code from Coong Wallet on a different device',
   },
   {
-    method: RestoreWalletMethod.JsonFile,
+    method: WalletRecoveryMethod.JsonFile,
     icon: <InsertDriveFileIcon />,
     primary: 'JSON File',
     secondary: 'Import JSON backup file exported from Coong Wallet',
@@ -34,7 +34,7 @@ export default function MethodSelection(): JSX.Element {
   const dispatch = useDispatch();
   const { onCancelSetup } = useWalletSetup();
 
-  const doSelectMethod = (method: RestoreWalletMethod) => {
+  const doSelectMethod = (method: WalletRecoveryMethod) => {
     return () => dispatch(setupWalletActions.setRestoreWalletMethod(method));
   };
 
