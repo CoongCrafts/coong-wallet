@@ -3,6 +3,7 @@ import QrReader from 'react-qr-reader';
 import { usePermission } from 'react-use';
 import { Alert, AlertTitle, Button } from '@mui/material';
 import { Props, TransferableObject } from 'types';
+import QrCodeUploadButton from './QrCodeUploadButton';
 
 interface QrCodeReaderProps extends Props {
   onResult: (data: string) => void;
@@ -42,13 +43,14 @@ function QrCodeReader({ onResult, object, showTitle, goBack }: QrCodeReaderProps
           className='w-full'
         />
       )}
-      {goBack && (
-        <div className='mt-4'>
+      <div className={`mt-4 flex ${goBack ? 'justify-between' : 'justify-end'}`}>
+        {goBack && (
           <Button onClick={goBack} color='gray' variant='text'>
             {t<string>('Back')}
           </Button>
-        </div>
-      )}
+        )}
+        <QrCodeUploadButton onResult={onResult} />
+      </div>
     </>
   );
 }

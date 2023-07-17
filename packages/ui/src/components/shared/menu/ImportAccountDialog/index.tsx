@@ -48,7 +48,7 @@ export default function ImportAccountDialog(): JSX.Element {
     try {
       const decoded = isBase64(data) ? u8aToString(base64Decode(data)) : data;
       const parsedBackup = JSON.parse(decoded) as AccountBackup;
-      await AccountBackupScheme.validate(parsedBackup);
+      await AccountBackupSchema.validate(parsedBackup);
 
       setBackup(parsedBackup);
     } catch (e: any) {
@@ -70,7 +70,7 @@ export default function ImportAccountDialog(): JSX.Element {
                 <Tab label={t<string>(ImportAccountMethod.QRCode)} value={ImportAccountMethod.QRCode} />
                 <Tab label={t<string>(ImportAccountMethod.JSON)} value={ImportAccountMethod.JSON} />
               </TabList>
-              <TabPanel value={ImportAccountMethod.QRCode} className='p-0 max-w-[450px] mx-auto mb-4'>
+              <TabPanel value={ImportAccountMethod.QRCode} className='p-0 max-w-[450px] mx-auto'>
                 <QrCodeReader onResult={onReadBackupCompleted} object={TransferableObject.Account} />
               </TabPanel>
               <TabPanel value={ImportAccountMethod.JSON} className='p-0'>
