@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import ImportJsonFile from 'components/pages/SetupWallet/RestoreWallet/ImportJsonFile';
 import ImportSecretRecoveryPhrase from 'components/pages/SetupWallet/RestoreWallet/ImportSecretRecoveryPhrase';
 import MethodSelection from 'components/pages/SetupWallet/RestoreWallet/MethodSelection';
 import ScanQrCode from 'components/pages/SetupWallet/RestoreWallet/ScanQrCode';
@@ -14,6 +15,8 @@ function RestoreWalletContent() {
       return <ImportSecretRecoveryPhrase />;
     case RestoreWalletMethod.QrCode:
       return <ScanQrCode />;
+    case RestoreWalletMethod.JsonFile:
+      return <ImportJsonFile />;
     default:
       return <MethodSelection />;
   }

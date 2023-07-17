@@ -14,12 +14,10 @@ import useDialog from 'hooks/useDialog';
 import useRegisterEvent from 'hooks/useRegisterEvent';
 import { TransferableObject } from 'types';
 import { EventName } from 'utils/eventemitter';
-import { AccountBackupScheme } from 'validations/AccountBackup';
-import QrCodeUploader from '../../import/QrCodeUploader';
+import { AccountBackupSchema } from 'validations/AccountBackup';
 
 enum ImportAccountMethod {
-  ScanQRCode = 'Scan QR Code',
-  QRCodeImage = 'QR Code Image',
+  QRCode = 'QR Code',
   JSON = 'JSON File',
 }
 
@@ -27,14 +25,14 @@ export default function ImportAccountDialog(): JSX.Element {
   const { open, doOpen, doClose } = useDialog();
   const { t } = useTranslation();
   const [backup, setBackup] = useState<AccountBackup>();
-  const [method, setMethod] = useState<ImportAccountMethod>(ImportAccountMethod.ScanQRCode);
+  const [method, setMethod] = useState<ImportAccountMethod>(ImportAccountMethod.QRCode);
 
   useRegisterEvent(EventName.OpenImportAccountDialog, doOpen);
 
   const onClose = () => {
     doClose(() => {
       setBackup(undefined);
-      setMethod(ImportAccountMethod.ScanQRCode);
+      setMethod(ImportAccountMethod.QRCode);
     });
   };
 
@@ -69,15 +67,11 @@ export default function ImportAccountDialog(): JSX.Element {
           ) : (
             <TabContext value={method}>
               <TabList onChange={switchMethod} variant='fullWidth'>
-                <Tab label={t<string>(ImportAccountMethod.ScanQRCode)} value={ImportAccountMethod.ScanQRCode} />
-                <Tab label={t<string>(ImportAccountMethod.QRCodeImage)} value={ImportAccountMethod.QRCodeImage} />
+                <Tab label={t<string>(ImportAccountMethod.QRCode)} value={ImportAccountMethod.QRCode} />
                 <Tab label={t<string>(ImportAccountMethod.JSON)} value={ImportAccountMethod.JSON} />
               </TabList>
-              <TabPanel value={ImportAccountMethod.ScanQRCode} className='p-0 max-w-[450px] mx-auto mb-4'>
+              <TabPanel value={ImportAccountMethod.QRCode} className='p-0 max-w-[450px] mx-auto mb-4'>
                 <QrCodeReader onResult={onReadBackupCompleted} object={TransferableObject.Account} />
-              </TabPanel>
-              <TabPanel value={ImportAccountMethod.QRCodeImage} className='p-0'>
-                <QrCodeUploader onResult={onReadBackupCompleted} object={TransferableObject.Account} />
               </TabPanel>
               <TabPanel value={ImportAccountMethod.JSON} className='p-0'>
                 <JsonFileReader onResult={onReadBackupCompleted} />
