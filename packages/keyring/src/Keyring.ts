@@ -1,11 +1,17 @@
 import { KeyringPair } from '@polkadot/keyring/types';
 import { Keyring as InnerKeyring } from '@polkadot/ui-keyring/Keyring';
-import { u8aToHex } from '@polkadot/util';
-import { sha256AsU8a } from '@polkadot/util-crypto';
 import { validateMnemonic } from '@polkadot/util-crypto/mnemonic/bip39';
-import { assert, CoongError, ErrorCode, isCoongError, StandardCoongError } from '@coong/utils';
+import {
+  assert,
+  assertFalse,
+  CoongError,
+  ErrorCode,
+  isCoongError,
+  StandardCoongError,
+  sha256AsHex,
+} from '@coong/utils';
 import CryptoJS from 'crypto-js';
-import { AccountBackup, AccountInfo, WalletBackup, WalletQrBackup } from './types';
+import { AccountBackup, AccountInfo, WalletBackup, WalletBackup$Json, WalletQrBackup } from './types';
 
 export const ENCRYPTED_MNEMONIC = 'ENCRYPTED_MNEMONIC';
 export const ORIGINAL_HASH = 'ORIGINAL_HASH';
@@ -13,10 +19,6 @@ export const ACCOUNTS_INDEX = 'ACCOUNTS_INDEX';
 export const DEFAULT_KEY_TYPE = 'sr25519';
 
 const DERIVATION_PATH_PREFIX = '//';
-
-const sha256AsHex = (data: string): string => {
-  return u8aToHex(sha256AsU8a(data));
-};
 
 /**
  * @name Keyring
@@ -493,6 +495,22 @@ export default class Keyring {
     return walletBackup;
   }
 
+  async #restoreWalletInfo(backup: WalletBackup$Json, password: string) {
+    assertFalse(await this.initialized(), 'Wallet is already initialized');
+
+    const { encryptedMnemonic, accountsIndex = 0 } = backup;
+
+    localStorage.setItem(ACCOUNTS_INDEX, accountsIndex.toString());
+    localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedMnemonic);
+
+    const rawMnemonic = await this.#decryptMnemonic(password);
+    if (!validateMnemonic(rawMnemonic)) {
+      throw new CoongError(ErrorCode.InvalidMnemonic);
+    }
+
+    this.#generateOriginalHash(rawMnemonic);
+  }
+
   /**
    * Import a Qr backup & initializing keyring
    *
@@ -500,25 +518,42 @@ export default class Keyring {
    * @param password
    */
   async importQrBackup(backup: WalletQrBackup, password: string) {
-    if (await this.initialized()) {
-      throw new StandardCoongError('Wallet is already initialized');
-    }
+    assertFalse(await this.initialized(), 'Wallet is already initialized');
 
     try {
-      const { encryptedMnemonic, accountsIndex, accounts } = backup;
-      localStorage.setItem(ACCOUNTS_INDEX, accountsIndex.toString());
-      localStorage.setItem(ENCRYPTED_MNEMONIC, encryptedMnemonic);
+      await this.#restoreWalletInfo(backup, password);
 
-      const rawMnemonic = await this.#decryptMnemonic(password);
-      if (!validateMnemonic(rawMnemonic)) {
-        throw new CoongError(ErrorCode.InvalidMnemonic);
+      if (backup.accounts && backup.accounts.length) {
+        for (let account of backup.accounts) {
+          const [path, name] = account;
+          await this.createNewAccount(name, password, path);
+        }
+      } else if (!backup.accountsIndex) {
+        // If backup has no accounts and accountsIndex is not defined
+        await this.createNewAccount('My first account', password);
       }
+    } catch (e: any) {
+      await this.reset();
 
-      this.#generateOriginalHash(rawMnemonic);
+      if (e instanceof StandardCoongError) {
+        throw e;
+      } else {
+        throw new StandardCoongError(e.message);
+      }
+    }
+  }
 
-      for (let account of accounts) {
-        const [path, name] = account;
-        await this.createNewAccount(name, password, path);
+  async importBackup(backup: WalletBackup, password: string) {
+    assertFalse(await this.initialized(), 'Wallet is already initialized');
+
+    try {
+      await this.#restoreWalletInfo(backup, password);
+
+      if (backup.accounts && backup.accounts.length) {
+        this.#keyring.restoreAccounts(backup, password);
+      } else if (!backup.accountsIndex) {
+        // If backup has no accounts and accountsIndex is not defined
+        await this.createNewAccount('My first account', password);
       }
     } catch (e: any) {
       await this.reset();
