@@ -13,20 +13,17 @@ const BackupWalletOptions = [
   {
     method: WalletRecoveryMethod.SecretRecoveryPhrase,
     icon: <KeyIcon />,
-    primary: 'Secret Recovery Phrase',
-    secondary: 'Write down 12 random words and keep them in a safe place!',
+    description: 'Write down 12 random words and keep them in a safe place!',
   },
   {
     method: WalletRecoveryMethod.QrCode,
     icon: <QrCode />,
-    primary: 'QR Code',
-    secondary: 'Downloads an encrypted QR Code and uploads it to the cloud (iCloud, Google Drive, ...)',
+    description: 'Downloads an encrypted QR Code and uploads it to the cloud (iCloud, Google Drive, ...)',
   },
   {
     method: WalletRecoveryMethod.JsonFile,
     icon: <InsertDriveFileIcon />,
-    primary: 'JSON File',
-    secondary: 'Downloads an encrypted JSON file and uploads it to the cloud (iCloud, Google Drive, ...)',
+    description: 'Downloads an encrypted JSON file and uploads it to the cloud (iCloud, Google Drive, ...)',
   },
 ];
 
@@ -48,17 +45,19 @@ export default function BackupMethodSelection(): JSX.Element {
     dispatch(setupWalletActions.setSecretPhrase(undefined));
   };
 
-  return method !== undefined ? (
-    <BackupWallet method={method} resetMethod={resetMethod} />
-  ) : (
+  if (method) {
+    return <BackupWallet method={method} resetMethod={resetMethod} />;
+  }
+
+  return (
     <>
       <h3>{t<string>('Finally, back up your wallet')}</h3>
       <p>{t<string>('Choose a method to back up your wallet')}</p>
       <List>
-        {BackupWalletOptions.map(({ method, icon, primary, secondary }) => (
+        {BackupWalletOptions.map(({ method, icon, description }) => (
           <ListItemButton key={method} onClick={() => doSelectMethod(method)}>
             <ListItemIcon>{icon}</ListItemIcon>
-            <ListItemText primary={t<string>(primary)} secondary={t<string>(secondary)} />
+            <ListItemText primary={t<string>(method)} secondary={t<string>(description)} />
           </ListItemButton>
         ))}
       </List>

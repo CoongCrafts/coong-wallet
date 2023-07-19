@@ -21,7 +21,7 @@ interface QrCodeProps extends Props {
 
 const DEFAULT_SIZE = 500;
 
-export default function QrCode({ value, object, topInstruction, bottomInstruction, title = '' }: QrCodeProps) {
+function QrCode({ value, object, topInstruction, bottomInstruction, title }: QrCodeProps) {
   const { t } = useTranslation();
   const { containerRef, size } = useQrCodeSize();
   const qrCodeWrapperRef = useRef<HTMLDivElement>(null);
@@ -98,14 +98,8 @@ export default function QrCode({ value, object, topInstruction, bottomInstructio
 
   return (
     <div ref={containerRef}>
-      <h3>{t<string>(title)}</h3>
-      {topInstruction || (
-        <p className='my-4 sm:px-20 text-center'>
-          {t<string>('Open Coong Wallet on another device and scan this QR Code to transfer your {{object}}', {
-            object: t<string>(object.toLowerCase()),
-          })}
-        </p>
-      )}
+      {title && <h3>{t<string>(title)}</h3>}
+      {topInstruction}
       <div className='text-center'>
         <div ref={qrCodeWrapperRef}>
           <QRCodeCanvas
@@ -131,13 +125,9 @@ export default function QrCode({ value, object, topInstruction, bottomInstructio
           </Button>
         </div>
       </div>
-      {bottomInstruction || (
-        <p className='my-4 italic sm:px-20 text-sm text-center'>
-          {t<string>(
-            'You will be prompted to enter your wallet password to complete the transfer process on the other device.',
-          )}
-        </p>
-      )}
+      {bottomInstruction}
     </div>
   );
 }
+
+export default QrCode;

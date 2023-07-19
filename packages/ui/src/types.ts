@@ -47,9 +47,9 @@ export enum NewWalletScreenStep {
 }
 
 export enum WalletRecoveryMethod {
-  SecretRecoveryPhrase,
-  QrCode,
-  JsonFile,
+  SecretRecoveryPhrase = 'Secret Recovery Phrase',
+  QrCode = 'QR Code',
+  JsonFile = 'JSON File',
 }
 
 export enum RestoreWalletScreenStep {

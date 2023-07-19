@@ -5,8 +5,8 @@ import { CompactAccountInfo, DerivationPath, WalletBackup, WalletQrBackup } from
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Dialog, DialogContent, DialogContentText, Tab } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
-import JsonFile from 'components/shared/export/JsonFile';
-import QrCode from 'components/shared/export/QrCode';
+import JsonFileWithExportInstruction from 'components/shared/export/JsonFileWithExportInstruction';
+import QrCodeWithExportInstruction from 'components/shared/export/QrCodeWithExportInstruction';
 import VerifyingPasswordForm from 'components/shared/forms/VerifyingPasswordForm';
 import useDialog from 'hooks/useDialog';
 import useRegisterEvent from 'hooks/useRegisterEvent';
@@ -73,10 +73,10 @@ export default function ExportWalletDialog(): JSX.Element {
               <Tab label={t<string>(ExportWalletMethod.JSON)} value={ExportWalletMethod.JSON} />
             </TabList>
             <TabPanel value={ExportWalletMethod.QRCode} className='p-0'>
-              <QrCode value={toWalletQrBackup(backup)} object={TransferableObject.Wallet} />
+              <QrCodeWithExportInstruction value={toWalletQrBackup(backup)} object={TransferableObject.Wallet} />
             </TabPanel>
             <TabPanel value={ExportWalletMethod.JSON} className='p-0'>
-              <JsonFile value={backup} object={TransferableObject.Wallet} />
+              <JsonFileWithExportInstruction value={backup} object={TransferableObject.Wallet} />
             </TabPanel>
           </TabContext>
         ) : (

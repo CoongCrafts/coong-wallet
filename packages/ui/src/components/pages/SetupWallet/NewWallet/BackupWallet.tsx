@@ -15,22 +15,26 @@ import { setupWalletActions } from 'redux/slices/setup-wallet';
 import { RootState } from 'redux/store';
 import { Props, TransferableObject, WalletRecoveryMethod } from 'types';
 
-interface BackupProps extends Props {
+interface BackupInstructionProps extends Props {
   method: WalletRecoveryMethod;
 }
 
-function Backup({ method }: BackupProps): JSX.Element {
+function BackupInstruction({ method }: BackupInstructionProps): JSX.Element {
   const { t } = useTranslation();
   const { password, secretPhrase } = useSelector((state: RootState) => state.setupWallet);
 
   // Preventing re-create the wallet backup when the component is re-rendered
   const walletBackup = useMemo(() => {
-    const encryptedMnemonic = CryptoJS.AES.encrypt(secretPhrase!, password!).toString();
+    if (!secretPhrase || !password) return;
+
+    const encryptedMnemonic = CryptoJS.AES.encrypt(secretPhrase, password).toString();
 
     return {
       encryptedMnemonic,
     } as WalletBackup;
   }, [secretPhrase, password]);
+
+  if (!walletBackup) return <></>;
 
   switch (method) {
     case WalletRecoveryMethod.SecretRecoveryPhrase:
@@ -48,7 +52,6 @@ function Backup({ method }: BackupProps): JSX.Element {
               )}
             </p>
           }
-          bottomInstruction={<></>} // Use to hide default bottom instruction
         />
       );
     case WalletRecoveryMethod.JsonFile:
@@ -64,7 +67,6 @@ function Backup({ method }: BackupProps): JSX.Element {
               )}
             </p>
           }
-          bottomInstruction={<></>} // Use to hide default bottom instruction
         />
       );
     default:
@@ -101,7 +103,7 @@ export default function BackupWallet({ method, resetMethod }: BackupWalletProps)
 
   return (
     <>
-      <Backup method={method} />
+      <BackupInstruction method={method} />
       <form>
         <FormGroup className='my-2'>
           <FormControlLabel

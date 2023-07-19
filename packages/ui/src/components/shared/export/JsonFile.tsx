@@ -14,13 +14,7 @@ interface JsonFileProps extends Props {
   bottomInstruction?: React.ReactNode;
 }
 
-export default function JsonFile({
-  value,
-  object,
-  topInstruction,
-  bottomInstruction,
-  title = '',
-}: JsonFileProps): JSX.Element {
+function JsonFile({ value, object, topInstruction, bottomInstruction, title }: JsonFileProps): JSX.Element {
   const { t } = useTranslation();
 
   const getFileName = () => {
@@ -39,27 +33,16 @@ export default function JsonFile({
 
   return (
     <>
-      <h3>{t<string>(title)}</h3>
-      {topInstruction || (
-        <p className='mt-4 sm:px-20 text-center'>
-          {t<string>(
-            `Export this {{object}} to a JSON file and import it back to Coong Wallet on this or other devices later`,
-            { object: t<string>(object.toLowerCase()) },
-          )}
-        </p>
-      )}
+      {title && <h3>{t<string>(title)}</h3>}
+      {topInstruction}
       <div className='text-center'>
         <Button onClick={downloadJsonFile} startIcon={<Download />}>
           {t<string>('Download JSON File')}
         </Button>
       </div>
-      {bottomInstruction || (
-        <p className='mt-4 italic sm:px-20 text-sm text-center'>
-          {t<string>(`You will be prompted to enter your wallet password to complete importing the {{object}}`, {
-            object: t<string>(object.toLowerCase()),
-          })}
-        </p>
-      )}
+      {bottomInstruction}
     </>
   );
 }
+
+export default JsonFile;
