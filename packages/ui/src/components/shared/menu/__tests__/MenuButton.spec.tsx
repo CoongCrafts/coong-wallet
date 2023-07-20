@@ -1,4 +1,5 @@
 import { waitFor } from '@testing-library/react';
+import { forwardRef } from 'react';
 import { base64Encode } from '@polkadot/util-crypto';
 import Keyring from '@coong/keyring';
 import { UserEvent, initializeKeyring, newUser, PASSWORD, render, screen } from '__tests__/testUtils';
@@ -36,10 +37,10 @@ vi.mock('react-qr-reader', async () => {
   const qrReader: any = await vi.importActual('react-qr-reader');
   return {
     ...qrReader,
-    default: ({ onScan }: any) => {
+    default: forwardRef(({ onScan }: any) => {
       onScanResult = onScan;
       return <div>Mocked QR Scanner</div>;
-    },
+    }),
   };
 });
 
@@ -144,6 +145,7 @@ describe('MenuButton', () => {
       expect(await screen.findByRole('tab', { name: /JSON File/ })).toBeInTheDocument();
       expect(await screen.findByText(/scan the QR code on the screen to transfer your account/)).toBeInTheDocument();
       expect(await screen.findByText(/Mocked QR Scanner/)).toBeInTheDocument();
+      expect(await screen.findByRole('button', { name: /Upload QR Code/ })).toBeInTheDocument();
     });
 
     describe('QR Code Method', () => {
