@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { NewWalletScreenStep, RestoreWalletMethod, RestoreWalletScreenStep } from 'types';
+import { NewWalletScreenStep, WalletRecoveryMethod, RestoreWalletScreenStep } from 'types';
 
 export interface SetupWalletState {
   newWalletScreenStep: NewWalletScreenStep;
-  restoreWalletMethod?: RestoreWalletMethod;
+  restoreWalletMethod?: WalletRecoveryMethod;
   restoreWalletScreenStep: RestoreWalletScreenStep;
   password?: string;
   passwordConfirmation?: string;
@@ -25,7 +25,7 @@ const setupWalletSlice = createSlice({
     setPassword: (state, action: PayloadAction<string>) => {
       state.password = action.payload;
     },
-    setRestoreWalletMethod: (state, action: PayloadAction<RestoreWalletMethod>) => {
+    setRestoreWalletMethod: (state, action: PayloadAction<WalletRecoveryMethod>) => {
       state.restoreWalletMethod = action.payload;
     },
     clearRestoreWalletMethod: (state) => {
@@ -34,7 +34,7 @@ const setupWalletSlice = createSlice({
     setRestoreWalletScreenStep: (state, action: PayloadAction<RestoreWalletScreenStep>) => {
       state.restoreWalletScreenStep = action.payload;
     },
-    setSecretPhrase: (state, action: PayloadAction<string>) => {
+    setSecretPhrase: (state, action: PayloadAction<string | undefined>) => {
       state.secretPhrase = action.payload;
     },
     resetState: (state) => {

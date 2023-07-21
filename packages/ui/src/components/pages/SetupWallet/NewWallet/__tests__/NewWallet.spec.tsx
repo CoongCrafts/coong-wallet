@@ -115,7 +115,7 @@ describe('NewWallet', () => {
         expect(await screen.findByText('Password does not match')).toBeInTheDocument();
       });
 
-      it('should render BackupSecretRecoveryPhrase after confirming the password', async () => {
+      it('should render BackupWalletSelection after confirming the password', async () => {
         const passwordField = await screen.findByLabelText('Confirm wallet password');
         await user.type(passwordField, 'random-password');
 
@@ -123,35 +123,33 @@ describe('NewWallet', () => {
         expect(nextButton).toBeEnabled();
         await user.click(nextButton);
 
-        expect(await screen.findByText('Finally, back up your secret recovery phrase')).toBeInTheDocument();
+        expect(await screen.findByText('Finally, back up your wallet')).toBeInTheDocument();
       });
     });
 
-    describe('BackupSecretRecoveryPhrase', () => {
+    describe('BackupWalletSelection', () => {
       beforeEach(() => {
         render(<NewWallet />, {
           preloadedState: {
             setupWallet: {
               password: 'password',
-              newWalletScreenStep: NewWalletScreenStep.BackupSecretRecoveryPhrase,
+              newWalletScreenStep: NewWalletScreenStep.BackupWallet,
             },
           },
         });
       });
 
-      it('should render the page correctly', async () => {
-        expect(await screen.findByText('Finally, back up your secret recovery phrase')).toBeInTheDocument();
-        expect(await screen.findByLabelText(/I have backed up my recovery phrase/)).toBeInTheDocument();
-        expect(await screen.findByRole('button', { name: /Finish/ })).toBeDisabled();
+      const expectBackupWalletSelection = async (screen: any) => {
+        expect(await screen.findByText('Finally, back up your wallet')).toBeInTheDocument();
+        expect(await screen.findByText(/Choose a method to back up your wallet/)).toBeInTheDocument();
+        expect(await screen.findByRole('button', { name: /Secret Recovery Phrase/ })).toBeInTheDocument();
+        expect(await screen.findByRole('button', { name: /QR Code/ })).toBeInTheDocument();
+        expect(await screen.findByRole('button', { name: /JSON File/ })).toBeInTheDocument();
         expect(await screen.findByRole('button', { name: /Back/ })).toBeInTheDocument();
-        expect(await screen.findByRole('button', { name: /Copy to Clipboard/ })).toBeInTheDocument();
-      });
+      };
 
-      it('should change copyButtonLabel to `Copied!` and disable the button', async () => {
-        const copyToClipboardButton = await screen.findByRole('button', { name: /Copy to Clipboard/ });
-        await user.click(copyToClipboardButton);
-
-        expect(await screen.findByRole('button', { name: /Copied!/ })).toBeDisabled();
+      it('should render the page correctly', async () => {
+        await expectBackupWalletSelection(screen);
       });
 
       it('should go back to ChooseWalletPassword page', async () => {
@@ -160,12 +158,35 @@ describe('NewWallet', () => {
         expect(await screen.findByText('First, choose your wallet password')).toBeInTheDocument();
       });
 
-      it('should trigger onWalletSetup callback', async () => {
-        await user.click(await screen.findByLabelText(/I have backed up my recovery phrase/));
-        await user.click(await screen.findByRole('button', { name: /Finish/ }));
+      it('should switch to BackupWallet screen', async () => {
+        await user.click(await screen.findByRole('button', { name: /Secret Recovery Phrase/ }));
 
-        await waitFor(() => {
-          expect(onWalletSetup).toBeCalled();
+        expect(
+          await screen.findByText(/Write down the below 12 words and keep it in a safe place./),
+        ).toBeInTheDocument();
+        expect(await screen.findByLabelText(/I have backed up my wallet/)).toBeInTheDocument();
+        expect(await screen.findByRole('button', { name: /Finish/ })).toBeDisabled();
+        expect(await screen.findByRole('button', { name: /Back/ })).toBeInTheDocument();
+      });
+
+      describe('BackupWallet', () => {
+        beforeEach(async () => {
+          await user.click(await screen.findByRole('button', { name: /Secret Recovery Phrase/ }));
+        });
+
+        it('should trigger onWalletSetup callback', async () => {
+          await user.click(await screen.findByLabelText(/I have backed up my wallet/));
+          await user.click(await screen.findByRole('button', { name: /Finish/ }));
+
+          await waitFor(() => {
+            expect(onWalletSetup).toBeCalled();
+          });
+        });
+
+        it('should go back to BackupWalletSelection', async () => {
+          await user.click(await screen.findByRole('button', { name: /Back/ }));
+
+          await expectBackupWalletSelection(screen);
         });
       });
     });

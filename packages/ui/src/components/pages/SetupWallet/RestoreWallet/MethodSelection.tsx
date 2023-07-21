@@ -6,26 +6,23 @@ import KeyIcon from '@mui/icons-material/Key';
 import { Button, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { useWalletSetup } from 'providers/WalletSetupProvider';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
-import { RestoreWalletMethod } from 'types';
+import { WalletRecoveryMethod } from 'types';
 
 const MethodInfo = [
   {
-    method: RestoreWalletMethod.SecretRecoveryPhrase,
+    method: WalletRecoveryMethod.SecretRecoveryPhrase,
     icon: <KeyIcon />,
-    primary: 'Secret Recovery Phrase',
-    secondary: 'Enter your existing secret recovery phrase',
+    description: 'Enter your existing secret recovery phrase',
   },
   {
-    method: RestoreWalletMethod.QrCode,
+    method: WalletRecoveryMethod.QrCode,
     icon: <QrCode />,
-    primary: 'QR Code',
-    secondary: 'Scan QR Code from Coong Wallet on a different device',
+    description: 'Scan QR Code from Coong Wallet on a different device',
   },
   {
-    method: RestoreWalletMethod.JsonFile,
+    method: WalletRecoveryMethod.JsonFile,
     icon: <InsertDriveFileIcon />,
-    primary: 'JSON File',
-    secondary: 'Import JSON backup file exported from Coong Wallet',
+    description: 'Import JSON backup file exported from Coong Wallet',
   },
 ];
 
@@ -34,7 +31,7 @@ export default function MethodSelection(): JSX.Element {
   const dispatch = useDispatch();
   const { onCancelSetup } = useWalletSetup();
 
-  const doSelectMethod = (method: RestoreWalletMethod) => {
+  const doSelectMethod = (method: WalletRecoveryMethod) => {
     return () => dispatch(setupWalletActions.setRestoreWalletMethod(method));
   };
 
@@ -42,10 +39,10 @@ export default function MethodSelection(): JSX.Element {
     <>
       <h3>Choose a method to restore your wallet</h3>
       <List className='mt-2'>
-        {MethodInfo.map(({ method, icon, primary, secondary }) => (
+        {MethodInfo.map(({ method, icon, description }) => (
           <ListItemButton key={method} onClick={doSelectMethod(method)}>
             <ListItemIcon>{icon}</ListItemIcon>
-            <ListItemText primary={t<string>(primary)} secondary={t<string>(secondary)} />
+            <ListItemText primary={t<string>(method)} secondary={t<string>(description)} />
           </ListItemButton>
         ))}
       </List>

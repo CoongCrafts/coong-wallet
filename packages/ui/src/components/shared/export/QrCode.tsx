@@ -6,7 +6,7 @@ import { base64Encode } from '@polkadot/util-crypto';
 import { AccountBackup, QrBackup } from '@coong/keyring/types';
 import { Download } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import CoongLogo from 'assets/images/coong-logo.png';
+import CoongLogo from 'assets/images/coong-logo-circle.png';
 import FileSaver from 'file-saver';
 import useQrCodeSize from 'hooks/useQrCodeSize';
 import { Props, TransferableObject } from 'types';
@@ -14,11 +14,14 @@ import { Props, TransferableObject } from 'types';
 interface QrCodeProps extends Props {
   value: QrBackup;
   object: TransferableObject;
+  title?: string;
+  topInstruction?: React.ReactNode;
+  bottomInstruction?: React.ReactNode;
 }
 
 const DEFAULT_SIZE = 500;
 
-export default function QrCode({ value, object }: QrCodeProps) {
+function QrCode({ value, object, topInstruction, bottomInstruction, title }: QrCodeProps) {
   const { t } = useTranslation();
   const { containerRef, size } = useQrCodeSize();
   const qrCodeWrapperRef = useRef<HTMLDivElement>(null);
@@ -94,40 +97,37 @@ export default function QrCode({ value, object }: QrCodeProps) {
   };
 
   return (
-    <div ref={containerRef} className='text-center'>
-      <p className='my-4 sm:px-20'>
-        {t<string>('Open Coong Wallet on another device and scan this QR Code to transfer your {{object}}', {
-          object: t<string>(object.toLowerCase()),
-        })}
-      </p>
-      <div ref={qrCodeWrapperRef}>
-        <QRCodeCanvas
-          size={DEFAULT_SIZE} // DEFAULT_SIZE for better quality when export to download
-          value={rawQrValue}
-          includeMargin
-          title={t<string>('{{object}} Export QR Code', { object: t<string>(object) })}
-          imageSettings={{
-            src: CoongLogo,
-            height: 64,
-            width: 64,
-            excavate: true,
-          }}
-          style={{
-            width: size,
-            height: size,
-          }}
-        />
+    <div ref={containerRef}>
+      {title && <h3>{t<string>(title)}</h3>}
+      {topInstruction}
+      <div className='text-center'>
+        <div ref={qrCodeWrapperRef}>
+          <QRCodeCanvas
+            size={DEFAULT_SIZE} // DEFAULT_SIZE for better quality when export to download
+            value={rawQrValue}
+            includeMargin
+            title={t<string>('{{object}} Export QR Code', { object: t<string>(object) })}
+            imageSettings={{
+              src: CoongLogo,
+              height: 64,
+              width: 64,
+              excavate: false,
+            }}
+            style={{
+              width: size,
+              height: size,
+            }}
+          />
+        </div>
+        <div className='mt-4'>
+          <Button variant='outlined' startIcon={<Download />} onClick={downloadQrCode} size='small'>
+            {t<string>('Downloads QR Code')}
+          </Button>
+        </div>
       </div>
-      <div className='mt-4'>
-        <Button variant='outlined' startIcon={<Download />} onClick={downloadQrCode} size='small'>
-          {t<string>('Download QR Code Image')}
-        </Button>
-      </div>
-      <p className='my-4 italic sm:px-20 text-sm'>
-        {t<string>(
-          'You will be prompted to enter your wallet password to complete the transfer process on the other device.',
-        )}
-      </p>
+      {bottomInstruction}
     </div>
   );
 }
+
+export default QrCode;

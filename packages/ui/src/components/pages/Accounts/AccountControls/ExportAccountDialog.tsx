@@ -5,8 +5,8 @@ import { AccountBackup } from '@coong/keyring/types';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Dialog, DialogContent, Tab } from '@mui/material';
 import DialogTitle from 'components/shared/DialogTitle';
-import JsonFile from 'components/shared/export/JsonFile';
-import QrCode from 'components/shared/export/QrCode';
+import JsonFileWithExportInstruction from 'components/shared/export/JsonFileWithExportInstruction';
+import QrCodeWithExportInstruction from 'components/shared/export/QrCodeWithExportInstruction';
 import VerifyingPasswordForm from 'components/shared/forms/VerifyingPasswordForm';
 import useDialog from 'hooks/useDialog';
 import useRegisterEvent from 'hooks/useRegisterEvent';
@@ -68,10 +68,10 @@ export default function ExportAccountDialog(): JSX.Element {
               <Tab label={t<string>(ExportAccountMethod.JSON)} value={ExportAccountMethod.JSON} />
             </TabList>
             <TabPanel value={ExportAccountMethod.QRCode} className='p-0'>
-              <QrCode value={backup} object={TransferableObject.Account} />
+              <QrCodeWithExportInstruction value={backup} object={TransferableObject.Account} />
             </TabPanel>
             <TabPanel value={ExportAccountMethod.JSON} className='p-0'>
-              <JsonFile value={backup} object={TransferableObject.Account} />
+              <JsonFileWithExportInstruction value={backup} object={TransferableObject.Account} />
             </TabPanel>
           </TabContext>
         ) : (

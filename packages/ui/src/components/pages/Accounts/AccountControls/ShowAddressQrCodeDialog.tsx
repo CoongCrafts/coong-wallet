@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { encodeAddress } from '@polkadot/util-crypto';
 import { Dialog, DialogContent } from '@mui/material';
+import CoongLogo from 'assets/images/coong-logo-circle.png';
 import AccountAddress from 'components/pages/Accounts/AccountAddress';
 import DialogTitle from 'components/shared/DialogTitle';
 import NetworksSelection from 'components/shared/NetworksSelection';
@@ -51,6 +52,12 @@ export default function ShowAddressQrCodeDialog(): JSX.Element {
           size={size}
           title={t<string>('Account Address QR Code')}
           className='p-4'
+          imageSettings={{
+            src: CoongLogo,
+            height: 45,
+            width: 45,
+            excavate: false,
+          }}
         />
         <AccountAddress address={address} className='text-sm' />
       </DialogContent>

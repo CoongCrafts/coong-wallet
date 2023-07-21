@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ChooseWalletPassword from 'components/pages/SetupWallet/ChooseWalletPassword';
 import ConfirmWalletPassword from 'components/pages/SetupWallet/ConfirmWalletPassword';
-import BackupSecretRecoveryPhrase from 'components/pages/SetupWallet/NewWallet/BackupSecretRecoveryPhrase';
+import BackupMethodSelection from 'components/pages/SetupWallet/NewWallet/BackupMethodSelection';
 import useOnWalletInitialized from 'hooks/wallet/useOnWalletInitialized';
 import { useWalletSetup } from 'providers/WalletSetupProvider';
 import { setupWalletActions } from 'redux/slices/setup-wallet';
@@ -22,13 +22,13 @@ const ScreenStep: FC<Props> = () => {
     case NewWalletScreenStep.ConfirmWalletPassword:
       return (
         <ConfirmWalletPassword
-          nextStep={goto(NewWalletScreenStep.BackupSecretRecoveryPhrase)}
+          nextStep={goto(NewWalletScreenStep.BackupWallet)}
           prevStep={goto(NewWalletScreenStep.ChooseWalletPassword)}
           heading='Next, confirm your wallet password'
         />
       );
-    case NewWalletScreenStep.BackupSecretRecoveryPhrase:
-      return <BackupSecretRecoveryPhrase />;
+    case NewWalletScreenStep.BackupWallet:
+      return <BackupMethodSelection />;
     default:
       return (
         <ChooseWalletPassword

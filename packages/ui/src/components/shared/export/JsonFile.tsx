@@ -9,9 +9,12 @@ import { TransferableObject, Props } from 'types';
 interface JsonFileProps extends Props {
   value: JsonBackup;
   object: TransferableObject;
+  title?: string;
+  topInstruction?: React.ReactNode;
+  bottomInstruction?: React.ReactNode;
 }
 
-export default function JsonFile({ value, object }: JsonFileProps): JSX.Element {
+function JsonFile({ value, object, topInstruction, bottomInstruction, title }: JsonFileProps): JSX.Element {
   const { t } = useTranslation();
 
   const getFileName = () => {
@@ -29,21 +32,17 @@ export default function JsonFile({ value, object }: JsonFileProps): JSX.Element 
   };
 
   return (
-    <div className='text-center'>
-      <p className='mt-4 sm:px-20'>
-        {t<string>(
-          `Export this {{object}} to a JSON file and import it back to Coong Wallet on this or other devices later`,
-          { object: t<string>(object.toLowerCase()) },
-        )}
-      </p>
-      <Button onClick={downloadJsonFile} startIcon={<Download />}>
-        {t<string>('Download JSON File')}
-      </Button>
-      <p className='mt-4 italic sm:px-20 text-sm'>
-        {t<string>(`You will be prompted to enter your wallet password to complete importing the {{object}}`, {
-          object: t<string>(object.toLowerCase()),
-        })}
-      </p>
-    </div>
+    <>
+      {title && <h3>{t<string>(title)}</h3>}
+      {topInstruction}
+      <div className='text-center'>
+        <Button onClick={downloadJsonFile} startIcon={<Download />}>
+          {t<string>('Downloads JSON File')}
+        </Button>
+      </div>
+      {bottomInstruction}
+    </>
   );
 }
+
+export default JsonFile;

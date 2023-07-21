@@ -5,17 +5,17 @@ import MethodSelection from 'components/pages/SetupWallet/RestoreWallet/MethodSe
 import ScanQrCode from 'components/pages/SetupWallet/RestoreWallet/ScanQrCode';
 import useOnWalletInitialized from 'hooks/wallet/useOnWalletInitialized';
 import { RootState } from 'redux/store';
-import { RestoreWalletMethod } from 'types';
+import { WalletRecoveryMethod } from 'types';
 
 function RestoreWalletContent() {
   const { restoreWalletMethod } = useSelector((state: RootState) => state.setupWallet);
 
   switch (restoreWalletMethod) {
-    case RestoreWalletMethod.SecretRecoveryPhrase:
+    case WalletRecoveryMethod.SecretRecoveryPhrase:
       return <ImportSecretRecoveryPhrase />;
-    case RestoreWalletMethod.QrCode:
+    case WalletRecoveryMethod.QrCode:
       return <ScanQrCode />;
-    case RestoreWalletMethod.JsonFile:
+    case WalletRecoveryMethod.JsonFile:
       return <ImportJsonFile />;
     default:
       return <MethodSelection />;
