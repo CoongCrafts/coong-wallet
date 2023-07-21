@@ -37,7 +37,7 @@ function JsonFile({ value, object, topInstruction, bottomInstruction, title }: J
       {topInstruction}
       <div className='text-center'>
         <Button onClick={downloadJsonFile} startIcon={<Download />}>
-          {t<string>('Download JSON File')}
+          {t<string>('Downloads JSON File')}
         </Button>
       </div>
       {bottomInstruction}

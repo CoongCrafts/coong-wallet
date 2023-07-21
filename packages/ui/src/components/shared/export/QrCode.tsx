@@ -121,7 +121,7 @@ function QrCode({ value, object, topInstruction, bottomInstruction, title }: QrC
         </div>
         <div className='mt-4'>
           <Button variant='outlined' startIcon={<Download />} onClick={downloadQrCode} size='small'>
-            {t<string>('Download QR Code Image')}
+            {t<string>('Downloads QR Code')}
           </Button>
         </div>
       </div>

@@ -41,6 +41,7 @@ export default function EnterSecretRecoveryPhrase({ className = '' }: Props): JS
 
   const onBack = () => {
     dispatch(setupWalletActions.clearRestoreWalletMethod());
+    dispatch(setupWalletActions.setSecretPhrase(undefined));
   };
 
   return (

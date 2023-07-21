@@ -14,7 +14,7 @@ function QrCodeWithExportInstruction({ value, object }: QrCodeWithExportInstruct
   return (
     <QrCode
       value={value}
-      object={TransferableObject.Wallet}
+      object={object}
       topInstruction={
         <p className='my-4 sm:px-20 text-center'>
           {t<string>('Open Coong Wallet on another device and scan this QR Code to transfer your {{object}}', {
