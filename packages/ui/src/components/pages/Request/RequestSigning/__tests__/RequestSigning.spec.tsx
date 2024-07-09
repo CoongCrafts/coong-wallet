@@ -65,7 +65,11 @@ describe('RequestTransactionApproval', () => {
   let requestUrl: string, requestSignExtrinsic: WalletRequestMessage;
 
   beforeEach(async () => {
-    requestSignExtrinsic = newWalletRequest({ name: 'tab/signExtrinsic', body: newPayload(account01.address) });
+    requestSignExtrinsic = newWalletRequest({
+      name: 'tab/signExtrinsic',
+      // @ts-ignore
+      body: newPayload(account01.address),
+    });
     const queryParam = new URLSearchParams({
       message: JSON.stringify(requestSignExtrinsic),
     }).toString();

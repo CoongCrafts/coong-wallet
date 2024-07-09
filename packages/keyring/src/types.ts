@@ -1,13 +1,14 @@
 import { KeyringPair$Json, KeyringPair$Meta } from '@polkadot/keyring/types';
 import { KeyringPairs$Json } from '@polkadot/ui-keyring/types';
 import { KeypairType } from '@polkadot/util-crypto/types';
+import type { HexString } from '@polkadot/util/types';
 
 export type DerivationPath = `//${string}` | '';
 export type AccountName = string;
 
 export interface AccountInfo extends KeyringPair$Meta {
   address: string; // Substrate generic address (prefix: 42)
-  genesisHash?: string | null;
+  genesisHash?: HexString | null;
   isExternal?: boolean;
   isHardware?: boolean;
   isHidden?: boolean;

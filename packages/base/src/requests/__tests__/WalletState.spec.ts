@@ -440,6 +440,7 @@ describe('sign extrinsic', () => {
   const newSignExtrinsicRequest = (address: string) => {
     return newWalletRequest({
       name: 'tab/signExtrinsic',
+      // @ts-ignore
       body: newPayload(address),
     });
   };
