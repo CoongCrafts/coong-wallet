@@ -43,7 +43,7 @@ export default function DappAccessDetailsDialog() {
 
     const authorizedAccounts = selectedAccounts.map((one) => one.address);
 
-    setAppInfo((prevAppInfo) => ({ ...prevAppInfo, authorizedAccounts } as AppInfo));
+    setAppInfo((prevAppInfo) => ({ ...prevAppInfo, authorizedAccounts }) as AppInfo);
   }, [selectedAccounts]);
 
   if (!appInfo) {

@@ -6,6 +6,7 @@ import { AccountBackup, AccountInfo, WalletBackup, WalletQrBackup } from '@coong
 import { CoongError, ErrorCode, StandardCoongError, sha256AsHex } from '@coong/utils';
 import CryptoJS from 'crypto-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { stringToU8a } from '@polkadot/util/string/toU8a';
 
 let keyring: Keyring;
 
@@ -412,6 +413,7 @@ describe('exportWallet', () => {
 
   it('should verify password', async () => {
     const mockedVerifyPassword = vi.spyOn(Keyring.prototype, 'verifyPassword');
+    console.log('stringToU8a', typeof stringToU8a('hello'), stringToU8a('hello') instanceof Uint8Array);
     await keyring.exportWallet(PASSWORD);
 
     expect(mockedVerifyPassword).toHaveBeenCalledWith(PASSWORD);

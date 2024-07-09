@@ -6,9 +6,9 @@ import { CoongError, ErrorCode } from '@coong/utils';
 import { Props } from 'types';
 
 export interface HandleWalletRequest {
-  <TRequestName extends RequestName>(message: WalletRequestMessage<TRequestName>): Promise<
-    WalletResponse<TRequestName>
-  >;
+  <TRequestName extends RequestName>(
+    message: WalletRequestMessage<TRequestName>,
+  ): Promise<WalletResponse<TRequestName>>;
 }
 
 interface WalletStateContextProps {
