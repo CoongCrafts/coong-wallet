@@ -1,6 +1,6 @@
 {
   "name": "@coong/utils",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "Utilities for Coong Wallet",
   "author": "Thang X. Vu <thang@coongwallet.io>",
   "homepage": "https://github.com/CoongCrafts/coong-wallet/tree/main/packages/utils#readme",

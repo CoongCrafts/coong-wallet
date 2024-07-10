@@ -1,6 +1,6 @@
 {
   "name": "@coong/sdk",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "Coong SDK to integrate Coong Wallet into dapps",
   "author": "Thang X. Vu <thang@coongwallet.io>",
   "homepage": "https://github.com/CoongCrafts/coong-wallet/tree/main/packages/sdk#readme",
@@ -15,8 +15,8 @@
     "clean": "rm -rf ./dist && rm -rf ./tsconfig.tsbuildinfo ./tsconfig.build.tsbuildinfo"
   },
   "dependencies": {
-    "@coong/base": "^0.0.22",
-    "@coong/utils": "^0.0.22",
+    "@coong/base": "^0.0.23",
+    "@coong/utils": "^0.0.23",
     "@polkadot/extension-inject": "^0.48.2",
     "rxjs": "^7.8.0"
   },

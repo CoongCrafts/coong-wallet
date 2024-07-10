@@ -1,6 +1,6 @@
 {
   "name": "@coong/base",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "Shared functions, logics for Coong Wallet",
   "author": "Thang X. Vu <thang@coongwallet.io>",
   "homepage": "https://github.com/CoongCrafts/coong-wallet/tree/main/packages/base#readme",
@@ -16,8 +16,8 @@
   },
   "main": "src/index.ts",
   "dependencies": {
-    "@coong/keyring": "^0.0.22",
-    "@coong/utils": "^0.0.22",
+    "@coong/keyring": "^0.0.23",
+    "@coong/utils": "^0.0.23",
     "@polkadot/networks": "^12.6.2",
     "@polkadot/types": "^12.1.1",
     "@polkadot/util": "^12.6.2",
