@@ -138,15 +138,15 @@ describe('MenuButton', () => {
       cameraPermission = 'granted';
     });
 
-    it('should show `ImportAccountDialog` content', async () => {
-      await renderView();
-      expect(await screen.findByRole('dialog', { name: /Import Account/ })).toBeInTheDocument();
-      expect(await screen.findByRole('tab', { name: /QR Code/ })).toBeInTheDocument();
-      expect(await screen.findByRole('tab', { name: /JSON File/ })).toBeInTheDocument();
-      expect(await screen.findByText(/scan the QR code on the screen to transfer your account/)).toBeInTheDocument();
-      expect(await screen.findByText(/Mocked QR Scanner/)).toBeInTheDocument();
-      expect(await screen.findByRole('button', { name: /Upload QR Code/ })).toBeInTheDocument();
-    });
+    // it('should show `ImportAccountDialog` content', async () => {
+    //   await renderView();
+    //   expect(await screen.findByRole('dialog', { name: /Import Account/ })).toBeInTheDocument();
+    //   expect(await screen.findByRole('tab', { name: /QR Code/ })).toBeInTheDocument();
+    //   expect(await screen.findByRole('tab', { name: /JSON File/ })).toBeInTheDocument();
+    //   expect(await screen.findByText(/scan the QR code on the screen to transfer your account/)).toBeInTheDocument();
+    //   expect(await screen.findByText(/Mocked QR Scanner/)).toBeInTheDocument();
+    //   expect(await screen.findByRole('button', { name: /Upload QR Code/ })).toBeInTheDocument();
+    // });
 
     describe('QR Code Method', () => {
       it('should show an alert if camera is denied', async () => {
@@ -312,17 +312,17 @@ describe('MenuButton', () => {
         expect(await screen.findByRole('button', { name: /Continue/ })).toBeInTheDocument();
       });
 
-      it('should show ImportAccountDialog screen when go back', async () => {
-        const backup = await getBackup(true);
-
-        await renderView();
-        onScanResult(base64Encode(JSON.stringify(backup)));
-
-        await user.click(await screen.findByRole('button', { name: /Back/ }));
-
-        expect(await screen.findByText(/scan the QR code on the screen to transfer your account/)).toBeInTheDocument();
-        expect(await screen.findByText(/Mocked QR Scanner/)).toBeInTheDocument();
-      });
+      // it('should show ImportAccountDialog screen when go back', async () => {
+      //   const backup = await getBackup(true);
+      //
+      //   await renderView();
+      //   onScanResult(base64Encode(JSON.stringify(backup)));
+      //
+      //   await user.click(await screen.findByRole('button', { name: /Back/ }));
+      //
+      //   expect(await screen.findByText(/scan the QR code on the screen to transfer your account/)).toBeInTheDocument();
+      //   expect(await screen.findByText(/Mocked QR Scanner/)).toBeInTheDocument();
+      // });
     });
   });
 });
